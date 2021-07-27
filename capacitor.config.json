@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "MGP",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}
