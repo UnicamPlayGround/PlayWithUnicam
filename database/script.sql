@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS public.lobby
     admin_lobby character varying(30) NOT NULL,
     data_creazione date NOT NULL,
     ultima_richiesta date NOT NULL,
-    id_gioco numeric NOT NULL,
+    id_gioco serial NOT NULL,
     PRIMARY KEY (codice)
 );
 
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS public.utenti
 CREATE TABLE IF NOT EXISTS public.giocatori
 (
     username character varying(30) NOT NULL,
-    codice_lobby numeric NOT NULL,
+    codice_lobby character varying(20) NOT NULL,
     ruolo character varying(20) NOT NULL,
     PRIMARY KEY (username)
 );
