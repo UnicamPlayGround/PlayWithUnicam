@@ -28,6 +28,8 @@
     "@capacitor/status-bar": "1.0.2",
     "@ionic/angular": "^5.5.2",
     "express": "^4.17.1",
+    "jwt-decode": "^3.1.2",
+    "pg": "^8.7.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",
     "zone.js": "~0.11.4"

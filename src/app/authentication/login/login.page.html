@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form (ngSubmit)="login()" [formGroup]="credenziali">
+
+      <ion-card>
+        <br>
+        <br>
+        <ion-card-header>
+          <ion-card-title style="font-size:35px"><strong>Login</strong></ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-item lines="full">
+            <ion-label position="floating">Username</ion-label>
+            <ion-input type="string" name="username" formControlName="username" required></ion-input>
+          </ion-item>
+
+          <ion-item lines="full">
+            <ion-label position="floating">Password</ion-label>
+            <ion-input type="password" name="password" formControlName="password" required></ion-input>
+          </ion-item>
+          <br>
+          <ion-row>
+            <ion-col>
+              <div>
+                <ion-button type="submit" color="primary" expand="block">Sign In</ion-button>
+              </div>
+              <br>
+              <a [routerLink]="['/forgot-password']" class="small-text forgot-password">Forgot Password?</a>
+              <br>
+            </ion-col>
+          </ion-row>
+        </ion-card-content>
+      </ion-card>
+
+  </form>
+</ion-content>
