@@ -4,7 +4,7 @@ import { map, tap, switchMap } from 'rxjs/operators';
 import { BehaviorSubject, Observable } from 'rxjs';
 import jwt_decode from 'jwt-decode';
 
-import {Storage} from '@capacitor/storage';
+import { Storage } from '@capacitor/storage';
 
 const TOKEN_KEY = "JWT_ACCOUNT";
 
