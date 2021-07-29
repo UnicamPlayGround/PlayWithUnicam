@@ -3,12 +3,12 @@ const app = express();
 
 const utente = require('./backend/utente');
 const controller = require('./backend/controller');
-const { response } = require('express');
 
 //TODO
 const SECRET_PWD = "secret";
 const SECRET_KEY = "secret_jwt";
 
+const bcrypt = require('bcrypt');
 //Run the app by serving the static files in the dist directory
 app.use(express.static(__dirname + '/www'));
 
@@ -17,7 +17,6 @@ app.use(express.json());
 
 /**
  * REST - POST
- *
  */
 
 /**
@@ -45,13 +44,11 @@ app.post('/login/utente', (req, res) => {
     }
 });
 
-
 /**
  * REST - Registrazione
  */
- app.post('/register/utente', (req, res) => {
+app.post('/register/utente', (req, res) => {
     try {
-        
         utente.cercaUtenteByUsername(req.body.username, (err, results) => {
             try {
                 if (err) return res.status(500).send('Server error!');
