@@ -30,7 +30,7 @@ app.post('/login/utente', (req, res) => {
 
             const user = JSON.parse(JSON.stringify(results.rows));
 
-            const toControl = bcrypt.hashSync(password + SECRET_PWD, user[0].salt);
+            const toControl = bcrypt.hashSync(req.body.password + SECRET_PWD, user[0].salt);
             const result = (user[0].password == toControl);
             if (!result) return res.status(401).send('Password non valida!');
 
