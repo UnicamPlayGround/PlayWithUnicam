@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-content-with-hexagon-background">
+  <form (ngSubmit)="register()" [formGroup]="credenziali">
+
+    <ion-card class="auth-card">
+      <br>
+      <br>
+      <ion-card-header>
+        <ion-card-title style="font-size:35px"><strong>Registrazione </strong></ion-card-title>
+      </ion-card-header>
+
+      <br>
+
+      <ion-card-content>
+        <ion-row>
+          <ion-col width-25>
+            <ion-item lines="full">
+              <ion-label position="floating"> Username</ion-label>
+              <ion-icon name="accessibility-outline" slot="start"></ion-icon>
+              <ion-input type="name" name="username" formControlName="username" required></ion-input>
+            </ion-item>
+          </ion-col>
+
+        </ion-row>
+
+        <ion-row>
+          <ion-col>
+            <ion-item lines="full">
+              <ion-label position="floating"> Password</ion-label>
+              <ion-icon name="key-outline" slot="start"></ion-icon>
+              <ion-input type="password" name="password" formControlName="password" required></ion-input>
+            </ion-item>
+          </ion-col>
+
+        </ion-row>
+
+        <br>
+
+        <ion-row>
+          <ion-col>
+            <ion-button type="submit" color="primary" expand="block">Registrati</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+  </form>
+</ion-content>

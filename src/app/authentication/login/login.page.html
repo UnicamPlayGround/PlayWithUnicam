@@ -1,17 +1,19 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Login</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <form (ngSubmit)="login()" [formGroup]="credenziali">
 
-      <ion-card>
+      <ion-card class="auth-card">
         <br>
         <br>
         <ion-card-header>
-          <ion-card-title style="font-size:35px"><strong>Login</strong></ion-card-title>
+          <ion-card-title><strong>Login</strong></ion-card-title>
         </ion-card-header>
 
         <ion-card-content>
@@ -31,7 +33,7 @@
                 <ion-button type="submit" color="primary" expand="block">Sign In</ion-button>
               </div>
               <br>
-              <a [routerLink]="['/forgot-password']" class="small-text forgot-password">Forgot Password?</a>
+              <a [routerLink]="['/forgot-password']" class="small-text forgot-password" style="text-decoration: none;">Password dimenticata?</a>
               <br>
             </ion-col>
           </ion-row>

@@ -7,7 +7,7 @@ import { LoginService } from 'src/app/services/login.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+  styleUrls: ['../auth.scss'],
 })
 export class LoginPage implements OnInit {
   credenziali: FormGroup;
@@ -22,7 +22,7 @@ export class LoginPage implements OnInit {
   ngOnInit() {
     this.credenziali = this.fb.group({
       username: ['', [Validators.required]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
     });
   }
 

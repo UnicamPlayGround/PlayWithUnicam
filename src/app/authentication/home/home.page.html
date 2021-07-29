@@ -1,0 +1,37 @@
+<!-- <ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Home
+    </ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-content [fullscreen]="true">
+  <ion-card class="login-card">
+    <ion-card-header>
+      <ion-card-title style="font-size:35px"><strong>Benvenuto!</strong></ion-card-title>
+      <h3><strong>Scegli un nickname per iniziare:</strong></h3>
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <form (ngSubmit)="start()" [formGroup]="credenziali">
+        <ion-input style="font-size:25px" type="nickname" name="username" formControlName="username" placeholder="Inserisci un nickname" required>
+        </ion-input>
+        <ion-button expand="block" type="submit">GIOCA ORA!</ion-button>
+      </form>
+
+      <br>
+      <h2>Oppure</h2>
+      <br>
+
+      <ion-button expand="block" color="danger" routerLink="/login">ACCEDI</ion-button>
+
+      <br>
+
+      <h2>Non sei ancora registrato? <a routerLink="/registration">Registrati ora!</a></h2>
+
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
