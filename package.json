@@ -28,6 +28,7 @@
     "@capacitor/status-bar": "1.0.2",
     "@capacitor/storage": "^1.0.3",
     "@ionic/angular": "^5.5.2",
+    "bcrypt": "^5.0.1",
     "express": "^4.17.1",
     "jwt-decode": "^3.1.2",
     "pg": "^8.7.1",

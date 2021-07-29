@@ -3,6 +3,7 @@ const app = express();
 
 const utente = require('./backend/utente');
 const controller = require('./backend/controller');
+const { response } = require('express');
 
 //TODO
 const SECRET_PWD = "secret";
@@ -43,6 +44,31 @@ app.post('/login/utente', (req, res) => {
         return res.status(400).send(error);
     }
 });
+
+
+/**
+ * REST - Registrazione
+ */
+ app.post('/register/utente', (req, res) => {
+    try {
+        
+        utente.cercaUtenteByUsername(req.body.username, (err, results) => {
+            try {
+                if (err) return res.status(500).send('Server error!');
+                const users = JSON.parse(JSON.stringify(results.rows));
+
+                if (users.length == 0)
+                    utente.creaUtente(req.body.username, req.body.password, res);
+                else return res.status(400).send("L'username \'" + users[0].username + "\' è già stato usato!");
+            } catch (error) {
+                return res.status(400).send(error);
+            }
+        });
+    } catch (error) {
+        return res.status(400).send(error);
+    }
+});
+
 
 app.get('/*', function (req, res) {
     res.sendFile('index.html', { root: __dirname + '/www' });
