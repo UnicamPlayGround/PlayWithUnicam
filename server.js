@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 
+const admin = require('./backend/admin');
 const controller = require('./backend/controller');
 const game = require('./backend/game');
 const utente = require('./backend/utente');
@@ -27,6 +28,13 @@ function verificaJWT(token) {
     } catch (error) {
         return false;
     }
+}
+
+function verificaAdmin(token) {
+    if (verificaJWT) {
+        tipo = (jwt.decode(token)).tipo;
+        return (tipo == "ADMIN");
+    } else return false;
 }
 
 /**
@@ -61,6 +69,17 @@ app.get('/game/status', (req, res) => {
     } else return res.status(401).send(ERRORE_JWT);
 });
 
+/**
+ * REST - Ritorna la lista degli Utenti
+ */
+app.get('/admin/utenti', (req, res) => {
+    if (verificaAdmin(req.headers.token)) {
+        admin.getUtenti((err, results) => {
+            if (err) return res.status(500).send('Server error!');
+            returnDataInJSON(res, results);
+        });
+    } else return res.status(401).send(ERRORE_JWT);
+});
 
 /**
  * REST - POST
