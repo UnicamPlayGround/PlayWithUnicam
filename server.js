@@ -8,11 +8,25 @@ const controller = require('./backend/controller');
 const SECRET_PWD = "secret";
 const SECRET_KEY = "secret_jwt";
 
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+
+const ERRORE_JWT = "Errore, JWT non valido! Rieffettua il Login."
+
 //Run the app by serving the static files in the dist directory
 app.use(express.static(__dirname + '/www'));
 
 app.use(express.json());
+
+function verificaJWT(token) {
+    try {
+        if (token == null || token == '' || token == undefined) return false;
+        jwt.verify(token, SECRET_KEY);
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
 
 
 /**
