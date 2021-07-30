@@ -6,7 +6,7 @@ BEGIN;
 CREATE TABLE IF NOT EXISTS public.lobby
 (
     codice character varying(20) NOT NULL,
-    admin_lobby character varying(30) NOT NULL,
+    admin_lobby character varying(30),
     data_creazione date NOT NULL,
     ultima_richiesta date NOT NULL,
     id_gioco serial NOT NULL,
@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS public.partite
     codice_lobby character varying(20) NOT NULL,
     giocatore_corrente character varying(30),
     vincitore character varying(30),
+    info_partita json,
     PRIMARY KEY (codice)
 );
 

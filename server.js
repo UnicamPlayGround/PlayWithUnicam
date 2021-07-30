@@ -1,8 +1,9 @@
 const express = require('express');
 const app = express();
 
-const utente = require('./backend/utente');
 const controller = require('./backend/controller');
+const game = require('./backend/game');
+const utente = require('./backend/utente');
 
 //TODO
 const SECRET_PWD = "secret";
@@ -27,6 +28,38 @@ function verificaJWT(token) {
         return false;
     }
 }
+
+/**
+ * Ritorna il risultato di una query in formato JSON.
+ * @param {*} response 
+ * @param {*} results Risultato della query da ritornare
+ */
+function returnDataInJSON(response, results) {
+    const data = JSON.parse(JSON.stringify(results.rows));
+    const to_return = { 'results': data };
+
+    response.status(200).send(to_return);
+}
+
+
+/**
+ * REST - GET
+ */
+
+//TODO commentare
+app.get('/game/status', (req, res) => {
+    const token = req.headers.token;
+
+    //TODO controllare che il JWT sia di un giocatore
+    if (verificaJWT(token)) {
+        game.getInfoPartita(jwt.decode(token), (err, results) => {
+            if (err) return res.status(500).send('Server error!');
+
+            const to_return = JSON.parse(JSON.stringify(results.rows));
+            res.status(200).send(to_return[0]);
+        });
+    } else return res.status(401).send(ERRORE_JWT);
+});
 
 
 /**
