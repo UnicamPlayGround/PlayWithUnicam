@@ -24,3 +24,11 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+
+.contact-popover .popover-content{ 
+    border-radius:0px!important;
+     padding:0px!important;
+     right: 0px !important;
+     margin-right: 0px !important;
+}

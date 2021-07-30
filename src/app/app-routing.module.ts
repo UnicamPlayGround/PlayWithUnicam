@@ -18,6 +18,16 @@ const routes: Routes = [
   {
     path: 'registration',
     loadChildren: () => import('./authentication/registration/registration.module').then(m => m.RegistrationPageModule)
+  },
+  {
+    path: 'player/dashboard',
+    loadChildren: () => import('./users/player/dashboard/dashboard.module').then( m => m.DashboardPageModule)
+    //TODO: mettere authguard
+  },
+  {
+    path: 'admin/dashboard',
+    loadChildren: () => import('./users/admin/dashboard/dashboard.module').then( m => m.DashboardPageModule)
+    //TODO: mettere authguard
   }
 ];
 

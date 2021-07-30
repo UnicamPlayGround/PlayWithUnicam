@@ -35,8 +35,8 @@ export class RegistrationPage implements OnInit {
 
     this.registrationService.register(this.credenziali.value).subscribe(
       async (res) => {
-        await loading.dismiss();
         this.router.navigateByUrl('/login', { replaceUrl: true });
+        await loading.dismiss();
         const alert = await this.alertController.create({
           header: 'Registrazione completata',
           message: "Ora puoi effettuare il login",

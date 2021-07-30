@@ -1,0 +1,109 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <!-- <img src="../../../../assets/unicam-logo.png"> -->
+    <ion-title>Dashboard</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="openPopover($event)">
+        <ion-icon name="person-outline" style="font-size:25px;"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-searchbar placeholder="Cerca giochi"></ion-searchbar>
+
+  <!-- <ion-card *ngFor="let game of games" class="card-background-page">
+    <img [src]="game.img" class="game-image" />
+    <div class="card-title">{{game.name}}</div>
+    <div class="game-bio">
+      <h1>{{game.name}}</h1>
+      <ion-item>
+        <h2 class="card-subtitle">
+          <ion-icon name="people-outline"></ion-icon>
+          Giocatori: {{game.min_players}} - {{game.max_players}}
+        </h2>
+        <ion-button slot="end" class="play-button">GIOCA</ion-button>
+      </ion-item>
+    </div>
+  </ion-card> -->
+
+  <!-- <div class="container">
+    <div class="tag">
+      <ion-label>
+        <h1><strong>UNO Card Game</strong></h1>
+        <h2>Giocatori 2-8</h2>
+      </ion-label>
+    </div>
+    <img src="https://bit.ly/3rL2BQP">
+  </div> -->
+
+  <!-- <div class="row">
+    <div class="column">
+
+      <img src="https://bit.ly/3rL2BQP">
+      <img src="https://bit.ly/3rL2BQP">
+      <img src="https://bit.ly/3rL2BQP">
+      <img src="https://bit.ly/3rL2BQP">
+      <img src="https://bit.ly/3rL2BQP">
+      <img src="https://bit.ly/3rL2BQP">
+    </div>
+    <div class="column">
+
+      <img src="https://bit.ly/3rL2BQP">
+      <img src="https://bit.ly/3rL2BQP">
+      <img src="https://bit.ly/3rL2BQP">
+      <img src="https://bit.ly/3rL2BQP">
+      <img src="https://bit.ly/3rL2BQP">
+      <img src="https://bit.ly/3rL2BQP">
+    </div>
+    <div class="column">
+
+      <img src="https://bit.ly/3rL2BQP">
+      <img src="https://bit.ly/3rL2BQP">
+      <img src="https://bit.ly/3rL2BQP">
+      <img src="https://bit.ly/3rL2BQP">
+      <img src="https://bit.ly/3rL2BQP">
+      <img src="https://bit.ly/3rL2BQP">
+    </div>
+    <div class="column">
+
+      <img src="https://bit.ly/3rL2BQP">
+      <img src="https://bit.ly/3rL2BQP">
+      <img src="https://bit.ly/3rL2BQP">
+      <img src="https://bit.ly/3rL2BQP">
+      <img src="https://bit.ly/3rL2BQP">
+      <img src="https://bit.ly/3rL2BQP">
+    </div>
+  </div> -->
+
+  <!-- <ion-infinite-scroll threshold="5%" (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more games...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll> -->
+
+
+  <div class="row">
+    <a *ngFor="let game of games" class="column">
+      <div class="container">
+        <img [src]="game.img" class="image" />
+        <div class="overlay" routerLink="/home">
+          <div class="text">GIOCA ORA!</div>
+        </div>
+        <div class="info">
+          <ion-label>
+            <h1><strong>{{game.name}}</strong></h1>
+            <h2>
+              <ion-icon name="people-outline"></ion-icon>
+              Giocatori {{game.min_players}} - {{game.max_players}}
+            </h2>
+          </ion-label>
+        </div>
+      </div>
+    </a>
+  </div>
+
+</ion-content>

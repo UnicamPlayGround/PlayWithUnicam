@@ -6,7 +6,7 @@ import { LoadingController } from '@ionic/angular';
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+  styleUrls: ['../auth.scss'],
 })
 export class HomePage implements OnInit {
   credenziali: FormGroup;
@@ -31,6 +31,8 @@ export class HomePage implements OnInit {
   async start() {
     const loading = await this.loadingController.create();
     await loading.present();
+
+    this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
     await loading.dismiss();
 
   }
