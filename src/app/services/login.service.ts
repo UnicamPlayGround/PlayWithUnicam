@@ -46,4 +46,10 @@ export class LoginService {
       })
     )
   }
+
+  //TODO
+  async logout() {
+    this.tipologiaAccount.next("");
+    await Storage.remove({ key: TOKEN_KEY });
+  }
 }
