@@ -23,15 +23,14 @@ exports.cercaUtenteByUsername = (username, cb) => {
  */
 exports.creaUtente = (username, password, response) => {
     controller.controllaNotNull(username, "L'username non deve essere vuoto!");
-    controller.controllaNotNull(password, "La password non deve essere vuota!");
+    controller.controllaPassword(password);
 
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password + SECRET_PWD, salt);
 
     db.pool.query('INSERT INTO public.utenti (username, password, salt, tipo) VALUES ($1, $2, $3, $4)',
-        [username, hash, salt, "UTENTE"], (error, results) => {
+        [username, hash, salt, "GIOCATORE"], (error, results) => {
             if (error) return response.status(400).send("NON E' STATO POSSIBILE CREARE L'UTENTE!");
             return response.status(200).send({ 'esito': "1" });
         })
-
 }

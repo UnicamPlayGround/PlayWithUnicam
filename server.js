@@ -38,15 +38,27 @@ function verificaAdmin(token) {
 }
 
 /**
- * Ritorna il risultato di una query in formato JSON.
+ * Invia il risultato di una query in formato JSON.
  * @param {*} response 
- * @param {*} results Risultato della query da ritornare
+ * @param {*} results Risultato della query da inviare
  */
-function returnDataInJSON(response, results) {
+function sendDataInJSON(response, results) {
     const data = JSON.parse(JSON.stringify(results.rows));
     const to_return = { 'results': data };
 
     response.status(200).send(to_return);
+}
+
+/**
+ * Invia il JWT di accesso.
+ * @param {*} response 
+ * @param {*} results JWT da inviare
+ */
+function sendAccessToken(response, toSend) {
+    const expiresIn = 24 * 60 * 60;
+
+    const accessToken = jwt.sign(toSend, SECRET_KEY, { algorithm: 'HS256', expiresIn: expiresIn });
+    return response.status(200).send({ "accessToken": accessToken });
 }
 
 
@@ -76,7 +88,7 @@ app.get('/admin/utenti', (req, res) => {
     if (verificaAdmin(req.headers.token)) {
         admin.getUtenti((err, results) => {
             if (err) return res.status(500).send('Server error!');
-            returnDataInJSON(res, results);
+            sendDataInJSON(res, results);
         });
     } else return res.status(401).send(ERRORE_JWT);
 });
@@ -100,10 +112,8 @@ app.post('/login/utente', (req, res) => {
             const result = (user[0].password == toControl);
             if (!result) return res.status(401).send('Password non valida!');
 
-            const expiresIn = 24 * 60 * 60;
-
-            const accessToken = jwt.sign({ id: user[0].id, tipo: user[0].tipo }, SECRET_KEY, { algorithm: 'HS256', expiresIn: expiresIn });
-            return res.status(200).send({ "accessToken": accessToken });
+            const toSend = { id: user[0].id, tipo: user[0].tipo };
+            sendAccessToken(res, toSend);
         })
     } catch (error) {
         return res.status(400).send(error);
