@@ -3,7 +3,9 @@ const app = express();
 
 const admin = require('./backend/admin');
 const controller = require('./backend/controller');
-const game = require('./backend/game');
+const game = require('./backend/multiplayer/game');
+const lobby = require('./backend/multiplayer/lobby');
+const partita = require('./backend/multiplayer/partita');
 const utente = require('./backend/utente');
 
 //TODO
@@ -58,7 +60,7 @@ function sendAccessToken(response, toSend) {
     const expiresIn = 24 * 60 * 60;
 
     const accessToken = jwt.sign(toSend, SECRET_KEY, { algorithm: 'HS256', expiresIn: expiresIn });
-    return response.status(200).send({ "accessToken": accessToken });
+    return response.status(201).send({ "accessToken": accessToken });
 }
 
 
@@ -67,19 +69,37 @@ function sendAccessToken(response, toSend) {
  */
 
 //TODO commentare
+app.get('/games', (req, res) => {
+    game.getListaGiochi((err, results) => {
+        if (err) return res.status(500).send('Server error!');
+        sendDataInJSON(res, results);
+    });
+})
+
+//TODO commentare
 app.get('/game/status', (req, res) => {
     const token = req.headers.token;
 
     //TODO controllare che il JWT sia di un giocatore
     if (verificaJWT(token)) {
-        game.getInfoPartita(jwt.decode(token), (err, results) => {
+        partita.getInfoPartita(jwt.decode(token), (err, results) => {
             if (err) return res.status(500).send('Server error!');
 
-            const to_return = JSON.parse(JSON.stringify(results.rows));
-            res.status(200).send(to_return[0]);
+            const toReturn = JSON.parse(JSON.stringify(results.rows));
+            res.status(200).send(toReturn[0]);
         });
     } else return res.status(401).send(ERRORE_JWT);
 });
+
+//TODO commentare
+app.get('/dado/:nFacce', (req, res) => {
+    try {
+        const toReturn = game.lancioDado(req.params.nFacce);
+        res.status(200).send({ "results": toReturn });
+    } catch (error) {
+        return res.status(400).send(error);
+    }
+})
 
 /**
  * REST - Ritorna la lista degli Utenti
@@ -141,6 +161,15 @@ app.post('/register/utente', (req, res) => {
         return res.status(400).send(error);
     }
 });
+
+//TODO commentare
+app.post('/lobby', (req, res) => {
+    try {
+        lobby.creaLobby(req.body.adminLobby, req.body.idGioco, res);
+    } catch (error) {
+        return res.status(400).send(error);
+    }
+})
 
 
 app.get('/*', function (req, res) {

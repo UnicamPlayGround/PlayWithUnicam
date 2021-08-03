@@ -55,36 +55,48 @@ CREATE TABLE IF NOT EXISTS public.giocatori
 ALTER TABLE public.partite
     ADD FOREIGN KEY (codice_lobby)
     REFERENCES public.lobby (codice)
+    ON DELETE CASCADE
+	ON UPDATE CASCADE
     NOT VALID;
 
 
 ALTER TABLE public.lobby
     ADD FOREIGN KEY (id_gioco)
     REFERENCES public.giochi (id)
+    ON DELETE CASCADE
+	ON UPDATE CASCADE
     NOT VALID;
 
 
 ALTER TABLE public.lobby
     ADD FOREIGN KEY (admin_lobby)
     REFERENCES public.giocatori (username)
+    ON DELETE CASCADE
+	ON UPDATE CASCADE
     NOT VALID;
 
 
 ALTER TABLE public.giocatori
     ADD FOREIGN KEY (codice_lobby)
     REFERENCES public.lobby (codice)
+    ON DELETE CASCADE
+	ON UPDATE CASCADE
     NOT VALID;
 
 
 ALTER TABLE public.partite
     ADD FOREIGN KEY (giocatore_corrente)
     REFERENCES public.giocatori (username)
+    ON DELETE CASCADE
+	ON UPDATE CASCADE
     NOT VALID;
 
 
 ALTER TABLE public.partite
     ADD FOREIGN KEY (vincitore)
     REFERENCES public.giocatori (username)
+    ON DELETE CASCADE
+	ON UPDATE CASCADE
     NOT VALID;
 
 END;
