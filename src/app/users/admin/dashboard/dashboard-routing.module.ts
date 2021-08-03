@@ -7,7 +7,13 @@ const routes: Routes = [
   {
     path: '',
     component: DashboardPage
+  },
+  {
+    path: 'users',
+    component: DashboardPage,
+    loadChildren: () => import('../users/users.module').then( m => m.UsersPageModule)
   }
+
 ];
 
 @NgModule({

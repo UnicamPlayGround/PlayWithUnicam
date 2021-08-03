@@ -1,0 +1,138 @@
+<ion-header>
+  <ion-toolbar color="primary">
+
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Giochi</ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar>
+    <ion-segment (ionChange)="segmentChanged($event)" value="lista">
+      <ion-segment-button value="lista">
+        <ion-label>Lista</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="crea">
+        <ion-label>Crea</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div *ngIf="segment === 'lista'">
+
+    <ion-item>
+      <ion-label>Elenco dei giochi aggiunti:</ion-label>
+    </ion-item>
+
+    <div class="row">
+      <a *ngFor="let game of games" class="column">
+        <div class="container">
+          <img [src]="game.img" class="image" />
+          <div class="overlay">
+            <div class="text">MODIFICA</div>
+          </div>
+          <div class="info">
+            <ion-label>
+              <h1><strong>{{game.name}}</strong></h1>
+              <h2>
+                <ion-icon name="people-outline"></ion-icon>
+                Giocatori {{game.min_players}} - {{game.max_players}}
+              </h2>
+            </ion-label>
+          </div>
+        </div>
+      </a>
+    </div>
+
+  </div>
+
+  <div *ngIf="segment === 'crea'" class="segment-div">
+
+    <ion-list lines="inset">
+      <ion-list-header>
+        <h2><strong>Info</strong></h2>
+      </ion-list-header>
+
+      <ion-item style="font-size: 20px;">
+        <ion-label position="floating">Nome</ion-label>
+        <ion-input type="text" placeholder="Inserisci il nome del gioco"></ion-input>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label>Giocatori</ion-label>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label position="floating">Min</ion-label>
+              <ion-input type="number"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-item>
+              <ion-label position="floating">Max</ion-label>
+              <ion-input type="number"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Tipologia</ion-label>
+        <ion-input type="text" placeholder="Inserisci il tipo del gioco"></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <ion-list lines="inset">
+      <ion-list-header>
+        <h2><strong>Impostazioni</strong></h2>
+      </ion-list-header>
+      <ion-item>
+        <ion-label>
+          Attiva
+          <p>Una volta caricato, il gioco sarà visibile a tutti i giocatori.</p>
+        </ion-label>
+        <ion-toggle slot="end"></ion-toggle>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>
+          Consenti multiplayer
+          <p>Se abilitato, l'utente potrà giocare con altri giocatori online</p>
+        </ion-label>
+        <ion-toggle slot="end"></ion-toggle>
+      </ion-item>
+    </ion-list>
+
+    <ion-list lines="inset">
+      <ion-list-header>
+        <h2><strong>Anteprima</strong></h2>
+      </ion-list-header>
+
+        <div class="preview">
+          <img src="https://bit.ly/376IQJU" class="image" />
+          <div class="overlay">
+            <div class="text">GIOCA ORA!</div>
+          </div>
+          <div class="info">
+            <ion-label>
+              <h1><strong>Gioco dell'Oca</strong></h1>
+              <h2>
+                <ion-icon name="people-outline"></ion-icon>
+                Giocatori 2 - 6
+              </h2>
+            </ion-label>
+          </div>
+        </div>
+
+    </ion-list>
+
+  </div>
+
+</ion-content>

@@ -1,9 +1,34 @@
 <ion-header>
   <ion-toolbar color="primary">
+
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
     <ion-title>Dashboard</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+
+  <ion-row class="row">
+    <ion-card class="users-card" routerLink="/admin/users">
+      <ion-label>
+        <h1>
+          <ion-icon name="people-outline"></ion-icon>
+        </h1>
+        <h1>GESTISCI UTENTI</h1>
+      </ion-label>
+    </ion-card>
+
+    <ion-card class="games-card" routerLink="/admin/games">
+      <ion-label>
+        <h1>
+          <ion-icon name="game-controller-outline"></ion-icon>
+        </h1>
+        <h1>GESTISCI GIOCHI</h1>
+      </ion-label>
+    </ion-card>
+  </ion-row>
 
 </ion-content>

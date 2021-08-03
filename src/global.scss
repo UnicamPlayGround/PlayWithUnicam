@@ -32,3 +32,12 @@
      right: 0px !important;
      margin-right: 0px !important;
 }
+
+.menu-active-item{
+    border-left: 8px solid var(--ion-color-primary);
+    --ion-text-color: var(--ion-color-primary);
+
+    ion-icon{
+        --ion-text-color-rgb: var(--ion-color-primary);
+    }
+}

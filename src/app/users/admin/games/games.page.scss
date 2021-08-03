@@ -1,0 +1,111 @@
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 10px;
+  }
+
+  .column {
+    flex: 100%;
+    max-width: 100%;
+    padding: 0 10px;
+  }
+
+  .column img {
+    margin-top: 20px;
+    vertical-align: middle;
+  }
+
+  .container {
+    position: relative;
+    width: 100%;
+  }
+
+  .image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: 0.5s ease;
+    background-color: black;
+  }
+
+  .container:hover .overlay {
+    opacity: 0.7;
+  }
+
+  .text {
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .info{
+    float: left;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    z-index: 1000;
+    background-color: #409e99;
+    padding: 5px;
+    color: #FFFFFF;
+    font-weight: bold;
+  }
+
+/* Desktop Styles */
+@media only screen and (min-width: 1100px){
+    .column {
+      flex: 25.0%;
+      max-width: 25.0%;
+    }
+}
+
+/* Desktop/Large Tablet Styles */
+@media only screen and (min-width: 820px) and (max-width: 1099px){
+    .column {
+      flex: 33.3%;
+      max-width: 33.3%;
+    }
+}
+
+/* Tablet Styles */
+@media only screen and (min-width: 560px) and (max-width: 819px){
+    .column {
+      flex: 50%;
+      max-width: 50%;
+    }
+}
+
+.segment-div {
+  padding: 25px;
+}
+
+.preview {
+  width: 35%;
+  position: relative;
+}
+
+.preview img {
+  margin-top: 20px;
+  vertical-align: middle;
+}
+
+.preview:hover .overlay {
+  opacity: 0.7;
+}

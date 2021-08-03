@@ -25,8 +25,8 @@ const routes: Routes = [
     //TODO: mettere authguard
   },
   {
-    path: 'admin/dashboard',
-    loadChildren: () => import('./users/admin/dashboard/dashboard.module').then( m => m.DashboardPageModule)
+    path: 'admin',
+    loadChildren: () => import('./users/admin/menu/menu.module').then( m => m.MenuPageModule)
     //TODO: mettere authguard
   }
 ];

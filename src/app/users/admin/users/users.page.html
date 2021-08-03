@@ -1,0 +1,84 @@
+<ion-header>
+  <ion-toolbar color="primary">
+
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Utenti</ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar>
+    <ion-row>
+      <ion-button (click)="toggleBulkEdit()" expand="full">Seleziona</ion-button>
+      <ion-button (click)="bulkDelete()" expand="full" color="danger" *ngIf="bulkEdit">
+        Elimina
+        <ion-icon slot="end" name="trash"></ion-icon>
+      </ion-button>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container">
+    
+
+    <ion-row class="header-row">
+      <ion-col size="1" *ngIf="bulkEdit" class="checkbox-column"></ion-col>
+
+      <ion-col size-md="4.5" size-lg="4.5" tappable class="ion-hide-lg-down" (click)="sortBy('email')">
+        Email
+        <ion-icon name="arrow-down" *ngIf="sortDirection == 1"></ion-icon>
+        <ion-icon name="arrow-up" *ngIf="sortDirection == 2"></ion-icon>
+      </ion-col>
+
+      <ion-col size="2" class="ion-hide-lg-down" tappable (click)="sortBy('name?.first')">
+        Nome
+      </ion-col>
+
+      <ion-col size="2" class="ion-hide-lg-down" tappable (click)="sortBy('name?.last')">
+        Cognome
+      </ion-col>
+
+      <ion-col size="2" class="ion-hide-lg-down">
+        Tipologia
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngFor="let user of users; let i = index;" class="data-row">
+      <ion-col size="1" *ngIf="bulkEdit" class="checkbox-column">
+        <ion-checkbox [(ngModel)]="edit[i]"></ion-checkbox>
+      </ion-col>
+
+      <ion-item class="ion-hide-lg-up">
+        <ion-label class="ion-hide-lg-up">
+          <h2 style="font-size:18px;">{{user.email}}</h2>
+          <p>Nome: {{user.name?.first}}</p>
+          <p>Cognome: {{user.name?.last}}</p>
+          <p>Tipologia: GIOCATORE</p>
+        </ion-label>
+      </ion-item>
+
+      <ion-col size-md="4.5" size-lg="4.5" class="ion-hide-lg-down">
+        {{user.email}}
+      </ion-col>
+
+      <ion-col size="2" class="ion-hide-lg-down">
+        {{user.name?.first}}
+      </ion-col>
+
+      <ion-col size="2" class="ion-hide-lg-down">
+        {{user.name?.last}}
+      </ion-col>
+
+      <ion-col size="2" class="ion-hide-lg-down">
+        GIOCATORE
+      </ion-col>
+    </ion-row>
+
+    <ion-infinite-scroll threshold="5%" (ionInfinite)="loadMore($event)">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more users...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </div>
+</ion-content>
