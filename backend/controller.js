@@ -17,3 +17,12 @@ exports.controllaRisultatoQuery = (results) => {
 exports.controllaNotNull = function (toControl, errorText) {
     if (toControl == null) throw errorText;
 }
+
+/**
+ * Controlla che la password sia compresa tra 8 e 16 caratteri.
+ * @param {String} password password da controllare
+ */
+exports.controllaPassword = function (password) {
+    if (password == null || password.length < 8 || password.length > 16)
+        throw "La password deve essere compresa tra 8 e 16 caratteri.";
+}
