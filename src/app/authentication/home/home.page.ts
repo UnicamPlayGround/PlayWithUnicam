@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
+import { LoginService } from 'src/app/services/login.service';
+
 
 @Component({
   selector: 'app-home',
@@ -14,7 +16,8 @@ export class HomePage implements OnInit {
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private loginService: LoginService,
   ) { }
 
 
@@ -28,12 +31,22 @@ export class HomePage implements OnInit {
     this.router.navigateByUrl('/login', { replaceUrl: true });
   }
 
-  async start() {
+  async loginOspiti() {
+    console.log("username : "+this.credenziali.value);
     const loading = await this.loadingController.create();
     await loading.present();
 
-    this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
-    await loading.dismiss();
-
+    this.loginService.loginOspiti(this.credenziali.value).subscribe(
+      async (res) => {
+        this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
+        await loading.dismiss();
+      },
+      async (res) => {
+        await loading.dismiss();
+        console.log("Login fallito");
+        //TODO da fare
+        // this.errorManager.stampaErrore(res, 'Login Failed');
+      }
+    );
   }
 }

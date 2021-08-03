@@ -29,6 +29,7 @@ export class LoginService {
     }
   }
 
+
   //TODO
   login(credenziali: { username, password }): Observable<any> {
     return this.http.post('/login/utente', credenziali).pipe(
@@ -36,6 +37,27 @@ export class LoginService {
       switchMap(token => {
         Storage.set({ key: TOKEN_KEY, value: token });
         console.log(token);
+        if (token == null)
+          return "0";
+        else
+          return "1";
+      }),
+      tap(_ => {
+        this.loadToken();
+      })
+    )
+  }
+
+
+  //TODO
+  loginOspiti(credenziali: { username }): Observable<any> {
+    console.log(credenziali.username);
+    return this.http.post('/login/ospiti', credenziali).pipe(
+      map((data: any) => data.accessToken),
+      switchMap(token => {
+        Storage.set({ key: TOKEN_KEY, value: token });
+        console.log(token);
+        //TODO
         if (token == null)
           return "0";
         else

@@ -15,7 +15,7 @@
 
     <ion-card-content>
 
-      <form (ngSubmit)="start()" [formGroup]="credenziali">
+      <form (ngSubmit)="loginOspiti()" [formGroup]="credenziali">
         <ion-input style="font-size:25px" type="nickname" name="username" formControlName="username" placeholder="Inserisci un nickname" required>
         </ion-input>
         <ion-button expand="block" type="submit">GIOCA ORA!</ion-button>

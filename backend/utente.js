@@ -14,13 +14,16 @@ exports.cercaUtenteByUsername = (username, cb) => {
     });
 }
 
+//TODO da commentare
+exports.cercaOspiteByUsername = (username, cb) => {
+    controller.controllaNotNull(username, "L'username non deve essere vuoto!");
+    return db.pool.query('SELECT * FROM public.ospiti WHERE username = $1', [username], (error, results) => {
+        cb(error, results)
+    });
+}
 
-/**
- * TODO
- * @param {*} username 
- * @param {*} password 
- * @param {*} response 
- */
+
+//TODO
 exports.creaUtente = (username, password, response) => {
     controller.controllaNotNull(username, "L'username non deve essere vuoto!");
     controller.controllaPassword(password);
@@ -33,4 +36,14 @@ exports.creaUtente = (username, password, response) => {
             if (error) return response.status(400).send("NON E' STATO POSSIBILE CREARE L'UTENTE!");
             return response.status(200).send({ 'esito': "1" });
         })
+}
+
+//TODO
+exports.creaOspite = (username, cb) => {
+    controller.controllaNotNull(username, "L'username non deve essere vuoto!");
+
+    db.pool.query('INSERT INTO public.ospiti (username) VALUES ($1)',
+    [username], (error, results) => {
+        cb(error, results)
+    })
 }

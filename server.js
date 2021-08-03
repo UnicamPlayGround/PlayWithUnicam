@@ -132,7 +132,7 @@ app.post('/login/utente', (req, res) => {
             const result = (user[0].password == toControl);
             if (!result) return res.status(401).send('Password non valida!');
 
-            const toSend = { id: user[0].id, tipo: user[0].tipo };
+            const toSend = { username: user[0].username, tipo: user[0].tipo };
             sendAccessToken(res, toSend);
         })
     } catch (error) {
@@ -166,6 +166,31 @@ app.post('/register/utente', (req, res) => {
 app.post('/lobby', (req, res) => {
     try {
         lobby.creaLobby(req.body.adminLobby, req.body.idGioco, res);
+    } catch (error) {
+        return res.status(400).send(error);
+    }
+})
+
+//TODO
+app.post('/login/ospiti', (req, res) => {
+    console.log(req.body.username);
+    try {
+        utente.cercaUtenteByUsername(req.body.username, (err, results) => {
+            
+            if (err) return res.status(500).send('Server Error!');
+            if (!controller.controllaRisultatoQuery(results)) return res.status(404).send("L'username " + req.body.username + " è già in uso");
+
+            utente.cercaOspiteByUsername(req.body.username, (err, results) => {
+                if (err) return res.status(500).send('Server Error!');
+                if (!controller.controllaRisultatoQuery(results)) return res.status(404).send("L'username " + req.body.username + " è già in uso");
+
+                utente.creaOspite(req.body.username, (err, results) => {
+                    if (err) return res.status(400).send("NON E' STATO POSSIBILE CREARE L'OSPITE!");
+                    const toSend = { username: req.body.username, tipo: "OSPITE" };
+                    sendAccessToken(res, toSend);
+                });
+            })
+        })
     } catch (error) {
         return res.status(400).send(error);
     }
