@@ -28,7 +28,12 @@ const routes: Routes = [
     path: 'admin',
     loadChildren: () => import('./users/admin/menu/menu.module').then( m => m.MenuPageModule)
     //TODO: mettere authguard
+  },
+  {
+    path: 'lobby',
+    loadChildren: () => import('./lobby/lobby-home/lobby-home.module').then( m => m.LobbyHomePageModule)
   }
+
 ];
 
 @NgModule({

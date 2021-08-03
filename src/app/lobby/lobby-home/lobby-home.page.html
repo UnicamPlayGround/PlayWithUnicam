@@ -1,0 +1,135 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-toolbar>
+    <ion-segment (ionChange)="segmentChanged($event)" value="impostazioni">
+      <ion-segment-button value="impostazioni">
+        <ion-label>Impostazioni</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="gioca">
+        <ion-label>Gioca ora</ion-label>
+      </ion-segment-button>
+    </ion-segment>  
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-div" *ngIf="segment === 'impostazioni'">
+
+    <ion-row>
+      <ion-col>
+        <div class="list-div" >
+          <ion-list inset style="width:240px;height:400px;overflow-y: scroll; border:1px solid black;">
+            <ion-list-header>GIOCATORI</ion-list-header>
+            <ion-item>
+              <ion-avatar class="ion-margin-start">
+                <img src="https://image.flaticon.com/icons/png/512/4333/4333609.png" alt="avatar player">
+              </ion-avatar>
+
+              <ion-label>
+                <h2>Leonardo</h2>
+              </ion-label>
+            </ion-item>
+
+            <ion-item>
+
+              <ion-avatar class="ion-margin-start">
+                <img src="https://image.flaticon.com/icons/png/512/4333/4333609.png" alt="avatar player">
+              </ion-avatar>
+              <ion-label>
+                <h2>Matteo</h2>
+              </ion-label>
+            </ion-item>
+
+            <ion-item>
+              <ion-avatar class="ion-margin-start">
+                <img src="https://image.flaticon.com/icons/png/512/4333/4333609.png" alt="avatar player">
+              </ion-avatar>
+              <ion-label>
+                <h2>Tommaso</h2>
+              </ion-label>
+            </ion-item>
+
+            <ion-item>
+              <ion-avatar class="ion-margin-start">
+                <img src="https://image.flaticon.com/icons/png/512/4333/4333609.png" alt="avatar player">
+              </ion-avatar>
+
+              <ion-label>
+                <h2>Lorenzo</h2>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </div>
+      </ion-col>
+
+      <ion-col>
+        <div >
+          <ion-list class="impostazioni-div">
+            <ion-item>
+              <span><label>Codice lobby: </label></span>
+              <span><label style="margin-left: 500px;">123456 </label></span>
+            </ion-item>
+            <ion-item>
+              <ion-label>Categoria lobby:</ion-label>
+              <ion-select value="Pubblica">
+                <ion-select-option value="Pubblica">Pubblica</ion-select-option>
+                <ion-select-option value="Privata">Privata</ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>Min numero partecipanti</ion-label>
+              <ion-select value="1">
+                <ion-select-option value="1">1</ion-select-option>
+                <ion-select-option value="2">2</ion-select-option>
+                <ion-select-option value="3">3</ion-select-option>
+                <ion-select-option value="4">4</ion-select-option>
+                <ion-select-option value="5">5</ion-select-option>
+                <ion-select-option value="6">6</ion-select-option>
+                <ion-select-option value="7">7</ion-select-option>
+                <ion-select-option value="8">8</ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>Max numero partecipanti</ion-label>
+              <ion-select value="1">
+                <ion-select-option value="1">1</ion-select-option>
+                <ion-select-option value="2">2</ion-select-option>
+                <ion-select-option value="3">3</ion-select-option>
+                <ion-select-option value="4">4</ion-select-option>
+                <ion-select-option value="5">5</ion-select-option>
+                <ion-select-option value="6">6</ion-select-option>
+                <ion-select-option value="7">7</ion-select-option>
+                <ion-select-option value="8">8</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-list>
+        </div>
+      </ion-col>
+
+
+    </ion-row>
+  </div>
+
+  <div *ngIf="segment === 'gioca'" class="game-div">
+    <row>
+      <img src="https://images.crazygames.com/games/goose-game/cover-1596195229993.png?auto=format,compress&q=75&cs=strip" alt="goose game">
+    </row>
+    <br>
+    <br>
+    <br>
+    <row>
+      
+        <ion-button color="warning">PLAY</ion-button>
+      
+    </row>
+    
+  </div>
+</ion-content>
