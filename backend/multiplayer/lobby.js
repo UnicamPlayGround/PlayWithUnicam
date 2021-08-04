@@ -9,15 +9,41 @@ function creaCodice() {
     return toReturn;
 }
 
+/**
+ * Controlla che non siano attive altre Lobby create dallo stesso Admin.
+ * In caso positivo la vecchia lobby viene cancellata.
+ * @param {*} results Risultato della query del metodo "cercaLobbyByAdmin"
+ */
+function controllaLobbyAdmin(results) {
+    if (!controller.controllaRisultatoQuery(results)) {
+        const tmp = JSON.parse(JSON.stringify(results.rows));
+        this.cancellaLobby(tmp[0].codice);
+    }
+}
+
+exports.cercaLobbyByAdmin = (adminLobby, cb) => {
+    return db.pool.query('SELECT * FROM public.lobby WHERE admin_lobby=$1',
+        [adminLobby], (error, results) => {
+            cb(error, results)
+        });
+}
+
+exports.cancellaLobby = (codice) => {
+    db.pool.query('DELETE FROM public.lobby WHERE codice = $1', [codice], (error, results) => { })
+}
 
 exports.creaLobby = (adminLobby, idGioco, response) => {
-    const codiceLobby = creaCodice();
+    this.cercaLobbyByAdmin(adminLobby, (err, results) => {
+        controllaLobbyAdmin(results);
 
-    db.pool.query('INSERT INTO public.lobby (codice, ultima_richiesta, id_gioco) VALUES ($1, NOW(), $2)',
-        [codiceLobby, idGioco], (error, results) => {
-            if (error) return response.status(400).send("Non è stato possibile creare la Lobby!");
-            giocatore.creaGiocatore(adminLobby, codiceLobby, "ADMIN", response);
-        })
+        const codiceLobby = creaCodice();
+
+        db.pool.query('INSERT INTO public.lobby (codice, ultima_richiesta, id_gioco) VALUES ($1, NOW(), $2)',
+            [codiceLobby, idGioco], (error, results) => {
+                if (error) return response.status(400).send("Non è stato possibile creare la Lobby!");
+                giocatore.creaGiocatore(adminLobby, codiceLobby, "ADMIN", response);
+            })
+    })
 }
 
 exports.impostaAdminLobby = (adminLobby, codiceLobby, response) => {
