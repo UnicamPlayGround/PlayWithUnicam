@@ -23,6 +23,8 @@ export class RegistrationPage implements OnInit {
 
   ngOnInit() {
     this.credenziali = this.fb.group({
+      nome: ['', [Validators.required]],
+      cognome: ['', [Validators.required]],
       username: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(8)]],
     })
@@ -39,7 +41,7 @@ export class RegistrationPage implements OnInit {
         await loading.dismiss();
         const alert = await this.alertController.create({
           header: 'Registrazione completata',
-          message: "Ora puoi effettuare il login",
+          message: "Ora puoi effettuare il login!",
           buttons: ['OK'],
         });
         await alert.present();
@@ -51,5 +53,4 @@ export class RegistrationPage implements OnInit {
       }
     );
   }
-
 }

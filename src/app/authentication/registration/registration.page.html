@@ -13,41 +13,36 @@
       <br>
       <br>
       <ion-card-header>
-        <ion-card-title><strong>Registrazione </strong></ion-card-title>
+        <ion-card-title><strong>Registrazione</strong></ion-card-title>
       </ion-card-header>
 
-      <br>
-
       <ion-card-content>
-        <ion-row>
-          <ion-col width-25>
-            <ion-item lines="full">
-              <ion-label position="floating"> Username</ion-label>
-              <ion-icon name="accessibility-outline" slot="start"></ion-icon>
-              <ion-input type="name" name="username" formControlName="username" required></ion-input>
-            </ion-item>
-          </ion-col>
 
-        </ion-row>
+        <ion-list lines="full">
+          <ion-item>
+            <ion-label position="floating">Nome</ion-label>
+            <ion-input type="name" name="nome" formControlName="nome" required placeholder="Inserisci il tuo nome"></ion-input>
+          </ion-item>
 
-        <ion-row>
-          <ion-col>
-            <ion-item lines="full">
-              <ion-label position="floating"> Password</ion-label>
-              <ion-icon name="key-outline" slot="start"></ion-icon>
-              <ion-input type="password" name="password" formControlName="password" required></ion-input>
-            </ion-item>
-          </ion-col>
+          <ion-item>
+            <ion-label position="floating">Cognome</ion-label>
+            <ion-input type="family-name" name="cognome" formControlName="cognome" required placeholder="Inserisci il tuo cognome"></ion-input>
+          </ion-item>
 
-        </ion-row>
+          <ion-item>
+            <ion-label position="floating">Username</ion-label>
+            <ion-input type="name" name="username" formControlName="username" required placeholder="Scegli un username"></ion-input>
+          </ion-item>
 
-        <br>
+          <ion-item>
+            <ion-label position="floating">Password</ion-label>
+            <ion-input type="password" name="password" formControlName="password" required placeholder="Scegli una password"></ion-input>
+          </ion-item>
 
-        <ion-row>
-          <ion-col>
-            <ion-button type="submit" color="primary" expand="block">Registrati</ion-button>
-          </ion-col>
-        </ion-row>
+          <br>
+
+          <ion-button type="submit" color="primary" expand="block">Registrati</ion-button>
+        </ion-list>
       </ion-card-content>
     </ion-card>
   </form>
