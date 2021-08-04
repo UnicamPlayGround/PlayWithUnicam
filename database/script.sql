@@ -39,6 +39,8 @@ CREATE TABLE IF NOT EXISTS public.giochi
 CREATE TABLE IF NOT EXISTS public.utenti
 (
     username character varying(30) NOT NULL,
+	nome character varying(35) NOT NULL,
+	cognome character varying(35) NOT NULL,
     password text NOT NULL,
     salt text NOT NULL,
     tipo character varying(20) NOT NULL,
