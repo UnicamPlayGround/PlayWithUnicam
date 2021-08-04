@@ -6,6 +6,7 @@ BEGIN;
 CREATE TABLE IF NOT EXISTS public.lobby
 (
     codice character varying(20) NOT NULL,
+	pubblica boolean NOT NULL,
     admin_lobby character varying(30),
     data_creazione date NOT NULL DEFAULT CURRENT_DATE,
     ultima_richiesta date NOT NULL,
