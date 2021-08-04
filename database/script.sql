@@ -55,6 +55,12 @@ CREATE TABLE IF NOT EXISTS public.giocatori
     PRIMARY KEY (username)
 );
 
+CREATE TABLE IF NOT EXISTS public.ospiti
+(
+    username character varying(30) NOT NULL,
+    PRIMARY KEY (username)
+);
+
 ALTER TABLE public.partite
     ADD FOREIGN KEY (codice_lobby)
     REFERENCES public.lobby (codice)
