@@ -21,19 +21,18 @@ const routes: Routes = [
   },
   {
     path: 'player/dashboard',
-    loadChildren: () => import('./users/player/dashboard/dashboard.module').then( m => m.DashboardPageModule)
+    loadChildren: () => import('./users/player/dashboard/dashboard.module').then(m => m.DashboardPageModule)
     //TODO: mettere authguard
   },
   {
     path: 'admin',
-    loadChildren: () => import('./users/admin/menu/menu.module').then( m => m.MenuPageModule)
+    loadChildren: () => import('./users/admin/menu/menu.module').then(m => m.MenuPageModule)
     //TODO: mettere authguard
   },
   {
     path: 'lobby',
-    loadChildren: () => import('./lobby/lobby-home/lobby-home.module').then( m => m.LobbyHomePageModule)
+    loadChildren: () => import('./lobby/lobby-home/lobby-home.module').then(m => m.LobbyHomePageModule)
   }
-
 ];
 
 @NgModule({
