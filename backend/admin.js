@@ -20,11 +20,8 @@ exports.eliminaUtenti = (utenti, response) => {
     const users_to_delete = utenti.split(",");
 
     users_to_delete.forEach(username => {
-        console.log('username: ', username);
-
         db.pool.query('delete from public.utenti where username = $1',
             [String(username)], (error, results) => {
-                console.log('sto eliminando..')
                 if (error) return response.status(400).send('Errore nella query');
             });
     });
