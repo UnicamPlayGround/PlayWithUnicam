@@ -11,74 +11,99 @@
   <ion-toolbar>
     <ion-row>
       <ion-button (click)="toggleBulkEdit()" expand="full">Seleziona</ion-button>
-      <ion-button (click)="bulkDelete()" expand="full" color="danger" *ngIf="bulkEdit">
+      <ion-button (click)="presentAlertConfirm()" expand="full" color="danger" *ngIf="bulkEdit">
         Elimina
         <ion-icon slot="end" name="trash"></ion-icon>
       </ion-button>
     </ion-row>
+
+    <ion-item class="ion-hide-lg-down">
+      <ion-icon slot="start" name="information-circle-outline"></ion-icon>
+      <ion-label>Fai click sull'icona della matita di una determinata riga per modificarne il contenuto</ion-label>
+    </ion-item>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div class="container">
-    
+  <div class="table; ion-hide-lg-down">
 
     <ion-row class="header-row">
-      <ion-col size="1" *ngIf="bulkEdit" class="checkbox-column"></ion-col>
+      <ion-col size="0.5" *ngIf="bulkEdit" class="checkbox-column"></ion-col>
 
-      <ion-col size-md="4.5" size-lg="4.5" tappable class="ion-hide-lg-down" (click)="sortBy('email')">
-        Email
-        <ion-icon name="arrow-down" *ngIf="sortDirection == 1"></ion-icon>
-        <ion-icon name="arrow-up" *ngIf="sortDirection == 2"></ion-icon>
+      <ion-col size-md="3" size-lg="3" tappable (click)="sortBy('username')">
+        Username
+        <ion-icon name="arrow-down" *ngIf="sortDirection == 1 && sortKey == 'username'"></ion-icon>
+        <ion-icon name="arrow-up" *ngIf="sortDirection == 2 && sortKey == 'username'"></ion-icon>
       </ion-col>
 
-      <ion-col size="2" class="ion-hide-lg-down" tappable (click)="sortBy('name?.first')">
+      <ion-col size="1.5" tappable (click)="sortBy('nome')">
         Nome
+        <ion-icon name="arrow-down" *ngIf="sortDirection == 1 && sortKey == 'nome'"></ion-icon>
+        <ion-icon name="arrow-up" *ngIf="sortDirection == 2 && sortKey == 'nome'"></ion-icon>
       </ion-col>
 
-      <ion-col size="2" class="ion-hide-lg-down" tappable (click)="sortBy('name?.last')">
+      <ion-col size="1.5" tappable (click)="sortBy('cognome')">
         Cognome
+        <ion-icon name="arrow-down" *ngIf="sortDirection == 1 && sortKey == 'cognome'"></ion-icon>
+        <ion-icon name="arrow-up" *ngIf="sortDirection == 2 && sortKey == 'cognome'"></ion-icon>
       </ion-col>
 
-      <ion-col size="2" class="ion-hide-lg-down">
+      <ion-col size="2" *ngIf="!bulkEdit">
         Tipologia
       </ion-col>
+
+      <ion-col size="0.5" *ngIf="bulkEdit" class="checkbox-column"></ion-col>
     </ion-row>
 
     <ion-row *ngFor="let user of users; let i = index;" class="data-row">
-      <ion-col size="1" *ngIf="bulkEdit" class="checkbox-column">
+      <ion-col size="0.5" *ngIf="bulkEdit" class="checkbox-column">
         <ion-checkbox [(ngModel)]="edit[i]"></ion-checkbox>
       </ion-col>
 
-      <ion-item class="ion-hide-lg-up">
-        <ion-label class="ion-hide-lg-up">
-          <h2 style="font-size:18px;">{{user.email}}</h2>
-          <p>Nome: {{user.name?.first}}</p>
-          <p>Cognome: {{user.name?.last}}</p>
-          <p>Tipologia: GIOCATORE</p>
-        </ion-label>
-      </ion-item>
-
-      <ion-col size-md="4.5" size-lg="4.5" class="ion-hide-lg-down">
-        {{user.email}}
+      <ion-col size-md="3" size-lg="3">
+        {{user.username}}
       </ion-col>
 
-      <ion-col size="2" class="ion-hide-lg-down">
-        {{user.name?.first}}
+      <ion-col size="1.5">
+        {{user.nome}}
       </ion-col>
 
-      <ion-col size="2" class="ion-hide-lg-down">
-        {{user.name?.last}}
+      <ion-col size="1.5">
+        {{user.cognome}}
       </ion-col>
 
-      <ion-col size="2" class="ion-hide-lg-down">
-        GIOCATORE
+      <ion-col size="2">
+        {{user.tipo}}
+      </ion-col>
+
+      <ion-col size="0.5" class="checkbox-column" *ngIf="!bulkEdit">
+        <ion-button fill="clear" (click)="editUser(user, i)">
+          <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+        </ion-button>
       </ion-col>
     </ion-row>
-
-    <ion-infinite-scroll threshold="5%" (ionInfinite)="loadMore($event)">
-      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more users...">
-      </ion-infinite-scroll-content>
-    </ion-infinite-scroll>
   </div>
+
+  <ion-list class="ion-hide-lg-up">
+
+    <ion-item *ngFor="let user of users; let i = index;">
+      <ion-checkbox slot="start" *ngIf="bulkEdit" [(ngModel)]="edit[i]"></ion-checkbox>
+
+      <ion-button slot="end" fill="clear" *ngIf="!bulkEdit" (click)="editUser(user, i)">
+        <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+      </ion-button>
+
+      <ion-label>
+        <h2 style="font-size:18px;">{{user.username}}</h2>
+        <p>Nome: {{user.nome}}</p>
+        <p>Cognome: {{user.cognome}}</p>
+        <p>Tipologia: <strong>{{user.tipo}}</strong></p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-infinite-scroll threshold="5%" (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more users...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

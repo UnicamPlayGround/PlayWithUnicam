@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { LoginService } from 'src/app/services/login.service';
 
 @Component({
@@ -16,7 +16,8 @@ export class LoginPage implements OnInit {
     private fb: FormBuilder,
     private loginService: LoginService,
     private router: Router,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private alertController: AlertController,
   ) { }
 
   ngOnInit() {
@@ -32,8 +33,23 @@ export class LoginPage implements OnInit {
 
     this.loginService.login(this.credenziali.value).subscribe(
       async (res) => {
-        this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
         await loading.dismiss();
+
+        switch (res) {
+          case "1":
+            this.router.navigateByUrl('/player', { replaceUrl: true });
+            break;
+          case "2":
+            this.router.navigateByUrl('/admin', { replaceUrl: true });
+            break;
+          default:
+            const alert = await this.alertController.create({
+              header: 'Login fallito',
+              message: "Rieffettua il Login",
+              buttons: ['OK'],
+            });
+            await alert.present();
+        }
       },
       async (res) => {
         await loading.dismiss();

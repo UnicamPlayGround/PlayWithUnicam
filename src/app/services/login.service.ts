@@ -29,18 +29,27 @@ export class LoginService {
     }
   }
 
+  //TODO
+  async getToken() {
+    const toReturn = await Storage.get({ key: TOKEN_KEY });
+    if (toReturn.value == null) toReturn.value = '';
+    return toReturn;
+  }
 
   //TODO
   login(credenziali: { username, password }): Observable<any> {
     return this.http.post('/login/utente', credenziali).pipe(
       map((data: any) => data.accessToken),
       switchMap(token => {
+        const decoded_token: any = jwt_decode(token);
         Storage.set({ key: TOKEN_KEY, value: token });
         console.log(token);
-        if (token == null)
-          return "0";
-        else
-          return "1";
+
+        switch (decoded_token.tipo) {
+          case "GIOCATORE": return "1";
+          case "ADMIN": return "2";
+          default: return "0";
+        }
       }),
       tap(_ => {
         this.loadToken();

@@ -7,14 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { UsersPageRoutingModule } from './users-routing.module';
 
 import { UsersPage } from './users.page';
+import { EditUserPageModule } from '../modal-pages/edit-user/edit-user.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    UsersPageRoutingModule
+    UsersPageRoutingModule,
+    EditUserPageModule
   ],
   declarations: [UsersPage]
 })
-export class UsersPageModule {}
+export class UsersPageModule { }

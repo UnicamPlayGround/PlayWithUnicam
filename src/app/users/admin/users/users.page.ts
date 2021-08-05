@@ -1,5 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { AlertController, ModalController } from '@ionic/angular';
+import { map, switchMap } from 'rxjs/operators';
+import { LoginService } from 'src/app/services/login.service';
+import { EditUserPage } from '../modal-pages/edit-user/edit-user.page';
 
 @Component({
   selector: 'app-users',
@@ -17,48 +21,40 @@ export class UsersPage implements OnInit {
   sortKey = null;
   maximum_pages = 2;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private modalController: ModalController,
+    private alertController: AlertController,
+    private loginService: LoginService
+  ) {
     this.loadUsers();
   }
 
   ngOnInit() {
   }
 
-  loadUsers(event?) {
-    // this.http.get('https://randomuser.me/api/?page=${this.page}&results=10')
-    //   .subscribe(res => {
-    //     console.log('res:', res);
-    //     // this.users = res['results'];
-    //     this.users = this.users.concat(res['results']);
-    //     this.sort();
-    //     if (event) event.target.complete();
-    //   });
+  async loadUsers(event?) {
+    const token_value = (await this.loginService.getToken()).value;
+    const headers = { 'token': token_value };
 
-    this.http.get('https://randomuser.me/api/?results=20&page=${this.page}')
-      .subscribe(res => {
-        console.log('res:', res);
-        // this.users = res['results'];
+    this.http.get('/admin/utenti', { headers }).subscribe(
+      async (res) => {
         this.users = this.users.concat(res['results']);
-        this.sort();
-        if (event) event.target.complete();
+        // this.reloadManager.completaReload(event);
+      },
+      async (res) => {
+        //TODO:gestione stampa errore
+        // this.errorManager.stampaErrore(res, 'Errore');
+        // this.reloadManager.completaReload(event);
       });
   }
 
-  // loadGames(event?) {
-  //   // this.http.get('https://randomuser.me/api/?results=20&page=${this.page}')
-  //   //   .subscribe(res => {
-  //   //     this.games = this.games.concat(res['results']);
-
-  //   //     if (event) event.target.complete();
-  //   //   });
-  //   this.games = this.games.concat(this.giochi);
-  // }
-
   loadMore(event) {
-    this.page++;
-    this.loadUsers(event);
+    //TODO:
+    // this.page++;
+    // this.loadUsers(event);
 
-    if (this.page === this.maximum_pages) event.target.disabled = true;
+    // if (this.page === this.maximum_pages) event.target.disabled = true;
   }
 
   sortBy(key) {
@@ -86,21 +82,113 @@ export class UsersPage implements OnInit {
     }
   }
 
+  // Abilita il selezionamento multiplo degli elementi per l'eliminazione
   toggleBulkEdit() {
     this.bulkEdit = !this.bulkEdit;
     this.edit = {};
   }
 
-  bulkDelete() {
+  // Rimuove tutti gli utenti selezionati dall'array degli utenti e ritorna un array con i loro username
+  getUsernamesToDelete() {
     let toDelete = Object.keys(this.edit);
-    const reallyDelete = toDelete.filter(index => this.edit[index]).map(key => +key);
-    while (reallyDelete.length) {
-      this.users.splice(reallyDelete.pop(), 1);
+    const indexes_to_delete = toDelete.filter(index => this.edit[index]).map(key => +key);
+    const usernames_to_delete = [];
+
+    while (indexes_to_delete.length) {
+      usernames_to_delete.push(this.users[indexes_to_delete.pop()].username)
     }
-    this.toggleBulkEdit();
+
+    return usernames_to_delete;
   }
 
-  removeRow(index) {
-    this.users.splice(index, 1);
+  deleteUsersFromTable() {
+    let toDelete = Object.keys(this.edit);
+    const indexes_to_delete = toDelete.filter(index => this.edit[index]).map(key => +key);
+
+    while (indexes_to_delete.length) {
+      this.users.splice(indexes_to_delete.pop(), 1);
+    }
+  }
+
+  //TODO: crea component/service
+  async presentAlertConfirm() {
+    if (this.edit && Object.keys(this.edit).length != 0 && this.edit.constructor === Object) {
+      var messaggio = "Sei sicuro di voler eliminare gli utenti selezionati?";
+
+      const alert = await this.alertController.create({
+        header: 'Conferma',
+        message: messaggio,
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+          },
+          {
+            text: 'Okay',
+            handler: () => {
+              this.bulkDelete();
+            }
+          }
+        ]
+      });
+
+      await alert.present();
+    } else {
+      const alert = await this.alertController.create({
+        header: 'Errore',
+        message: 'Seleziona prima qualche elemento!',
+        buttons: ['OK'],
+      });
+      await alert.present();
+    }
+  }
+
+  //TODO: mettere alert per chiedere conferma
+  async bulkDelete() {
+    const token_value = (await this.loginService.getToken()).value;
+    var headers = { 'token': token_value, 'users_to_delete': this.getUsernamesToDelete() };
+    console.log('headers.users_to_delete: ', headers.users_to_delete);
+
+    this.http.delete('/admin/utenti', { headers }).pipe(
+      map((data: any) => data.esito),
+      switchMap(esito => { return esito; })).subscribe(
+        async (res) => {
+          this.deleteUsersFromTable();
+          const text = 'Gli utenti selezionati sono stati eliminati';
+          const alert = await this.alertController.create({
+            header: 'Eliminazione completata',
+            message: text,
+            buttons: ['OK'],
+          });
+          this.toggleBulkEdit();
+          await alert.present();
+        },
+        async (res) => {
+          //TODO: stampa errore
+          // this.errorManager.stampaErrore(res, 'Eliminazione Fallita');
+        });
+  }
+
+  async editUser(user, index) {
+    const modal = await this.modalController.create({
+      component: EditUserPage,
+      componentProps: {
+        username: user.username,
+        nome: user.nome,
+        cognome: user.cognome,
+        tipo: user.tipo
+      },
+      cssClass: 'fullheight'
+    });
+
+    modal.onDidDismiss().then((data) => {
+      const mod_user = data['data'];
+      console.log('mod_user', mod_user);
+
+      if (mod_user)
+        this.users[index] = mod_user;
+    });
+
+    return await modal.present();
   }
 }

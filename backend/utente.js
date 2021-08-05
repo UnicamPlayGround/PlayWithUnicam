@@ -25,6 +25,7 @@ exports.cercaOspiteByUsername = (username, cb) => {
 
 //TODO
 exports.creaUtente = (dati, response) => {
+    //TODO: metterli tutti in un unico metodo
     controller.controllaNotNull(dati.username, "Il campo 'Username' non deve essere vuoto!");
     controller.controllaNotNull(dati.nome, "Il campo 'Nome' non deve essere vuoto!");
     controller.controllaNotNull(dati.cognome, "Il campo 'Cognome' non deve essere vuoto!");

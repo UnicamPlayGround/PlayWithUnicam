@@ -1,6 +1,8 @@
 .header-row {
     font-weight: bold;
     border-bottom: 3px solid #000 !important;
+    height: 50px;
+    align-content: center;
 }
 
 .data-row {
@@ -15,6 +17,6 @@
     align-items: center;
 }
 
-.container{
+.table{
     padding: 10px;
 }

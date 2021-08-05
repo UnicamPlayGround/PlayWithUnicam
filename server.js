@@ -106,11 +106,38 @@ app.get('/dado/:nFacce', (req, res) => {
  */
 app.get('/admin/utenti', (req, res) => {
     if (verificaAdmin(req.headers.token)) {
-        admin.getUtenti((err, results) => {
+        const decoded_token = jwt.decode(req.headers.token);
+        admin.getUtenti(decoded_token.username, (err, results) => {
             if (err) return res.status(500).send('Server error!');
             sendDataInJSON(res, results);
         });
     } else return res.status(401).send(ERRORE_JWT);
+});
+
+/**
+ * REST - Ritorna la lista degli Utenti
+ */
+app.delete('/admin/utenti', (req, res) => {
+    if (verificaAdmin(req.headers.token)) {
+        try {
+            admin.eliminaUtenti(req.headers.users_to_delete, res);
+        } catch (error) {
+            return res.status(400).send(error);
+        }
+    } else return res.status(401).send(ERRORE_JWT);
+});
+
+/**
+ * REST - Modifica i dati dell'utente come admin
+ */
+app.put('/admin/utenti/:username', (req, res) => {
+    if (verificaAdmin(req.body.token)) {
+        try {
+            admin.modificaUtente(req, res);
+        } catch (error) {
+            return res.status(400).send(error);
+        }
+    } else return res.status(401).send('JWT non valido!');
 });
 
 /**
