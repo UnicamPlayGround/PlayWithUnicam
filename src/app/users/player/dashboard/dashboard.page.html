@@ -19,15 +19,15 @@
     <a *ngFor="let game of games" class="column">
       <div class="container">
         <img [src]="game.img" class="image" />
-        <div class="overlay" routerLink="/home">
+        <div class="overlay" (click)="openIntroLobby(game)">
           <div class="text">GIOCA ORA!</div>
         </div>
         <div class="info">
           <ion-label>
-            <h1><strong>{{game.name}}</strong></h1>
+            <h1><strong>{{game.nome}}</strong></h1>
             <h2>
               <ion-icon name="people-outline"></ion-icon>
-              Giocatori {{game.min_players}} - {{game.max_players}}
+              Giocatori {{game.min_giocatori}} - {{game.max_giocatori}}
             </h2>
           </ion-label>
         </div>

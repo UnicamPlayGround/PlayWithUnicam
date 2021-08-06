@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Crea una Lobby</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-content-with-hexagon-background">
+
+  <ion-card class="auth-card">
+    <br>
+    <br>
+    <ion-card-header>
+      <ion-card-title><strong>Creazione Lobby</strong></ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <ion-list lines="full">
+
+        <h2>{{giocoSelezionato.nome}}</h2>
+        <h2>{{giocoSelezionato.min_giocatori}}</h2>
+        <h2>{{giocoSelezionato.max_giocatori}}</h2>
+
+        <ion-item>
+          <ion-label position="floating">ID Gioco</ion-label>
+          <ion-input type="name" name="nome" formControlName="nome" required placeholder="Inserisci il tuo nome">
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Privata</ion-label>
+          <ion-toggle [(ngModel)]="tipo"></ion-toggle>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Nome Gioco</ion-label>
+          <ion-input type="name" name="username" formControlName="username" required placeholder="Scegli un username">
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Min Giocaotiri</ion-label>
+          <ion-input type="password" name="password" formControlName="password" required
+            placeholder="Scegli una password"></ion-input>
+        </ion-item>
+
+        <br>
+        <ion-button color="primary" expand="block" (click)="stampaGioco()">Pippo</ion-button>
+
+        <ion-button type="submit" color="primary" expand="block">Crea Lobby</ion-button>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
