@@ -6,7 +6,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-content-with-hexagon-background">
+<ion-content [fullscreen]="true">
   <form (ngSubmit)="register()" [formGroup]="credenziali">
 
     <ion-card class="auth-card">
@@ -21,22 +21,26 @@
         <ion-list lines="full">
           <ion-item>
             <ion-label position="floating">Nome</ion-label>
-            <ion-input type="name" name="nome" formControlName="nome" required placeholder="Inserisci il tuo nome"></ion-input>
+            <ion-input type="name" name="nome" formControlName="nome" required placeholder="Inserisci il tuo nome">
+            </ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label position="floating">Cognome</ion-label>
-            <ion-input type="family-name" name="cognome" formControlName="cognome" required placeholder="Inserisci il tuo cognome"></ion-input>
+            <ion-input type="family-name" name="cognome" formControlName="cognome" required
+              placeholder="Inserisci il tuo cognome"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label position="floating">Username</ion-label>
-            <ion-input type="name" name="username" formControlName="username" required placeholder="Scegli un username"></ion-input>
+            <ion-input type="name" name="username" formControlName="username" required placeholder="Scegli un username">
+            </ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label position="floating">Password</ion-label>
-            <ion-input type="password" name="password" formControlName="password" required placeholder="Scegli una password"></ion-input>
+            <ion-input type="password" name="password" formControlName="password" required
+              placeholder="Scegli una password"></ion-input>
           </ion-item>
 
           <br>
