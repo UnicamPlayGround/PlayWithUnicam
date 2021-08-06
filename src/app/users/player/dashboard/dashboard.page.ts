@@ -16,7 +16,7 @@ export class DashboardPage implements OnInit {
 
   giochi = [
     { id: 1, nome: 'Gioco 1', min_giocatori: 2, max_giocatori: 6, img: 'https://bit.ly/376IQJU' },
-    { id: 2, nome: 'Gioco 2', min_giocatori: 2, max_giocatori: 6, img: 'https://bit.ly/376IQJU' },
+    { id: 2, nome: 'Gioco dell\'Oca', min_giocatori: 2, max_giocatori: 6, img: 'https://bit.ly/376IQJU' },
     { id: 3, nome: 'Gioco 3', min_giocatori: 2, max_giocatori: 6, img: 'https://bit.ly/376IQJU' },
     { id: 4, nome: 'Gioco 4', min_giocatori: 2, max_giocatori: 6, img: 'https://bit.ly/376IQJU' },
     { id: 5, nome: 'Gioco 5', min_giocatori: 2, max_giocatori: 6, img: 'https://bit.ly/376IQJU' },

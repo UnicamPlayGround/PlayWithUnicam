@@ -17,6 +17,10 @@ export class CreaLobbyPage implements OnInit {
 
   }
 
+  creaLobby(){
+    
+  }
+
   stampaGioco() {
     console.log(this.giocoSelezionato);
   }

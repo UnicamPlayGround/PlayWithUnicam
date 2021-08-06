@@ -28,8 +28,7 @@ export class IntroLobbyPopoverComponent implements OnInit {
       component: CreaLobbyPage,
       componentProps: {
         giocoSelezionato: this.giocoSelezionato
-      },
-      cssClass: 'fullheight'
+      }
     });
 
     return await modal.present();
