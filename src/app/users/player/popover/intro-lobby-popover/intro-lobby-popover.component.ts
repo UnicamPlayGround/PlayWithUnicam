@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController, PopoverController } from '@ionic/angular';
+import { CercaPrivataPage } from '../../modal/cerca-privata/cerca-privata.page';
 //TODO forse da importare sul module di dashboard
 import { CreaLobbyPage } from '../../modal/crea-lobby/crea-lobby.page';
 
@@ -34,4 +35,11 @@ export class IntroLobbyPopoverComponent implements OnInit {
     return await modal.present();
   }
 
+  async cercaLobbyPrivata() {
+    const modal = await this.modalController.create({
+      component: CercaPrivataPage
+    });
+
+    return await modal.present();
+  }
 }

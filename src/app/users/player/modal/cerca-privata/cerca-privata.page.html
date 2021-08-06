@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Unisciti a una lobby privata</ion-title>
+
+    <ion-button fill="clear" slot="start" (click)="closeModal()">
+      <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list lines="none" class="modal">
+    <ion-item>
+      <ion-label>CODICE LOBBY</ion-label>
+    </ion-item>
+
+    <ion-item>
+      <!-- <ion-label position="floating">Codice lobby</ion-label> -->
+      <ion-input type="number" inputmode="numeric" [attr.maxlength]="6" placeholder="Inserisci il codice della lobby"></ion-input>
+    </ion-item>
+
+    <ion-button (click)="partecipa()" expand="block" shape="round">Partecipa</ion-button>
+  </ion-list>
+</ion-content>
