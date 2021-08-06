@@ -28,7 +28,10 @@
         </ion-item>
 
         <ion-item>
-          <ion-label>Privata</ion-label>
+          <ion-label>
+            Privata
+            <p>Imposta la Lobby come Privata</p>
+          </ion-label>
           <ion-toggle [(ngModel)]="tipo"></ion-toggle>
         </ion-item>
 
@@ -45,7 +48,7 @@
         </ion-item>
 
         <br>
-        <ion-button color="primary" expand="block" (click)="stampaGioco()">Pippo</ion-button>
+        <ion-button color="primary" expand="block" (click)="stampaGioco()">Stampa Gioco</ion-button>
 
         <ion-button type="submit" color="primary" expand="block">Crea Lobby</ion-button>
       </ion-list>
