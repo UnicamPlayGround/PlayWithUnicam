@@ -14,8 +14,6 @@ const SECRET_KEY = "secret_jwt";
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const { request } = require('http');
-const { response } = require('express');
 
 const ERRORE_JWT = "Errore, JWT non valido! Rieffettua il Login."
 
@@ -141,7 +139,7 @@ app.put('/admin/utenti/:username', (req, res) => {
         } catch (error) {
             return res.status(400).send(error);
         }
-    } else return res.status(401).send('JWT non valido!');
+    } else return res.status(401).send(ERRORE_JWT);
 });
 
 
@@ -149,18 +147,16 @@ app.put('/admin/utenti/:username', (req, res) => {
  * REST - Modifica i dati della lobby
  */
 app.put('/lobby/:codiceLobby', (req, res) => {
-
     try {
         if (verificaJWT(req.body.token)) {
-            lobby.modificaLobby(req.params.codiceLobby, req.body.pubblica, req.body.adminLobby, res);
+            decoded_token = jwt.decode(req.body.token);
+            lobby.modificaLobby(req.params.codiceLobby, req.body.pubblica, decoded_token.username, res);
         } else return res.status(401).send(ERRORE_JWT);
 
     } catch (error) {
         return res.status(400).send(error);
     }
 });
-
-
 
 
 /**
@@ -244,9 +240,9 @@ app.post('/register/utente', (req, res) => {
 app.post('/lobby', (req, res) => {
     try {
         if (verificaJWT(req.body.token)) {
-            lobby.creaLobby(req.body.adminLobby, req.body.idGioco, req.body.pubblica, res);
+            decoded_token = jwt.decode(req.body.token);
+            lobby.creaLobby(decoded_token.username, req.body.idGioco, req.body.pubblica, res);
         } else return res.status(401).send(ERRORE_JWT);
-
     } catch (error) {
         return res.status(400).send(error);
     }
@@ -255,7 +251,5 @@ app.post('/lobby', (req, res) => {
 app.get('/*', function (req, res) {
     res.sendFile('index.html', { root: __dirname + '/www' });
 });
-
-
 
 app.listen(8080);
