@@ -1,0 +1,46 @@
+.main-div {
+    max-width: 1500px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-inline: 30px;
+    text-align: center;
+    margin: auto;
+    background-color: lightblue;
+}
+
+.list-div{
+    max-width: 300px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-inline: 50px;
+    text-align: center;
+    max-height: 500px;
+}
+
+.impostazioni-div{
+    margin-top: 100px;
+    margin-right: 200px;
+}
+
+.game-div {
+    max-width: 1000px;
+    height: 600px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-inline: 30px;
+    text-align: center;
+    margin: auto;
+    background-color: lightblue;
+}
+
+.lobby{
+    max-width: 600px;
+}
+
+/* Tablet Styles */
+@media only screen and (min-width: 560px) and (max-width: 819px){
+    .lobby {
+      flex: 50%;
+      max-width: 50%;
+    }
+}

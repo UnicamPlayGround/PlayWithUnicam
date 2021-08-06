@@ -32,7 +32,11 @@ const routes: Routes = [
   {
     path: 'lobby',
     loadChildren: () => import('./users/player/lobby/lobby-home/lobby-home.module').then(m => m.LobbyHomePageModule)
+  },  {
+    path: 'lobby-guest',
+    loadChildren: () => import('./users/player/lobby/lobby-guest/lobby-guest.module').then( m => m.LobbyGuestPageModule)
   }
+
 ];
 
 @NgModule({

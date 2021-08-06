@@ -1,0 +1,82 @@
+<ion-header>
+  <!-- <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar> -->
+
+  <ion-toolbar>
+    <ion-segment (ionChange)="segmentChanged($event)" value="impostazioni">
+      <ion-segment-button value="impostazioni">
+        <ion-label>Impostazioni</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="gioca">
+        <ion-label>Gioca ora</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="segment === 'impostazioni'">
+
+    <div class="lobby">
+
+      <ion-card>
+        <ion-card-header>
+          <ion-card-subtitle style="text-align: center;">Codice Lobby</ion-card-subtitle>
+          <ion-card-title style="font-size: 25px; font-weight:bold; text-align: center;">123456</ion-card-title>
+        </ion-card-header>
+
+        <ion-list lines="none">
+          <ion-item>
+            <ion-label>Categoria lobby:</ion-label>
+            <p>Privata</p>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Min numero partecipanti</ion-label>
+            <p>2</p>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Max numero partecipanti</ion-label>
+            <p>6</p>
+          </ion-item>
+        </ion-list>
+      </ion-card>
+
+      <ion-card>
+        <ion-list>
+          <ion-list-header>GIOCATORI</ion-list-header>
+
+          <ion-item *ngFor="let guest of guests">
+            <ion-avatar slot="start">
+              <img src="https://image.flaticon.com/icons/png/512/4333/4333609.png" alt="avatar player">
+            </ion-avatar>
+
+            <ion-label>{{ guest.username }}</ion-label>
+          </ion-item>
+
+        </ion-list>
+      </ion-card>
+    </div>
+  </div>
+
+  <div *ngIf="segment === 'gioca'" class="game-div">
+    <ion-row>
+      <img
+        src="https://images.crazygames.com/games/goose-game/cover-1596195229993.png?auto=format,compress&q=75&cs=strip"
+        alt="goose game">
+    </ion-row>
+    <br>
+    <br>
+    <br>
+    <ion-row>
+      <ion-button color="warning">PLAY</ion-button>
+
+    </ion-row>
+
+  </div>
+</ion-content>
