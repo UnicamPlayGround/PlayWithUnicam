@@ -10,16 +10,13 @@ import { RegistrationService } from 'src/app/services/registration.service';
   styleUrls: ['../auth.scss'],
 })
 export class RegistrationPage implements OnInit {
-
   credenziali: FormGroup
 
   constructor(private fb: FormBuilder,
-     private loadingController: LoadingController, 
-     private router: Router,
-     private registrationService: RegistrationService,
-     private alertController: AlertController) { 
-    
-  }
+    private loadingController: LoadingController,
+    private router: Router,
+    private registrationService: RegistrationService,
+    private alertController: AlertController) { }
 
   ngOnInit() {
     this.credenziali = this.fb.group({
@@ -30,7 +27,6 @@ export class RegistrationPage implements OnInit {
     })
   }
 
-  
   async register() {
     const loading = await this.loadingController.create();
     await loading.present();
