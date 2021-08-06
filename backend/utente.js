@@ -24,18 +24,18 @@ exports.cercaOspiteByUsername = (username, cb) => {
 
 
 //TODO
-exports.creaUtente = (dati, response) => {
+exports.creaUtente = (username, password, nome, cognome, response) => {
     //TODO: metterli tutti in un unico metodo
-    controller.controllaNotNull(dati.username, "Il campo 'Username' non deve essere vuoto!");
-    controller.controllaNotNull(dati.nome, "Il campo 'Nome' non deve essere vuoto!");
-    controller.controllaNotNull(dati.cognome, "Il campo 'Cognome' non deve essere vuoto!");
-    controller.controllaPassword(dati.password);
+    controller.controllaNotNull(username, "Il campo 'Username' non deve essere vuoto!");
+    controller.controllaNotNull(nome, "Il campo 'Nome' non deve essere vuoto!");
+    controller.controllaNotNull(cognome, "Il campo 'Cognome' non deve essere vuoto!");
+    controller.controllaPassword(password);
 
     const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(dati.password + SECRET_PWD, salt);
+    const hash = bcrypt.hashSync(password + SECRET_PWD, salt);
 
     db.pool.query('INSERT INTO public.utenti (username, nome, cognome, password, salt, tipo) VALUES ($1, $2, $3, $4, $5, $6)',
-        [dati.username, dati.nome, dati.cognome, hash, salt, "GIOCATORE"], (error, results) => {
+        [username, nome, cognome, hash, salt, "GIOCATORE"], (error, results) => {
             if (error) return response.status(400).send("NON E' STATO POSSIBILE CREARE L'UTENTE!");
             return response.status(200).send({ 'esito': "1" });
         })

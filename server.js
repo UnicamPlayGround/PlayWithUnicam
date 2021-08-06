@@ -14,6 +14,8 @@ const SECRET_KEY = "secret_jwt";
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const { request } = require('http');
+const { response } = require('express');
 
 const ERRORE_JWT = "Errore, JWT non valido! Rieffettua il Login."
 
@@ -114,6 +116,8 @@ app.get('/admin/utenti', (req, res) => {
     } else return res.status(401).send(ERRORE_JWT);
 });
 
+
+
 /**
  * REST - Ritorna la lista degli Utenti
  */
@@ -139,6 +143,25 @@ app.put('/admin/utenti/:username', (req, res) => {
         }
     } else return res.status(401).send('JWT non valido!');
 });
+
+
+/**
+ * REST - Modifica i dati della lobby
+ */
+app.put('/lobby/:codiceLobby', (req, res) => {
+
+    try {
+        if (verificaJWT(req.body.token)) {
+            lobby.modificaLobby(req.params.codiceLobby, req.body.pubblica, req.body.adminLobby, res);
+        } else return res.status(401).send(ERRORE_JWT);
+
+    } catch (error) {
+        return res.status(400).send(error);
+    }
+});
+
+
+
 
 /**
  * REST - POST
@@ -196,15 +219,18 @@ app.post('/register/utente', (req, res) => {
             if (err) return res.status(500).send('Server Error!');
             if (!controller.controllaRisultatoQuery(results)) return res.status(404).send("L'username " + req.body.username + " è già in uso!");
 
+
+
             utente.cercaUtenteByUsername(req.body.username, (err, results) => {
                 try {
                     if (err) return res.status(500).send('Server error!');
                     const users = JSON.parse(JSON.stringify(results.rows));
 
                     if (users.length == 0)
-                        utente.creaUtente(req.body.username, req.body.password, res);
+                        utente.creaUtente(req.body.username, req.body.password, req.body.nome, req.body.cognome, res);
                     else return res.status(400).send("L'username \'" + users[0].username + "\' è già stato usato!");
                 } catch (error) {
+                    console.log(error);
                     return res.status(400).send(error);
                 }
             });
@@ -217,7 +243,10 @@ app.post('/register/utente', (req, res) => {
 //TODO commentare
 app.post('/lobby', (req, res) => {
     try {
-        lobby.creaLobby(req.body.adminLobby, req.body.idGioco, res);
+        if (verificaJWT(req.body.token)) {
+            lobby.creaLobby(req.body.adminLobby, req.body.idGioco, req.body.pubblica, res);
+        } else return res.status(401).send(ERRORE_JWT);
+
     } catch (error) {
         return res.status(400).send(error);
     }
@@ -226,5 +255,7 @@ app.post('/lobby', (req, res) => {
 app.get('/*', function (req, res) {
     res.sendFile('index.html', { root: __dirname + '/www' });
 });
+
+
 
 app.listen(8080);

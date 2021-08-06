@@ -21,25 +21,41 @@ function controllaLobbyAdmin(results) {
     }
 }
 
+//TODO
 exports.cercaLobbyByAdmin = (adminLobby, cb) => {
-    return db.pool.query('SELECT * FROM public.lobby WHERE admin_lobby=$1',
+    db.pool.query('SELECT * FROM public.lobby WHERE admin_lobby=$1',
         [adminLobby], (error, results) => {
             cb(error, results)
         });
 }
 
+//TODO
+exports.modificaLobby = (idLobby, pubblica, username, response) => {
+    this.cercaLobbyByAdmin(username, (err, results) => {
+        if(controller.controllaRisultatoQuery(results)) return response.status(401).send("Solo l'admin può modificare la lobby");
+
+        db.pool.query('UPDATE public.lobby SET pubblica = $1 WHERE codice = $2',
+            [pubblica, idLobby], (error, results) => {
+                //TODO fare controlli
+                if (error) return response.status(400).send("Non è stato possibile modificare la lobby");
+                return response.status(200).send({ 'esito': "1" });
+            })
+        })
+}
+
+//TODO
 exports.cancellaLobby = (codice) => {
     db.pool.query('DELETE FROM public.lobby WHERE codice = $1', [codice], (error, results) => { })
 }
 
-exports.creaLobby = (adminLobby, idGioco, response) => {
+exports.creaLobby = (adminLobby, idGioco, pubblica, response) => {
     this.cercaLobbyByAdmin(adminLobby, (err, results) => {
         controllaLobbyAdmin(results);
 
         const codiceLobby = creaCodice();
 
-        db.pool.query('INSERT INTO public.lobby (codice, ultima_richiesta, id_gioco) VALUES ($1, NOW(), $2)',
-            [codiceLobby, idGioco], (error, results) => {
+        db.pool.query('INSERT INTO public.lobby (codice, ultima_richiesta, id_gioco, pubblica) VALUES ($1, NOW(), $2, $3)',
+            [codiceLobby, idGioco, pubblica], (error, results) => {
                 if (error) return response.status(400).send("Non è stato possibile creare la Lobby!");
                 giocatore.creaGiocatore(adminLobby, codiceLobby, "ADMIN", response);
             })
@@ -53,7 +69,7 @@ exports.impostaAdminLobby = (adminLobby, codiceLobby, response) => {
         db.pool.query('UPDATE public.lobby SET admin_lobby = $1 WHERE codice = $2',
             [adminLobby, codiceLobby], (error, results) => {
                 //TODO fare controlli
-                if (error) return response.status(400).send("Non è stato impostare l'Admin della Lobby!");
+                if (error) return response.status(400).send("Non è stato possibile impostare l'Admin della Lobby!");
                 return response.status(200).send({ 'esito': "1" });
             })
     })

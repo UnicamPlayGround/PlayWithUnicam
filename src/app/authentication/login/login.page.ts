@@ -37,7 +37,7 @@ export class LoginPage implements OnInit {
 
         switch (res) {
           case "1":
-            this.router.navigateByUrl('/player', { replaceUrl: true });
+            this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
             break;
           case "2":
             this.router.navigateByUrl('/admin', { replaceUrl: true });
