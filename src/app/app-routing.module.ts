@@ -31,7 +31,7 @@ const routes: Routes = [
   },
   {
     path: 'lobby',
-    loadChildren: () => import('./lobby/lobby-home/lobby-home.module').then(m => m.LobbyHomePageModule)
+    loadChildren: () => import('./users/player/lobby/lobby-home/lobby-home.module').then(m => m.LobbyHomePageModule)
   }
 ];
 
