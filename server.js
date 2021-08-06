@@ -70,10 +70,14 @@ function sendAccessToken(response, toSend) {
 
 //TODO commentare
 app.get('/games', (req, res) => {
-    game.getListaGiochi((err, results) => {
-        if (err) return res.status(500).send('Server error!');
-        sendDataInJSON(res, results);
-    });
+    const token = req.headers.token;
+
+    if (verificaJWT(token)) {
+        game.getListaGiochi((err, results) => {
+            if (err) return res.status(500).send('Server error!');
+            sendDataInJSON(res, results);
+        });
+    } else return res.status(401).send(ERRORE_JWT);
 })
 
 //TODO commentare

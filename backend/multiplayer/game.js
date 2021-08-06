@@ -2,7 +2,7 @@ const db = require('../database');
 
 //TODO commentare
 exports.getListaGiochi = (cb) => {
-    return db.pool.query('select nome, tipo, max_giocatori, min_giocatori, link from public.giochi where attivo=$1',
+    return db.pool.query('select id, nome, tipo, max_giocatori, min_giocatori, link from public.giochi where attivo=$1',
         [true], (error, results) => {
             cb(error, results)
         });
