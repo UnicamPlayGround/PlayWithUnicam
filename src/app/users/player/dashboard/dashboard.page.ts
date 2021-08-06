@@ -54,7 +54,6 @@ export class DashboardPage implements OnInit {
 
   async openIntroLobby(game) {
     const giocoSelezionato = game;
-    console.log(giocoSelezionato);
     const popover = await this.popoverController.create({
       component: IntroLobbyPopoverComponent,
       componentProps: {

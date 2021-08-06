@@ -17,7 +17,7 @@ function creaCodice() {
 function controllaLobbyAdmin(results) {
     if (!controller.controllaRisultatoQuery(results)) {
         const tmp = JSON.parse(JSON.stringify(results.rows));
-        this.cancellaLobby(tmp[0].codice);
+        exports.cancellaLobby(tmp[0].codice);
     }
 }
 
@@ -32,7 +32,7 @@ exports.cercaLobbyByAdmin = (adminLobby, cb) => {
 //TODO
 exports.modificaLobby = (idLobby, pubblica, username, response) => {
     this.cercaLobbyByAdmin(username, (err, results) => {
-        if(controller.controllaRisultatoQuery(results)) return response.status(401).send("Solo l'admin può modificare la lobby");
+        if (controller.controllaRisultatoQuery(results)) return response.status(401).send("Solo l'admin può modificare la lobby");
 
         db.pool.query('UPDATE public.lobby SET pubblica = $1 WHERE codice = $2',
             [pubblica, idLobby], (error, results) => {
@@ -40,7 +40,7 @@ exports.modificaLobby = (idLobby, pubblica, username, response) => {
                 if (error) return response.status(400).send("Non è stato possibile modificare la lobby");
                 return response.status(200).send({ 'esito': "1" });
             })
-        })
+    })
 }
 
 //TODO

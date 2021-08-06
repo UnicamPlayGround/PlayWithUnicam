@@ -1,10 +1,14 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Crea una Lobby</ion-title>
+
+    <ion-button fill="clear" slot="start" (click)="closeModal()">
+      <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+    </ion-button>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content>
 
   <ion-list lines="full" class="modal">
 
@@ -13,32 +17,30 @@
     </ion-item>
 
     <ion-item>
-      <ion-label>Nome Gioco:</ion-label>
-      <ion-label>{{giocoSelezionato.nome}}</ion-label>
+      <ion-label>Nome Gioco: {{giocoSelezionato.nome}}</ion-label>
     </ion-item>
 
     <ion-item>
-      <ion-label>Numero minimo di Giocatori:</ion-label>
-      <ion-label>{{giocoSelezionato.min_giocatori}}</ion-label>
+      <span>Numero minimo di Giocatori: </span>
+      <span style="text-align: right; padding-right: 25px;" slot="end">{{giocoSelezionato.min_giocatori}}</span>
     </ion-item>
 
     <ion-item>
-      <ion-label>Numero massimo di Giocatori:</ion-label>
-      <ion-label>{{giocoSelezionato.max_giocatori}}</ion-label>
+      <span>Numero massimo di Giocatori:</span>
+      <span style="text-align: right; padding-right: 25px;" slot="end">{{giocoSelezionato.max_giocatori}}</span>
     </ion-item>
 
     <ion-item>
       <ion-label>
-        Privata
-        <p>Imposta la Lobby come Privata</p>
+        Pubblica
+        <p>Imposta la Lobby come Pubblica</p>
       </ion-label>
       <ion-toggle [(ngModel)]="tipo"></ion-toggle>
     </ion-item>
 
     <br>
-    <ion-button color="primary" expand="block" (click)="stampaGioco()">Stampa Gioco</ion-button>
 
-    <ion-button type="submit" color="primary" expand="block">Crea Lobby</ion-button>
+    <ion-button type="submit" color="primary" expand="block" (click)="creaLobby()">Crea Lobby</ion-button>
   </ion-list>
 
 </ion-content>

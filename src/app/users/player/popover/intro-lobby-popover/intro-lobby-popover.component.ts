@@ -24,14 +24,13 @@ export class IntroLobbyPopoverComponent implements OnInit {
   }
 
   async creaLobby() {
-    console.log(this.giocoSelezionato);
     const modal = await this.modalController.create({
       component: CreaLobbyPage,
       componentProps: {
         giocoSelezionato: this.giocoSelezionato
       }
     });
-
+    this.close();
     return await modal.present();
   }
 
@@ -39,7 +38,7 @@ export class IntroLobbyPopoverComponent implements OnInit {
     const modal = await this.modalController.create({
       component: CercaPrivataPage
     });
-
+    this.close();
     return await modal.present();
   }
 }
