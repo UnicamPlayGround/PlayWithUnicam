@@ -227,7 +227,7 @@ app.post('/register/utente', (req, res) => {
                     const users = JSON.parse(JSON.stringify(results.rows));
 
                     if (users.length == 0)
-                        utente.creaUtente(req.body.username, req.body.password, req.body.nome, req.body.cognome, res);
+                        utente.creaUtente(req.body, res);
                     else return res.status(400).send("L'username \'" + users[0].username + "\' è già stato usato!");
                 } catch (error) {
                     console.log(error);
