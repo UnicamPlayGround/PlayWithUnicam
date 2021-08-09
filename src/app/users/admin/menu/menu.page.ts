@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterEvent } from '@angular/router';
+import { Router } from '@angular/router';
+import { LoginService } from 'src/app/services/login.service';
+import { AlertController, LoadingController } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-menu',
@@ -25,12 +28,33 @@ export class MenuPage implements OnInit {
     }
   ]
 
-  constructor() { }
+  constructor(private router: Router,
+    private loginService: LoginService,
+    private alertController: AlertController) { 
+    
+  }
 
   ngOnInit() {
   }
 
   async logout() {
+    const alert = await this.alertController.create({
+      header: 'Sei sicuro di voler uscire?',
+      buttons: [
+        {
+          text: 'Annulla',
+          role: 'cancel',
+        },
+        {
+          text: 'Conferma',
+          handler: () => {
+            this.loginService.logout();
+            this.router.navigateByUrl('/home', { replaceUrl: true });
+          }
+        }
+      ]
+    });
 
+    await alert.present();
   }
 }
