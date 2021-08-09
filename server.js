@@ -146,6 +146,20 @@ app.put('/admin/utenti/:username', (req, res) => {
     } else return res.status(401).send(ERRORE_JWT);
 });
 
+/**
+ * REST - Modifica i dati del profilo
+ */
+app.put('/player/profilo', (req, res) => {
+    try {
+        if (verificaJWT(req.body.token)) {
+            decoded_token = jwt.decode(req.body.token);
+            utente.modificaCredenziali(decoded_token.username, req, res);
+        }
+    } catch (error) {
+            return res.status(400).send(error);
+        }
+    });
+
 
 /**
  * REST - Modifica i dati della lobby

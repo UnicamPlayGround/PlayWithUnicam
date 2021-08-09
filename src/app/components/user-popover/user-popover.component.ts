@@ -18,8 +18,9 @@ export class UserPopoverComponent implements OnInit {
 
   ngOnInit() { }
 
-  close() {
+  openProfile() {
     this.popoverController.dismiss();
+    this.router.navigateByUrl('/account', { replaceUrl: true });
   }
 
   logout() {
