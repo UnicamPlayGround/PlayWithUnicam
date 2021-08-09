@@ -8,6 +8,7 @@ import { IntroLobbyPopoverComponent } from './intro-lobby-popover.component';
 
 import { CreaLobbyPageModule } from '../../modal/crea-lobby/crea-lobby.module';
 import { CercaPrivataPageModule } from '../../modal/cerca-privata/cerca-privata.module';
+import { CercaPubblicaPageModule } from '../../modal/cerca-pubblica/cerca-pubblica.module';
 
 @NgModule({
     imports: [
@@ -15,7 +16,8 @@ import { CercaPrivataPageModule } from '../../modal/cerca-privata/cerca-privata.
         CommonModule,
         FormsModule,
         CreaLobbyPageModule,
-        CercaPrivataPageModule
+        CercaPrivataPageModule,
+        CercaPubblicaPageModule
     ],
     declarations: [IntroLobbyPopoverComponent]
 })

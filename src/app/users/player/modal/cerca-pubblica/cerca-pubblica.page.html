@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Cerca Lobby Pubbliche</ion-title>
+
+    <ion-button fill="clear" slot="start" (click)="closeModal()">
+      <ion-icon style="color:white" slot="icon-only" name="close-outline"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="table; ion-hide-lg-down">
+
+    <ion-row class="header-row">
+
+      <ion-col size-md="3">
+        Nome Gioco
+      </ion-col>
+
+      <ion-col size="2">
+        Admin
+      </ion-col>
+
+      <ion-col size="1.5">
+        Min Giocatori
+      </ion-col>
+
+      <ion-col size="1.5">
+        Max Giocatori
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row *ngFor="let lobby of lobbies;" tappable class="data-row" (click)="partecipa(lobby)">
+
+      <ion-col size="3">
+        {{lobby.nome}}
+      </ion-col>
+
+      <ion-col size="2">
+        {{lobby.admin_lobby}}
+      </ion-col>
+
+      <ion-col size="1.5">
+        {{lobby.min_giocatori}}
+      </ion-col>
+
+      <ion-col size="1.5">
+        {{lobby.max_giocatori}}
+      </ion-col>
+
+    </ion-row>
+  </div>
+
+  <ion-list class="ion-hide-lg-up">
+
+    <ion-item *ngFor="let lobby of lobbies;" button="true" (click)="partecipa(lobby)">
+      <ion-label>
+        <h2 style="font-size:18px;">Gioco: {{lobby.nome}}</h2>
+        <p>Admin: {{lobby.admin_lobby}}</p>
+        <p>Min Giocatori: {{lobby.min_giocatori}}</p>
+        <p>Max Giocatori: <strong>{{lobby.max_giocatori}}</strong></p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-infinite-scroll threshold="5%" (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more users...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
