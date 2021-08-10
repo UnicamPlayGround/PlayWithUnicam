@@ -12,16 +12,21 @@ exports.cercaGiocatore = (username, cb) => {
 
 exports.creaGiocatore = (username, codiceLobby, ruolo, response) => {
     try {
+        var utenteNonTrovato = false;
         utente.cercaUtenteByUsername(username, (err, results) => {
-            if (controller.controllaRisultatoQuery(results)) return response.status(400).send("L'Utente '" + username + "' non esiste!");
+            if (controller.controllaRisultatoQuery(results)) utenteNonTrovato = true;
 
-            db.pool.query('INSERT INTO public.giocatori (username, codice_lobby, ruolo) VALUES ($1, $2, $3)',
-                [username, codiceLobby, ruolo], (error, results) => {
-                    if (error) return response.status(400).send("Non è stato possibile creare il Giocatore!");
+            utente.cercaOspiteByUsername(username, (err, results) => {
+                if (utenteNonTrovato && controller.controllaRisultatoQuery(results)) return response.status(404).send("L'Utente '" + username + "' non esiste!");
 
-                    if (ruolo == "ADMIN")
-                        lobby.impostaAdminLobby(username, codiceLobby, response);
-                })
+                db.pool.query('INSERT INTO public.giocatori (username, codice_lobby, ruolo) VALUES ($1, $2, $3)',
+                    [username, codiceLobby, ruolo], (error, results) => {
+                        if (error) return response.status(400).send("Non è stato possibile creare il Giocatore!");
+
+                        if (ruolo == "ADMIN")
+                            lobby.impostaAdminLobby(username, codiceLobby, response);
+                    })
+            })
         })
     } catch (error) {
         return response.status(400).send(error);
