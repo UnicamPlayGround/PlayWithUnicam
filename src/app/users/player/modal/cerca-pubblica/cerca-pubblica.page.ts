@@ -12,7 +12,11 @@ import { LoginService } from 'src/app/services/login-service/login.service';
   styleUrls: ['./cerca-pubblica.page.scss'],
 })
 export class CercaPubblicaPage implements OnInit {
-  lobbies = [];
+  // lobbies = [];
+  
+  lobbies = [
+    
+  ];
 
   constructor(
     private http: HttpClient,
@@ -59,8 +63,8 @@ export class CercaPubblicaPage implements OnInit {
     const token_value = (await this.loginService.getToken()).value;
 
     const toSend = {
-      token: token_value,
-      codice_lobby: lobby.codice
+      'token': token_value,
+      'codice_lobby': lobby.codice
     }
 
     return this.http.post('/lobby/partecipa', toSend).pipe(
