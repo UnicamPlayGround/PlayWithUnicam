@@ -12,13 +12,7 @@ import { LoginService } from 'src/app/services/login-service/login.service';
   styleUrls: ['./cerca-pubblica.page.scss'],
 })
 export class CercaPubblicaPage implements OnInit {
-  lobbies = [
-    { codice: 1, nome: "Gioco dell'Oca", admin_lobby: "pippo", min_giocatori: 2, max_giocatori: 6 },
-    { codice: 2, nome: "Gioco dell'Oca", admin_lobby: "pippo", min_giocatori: 2, max_giocatori: 6 },
-    { codice: 3, nome: "Gioco dell'Oca", admin_lobby: "pippo", min_giocatori: 2, max_giocatori: 6 },
-    { codice: 4, nome: "Gioco dell'Oca", admin_lobby: "pippo", min_giocatori: 2, max_giocatori: 6 }
-  ]
-
+  lobbies = [];
 
   constructor(
     private http: HttpClient,
@@ -27,13 +21,32 @@ export class CercaPubblicaPage implements OnInit {
     private loginService: LoginService,
     private modalController: ModalController,
     private errorManager: ErrorManagerService
-  ) { }
+  ) {
+    this.loadLobby();
+  }
 
   ngOnInit() {
   }
 
   async closeModal() {
     this.modalController.dismiss();
+  }
+
+  async loadLobby() {
+    const token_value = (await this.loginService.getToken()).value;
+    const headers = { 'token': token_value };
+
+    this.http.get('/lobby/pubbliche', { headers }).subscribe(
+      async (res) => {
+        this.lobbies = res['results'];
+        //TODO
+        // this.reloadManager.completaReload(event);
+      },
+      async (res) => {
+        //TODO:gestione stampa errore
+        this.errorManager.stampaErrore(res, 'Impossibile caricare le Lobby!');
+        // this.reloadManager.completaReload(event);
+      });
   }
 
   //TODO commentare

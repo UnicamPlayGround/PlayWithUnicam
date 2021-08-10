@@ -37,6 +37,13 @@ exports.cercaLobbyByCodice = (codice, cb) => {
         });
 }
 
+exports.getLobbyPubbliche = (cb) => {
+    db.pool.query('SELECT codice, admin_lobby, data_creazione, id_gioco, nome, max_giocatori, min_giocatori FROM public.lobby' +
+        ' INNER JOIN public.giochi ON public.lobby.id_gioco = public.giochi.id WHERE pubblica=$1', [true], (error, results) => {
+            cb(error, results)
+        });
+}
+
 //TODO
 exports.modificaLobby = (idLobby, pubblica, username, response) => {
     this.cercaLobbyByAdmin(username, (err, results) => {

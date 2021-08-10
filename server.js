@@ -118,9 +118,20 @@ app.get('/admin/utenti', (req, res) => {
     } else return res.status(401).send(ERRORE_JWT);
 });
 
-
+/**
+ * REST - Ritorna la lista delle Lobby Pubbliche
+ */
+app.get('/lobby/pubbliche', (req, res) => {
+    if (verificaJWT(req.headers.token)) {
+        lobby.getLobbyPubbliche((err, results) => {
+            if (err) return res.status(500).send('Server error!');
+            sendDataInJSON(res, results);
+        })
+    } else return res.status(401).send(ERRORE_JWT);
+});
 
 /**
+ * //TODO riguardare commento
  * REST - Ritorna la lista degli Utenti
  */
 app.delete('/admin/utenti', (req, res) => {
@@ -156,9 +167,9 @@ app.put('/player/profilo', (req, res) => {
             utente.modificaCredenziali(decoded_token.username, req, res);
         }
     } catch (error) {
-            return res.status(400).send(error);
-        }
-    });
+        return res.status(400).send(error);
+    }
+});
 
 
 /**
