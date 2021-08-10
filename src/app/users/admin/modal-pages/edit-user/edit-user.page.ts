@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, LoadingController, ModalController, NavParams } from '@ionic/angular';
 import { map, switchMap } from 'rxjs/operators';
-import { LoginService } from 'src/app/services/login.service';
+import { LoginService } from 'src/app/services/login-service/login.service';
 
 @Component({
   selector: 'app-edit-user',
@@ -12,7 +12,7 @@ import { LoginService } from 'src/app/services/login.service';
 })
 export class EditUserPage implements OnInit {
   data: FormGroup;
-  password: FormGroup;
+  passwordForm: FormGroup;
 
   @Input() username: any;
   @Input() nome: any;
@@ -42,7 +42,7 @@ export class EditUserPage implements OnInit {
       tipo: [this.tipo]
     });
 
-    this.password = this.fb.group({
+    this.passwordForm = this.fb.group({
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16)]]
     });
   }

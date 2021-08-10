@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { map, switchMap } from 'rxjs/operators';
-import { LoginService } from 'src/app/services/login.service';
+import { LoginService } from 'src/app/services/login-service/login.service';
 
 @Component({
   selector: 'app-cerca-pubblica',

@@ -1,5 +1,15 @@
 ion-input{
-    --background: rgb(191, 219, 255);
-    border-radius: 15px;
+    --background: rgb(197, 219, 248);
+    border-radius: 20px;
     text-align: center;
+    font-size: 25px;
+}
+
+.header{
+    align-items: center;
+}
+
+.title{
+    text-align: center;
+    font-weight: bold;
 }

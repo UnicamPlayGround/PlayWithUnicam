@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
 import { map, switchMap } from 'rxjs/operators';
-import { LoginService } from 'src/app/services/login.service';
+import { LoginService } from 'src/app/services/login-service/login.service';
 import { EditUserPage } from '../modal-pages/edit-user/edit-user.page';
 
 @Component({

@@ -3,7 +3,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController, ModalController } from '@ionic/angular';
 import { map, switchMap } from 'rxjs/operators';
-import { LoginService } from 'src/app/services/login.service';
+import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
+import { LoginService } from 'src/app/services/login-service/login.service';
 
 @Component({
   selector: 'app-crea-lobby',
@@ -17,6 +18,7 @@ export class CreaLobbyPage implements OnInit {
   constructor(
     private http: HttpClient,
     private router: Router,
+    private errorManager: ErrorManagerService,
     private loadingController: LoadingController,
     private modalController: ModalController,
     private alertController: AlertController,
@@ -59,7 +61,7 @@ export class CreaLobbyPage implements OnInit {
           await loading.dismiss();
           this.modalController.dismiss();
           //TODO da fare
-          // this.errorManager.stampaErrore(res, 'Creazione Lobby fallita');
+          this.errorManager.stampaErrore(res, 'Creazione Lobby fallita');
         });
   }
 

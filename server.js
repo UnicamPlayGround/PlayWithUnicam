@@ -266,6 +266,18 @@ app.post('/lobby', (req, res) => {
     }
 })
 
+//TODO commentare
+app.post('/lobby/partecipa', (req, res) => {
+    try {
+        if (verificaJWT(req.body.token)) {
+            decoded_token = jwt.decode(req.body.token);
+            lobby.partecipaLobby(decoded_token.username, req.body.codice_lobby, res);
+        } else return res.status(401).send(ERRORE_JWT);
+    } catch (error) {
+        return res.status(400).send(error);
+    }
+})
+
 app.get('/*', function (req, res) {
     res.sendFile('index.html', { root: __dirname + '/www' });
 });

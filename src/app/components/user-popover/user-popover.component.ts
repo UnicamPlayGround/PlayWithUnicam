@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PopoverController } from '@ionic/angular';
-import { LoginService } from 'src/app/services/login.service';
+import { LoginService } from 'src/app/services/login-service/login.service';
 
 @Component({
   selector: 'app-user-popover',

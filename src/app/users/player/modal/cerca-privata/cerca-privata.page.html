@@ -1,9 +1,9 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>Unisciti a una lobby privata</ion-title>
 
     <ion-button fill="clear" slot="start" (click)="closeModal()">
-      <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      <ion-icon slot="icon-only" name="close-outline" style="color:white"></ion-icon>
     </ion-button>
   </ion-toolbar>
 </ion-header>
@@ -11,15 +11,19 @@
 <ion-content>
 
   <ion-list lines="none" class="modal">
-    <ion-item>
-      <ion-label>CODICE LOBBY</ion-label>
-    </ion-item>
+    <form (ngSubmit)="partecipa()" [formGroup]="codiceForm">
 
-    <ion-item>
-      <!-- <ion-label position="floating">Codice lobby</ion-label> -->
-      <ion-input type="number" inputmode="numeric" [attr.maxlength]="6" placeholder="Inserisci il codice della lobby"></ion-input>
-    </ion-item>
+      <h2 class="title">Codice lobby</h2>
 
-    <ion-button (click)="partecipa()" expand="block" shape="round">Partecipa</ion-button>
+      <ion-item>
+        <ion-input type="number" inputmode="numeric" formControlName="codice" required
+          placeholder="Inserisci il codice">
+        </ion-input>
+      </ion-item>
+
+      <br><br>
+
+      <ion-button type="submit" expand="block" shape="round">Partecipa</ion-button>
+    </form>
   </ion-list>
 </ion-content>

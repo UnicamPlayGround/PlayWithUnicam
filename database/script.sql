@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS public.giocatori
 (
     username character varying(30) NOT NULL,
     codice_lobby character varying(20) NOT NULL,
-    ruolo character varying(20) NOT NULL,
+    ruolo character varying(20),
     PRIMARY KEY (username)
 );
 

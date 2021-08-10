@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, LoadingController } from '@ionic/angular';
 import { Router } from "@angular/router";
-import { RegistrationService } from 'src/app/services/registration.service';
+import { RegistrationService } from 'src/app/services/registration-service/registration.service';
 
 @Component({
   selector: 'app-registration',

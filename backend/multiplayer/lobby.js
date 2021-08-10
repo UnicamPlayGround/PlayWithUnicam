@@ -30,6 +30,14 @@ exports.cercaLobbyByAdmin = (adminLobby, cb) => {
 }
 
 //TODO
+exports.cercaLobbyByCodice = (codice, cb) => {
+    db.pool.query('SELECT * FROM public.lobby WHERE codice=$1',
+        [codice], (error, results) => {
+            cb(error, results)
+        });
+}
+
+//TODO
 exports.modificaLobby = (idLobby, pubblica, username, response) => {
     this.cercaLobbyByAdmin(username, (err, results) => {
         if (controller.controllaRisultatoQuery(results)) return response.status(401).send("Solo l'admin può modificare la lobby");
@@ -73,4 +81,35 @@ exports.impostaAdminLobby = (adminLobby, codiceLobby, response) => {
                 return response.status(200).send({ 'esito': "1" });
             })
     })
+}
+
+exports.partecipaLobby = (username, codice_lobby, response) => {
+    this.cercaLobbyByCodice(codice_lobby, (err, results) => {
+        if (controller.controllaRisultatoQuery(results)) return response.status(401).send("Non è stata trovata alcuna lobby corrispondente al codice inserito!");
+
+        giocatore.cercaGiocatore(username, (err, results) => {
+            if (!controller.controllaRisultatoQuery(results)) {
+                db.pool.query('UPDATE public.giocatori SET codice_lobby = $1 WHERE username = $2',
+                    [codice_lobby, username], (error, results) => {
+                        //TODO fare controlli
+                        if (error) return response.status(400).send("Non è stato possibile partecipare alla lobby.");
+                        return response.status(200).send({ 'esito': "1" });
+                    })
+            } else {
+                db.pool.query('INSERT into public.giocatori (username, codice_lobby) VALUES ($1, $2)',
+                    [username, codice_lobby], (error, results) => {
+                        //TODO fare controlli
+                        if (error) return response.status(400).send("Non è stato possibile partecipare alla lobby.");
+                        return response.status(200).send({ 'esito': "1" });
+                    })
+            }
+        })
+    })
+}
+
+function controllaLobbyAdmin(results) {
+    if (!controller.controllaRisultatoQuery(results)) {
+        const tmp = JSON.parse(JSON.stringify(results.rows));
+        exports.cancellaLobby(tmp[0].codice);
+    }
 }
