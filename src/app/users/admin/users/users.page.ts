@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
 import { map, switchMap } from 'rxjs/operators';
+import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LoginService } from 'src/app/services/login-service/login.service';
 import { EditUserPage } from '../modal-pages/edit-user/edit-user.page';
 
@@ -25,7 +26,8 @@ export class UsersPage implements OnInit {
     private http: HttpClient,
     private modalController: ModalController,
     private alertController: AlertController,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private errorManager: ErrorManagerService
   ) {
     this.loadUsers();
   }
@@ -40,11 +42,12 @@ export class UsersPage implements OnInit {
     this.http.get('/admin/utenti', { headers }).subscribe(
       async (res) => {
         this.users = this.users.concat(res['results']);
+        //TODO
         // this.reloadManager.completaReload(event);
       },
       async (res) => {
         //TODO:gestione stampa errore
-        // this.errorManager.stampaErrore(res, 'Errore');
+        this.errorManager.stampaErrore(res, 'Errore!');
         // this.reloadManager.completaReload(event);
       });
   }
@@ -164,8 +167,7 @@ export class UsersPage implements OnInit {
           await alert.present();
         },
         async (res) => {
-          //TODO: stampa errore
-          // this.errorManager.stampaErrore(res, 'Eliminazione Fallita');
+          this.errorManager.stampaErrore(res, 'Eliminazione Fallita');
         });
   }
 

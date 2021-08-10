@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { map, switchMap } from 'rxjs/operators';
+import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LoginService } from 'src/app/services/login-service/login.service';
 
 @Component({
@@ -25,6 +26,7 @@ export class CercaPubblicaPage implements OnInit {
     private loadingController: LoadingController,
     private loginService: LoginService,
     private modalController: ModalController,
+    private errorManager: ErrorManagerService
   ) { }
 
   ngOnInit() {
@@ -59,8 +61,7 @@ export class CercaPubblicaPage implements OnInit {
         async (res) => {
           await loading.dismiss();
           this.modalController.dismiss();
-          //TODO da fare
-          // this.errorManager.stampaErrore(res, 'Creazione Lobby fallita');
+          this.errorManager.stampaErrore(res, 'Creazione Lobby fallita');
         });
   }
 }

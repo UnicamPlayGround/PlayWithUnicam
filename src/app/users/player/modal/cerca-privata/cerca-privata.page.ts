@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController, LoadingController, ModalController } from '@ionic/angular';
+import { LoadingController, ModalController } from '@ionic/angular';
 import { map, switchMap } from 'rxjs/operators';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LoginService } from 'src/app/services/login-service/login.service';
@@ -20,7 +20,6 @@ export class CercaPrivataPage implements OnInit {
     private http: HttpClient,
     private router: Router,
     private loadingController: LoadingController,
-    private alertController: AlertController,
     private errorManager: ErrorManagerService,
     private loginService: LoginService,
     private modalController: ModalController

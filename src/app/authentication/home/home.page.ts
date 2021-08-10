@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
+import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LoginService } from 'src/app/services/login-service/login.service';
 
 
@@ -18,6 +19,7 @@ export class HomePage implements OnInit {
     private fb: FormBuilder,
     private loadingController: LoadingController,
     private loginService: LoginService,
+    private errorManager: ErrorManagerService
   ) { }
 
 
@@ -32,7 +34,7 @@ export class HomePage implements OnInit {
   }
 
   async loginOspiti() {
-    console.log("username : "+this.credenziali.value);
+    console.log("username : " + this.credenziali.value);
     const loading = await this.loadingController.create();
     await loading.present();
 
@@ -43,9 +45,7 @@ export class HomePage implements OnInit {
       },
       async (res) => {
         await loading.dismiss();
-        console.log("Login fallito");
-        //TODO da fare
-        // this.errorManager.stampaErrore(res, 'Login Failed');
+        this.errorManager.stampaErrore(res, 'Login Fallito!');
       }
     );
   }

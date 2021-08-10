@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController } from '@ionic/angular';
+import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LoginService } from 'src/app/services/login-service/login.service';
 
 @Component({
@@ -18,6 +19,7 @@ export class LoginPage implements OnInit {
     private router: Router,
     private loadingController: LoadingController,
     private alertController: AlertController,
+    private errorManager: ErrorManagerService
   ) { }
 
   ngOnInit() {
@@ -53,9 +55,7 @@ export class LoginPage implements OnInit {
       },
       async (res) => {
         await loading.dismiss();
-        console.log("Login fallito");
-        //TODO da fare
-        // this.errorManager.stampaErrore(res, 'Login Failed');
+        this.errorManager.stampaErrore(res, 'Login Fallito');
       }
     );
   }

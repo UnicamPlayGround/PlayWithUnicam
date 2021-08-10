@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, LoadingController } from '@ionic/angular';
 import { Router } from "@angular/router";
 import { RegistrationService } from 'src/app/services/registration-service/registration.service';
+import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 
 @Component({
   selector: 'app-registration',
@@ -12,11 +13,14 @@ import { RegistrationService } from 'src/app/services/registration-service/regis
 export class RegistrationPage implements OnInit {
   credenziali: FormGroup
 
-  constructor(private fb: FormBuilder,
+  constructor(
+    private fb: FormBuilder,
     private loadingController: LoadingController,
     private router: Router,
     private registrationService: RegistrationService,
-    private alertController: AlertController) { }
+    private alertController: AlertController,
+    private errorManager: ErrorManagerService
+  ) { }
 
   ngOnInit() {
     this.credenziali = this.fb.group({
@@ -43,9 +47,8 @@ export class RegistrationPage implements OnInit {
         await alert.present();
       },
       async (res) => {
-        //TODO dismiss
         await loading.dismiss();
-        //this.errorManager.stampaErrore(res, 'Registrazione fallita');
+        this.errorManager.stampaErrore(res, 'Registrazione Fallita');
       }
     );
   }

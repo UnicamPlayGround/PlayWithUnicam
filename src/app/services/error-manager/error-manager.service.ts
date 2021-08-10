@@ -13,7 +13,7 @@ export class ErrorManagerService {
     if (this.controllaRes(res)) this.stampa(headerText, res.error)
   }
 
-  controllaRes(res) {
+  private controllaRes(res) {
     if (res.error == 'JWT non valido!') {
       this.stampa('Errore nella Sessione', 'Rieffettua il Login');
       this.router.navigateByUrl('/login', { replaceUrl: true });
@@ -21,7 +21,7 @@ export class ErrorManagerService {
     } else return true;
   }
 
-  async stampa(headerText, messageText) {
+  private async stampa(headerText, messageText) {
     const alert = await this.alertController.create({
       header: headerText,
       message: messageText,

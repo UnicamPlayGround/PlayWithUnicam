@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, LoadingController, ModalController, NavParams } from '@ionic/angular';
 import { map, switchMap } from 'rxjs/operators';
+import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LoginService } from 'src/app/services/login-service/login.service';
 
 @Component({
@@ -26,7 +27,8 @@ export class EditUserPage implements OnInit {
     private loadingController: LoadingController,
     private alertController: AlertController,
     private navParams: NavParams,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private errorManager: ErrorManagerService
   ) { }
 
   ngOnInit() {
@@ -84,8 +86,7 @@ export class EditUserPage implements OnInit {
         async (res) => {
           this.modalController.dismiss();
           await loading.dismiss();
-          //TODO:
-          // this.errorManager.stampaErrore(res, 'Modifica Fallita');
+          this.errorManager.stampaErrore(res, 'Modifica Fallita');
         });
   }
 
