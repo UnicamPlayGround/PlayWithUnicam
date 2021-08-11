@@ -76,9 +76,9 @@ function sendAccessToken(response, toSend) {
  */
 function formatDataLobby(lobbies) {
     lobbies.forEach(lobby => {
-        var tmp = new Date(lobby.data_ordine);
+        var tmp = new Date(lobby.data_creazione);
         var data = tmp.getDate() + '/' + (tmp.getMonth() + 1) + '/' + tmp.getFullYear();
-        lobby.data_ordine = data;
+        lobby.data_creazione = data;
     })
 }
 
