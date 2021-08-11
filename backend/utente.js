@@ -72,3 +72,32 @@ exports.modificaCredenziali = (old_username, request, response) => {
         });
     });
 }
+
+exports.cambiaPassword =  (request, response, results, username) => {
+    var query, errorText;
+    query = 'UPDATE public.utenti SET password = $1 WHERE username = $2';
+    errorText = 'Utente non trovato!';
+
+
+    const risultati = JSON.parse(JSON.stringify(results.rows));
+    if (risultati.length == 0) return response.status(404).send(errorText);
+
+    const data = risultati[0];
+    const hash = bcrypt.hashSync(request.body.old_password + process.env.SECRET_PWD, data.salt);
+
+    if (hash == data.password) {
+        const new_hash = bcrypt.hashSync(request.body.new_password + process.env.SECRET_PWD, data.salt);
+
+        db.pool.query(query, [new_hash, username], (error, results) => {
+            if (error) return response.status(400).send(db.ERRORE_DATI_QUERY);
+            return response.status(200).send({ 'esito': "1" });
+        });
+    } else return response.status(401).send('La vecchia password non è corretta');
+}
+
+exports.getUserInfo = (username, cb) => {
+    return db.pool.query('select username, nome, cognome from public.utenti where username=$1',
+        [username], (error, results) => {
+            cb(error, results)
+        });
+}

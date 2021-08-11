@@ -7,7 +7,7 @@
 </ion-header>
 
 <ion-content>
-  <form (ngSubmit)="aggiornaProfilo()">
+  <form (ngSubmit)="aggiornaProfilo()" [formGroup]="dati">
     <ion-card class="auth-card">
       <ion-card-header>
         <ion-card-title><strong>Dati profilo</strong></ion-card-title>
@@ -16,17 +16,17 @@
         <ion-list lines="full">
           <ion-item>
             <ion-label position="floating">Username</ion-label>
-            <ion-input type="name" name="nome" required placeholder="Inserisci il nuovo username"></ion-input>
+            <ion-input type="name" name="username" formControlName="username" required placeholder="Inserisci il nuovo username"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label position="floating">Nome</ion-label>
-            <ion-input type="family-name" name="nome" required placeholder="Inserisci il tuo nome"></ion-input>
+            <ion-input type="family-name" name="nome"  formControlName="nome" required placeholder="Inserisci il tuo nome"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label position="floating">Cognome</ion-label>
-            <ion-input type="name" name="nome" required placeholder="Inserisci il tuo nome"></ion-input>
+            <ion-input type="name" name="cognome"  formControlName="cognome" required placeholder="Inserisci il tuo nome"></ion-input>
           </ion-item>
         </ion-list>
         <br>
@@ -39,7 +39,7 @@
   <br>
   <br>
 
-  <form (ngSubmit)="aggiornaPassword()">
+  <form (ngSubmit)="aggiornaPassword()" [formGroup]="passwords">
     <ion-card class="auth-card">
       <ion-card-header>
         <ion-card-title><strong>Cambia password</strong></ion-card-title>
@@ -48,17 +48,17 @@
         <ion-list lines="full">
           <ion-item>
             <ion-label position="floating">Password precedente</ion-label>
-            <ion-input type="password" name="nome" required placeholder="Inserisci il nuovo username"></ion-input>
+            <ion-input type="password" name="old_password" required placeholder="Inserisci il nuovo username"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label position="floating">Nuova password</ion-label>
-            <ion-input type="password" name="nome" required placeholder="Inserisci il tuo nome"></ion-input>
+            <ion-input type="password" name="new_password" required placeholder="Inserisci il tuo nome"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label position="floating">Conferma nuova password</ion-label>
-            <ion-input type="password" name="nome" required placeholder="Inserisci il tuo nome"></ion-input>
+            <ion-input type="password" name="password_confirmed" required placeholder="Inserisci il tuo nome"></ion-input>
           </ion-item>
         </ion-list>
         <br>

@@ -39,6 +39,13 @@ function verificaAdmin(token) {
     } else return false;
 }
 
+function verificaUtente(token) {
+    if (verificaJWT) {
+        tipo = (jwt.decode(token)).tipo;
+        return (tipo == "UTENTE");
+    } else return false;
+}
+
 /**
  * Invia il risultato di una query in formato JSON.
  * @param {*} response 
@@ -62,7 +69,6 @@ function sendAccessToken(response, toSend) {
     const accessToken = jwt.sign(toSend, SECRET_KEY, { algorithm: 'HS256', expiresIn: expiresIn });
     return response.status(201).send({ "accessToken": accessToken });
 }
-
 
 /**
  * REST - GET
@@ -130,6 +136,20 @@ app.get('/lobby/pubbliche', (req, res) => {
     } else return res.status(401).send(ERRORE_JWT);
 });
 
+ /**
+  * REST - Ritorna le Informazioni dell'Utente
+  * 
+  */
+ app.get('/info/utente', (req, res) => {
+    const token = req.headers.token;
+    if (verificaJWT(req.headers.token)) {
+        utente.getUserInfo(jwt.decode(token).username, (err, results) => {
+            if (err) return res.status(500).send('Server error!');
+            sendDataInJSON(res, results);
+        })
+    } else return res.status(401).send('JWT non valido!');
+});
+
 /**
  * //TODO riguardare commento
  * REST - Ritorna la lista degli Utenti
@@ -171,7 +191,6 @@ app.put('/player/profilo', (req, res) => {
     }
 });
 
-
 /**
  * REST - Modifica i dati della lobby
  */
@@ -187,6 +206,19 @@ app.put('/lobby/:codiceLobby', (req, res) => {
     }
 });
 
+/**
+ * REST - Modifica la Password 
+ */
+ app.put('/modifica/password/:id', (req, res) => {
+    const token = req.body.token_value;
+    if (utente.verificaUtente(token)) {
+        try {
+            utente.modificaPassword(req, res, jwt.decode(token));
+        } catch (error) {
+            return res.status(400).send(error);
+        }
+    } else return res.status(401).send('JWT non valido!');
+});
 
 /**
  * REST - POST
