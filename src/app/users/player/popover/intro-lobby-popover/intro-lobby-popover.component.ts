@@ -46,7 +46,8 @@ export class IntroLobbyPopoverComponent implements OnInit {
 
   async cercaLobbyPubblica() {
     const modal = await this.modalController.create({
-      component: CercaPubblicaPage
+      component: CercaPubblicaPage,
+      cssClass: 'lobby-pubbliche'
     });
     this.close();
     return await modal.present();
