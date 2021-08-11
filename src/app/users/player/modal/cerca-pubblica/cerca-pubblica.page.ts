@@ -14,13 +14,6 @@ import { LoginService } from 'src/app/services/login-service/login.service';
 export class CercaPubblicaPage implements OnInit {
   lobbies = [];
 
-  cacca = [
-    { nome: "Gioco dell'Oca", admin_lobby: 'pippo', data_creazione: '10/08/2021', min_giocatori: 2, max_giocatori: 6 },
-    { nome: "Battaglia Navale", admin_lobby: 'albano', data_creazione: '10/08/2021', min_giocatori: 2, max_giocatori: 2 },
-    { nome: "Tris", admin_lobby: 'bob', data_creazione: '10/08/2021', min_giocatori: 2, max_giocatori: 2 },
-    { nome: "Cruciverba", admin_lobby: 'geppetto', data_creazione: '10/08/2021', min_giocatori: 1, max_giocatori: 6 }
-  ];
-
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -40,41 +33,44 @@ export class CercaPubblicaPage implements OnInit {
   }
 
   async loadLobby() {
-    // const token_value = (await this.loginService.getToken()).value;
-    // const headers = { 'token': token_value };
+    const token_value = (await this.loginService.getToken()).value;
+    const headers = { 'token': token_value };
 
-    // this.http.get('/lobby/pubbliche', { headers }).subscribe(
-    //   async (res) => {
-    //     this.lobbies = res['results'];
-    //     //TODO
-    //     // this.reloadManager.completaReload(event);
-    //   },
-    //   async (res) => {
-    //     //TODO:gestione stampa errore
-    //     this.errorManager.stampaErrore(res, 'Impossibile caricare le Lobby!');
-    //     // this.reloadManager.completaReload(event);
-    //   });
-
-    this.lobbies = this.cacca;
+    this.http.get('/lobby/pubbliche', { headers }).subscribe(
+      async (res) => {
+        this.lobbies = await res['results'];
+        this.getPartecipantiLobby(headers);
+        //TODO
+        // this.reloadManager.completaReload(event);
+      },
+      async (res) => {
+        this.errorManager.stampaErrore(res, 'Impossibile caricare le Lobby!');
+        // this.reloadManager.completaReload(event);
+      });
   }
 
-  refresh() {
-
+  async getPartecipantiLobby(headers) {
+    this.lobbies.forEach(lobby => {
+      this.http.get('/lobby/giocatori/' + lobby.codice, { headers }).subscribe(
+        async (res) => {
+          var tmp = await res['results'];
+          lobby['partecipanti'] = tmp[0].count;
+        },
+        async (res) => {
+          this.errorManager.stampaErrore(res, 'Impossibile reperire i partecipanti della lobby!');
+          //TODO:
+          // this.reloadManager.completaReload(event);
+        });
+    })
   }
 
   //TODO commentare
   async partecipa(lobby) {
-    console.log(lobby);
-
     const loading = await this.loadingController.create();
     await loading.present();
 
     const token_value = (await this.loginService.getToken()).value;
-
-    const toSend = {
-      'token': token_value,
-      'codice_lobby': lobby.codice
-    }
+    const toSend = { 'token': token_value, 'codice_lobby': lobby.codice }
 
     return this.http.post('/lobby/partecipa', toSend).pipe(
       map((data: any) => data.esito),
@@ -87,7 +83,7 @@ export class CercaPubblicaPage implements OnInit {
         async (res) => {
           await loading.dismiss();
           this.modalController.dismiss();
-          this.errorManager.stampaErrore(res, 'Creazione Lobby fallita');
+          this.errorManager.stampaErrore(res, 'Partecipazione a lobby fallita');
         });
   }
 }
