@@ -10,7 +10,6 @@ import { LoginService } from 'src/app/services/login-service/login.service';
 })
 export class LobbyGuestPage implements OnInit {
   segment: string = "impostazioni";
-  guests = [];
   lobby = { codice: null, pubblica: false, min_giocatori: 0, max_giocatori: 0 };
   giocatori = [];
 
