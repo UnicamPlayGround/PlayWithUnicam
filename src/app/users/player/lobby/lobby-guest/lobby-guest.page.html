@@ -26,23 +26,25 @@
       <ion-card>
         <ion-card-header>
           <ion-card-subtitle style="text-align: center;">Codice Lobby</ion-card-subtitle>
-          <ion-card-title style="font-size: 25px; font-weight:bold; text-align: center;">123456</ion-card-title>
+          <ion-card-title style="font-size: 25px; font-weight:bold; text-align: center;">{{lobby.codice}}
+          </ion-card-title>
         </ion-card-header>
 
         <ion-list lines="none">
           <ion-item>
             <ion-label>Categoria lobby:</ion-label>
-            <p>Privata</p>
+            <p *ngIf="lobby.pubblica">Pubblica</p>
+            <p *ngIf="!lobby.pubblica">Privata</p>
           </ion-item>
 
           <ion-item>
             <ion-label>Min numero partecipanti</ion-label>
-            <p>2</p>
+            <p>{{lobby.min_giocatori}}</p>
           </ion-item>
 
           <ion-item>
             <ion-label>Max numero partecipanti</ion-label>
-            <p>6</p>
+            <p>{{lobby.max_giocatori}}</p>
           </ion-item>
         </ion-list>
       </ion-card>
@@ -51,12 +53,12 @@
         <ion-list>
           <ion-list-header>GIOCATORI</ion-list-header>
 
-          <ion-item *ngFor="let guest of guests">
+          <ion-item *ngFor="let giocatore of giocatori">
             <ion-avatar slot="start">
               <img src="https://image.flaticon.com/icons/png/512/4333/4333609.png" alt="avatar player">
             </ion-avatar>
 
-            <ion-label>{{ guest.username }}</ion-label>
+            <ion-label>{{ giocatore.username }}</ion-label>
           </ion-item>
 
         </ion-list>

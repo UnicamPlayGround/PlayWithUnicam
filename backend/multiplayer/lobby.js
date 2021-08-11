@@ -43,11 +43,34 @@ exports.cercaLobbyByCodice = (codice, cb) => {
         });
 }
 
+//TODO
+exports.cercaLobbyByUsername = (username, cb) => {
+    db.pool.query('SELECT codice, data_creazione, id_gioco, public.giochi.nome, min_giocatori, max_giocatori, pubblica FROM ' +
+        '(public.giocatori INNER JOIN public.lobby ON public.giocatori.codice_lobby = public.lobby.codice) ' +
+        'INNER JOIN public.giochi ON public.lobby.id_gioco = public.giochi.id WHERE username = $1',
+        [username], (error, results) => {
+            cb(error, results)
+        });
+}
+
 exports.getLobbyPubbliche = (cb) => {
     db.pool.query('SELECT codice, admin_lobby, data_creazione, id_gioco, nome, max_giocatori, min_giocatori FROM public.lobby' +
         ' INNER JOIN public.giochi ON public.lobby.id_gioco = public.giochi.id WHERE pubblica=$1', [true], (error, results) => {
             cb(error, results)
         });
+}
+
+exports.getGiocatoriLobby = (username, cb) => {
+    this.cercaLobbyByUsername(username, (error, results) => {
+        if (error) return response.status(400).send("Non è stato possibile trovare la Lobby");
+        if (controller.controllaRisultatoQuery(results))
+            return response.status(400).send("Errore: Devi partecipare ad una Lobby!");
+
+        const tmp = JSON.parse(JSON.stringify(results.rows));
+        db.pool.query('SELECT * FROM public.giocatori WHERE codice_lobby = $1', [tmp[0].codice], (error, results) => {
+            cb(error, results)
+        });
+    })
 }
 
 //TODO

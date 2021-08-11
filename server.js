@@ -151,6 +151,29 @@ app.get('/lobby/pubbliche', (req, res) => {
 });
 
 /**
+ * REST - Ritorna le informazioni di una Lobby
+ */
+app.get('/lobby/info', (req, res) => {
+    if (verificaJWT(req.headers.token)) {
+        const decoded_token = jwt.decode(req.headers.token);
+        lobby.cercaLobbyByUsername(decoded_token.username, (err, results) => {
+            if (err) return res.status(500).send('Server error!');
+            sendDataInJSON(res, results);
+        })
+    } else return res.status(401).send(ERRORE_JWT);
+});
+
+app.get('/lobby/giocatori', (req, res) => {
+    if (verificaJWT(req.headers.token)) {
+        const decoded_token = jwt.decode(req.headers.token);
+        lobby.getGiocatoriLobby(decoded_token.username, (err, results) => {
+            if (err) return res.status(500).send('Server error!');
+            sendDataInJSON(res, results);
+        })
+    } else return res.status(401).send(ERRORE_JWT);
+});
+
+/**
  * //TODO riguardare commento
  * REST - Ritorna la lista degli Utenti
  */

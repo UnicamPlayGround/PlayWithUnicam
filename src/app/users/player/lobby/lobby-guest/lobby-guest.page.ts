@@ -1,4 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
+import { LoginService } from 'src/app/services/login-service/login.service';
 
 @Component({
   selector: 'app-lobby-guest',
@@ -6,28 +9,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./lobby-guest.page.scss'],
 })
 export class LobbyGuestPage implements OnInit {
-
   segment: string = "impostazioni";
   guests = [];
-  gioco = { nome: 'Gioco 1', min_giocatori: 2, max_giocatori: 6, img: 'https://bit.ly/376IQJU' };
-  pubblica = false;
-  codice;
+  lobby = { codice: null, pubblica: false, min_giocatori: 0, max_giocatori: 0 };
+  giocatori = [];
 
-  ospiti = [
-    { username: 'cipo' },
-    { username: 'rondy' },
-    { username: 'tommi' },
-    { username: 'cla' },
-    { username: 'gre' },
-    { username: 'ludo' },
-    { username: 'pippo' },
-    { username: 'pluto' }
-  ]
-
-  constructor() {
-    this.loadinfo();
-    this.loadGuests();
-   }
+  constructor(
+    private http: HttpClient,
+    private loginService: LoginService,
+    private errorManager: ErrorManagerService
+  ) {
+    this.loadInfoLobby();
+    this.loadGiocatori();
+  }
 
   ngOnInit() {
   }
@@ -36,15 +30,41 @@ export class LobbyGuestPage implements OnInit {
     this.segment = ev.detail.value;
   }
 
+  //TODO commentare
+  async loadInfoLobby() {
+    const token_value = (await this.loginService.getToken()).value;
+    const headers = { 'token': token_value };
 
-  loadinfo() {
-
+    this.http.get('/lobby/info', { headers }).subscribe(
+      async (res) => {
+        this.lobby = res['results'][0];
+        console.log(this.lobby);
+        //TODO
+        // this.reloadManager.completaReload(event);
+      },
+      async (res) => {
+        //TODO:gestione stampa errore
+        this.errorManager.stampaErrore(res, 'Impossibile caricare la Lobby!');
+        // this.reloadManager.completaReload(event);
+      });
   }
 
-  loadGuests() {
-    //TODO: chiamata REST
-    this.guests = this.guests.concat(this.ospiti);
-  }
+  async loadGiocatori() {
+    const token_value = (await this.loginService.getToken()).value;
+    const headers = { 'token': token_value };
 
+    this.http.get('/lobby/giocatori', { headers }).subscribe(
+      async (res) => {
+        this.giocatori = res['results'];
+        console.log(this.giocatori);
+        //TODO
+        // this.reloadManager.completaReload(event);
+      },
+      async (res) => {
+        //TODO:gestione stampa errore
+        this.errorManager.stampaErrore(res, 'Impossibile caricare la Lobby!');
+        // this.reloadManager.completaReload(event);
+      });
+  }
 
 }
