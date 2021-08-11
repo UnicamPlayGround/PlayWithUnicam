@@ -17,3 +17,20 @@
 .table{
     padding: 10px;
 }
+
+.lobby-card{
+    border: 1px solid rgb(49, 114, 167) !important;
+    // border-bottom: 1px solid #000 !important;
+
+    ion-card-header{
+        background-color: rgb(49, 114, 167);
+        color:white;
+        text-align: center;
+        p{
+            color:white;
+        }
+        h2{
+            font-size: 18px;
+        }
+    }
+}
