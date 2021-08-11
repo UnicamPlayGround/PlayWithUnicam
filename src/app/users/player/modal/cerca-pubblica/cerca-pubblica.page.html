@@ -22,58 +22,34 @@
   <div class="modal">
 
     <div class="table; ion-hide-xl-down">
-
       <ion-row class="header-row">
-
-        <ion-col size="3">
-          GIOCO
-        </ion-col>
-
-        <ion-col size="2">
-          ADMIN
-        </ion-col>
-
-        <ion-col size="2">
-          Data creazione
-        </ion-col>
-
-        <ion-col size="2">
-          PARTECIPANTI
-        </ion-col>
-
-        <ion-col size="2"></ion-col>
-
+        <ion-col size="3">GIOCO</ion-col>
+        <ion-col size="2">ADMIN</ion-col>
+        <ion-col size="2">Data creazione</ion-col>
+        <ion-col size="2">PARTECIPANTI</ion-col>
+        <ion-col size="3"></ion-col>
       </ion-row>
 
       <ion-row *ngFor="let lobby of lobbies;" class="data-row">
-
         <ion-col size="3">
           <ion-label>
             <strong>{{lobby.nome}}</strong>
             <p>Giocatori: {{lobby.min_giocatori}} - {{lobby.max_giocatori}}</p>
           </ion-label>
-
         </ion-col>
 
-        <ion-col size="2">
-          {{lobby.admin_lobby}}
-        </ion-col>
+        <ion-col size="2">{{lobby.admin_lobby}}</ion-col>
 
-        <ion-col size="2">
-          {{lobby.data_creazione}}
-        </ion-col>
+        <ion-col size="2">{{lobby.data_creazione}}</ion-col>
 
-        <ion-col size="2">
-          {{lobby.partecipanti}} / {{lobby.max_giocatori}}
-        </ion-col>
+        <ion-col size="2">{{lobby.partecipanti}} / {{lobby.max_giocatori}}</ion-col>
 
-        <ion-col size="2">
+        <ion-col size="3">
           <ion-button (click)="partecipa(lobby)" expand="block" shape="round">
             <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
             Partecipa
           </ion-button>
         </ion-col>
-
       </ion-row>
     </div>
 
@@ -91,32 +67,21 @@
           </ion-label>
         </ion-card-header>
 
-        <ion-item lines="none">
-          <ion-label>
-            <p>Gioco</p>
-            <h2 style="font-size:18px;">{{lobby.nome}}</h2>
-          </ion-label>
-        </ion-item>
+        <div class="content">
+          <ion-item lines="none">
+            <ion-label>
+              <p>Gioco</p>
+              <h2 style="font-size:18px;">{{lobby.nome}}</h2>
+            </ion-label>
+          </ion-item>
 
-        <ion-row>
-          <ion-col>
-            <ion-item lines="none">
-              <ion-label>
-                <p>Giocatori</p>
-                <h2 style="font-size:18px;">{{lobby.min_giocatori}} - {{lobby.max_giocatori}}</h2>
-              </ion-label>
-            </ion-item>
-          </ion-col>
-
-          <ion-col>
-            <ion-item lines="none">
-              <ion-label>
-                <p>Partecipanti</p>
-                <h2 style="font-size:22px; font-weight: bold;">{{lobby.partecipanti}} / {{lobby.max_giocatori}}</h2>
-              </ion-label>
-            </ion-item>
-          </ion-col>
-        </ion-row>
+          <ion-item lines="none">
+            <ion-label>
+              <p>Partecipanti (minimi: {{lobby.min_giocatori}})</p>
+              <h2 style="font-size:24px; font-weight: bold;">{{lobby.partecipanti}} / {{lobby.max_giocatori}}</h2>
+            </ion-label>
+          </ion-item>
+        </div>
 
         <ion-button (click)="partecipa(lobby)" expand="block" fill="clear">
           <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
