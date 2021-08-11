@@ -48,7 +48,7 @@
       <h2><strong>Modifica password</strong></h2>
     </ion-list-header>
 
-    <form (ngSubmit)="changePassword()" [formGroup]="password">
+    <form (ngSubmit)="changePassword()" [formGroup]="passwordForm">
       <ion-item>
         <ion-label position="floating">Password</ion-label>
         <ion-input type="password" name="password" formControlName="password" required
