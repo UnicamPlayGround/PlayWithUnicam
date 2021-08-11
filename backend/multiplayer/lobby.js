@@ -12,6 +12,7 @@ function creaCodice() {
 /**
  * Controlla che non siano attive altre Lobby create dallo stesso Admin.
  * In caso positivo la vecchia lobby viene cancellata.
+ * 
  * @param {*} results Risultato della query del metodo "cercaLobbyByAdmin"
  */
 function controllaLobbyAdmin(results) {
@@ -21,7 +22,12 @@ function controllaLobbyAdmin(results) {
     }
 }
 
-//TODO
+/**
+ * Controlla se esistono lobby che hanno come admin l'username passato.
+ * 
+ * @param {*} adminLobby l'username da controllare
+ * @param {*} cb callback
+ */
 exports.cercaLobbyByAdmin = (adminLobby, cb) => {
     db.pool.query('SELECT * FROM public.lobby WHERE admin_lobby=$1',
         [adminLobby], (error, results) => {
@@ -63,17 +69,38 @@ exports.cancellaLobby = (codice) => {
     db.pool.query('DELETE FROM public.lobby WHERE codice = $1', [codice], (error, results) => { })
 }
 
+exports.abbandonaLobby = (username) => {
+    giocatore.cancellaGiocatore(username, (error, results) => {
+        //TODO: rivedere
+        // if (error) return response.status(400).send("Non è stato possibile abbandonare la lobby");
+    });
+}
+
 exports.creaLobby = (adminLobby, idGioco, pubblica, response) => {
     this.cercaLobbyByAdmin(adminLobby, (err, results) => {
         controllaLobbyAdmin(results);
 
-        const codiceLobby = creaCodice();
+        giocatore.cercaGiocatore(adminLobby, (err, results) => {
+            if (!controller.controllaRisultatoQuery(results)) this.abbandonaLobby(adminLobby);
 
-        db.pool.query('INSERT INTO public.lobby (codice, ultima_richiesta, id_gioco, pubblica) VALUES ($1, NOW(), $2, $3)',
-            [codiceLobby, idGioco, pubblica], (error, results) => {
-                if (error) return response.status(400).send("Non è stato possibile creare la Lobby!");
-                giocatore.creaGiocatore(adminLobby, codiceLobby, "ADMIN", response);
-            })
+            const codiceLobby = creaCodice();
+
+            db.pool.query('INSERT INTO public.lobby (codice, ultima_richiesta, id_gioco, pubblica) VALUES ($1, NOW(), $2, $3)',
+                [codiceLobby, idGioco, pubblica], (error, results) => {
+                    if (error) {
+                        console.log(error);
+                        return response.status(400).send("Non è stato possibile creare la Lobby!");
+                    }
+
+                    giocatore.creaGiocatore(adminLobby, codiceLobby, response, (err, results) => {
+                        if (err) {
+                            console.log(err);
+                            return response.status(400).send("Non è stato possibile creare la lobby!");
+                        }
+                        this.impostaAdminLobby(adminLobby, codiceLobby, response);
+                    });
+                })
+        })
     })
 }
 
@@ -92,31 +119,12 @@ exports.impostaAdminLobby = (adminLobby, codiceLobby, response) => {
 
 exports.partecipaLobby = (username, codice_lobby, response) => {
     this.cercaLobbyByCodice(codice_lobby, (err, results) => {
-        if (controller.controllaRisultatoQuery(results)) return response.status(401).send("Non è stata trovata alcuna lobby corrispondente al codice inserito!");
+        if (controller.controllaRisultatoQuery(results))
+            return response.status(401).send("Non è stata trovata alcuna lobby corrispondente al codice inserito!");
 
-        giocatore.cercaGiocatore(username, (err, results) => {
-            if (!controller.controllaRisultatoQuery(results)) {
-                db.pool.query('UPDATE public.giocatori SET codice_lobby = $1 WHERE username = $2',
-                    [codice_lobby, username], (error, results) => {
-                        //TODO fare controlli
-                        if (error) return response.status(400).send("Non è stato possibile partecipare alla lobby.");
-                        return response.status(200).send({ 'esito': "1" });
-                    })
-            } else {
-                db.pool.query('INSERT into public.giocatori (username, codice_lobby) VALUES ($1, $2)',
-                    [username, codice_lobby], (error, results) => {
-                        //TODO fare controlli
-                        if (error) return response.status(400).send("Non è stato possibile partecipare alla lobby.");
-                        return response.status(200).send({ 'esito': "1" });
-                    })
-            }
-        })
+        giocatore.creaGiocatore(username, codice_lobby, response, (error, results) => {
+            if (error) return response.status(400).send("Non è stato possibile partecipare alla lobby.");
+            return response.status(200).send({ 'esito': "1" });
+        });
     })
-}
-
-function controllaLobbyAdmin(results) {
-    if (!controller.controllaRisultatoQuery(results)) {
-        const tmp = JSON.parse(JSON.stringify(results.rows));
-        exports.cancellaLobby(tmp[0].codice);
-    }
 }
