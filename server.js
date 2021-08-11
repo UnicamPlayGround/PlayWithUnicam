@@ -71,6 +71,18 @@ function sendAccessToken(response, toSend) {
 }
 
 /**
+ * Imposta il formato della Data delle Lobby.
+ * @param {*} lobbies 
+ */
+function formatDataLobby(lobbies) {
+    lobbies.forEach(lobby => {
+        var tmp = new Date(lobby.data_ordine);
+        var data = tmp.getDate() + '/' + (tmp.getMonth() + 1) + '/' + tmp.getFullYear();
+        lobby.data_ordine = data;
+    })
+}
+
+/**
  * REST - GET
  */
 
@@ -131,7 +143,12 @@ app.get('/lobby/pubbliche', (req, res) => {
     if (verificaJWT(req.headers.token)) {
         lobby.getLobbyPubbliche((err, results) => {
             if (err) return res.status(500).send('Server error!');
-            sendDataInJSON(res, results);
+
+            const lobbies = JSON.parse(JSON.stringify(results.rows));
+            formatDataLobby(lobbies);
+            const to_return = { 'results': lobbies };
+
+            res.status(200).send(to_return);
         })
     } else return res.status(401).send(ERRORE_JWT);
 });
