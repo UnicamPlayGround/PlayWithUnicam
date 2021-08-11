@@ -23,6 +23,15 @@ function controllaLobbyAdmin(results) {
 }
 
 /**
+ * Ritorna la Data Odierna.
+ * @returns la Data di oggi in formato gg/mm/yyyy
+ */
+function getDataOdierna() {
+    var tmp = new Date();
+    return (tmp.getDate() + '/' + (tmp.getMonth() + 1) + '/' + tmp.getFullYear());
+}
+
+/**
  * Controlla se esistono lobby che hanno come admin l'username passato.
  * 
  * @param {*} adminLobby l'username da controllare
@@ -114,8 +123,8 @@ exports.creaLobby = (adminLobby, idGioco, pubblica, response) => {
 
             const codiceLobby = creaCodice();
 
-            db.pool.query('INSERT INTO public.lobby (codice, ultima_richiesta, id_gioco, pubblica) VALUES ($1, NOW(), $2, $3)',
-                [codiceLobby, idGioco, pubblica], (error, results) => {
+            db.pool.query('INSERT INTO public.lobby (codice, data_creazione, ultima_richiesta, id_gioco, pubblica) VALUES ($1, $2, NOW(), $3, $4)',
+                [codiceLobby, getDataOdierna(), idGioco, pubblica], (error, results) => {
                     if (error) {
                         console.log(error);
                         return response.status(400).send("Non è stato possibile creare la Lobby!");
