@@ -136,11 +136,22 @@ app.get('/lobby/pubbliche', (req, res) => {
     } else return res.status(401).send(ERRORE_JWT);
 });
 
- /**
-  * REST - Ritorna le Informazioni dell'Utente
-  * 
-  */
- app.get('/info/utente', (req, res) => {
+/**
+ * REST - Ritorna il numero dei Giocatori all'interno di una Lobby
+ */
+app.get('/lobby/giocatori/:codiceLobby', (req, res) => {
+    if (verificaJWT(req.headers.token)) {
+        lobby.getNumeroGiocatoriLobby(req.params.codiceLobby, (err, results) => {
+            if (err) return res.status(500).send('Server error!');
+            sendDataInJSON(res, results);
+        })
+    } else return res.status(401).send(ERRORE_JWT);
+});
+
+/**
+ * REST - Ritorna le Informazioni dell'Utente
+ */
+app.get('/info/utente', (req, res) => {
     const token = req.headers.token;
     if (verificaJWT(req.headers.token)) {
         utente.getUserInfo(jwt.decode(token).username, (err, results) => {
@@ -232,7 +243,7 @@ app.put('/lobby/:codiceLobby', (req, res) => {
 /**
  * REST - Modifica la Password 
  */
- app.put('/modifica/password/:id', (req, res) => {
+app.put('/modifica/password/:id', (req, res) => {
     const token = req.body.token_value;
     if (utente.verificaUtente(token)) {
         try {

@@ -73,6 +73,12 @@ exports.getGiocatoriLobby = (username, cb) => {
     })
 }
 
+exports.getNumeroGiocatoriLobby = (codiceLobby, cb) => {
+    db.pool.query('SELECT COUNT(*) FROM public.giocatori WHERE codice_lobby = $1', [codiceLobby], (error, results) => {
+        cb(error, results)
+    });
+}
+
 //TODO
 exports.modificaLobby = (idLobby, pubblica, username, response) => {
     this.cercaLobbyByAdmin(username, (err, results) => {
