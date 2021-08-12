@@ -34,13 +34,16 @@ export class AccountPage implements OnInit {
       old_password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16)],],
       new_password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16)],],
       password_confirmed: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16)],],
-      
     });
-    this.dati = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16)],],
-      nome: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16)],],
-      cognome: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16)],]
+    this.riempiForm();
+    
+  }
 
+  riempiForm(){
+    this.dati = this.fb.group({
+      username: [this.user.username, [Validators.required]],
+      nome: [this.user.nome, [Validators.required]],
+      cognome: [this.user.cognome, [Validators.required]]
     })
   }
   
@@ -54,6 +57,7 @@ export class AccountPage implements OnInit {
       async (res) => {
         const tmp = await res['results'];
         this.user = tmp[0];
+        this.riempiForm();
         await loading.dismiss();
       },
       async (res) => {
@@ -63,7 +67,6 @@ export class AccountPage implements OnInit {
   }
   
   async aggiornaProfilo() {
-    //utente.modificaCredenziali
 
     const loading = await this.loadingController.create();
     await loading.present();
@@ -73,7 +76,7 @@ export class AccountPage implements OnInit {
       'nome': this.dati.value.nome,
       'cognome': this.dati.value.cognome,
       'username': this.dati.value.username,
-      'token_value': token_value
+      'token_value': token_value,
     }
 
     this.http.put('/player/profilo', to_send).pipe(
@@ -81,7 +84,7 @@ export class AccountPage implements OnInit {
       switchMap(esito => { return esito; })).subscribe(
         async (res) => {
           const text = 'I tuoi dati sono stati aggiornati';
-          this.getDatiProfilo()
+          //this.getDatiProfilo();
           await loading.dismiss();
           const alert = await this.alertController.create({
             header: 'Profilo aggiornato',

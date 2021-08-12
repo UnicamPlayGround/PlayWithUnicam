@@ -53,20 +53,24 @@ exports.creaOspite = (username, cb) => {
 
 //TODO
 exports.modificaCredenziali = (old_username, request, response) => {
-    controller.controllaString(old_username, "L'username non è valido");
+    console.log(old_username);
+    //controller.controllaString(old_username, "L'username non è valido");
     controller.controllaDatiAccount(request.body);
 
-    utente.cercaUtenteByUsername(old_username, (err, results) => {
+    this.cercaUtenteByUsername(old_username, (err, results) => {
         if (err) return response.status(500).send('Server Error!');
         if (controller.controllaRisultatoQuery(results)) return response.status(404).send('Utente non trovato!');
 
-        utente.cercaUtenteByUsername(request.body.new_username, (err, results) => {
+        this.cercaUtenteByUsername(request.body.username, (err, results) => {
             if (err) return response.status(500).send('Server Error!');
             if (!controller.controllaRisultatoQuery(results)) return response.status(404).send("L'username inserito è già stato usato!");
 
             db.pool.query('UPDATE public.utenti SET username = $1, nome = $2, cognome = $3 WHERE username = $4',
-                [request.body.new_username, request.body.nome, request.body.new_cognome, old_username], (error, results) => {
-                    if (error) return response.status(400).send('Errore dati query');
+                [request.body.username, request.body.nome, request.body.cognome, old_username], (error, results) => {
+                    if (error){
+                        console.log(error);
+                        return response.status(400).send('Errore dati query');
+                    } 
                     return response.status(200).send({ 'esito': "1" });
                 })
         });

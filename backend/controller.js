@@ -37,9 +37,9 @@ exports.controllaPassword = function (password) {
 }
 
 exports.controllaDatiAccount = function (dati) {
-    this.controllaString(dati.new_username, "Il nuovo username non è valido");
-    this.controllaString(dati.new_nome,"Il nuovo nome non è valido");
-    this.controllaString(dati.new_cognome,"Il nuovo cognome non è valido");
+    this.controllaString(dati.username, "Il nuovo username non è valido");
+    this.controllaString(dati.nome,"Il nuovo nome non è valido");
+    this.controllaString(dati.cognome,"Il nuovo cognome non è valido");
 }
 
 exports.controllaDatiAccountAsAdmin = function(dati){

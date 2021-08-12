@@ -229,12 +229,13 @@ app.put('/admin/utenti/:username', (req, res) => {
 });
 
 /**
- * REST - Modifica i dati del profilo
+ * REST - Modifica i dati del profilo di un utente
  */
 app.put('/player/profilo', (req, res) => {
     try {
-        if (verificaJWT(req.body.token)) {
-            decoded_token = jwt.decode(req.body.token);
+        if (verificaJWT(req.body.token_value)) {
+            decoded_token = jwt.decode(req.body.token_value);
+            console.log(decoded_token.username);
             utente.modificaCredenziali(decoded_token.username, req, res);
         }
     } catch (error) {
