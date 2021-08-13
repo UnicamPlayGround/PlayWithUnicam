@@ -66,8 +66,9 @@ export class AccountPage implements OnInit {
       });
   }
   
-  async aggiornaProfilo() {
 
+  //TODO rigenerare il token
+  async aggiornaProfilo() {
     const loading = await this.loadingController.create();
     await loading.present();
 

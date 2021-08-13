@@ -77,26 +77,31 @@ exports.modificaCredenziali = (old_username, request, response) => {
     });
 }
 
-exports.cambiaPassword =  (request, response, results, username) => {
+exports.cambiaPassword =  (request, response, decoded_token) => {
     var query, errorText;
     query = 'UPDATE public.utenti SET password = $1 WHERE username = $2';
     errorText = 'Utente non trovato!';
 
+    this.cercaUtenteByUsername(decoded_token.username, (err, results) => {
+        if (err) return response.status(500).send('Server Error!');
+        if (controller.controllaRisultatoQuery(results)) return response.status(404).send('Utente non trovato!');
 
-    const risultati = JSON.parse(JSON.stringify(results.rows));
-    if (risultati.length == 0) return response.status(404).send(errorText);
+        const risultati = JSON.parse(JSON.stringify(results.rows));
+        if (risultati.length == 0) return response.status(404).send(errorText);
+    
+        const data = risultati[0];
+        const hash = bcrypt.hashSync(request.body.old_password + process.env.SECRET_PWD, data.salt);
+    
+        if (hash == data.password) {
+            const new_hash = bcrypt.hashSync(request.body.new_password + process.env.SECRET_PWD, data.salt);
+    
+            db.pool.query(query, [new_hash, decoded_token.username], (error, results) => {
+                if (error) return response.status(400).send(db.ERRORE_DATI_QUERY);
+                return response.status(200).send({ 'esito': "1" });
+            });
+        } else return response.status(401).send('La vecchia password non è corretta');
+    });
 
-    const data = risultati[0];
-    const hash = bcrypt.hashSync(request.body.old_password + process.env.SECRET_PWD, data.salt);
-
-    if (hash == data.password) {
-        const new_hash = bcrypt.hashSync(request.body.new_password + process.env.SECRET_PWD, data.salt);
-
-        db.pool.query(query, [new_hash, username], (error, results) => {
-            if (error) return response.status(400).send(db.ERRORE_DATI_QUERY);
-            return response.status(200).send({ 'esito': "1" });
-        });
-    } else return response.status(401).send('La vecchia password non è corretta');
 }
 
 exports.getUserInfo = (username, cb) => {

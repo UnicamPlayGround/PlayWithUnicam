@@ -261,11 +261,11 @@ app.put('/lobby/:codiceLobby', (req, res) => {
 /**
  * REST - Modifica la Password 
  */
-app.put('/modifica/password/:id', (req, res) => {
+app.put('/modifica/password/:username', (req, res) => {
     const token = req.body.token_value;
     if (utente.verificaUtente(token)) {
         try {
-            utente.modificaPassword(req, res, jwt.decode(token));
+            utente.cambiaPassword(req, res, jwt.decode(token));
         } catch (error) {
             return res.status(400).send(error);
         }
