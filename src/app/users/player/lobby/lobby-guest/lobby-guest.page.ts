@@ -12,6 +12,7 @@ export class LobbyGuestPage implements OnInit {
   segment: string = "impostazioni";
   lobby = { codice: null, pubblica: false, min_giocatori: 0, max_giocatori: 0 };
   giocatori = [];
+  private timerGiocatori;
 
   constructor(
     private http: HttpClient,
@@ -20,6 +21,7 @@ export class LobbyGuestPage implements OnInit {
   ) {
     this.loadInfoLobby();
     this.loadGiocatori();
+    this.timerGiocatori = this.aggiornaGiocatori(() => { this.loadGiocatori() });
   }
 
   ngOnInit() {
@@ -43,12 +45,14 @@ export class LobbyGuestPage implements OnInit {
       },
       async (res) => {
         //TODO:gestione stampa errore
+        clearTimeout(this.timerGiocatori);
         this.errorManager.stampaErrore(res, 'Impossibile caricare la Lobby!');
         // this.reloadManager.completaReload(event);
       });
   }
 
   async loadGiocatori() {
+    console.log("sto caricando i giocatori...");
     const token_value = (await this.loginService.getToken()).value;
     const headers = { 'token': token_value };
 
@@ -64,6 +68,10 @@ export class LobbyGuestPage implements OnInit {
         this.errorManager.stampaErrore(res, 'Impossibile caricare la Lobby!');
         // this.reloadManager.completaReload(event);
       });
+  }
+
+  aggiornaGiocatori(cb) {
+    return setInterval(() => { cb(); }, 2000);
   }
 
 }

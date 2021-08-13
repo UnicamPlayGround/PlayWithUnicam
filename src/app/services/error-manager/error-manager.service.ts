@@ -1,22 +1,28 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { LoginService } from '../login-service/login.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ErrorManagerService {
 
-  constructor(private alertController: AlertController, private router: Router) { }
+  constructor(
+    private alertController: AlertController,
+    private router: Router,
+    private loginService: LoginService
+  ) { }
 
   stampaErrore(res, headerText) {
     if (this.controllaRes(res)) this.stampa(headerText, res.error)
   }
 
   private controllaRes(res) {
-    if (res.error == 'JWT non valido!') {
+    if (res.error == 'Errore, JWT non valido! Rieffettua il Login.') {
       this.stampa('Errore nella Sessione', 'Rieffettua il Login');
-      this.router.navigateByUrl('/login', { replaceUrl: true });
+      this.loginService.logout();
+      this.router.navigateByUrl('/home', { replaceUrl: true });
       return false;
     } else return true;
   }
