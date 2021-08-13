@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LoginService } from 'src/app/services/login-service/login.service';
+import { TimerServiceService } from 'src/app/services/timer-service.service';
 
 @Component({
   selector: 'app-lobby-guest',
@@ -17,11 +18,12 @@ export class LobbyGuestPage implements OnInit {
   constructor(
     private http: HttpClient,
     private loginService: LoginService,
-    private errorManager: ErrorManagerService
+    private errorManager: ErrorManagerService,
+    private timerService: TimerServiceService
   ) {
     this.loadInfoLobby();
     this.loadGiocatori();
-    this.timerGiocatori = this.aggiornaGiocatori(() => { this.loadGiocatori() });
+    this.timerGiocatori = timerService.getTimer(() => { this.loadGiocatori() }, 5000);
   }
 
   ngOnInit() {
@@ -40,14 +42,10 @@ export class LobbyGuestPage implements OnInit {
       async (res) => {
         this.lobby = res['results'][0];
         console.log(this.lobby);
-        //TODO
-        // this.reloadManager.completaReload(event);
       },
       async (res) => {
-        //TODO:gestione stampa errore
-        clearTimeout(this.timerGiocatori);
+        this.timerService.stopTimer(this.timerGiocatori);
         this.errorManager.stampaErrore(res, 'Impossibile caricare la Lobby!');
-        // this.reloadManager.completaReload(event);
       });
   }
 
@@ -60,18 +58,11 @@ export class LobbyGuestPage implements OnInit {
       async (res) => {
         this.giocatori = res['results'];
         console.log(this.giocatori);
-        //TODO
-        // this.reloadManager.completaReload(event);
       },
       async (res) => {
-        //TODO:gestione stampa errore
+        this.timerService.stopTimer(this.timerGiocatori);
         this.errorManager.stampaErrore(res, 'Impossibile caricare la Lobby!');
-        // this.reloadManager.completaReload(event);
       });
-  }
-
-  aggiornaGiocatori(cb) {
-    return setInterval(() => { cb(); }, 2000);
   }
 
 }
