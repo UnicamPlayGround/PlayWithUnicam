@@ -89,13 +89,13 @@ exports.getNumeroGiocatoriLobby = (codiceLobby, cb) => {
 }
 
 //TODO
-exports.modificaLobby = (idLobby, pubblica, username, response) => {
+exports.modificaLobby = (username, pubblica, response) => {
     this.cercaLobbyByAdmin(username, (err, results) => {
         if (controller.controllaRisultatoQuery(results)) return response.status(401).send("Solo l'admin può modificare la lobby");
+        const tmp = JSON.parse(JSON.stringify(results.rows));
 
         db.pool.query('UPDATE public.lobby SET pubblica = $1 WHERE codice = $2',
-            [pubblica, idLobby], (error, results) => {
-                //TODO fare controlli
+            [pubblica, tmp[0].codice], (error, results) => {
                 if (error) return response.status(400).send("Non è stato possibile modificare la lobby");
                 return response.status(200).send({ 'esito': "1" });
             })

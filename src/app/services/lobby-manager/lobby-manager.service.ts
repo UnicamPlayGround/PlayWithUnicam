@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { LoginService } from '../login-service/login.service';
 
 @Injectable({
@@ -27,4 +26,16 @@ export class LobbyManagerService {
 
     return this.http.get('/lobby/giocatori', { headers });
   }
+
+  async modificaLobby(pubblica) {
+    const token_value = (await this.loginService.getToken()).value;
+
+    const to_send = {
+      'pubblica': pubblica,
+      'token': token_value,
+    }
+
+    return this.http.put('/lobby', to_send);
+  }
+
 }

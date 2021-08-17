@@ -1,0 +1,81 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-segment (ionChange)="segmentChanged($event)" value="impostazioni">
+      <ion-segment-button value="impostazioni">
+        <ion-label>Impostazioni</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="gioca">
+        <ion-label>Gioca ora</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="segment === 'impostazioni'">
+
+    <div class="lobby">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-subtitle style="text-align: center;">Codice Lobby</ion-card-subtitle>
+          <ion-card-title style="font-size: 25px; font-weight:bold; text-align: center;">{{lobby.codice}}
+          </ion-card-title>
+        </ion-card-header>
+
+        <ion-list lines="none">
+          <ion-item>
+            <ion-label>
+              Pubblica
+              <p>Imposta la Lobby come Pubblica</p>
+            </ion-label>
+            <ion-toggle [(ngModel)]="lobby.pubblica"></ion-toggle>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Min numero partecipanti</ion-label>
+            <p>{{lobby.min_giocatori}}</p>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Max numero partecipanti</ion-label>
+            <p>{{lobby.max_giocatori}}</p>
+          </ion-item>
+
+          <ion-button (click)="modificaLobby()" expand="block">Salva modifiche</ion-button>
+        </ion-list>
+      </ion-card>
+
+      <ion-card>
+        <ion-list>
+          <ion-list-header>GIOCATORI</ion-list-header>
+
+          <ion-item *ngFor="let giocatore of giocatori">
+            <ion-avatar slot="start">
+              <img src="https://image.flaticon.com/icons/png/512/4333/4333609.png" alt="avatar player">
+            </ion-avatar>
+
+            <ion-label>{{ giocatore.username }}</ion-label>
+          </ion-item>
+
+        </ion-list>
+      </ion-card>
+    </div>
+  </div>
+
+  <div *ngIf="segment === 'gioca'" class="game-div">
+    <ion-row>
+      <img
+        src="https://images.crazygames.com/games/goose-game/cover-1596195229993.png?auto=format,compress&q=75&cs=strip"
+        alt="goose game">
+    </ion-row>
+    <br>
+    <br>
+    <br>
+    <ion-row>
+      <ion-button color="warning">PLAY</ion-button>
+
+    </ion-row>
+
+  </div>
+</ion-content>

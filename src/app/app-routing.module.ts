@@ -30,8 +30,8 @@ const routes: Routes = [
     //TODO: mettere authguard
   },
   {
-    path: 'lobby',
-    loadChildren: () => import('./users/player/lobby/lobby-home/lobby-home.module').then(m => m.LobbyHomePageModule)
+    path: 'lobby-admin',
+    loadChildren: () => import('./users/player/lobby/lobby-admin/lobby-admin.module').then(m => m.LobbyAdminPageModule)
   },
   {
     path: 'lobby-guest',

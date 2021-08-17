@@ -69,20 +69,18 @@ export class EditUserPage implements OnInit {
 
     //TODO: fare chiamata REST per modificare l'utente
 
-    this.http.put('/admin/utenti/' + this.username, to_send).pipe(
-      map((data: any) => data.esito),
-      switchMap(esito => { return esito; })).subscribe(
-        async (res) => {
-          this.modalController.dismiss(this.data.value);
-          const message = "I dati dell'utente sono stati aggiornati";
-          await loading.dismiss();
-          this.alertCreator.createInfoAlert('Profilo aggiornato', message);
-        },
-        async (res) => {
-          this.modalController.dismiss();
-          await loading.dismiss();
-          this.errorManager.stampaErrore(res, 'Modifica Fallita');
-        });
+    this.http.put('/admin/utenti/' + this.username, to_send).subscribe(
+      async (res) => {
+        this.modalController.dismiss(this.data.value);
+        const message = "I dati dell'utente sono stati aggiornati";
+        await loading.dismiss();
+        this.alertCreator.createInfoAlert('Profilo aggiornato', message);
+      },
+      async (res) => {
+        this.modalController.dismiss();
+        await loading.dismiss();
+        this.errorManager.stampaErrore(res, 'Modifica Fallita');
+      });
   }
 
   async changePassword() {

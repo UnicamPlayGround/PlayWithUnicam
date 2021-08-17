@@ -72,18 +72,16 @@ export class CercaPubblicaPage implements OnInit {
     const token_value = (await this.loginService.getToken()).value;
     const toSend = { 'token': token_value, 'codice_lobby': lobby.codice }
 
-    return this.http.post('/lobby/partecipa', toSend).pipe(
-      map((data: any) => data.esito),
-      switchMap(esito => { return esito; })).subscribe(
-        async (res) => {
-          this.modalController.dismiss();
-          this.router.navigateByUrl('/lobby-guest', { replaceUrl: true });
-          await loading.dismiss();
-        },
-        async (res) => {
-          await loading.dismiss();
-          this.modalController.dismiss();
-          this.errorManager.stampaErrore(res, 'Partecipazione a lobby fallita');
-        });
+    return this.http.post('/lobby/partecipa', toSend).subscribe(
+      async (res) => {
+        this.modalController.dismiss();
+        this.router.navigateByUrl('/lobby-guest', { replaceUrl: true });
+        await loading.dismiss();
+      },
+      async (res) => {
+        await loading.dismiss();
+        this.modalController.dismiss();
+        this.errorManager.stampaErrore(res, 'Partecipazione a lobby fallita');
+      });
   }
 }

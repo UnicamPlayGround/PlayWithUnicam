@@ -46,18 +46,16 @@ export class CercaPrivataPage implements OnInit {
       'codice_lobby': this.codiceForm.value.codice
     }
 
-    this.http.post('/lobby/partecipa', to_send).pipe(
-      map((data: any) => data.esito),
-      switchMap(esito => { return esito; })).subscribe(
-        async (res) => {
-          this.modalController.dismiss(true);
-          this.router.navigateByUrl('/lobby-guest', { replaceUrl: true });
-          await loading.dismiss();
-        },
-        async (res) => {
-          await loading.dismiss();
-          this.modalController.dismiss(false);
-          this.errorManager.stampaErrore(res, 'Codice errato');
-        });
+    this.http.post('/lobby/partecipa', to_send).subscribe(
+      async (res) => {
+        this.modalController.dismiss(true);
+        this.router.navigateByUrl('/lobby-guest', { replaceUrl: true });
+        await loading.dismiss();
+      },
+      async (res) => {
+        await loading.dismiss();
+        this.modalController.dismiss(false);
+        this.errorManager.stampaErrore(res, 'Codice errato');
+      });
   }
 }

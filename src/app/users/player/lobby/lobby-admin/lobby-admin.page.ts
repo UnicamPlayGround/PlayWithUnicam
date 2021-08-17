@@ -1,31 +1,34 @@
+import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creator.service';
 import { Component, OnInit } from '@angular/core';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
+import { LoadingController } from '@ionic/angular';
 import { LobbyManagerService } from 'src/app/services/lobby-manager/lobby-manager.service';
 import { TimerServiceService } from 'src/app/services/timer-service/timer-service.service';
 
 @Component({
-  selector: 'app-lobby-guest',
-  templateUrl: './lobby-guest.page.html',
-  styleUrls: ['./lobby-guest.page.scss'],
+  selector: 'app-lobby-admin',
+  templateUrl: './lobby-admin.page.html',
+  styleUrls: ['./lobby-admin.page.scss'],
 })
-export class LobbyGuestPage implements OnInit {
+export class LobbyAdminPage implements OnInit {
   segment: string = "impostazioni";
   lobby = { codice: null, pubblica: false, min_giocatori: 0, max_giocatori: 0 };
   giocatori = [];
   private timerGiocatori;
 
   constructor(
+    private alertCreator: AlertCreatorService,
     private errorManager: ErrorManagerService,
-    private timerService: TimerServiceService,
-    private lobbyManager: LobbyManagerService
+    private loadingController: LoadingController,
+    private lobbyManager: LobbyManagerService,
+    private timerService: TimerServiceService
   ) {
     this.loadInfoLobby();
     this.loadGiocatori();
     this.timerGiocatori = timerService.getTimer(() => { this.loadGiocatori() }, 5000);
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   segmentChanged(ev: any) {
     this.segment = ev.detail.value;
@@ -57,4 +60,22 @@ export class LobbyGuestPage implements OnInit {
         this.errorManager.stampaErrore(res, 'Impossibile caricare la Lobby!');
       });
   }
+
+  async modificaLobby() {
+    const loading = await this.loadingController.create();
+    await loading.present();
+
+    (await this.lobbyManager.modificaLobby(this.lobby.pubblica)).subscribe(
+      async (res) => {
+        await loading.dismiss();
+        this.alertCreator.createInfoAlert("Lobby Aggiornata", "Lo stato della Lobby è stato aggiornato.");
+      },
+      async (res) => {
+        await loading.dismiss();
+        this.errorManager.stampaErrore(res, 'Modifica Fallita');
+      }
+    );
+
+  }
+
 }
