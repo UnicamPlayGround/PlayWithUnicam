@@ -28,6 +28,6 @@ export class ErrorManagerService {
   }
 
   private async stampa(headerText, messageText) {
-    this.alertCreator.createInfoAlert(headerText,messageText);
+    this.alertCreator.createInfoAlert(headerText, messageText);
   }
 }
