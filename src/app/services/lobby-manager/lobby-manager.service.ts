@@ -26,4 +26,16 @@ export class LobbyManagerService {
 
     return this.http.get('/lobby/giocatori', { headers });
   }
+
+  async modificaLobby(pubblica) {
+    const token_value = (await this.loginService.getToken()).value;
+
+    const to_send = {
+      'pubblica': pubblica,
+      'token': token_value,
+    }
+
+    return this.http.put('/lobby', to_send);
+  }
+
 }

@@ -246,13 +246,12 @@ app.put('/player/profilo', (req, res) => {
 /**
  * REST - Modifica i dati della lobby
  */
-app.put('/lobby/:codiceLobby', (req, res) => {
+app.put('/lobby', (req, res) => {
     try {
         if (verificaJWT(req.body.token)) {
             decoded_token = jwt.decode(req.body.token);
-            lobby.modificaLobby(req.params.codiceLobby, req.body.pubblica, decoded_token.username, res);
+            lobby.modificaLobby(decoded_token.username, req.body.pubblica, res);
         } else return res.status(401).send(ERRORE_JWT);
-
     } catch (error) {
         return res.status(400).send(error);
     }

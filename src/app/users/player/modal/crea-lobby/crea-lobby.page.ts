@@ -51,7 +51,7 @@ export class CreaLobbyPage implements OnInit {
           var message = "La Lobby è stata creata, ora è possibile iniziare a giocare.";
           this.alertCreator.createInfoAlert('Lobby creata', message);
           this.modalController.dismiss();
-          this.router.navigateByUrl('/lobby-guest', { replaceUrl: true });
+          this.router.navigateByUrl('/lobby-admin', { replaceUrl: true });
           await loading.dismiss();
         },
         async (res) => {
