@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
+import { LobbyManagerService } from 'src/app/services/lobby-manager/lobby-manager.service';
 import { LoginService } from 'src/app/services/login-service/login.service';
 import { TimerServiceService } from 'src/app/services/timer-service/timer-service.service';
 
@@ -19,7 +20,8 @@ export class LobbyGuestPage implements OnInit {
     private http: HttpClient,
     private loginService: LoginService,
     private errorManager: ErrorManagerService,
-    private timerService: TimerServiceService
+    private timerService: TimerServiceService,
+    private lobbyManager: LobbyManagerService
   ) {
     this.loadInfoLobby();
     this.loadGiocatori();
@@ -51,10 +53,8 @@ export class LobbyGuestPage implements OnInit {
 
   async loadGiocatori() {
     console.log("sto caricando i giocatori...");
-    const token_value = (await this.loginService.getToken()).value;
-    const headers = { 'token': token_value };
 
-    this.http.get('/lobby/giocatori', { headers }).subscribe(
+    (await this.lobbyManager.getPartecipanti()).subscribe(
       async (res) => {
         this.giocatori = res['results'];
         console.log(this.giocatori);
