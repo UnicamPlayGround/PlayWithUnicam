@@ -48,17 +48,17 @@
         <ion-list lines="full">
           <ion-item>
             <ion-label position="floating">Password precedente</ion-label>
-            <ion-input type="password" name="old_password" required placeholder="Inserisci il nuovo username"></ion-input>
+            <ion-input type="password" name="old_password" formControlName="old_password" required placeholder="Inserisci il nuovo username"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label position="floating">Nuova password</ion-label>
-            <ion-input type="password" name="new_password" required placeholder="Inserisci il tuo nome"></ion-input>
+            <ion-input type="password" name="new_password" formControlName="new_password" required placeholder="Inserisci il tuo nome"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label position="floating">Conferma nuova password</ion-label>
-            <ion-input type="password" name="password_confirmed" required placeholder="Inserisci il tuo nome"></ion-input>
+            <ion-input type="password" name="password_confirmed" formControlName="password_confirmed" required placeholder="Inserisci il tuo nome"></ion-input>
           </ion-item>
         </ion-list>
         <br>

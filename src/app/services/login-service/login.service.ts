@@ -83,4 +83,10 @@ export class LoginService {
     this.tipologiaAccount.next("");
     await Storage.remove({ key: TOKEN_KEY });
   }
+
+  //TODO
+  async setToken(token) {
+    Storage.set({ key: TOKEN_KEY, value: token });
+    this.loadToken();
+  }
 }

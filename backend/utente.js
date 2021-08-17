@@ -52,56 +52,67 @@ exports.creaOspite = (username, cb) => {
 }
 
 //TODO
-exports.modificaCredenziali = (old_username, request, response) => {
-    console.log(old_username);
-    //controller.controllaString(old_username, "L'username non è valido");
-    controller.controllaDatiAccount(request.body);
+exports.modificaNomeCognome = (username, nome, cognome, response) => {
+    controller.controllaString(nome, "Il nome non è valido!");
+    controller.controllaString(cognome, "il cognome non è valido!");
+
+    this.cercaUtenteByUsername(username, (err, results) => {
+        if (err) return response.status(500).send('Server Error!');
+        if (controller.controllaRisultatoQuery(results)) return response.status(404).send('Utente non trovato!');
+        db.pool.query('UPDATE public.utenti SET nome = $1, cognome = $2 WHERE username = $3',
+            [nome, cognome, username], (error, results) => {
+                if (error) {
+                    console.log(error);
+                    return response.status(400).send('Errore dati query');
+                }
+                return response.status(200).send({ 'esito': "1" });
+            })
+    });
+}
+
+exports.modificaUsername = (old_username, new_username, response, cb) => {
+    controller.controllaString(new_username, "Il nuovo username non è valido!");
 
     this.cercaUtenteByUsername(old_username, (err, results) => {
         if (err) return response.status(500).send('Server Error!');
         if (controller.controllaRisultatoQuery(results)) return response.status(404).send('Utente non trovato!');
 
-        this.cercaUtenteByUsername(request.body.username, (err, results) => {
-            if (err) return response.status(500).send('Server Error!');
-            if (!controller.controllaRisultatoQuery(results)) return response.status(404).send("L'username inserito è già stato usato!");
-
-            db.pool.query('UPDATE public.utenti SET username = $1, nome = $2, cognome = $3 WHERE username = $4',
-                [request.body.username, request.body.nome, request.body.cognome, old_username], (error, results) => {
-                    if (error){
-                        console.log(error);
-                        return response.status(400).send('Errore dati query');
-                    } 
-                    return response.status(200).send({ 'esito': "1" });
-                })
-        });
+        this.cercaUtenteByUsername(new_username, (err, results) => {
+            if (!controller.controllaRisultatoQuery(results)) return response.status(404).send("Il nuovo username è già utilizzato!");
+            db.pool.query('UPDATE public.utenti SET username = $1 WHERE username = $2',
+            [new_username, old_username], (error, results) => {
+                cb(error, results);
+            })
+        })
     });
 }
 
-exports.cambiaPassword =  (request, response, decoded_token) => {
-    var query, errorText;
-    query = 'UPDATE public.utenti SET password = $1 WHERE username = $2';
-    errorText = 'Utente non trovato!';
-
+exports.cambiaPassword = (request, response, decoded_token) => {
+    try {
+        controller.controllaPassword(request.body.new_password);
+    } catch (error) { return response.status(401).send('La password non è corretta'); }
+    
     this.cercaUtenteByUsername(decoded_token.username, (err, results) => {
         if (err) return response.status(500).send('Server Error!');
-        if (controller.controllaRisultatoQuery(results)) return response.status(404).send('Utente non trovato!');
-
+        if (controller.controllaRisultatoQuery(results)){
+            return response.status(404).send('Utente non trovato!');
+        } 
         const risultati = JSON.parse(JSON.stringify(results.rows));
-        if (risultati.length == 0) return response.status(404).send(errorText);
-    
+        if (risultati.length == 0){
+            return response.status(404).send('Utente non trovato!');
+        } 
         const data = risultati[0];
-        const hash = bcrypt.hashSync(request.body.old_password + process.env.SECRET_PWD, data.salt);
-    
+        const hash = bcrypt.hashSync(request.body.old_password + SECRET_PWD, data.salt);
         if (hash == data.password) {
-            const new_hash = bcrypt.hashSync(request.body.new_password + process.env.SECRET_PWD, data.salt);
-    
-            db.pool.query(query, [new_hash, decoded_token.username], (error, results) => {
+            const new_hash = bcrypt.hashSync(request.body.new_password + SECRET_PWD, data.salt);
+
+            db.pool.query('UPDATE public.utenti SET password = $1 WHERE username = $2',
+             [new_hash, decoded_token.username], (error, results) => {
                 if (error) return response.status(400).send(db.ERRORE_DATI_QUERY);
                 return response.status(200).send({ 'esito': "1" });
             });
         } else return response.status(401).send('La vecchia password non è corretta');
     });
-
 }
 
 exports.getUserInfo = (username, cb) => {

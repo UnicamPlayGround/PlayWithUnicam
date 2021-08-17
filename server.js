@@ -14,6 +14,7 @@ const SECRET_KEY = "secret_jwt";
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const { error } = require('protractor');
 
 const ERRORE_JWT = "Errore, JWT non valido! Rieffettua il Login."
 
@@ -229,15 +230,31 @@ app.put('/admin/utenti/:username', (req, res) => {
 });
 
 /**
- * REST - Modifica i dati del profilo di un utente
+ * REST - Modifica nome e cognome di un utente
  */
 app.put('/player/profilo', (req, res) => {
     try {
-        if (verificaJWT(req.body.token_value)) {
-            decoded_token = jwt.decode(req.body.token_value);
-            console.log(decoded_token.username);
-            utente.modificaCredenziali(decoded_token.username, req, res);
-        }
+        if (verificaJWT(req.body.token)) {
+            decoded_token = jwt.decode(req.body.token);
+            utente.modificaNomeCognome(decoded_token.username, req.body.nome, req.body.cognome, res);
+        }else return res.status(401).send(ERRORE_JWT);
+    } catch (error) {
+        return res.status(400).send(error);
+    }
+});
+
+/**
+ * REST - Modifica username di un utente
+ */
+ app.put('/player/username', (req, res) => {
+    try {
+        if (verificaJWT(req.body.token)) {
+            decoded_token = jwt.decode(req.body.token);
+            utente.modificaUsername(decoded_token.username, req.body.new_username, res, (error, results) => {
+                if (error) { return res.status(400).send('Errore dati query'); }
+                sendAccessToken(res, { username: req.body.new_username, tipo: decoded_token.tipo });
+            });
+        }else return res.status(401).send(ERRORE_JWT);
     } catch (error) {
         return res.status(400).send(error);
     }
@@ -261,9 +278,9 @@ app.put('/lobby/:codiceLobby', (req, res) => {
 /**
  * REST - Modifica la Password 
  */
-app.put('/modifica/password/:username', (req, res) => {
-    const token = req.body.token_value;
-    if (utente.verificaUtente(token)) {
+app.put('/modifica/password', (req, res) => {
+    const token = req.body.token;
+    if (verificaJWT(token)) {
         try {
             utente.cambiaPassword(req, res, jwt.decode(token));
         } catch (error) {
