@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login-service/login.service';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creator.service';
 
 
 @Component({
@@ -30,31 +30,18 @@ export class MenuPage implements OnInit {
 
   constructor(private router: Router,
     private loginService: LoginService,
-    private alertController: AlertController) { 
-    
+    private alertCreator: AlertCreatorService) {
+
   }
 
   ngOnInit() {
   }
 
   async logout() {
-    const alert = await this.alertController.create({
-      header: 'Sei sicuro di voler uscire?',
-      buttons: [
-        {
-          text: 'Annulla',
-          role: 'cancel',
-        },
-        {
-          text: 'Conferma',
-          handler: () => {
-            this.loginService.logout();
-            this.router.navigateByUrl('/home', { replaceUrl: true });
-          }
-        }
-      ]
+    var message = 'Sei sicuro di voler uscire?';
+    this.alertCreator.createConfirmationAlert(message, () => {
+      this.loginService.logout();
+      this.router.navigateByUrl('/home', { replaceUrl: true });
     });
-
-    await alert.present();
   }
 }

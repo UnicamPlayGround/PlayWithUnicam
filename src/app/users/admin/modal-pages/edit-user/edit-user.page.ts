@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AlertController, LoadingController, ModalController, NavParams } from '@ionic/angular';
+import { LoadingController, ModalController, NavParams } from '@ionic/angular';
 import { map, switchMap } from 'rxjs/operators';
+import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creator.service';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LoginService } from 'src/app/services/login-service/login.service';
 
@@ -25,7 +26,7 @@ export class EditUserPage implements OnInit {
     private http: HttpClient,
     private modalController: ModalController,
     private loadingController: LoadingController,
-    private alertController: AlertController,
+    private alertCreator: AlertCreatorService,
     private navParams: NavParams,
     private loginService: LoginService,
     private errorManager: ErrorManagerService
@@ -73,15 +74,9 @@ export class EditUserPage implements OnInit {
       switchMap(esito => { return esito; })).subscribe(
         async (res) => {
           this.modalController.dismiss(this.data.value);
-          const text = "I dati dell'utente sono stati aggiornati";
+          const message = "I dati dell'utente sono stati aggiornati";
           await loading.dismiss();
-
-          const alert = await this.alertController.create({
-            header: 'Profilo aggiornato',
-            message: text,
-            buttons: ['OK'],
-          });
-          await alert.present();
+          this.alertCreator.createInfoAlert('Profilo aggiornato', message);
         },
         async (res) => {
           this.modalController.dismiss();
