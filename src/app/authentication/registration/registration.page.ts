@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { LoadingController } from '@ionic/angular';
 import { Router } from "@angular/router";
 import { RegistrationService } from 'src/app/services/registration-service/registration.service';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
+import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creator.service';
 
 @Component({
   selector: 'app-registration',
@@ -18,7 +19,7 @@ export class RegistrationPage implements OnInit {
     private loadingController: LoadingController,
     private router: Router,
     private registrationService: RegistrationService,
-    private alertController: AlertController,
+    private alertCreator: AlertCreatorService,
     private errorManager: ErrorManagerService
   ) { }
 
@@ -39,12 +40,8 @@ export class RegistrationPage implements OnInit {
       async (res) => {
         this.router.navigateByUrl('/login', { replaceUrl: true });
         await loading.dismiss();
-        const alert = await this.alertController.create({
-          header: 'Registrazione completata',
-          message: "Ora puoi effettuare il login!",
-          buttons: ['OK'],
-        });
-        await alert.present();
+        var message = "Ora puoi effettuare il login!";
+        this.alertCreator.createInfoAlert('Registrazione completata', message);
       },
       async (res) => {
         await loading.dismiss();

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { LoadingController } from '@ionic/angular';
+import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creator.service';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LoginService } from 'src/app/services/login-service/login.service';
 
@@ -18,7 +19,7 @@ export class LoginPage implements OnInit {
     private loginService: LoginService,
     private router: Router,
     private loadingController: LoadingController,
-    private alertController: AlertController,
+    private alertCreator: AlertCreatorService,
     private errorManager: ErrorManagerService
   ) { }
 
@@ -45,12 +46,7 @@ export class LoginPage implements OnInit {
             this.router.navigateByUrl('/admin', { replaceUrl: true });
             break;
           default:
-            const alert = await this.alertController.create({
-              header: 'Login fallito',
-              message: "Rieffettua il Login",
-              buttons: ['OK'],
-            });
-            await alert.present();
+            this.alertCreator.createInfoAlert('Login fallito', 'Rieffettua il Login');
         }
       },
       async (res) => {
@@ -59,5 +55,4 @@ export class LoginPage implements OnInit {
       }
     );
   }
-
 }
