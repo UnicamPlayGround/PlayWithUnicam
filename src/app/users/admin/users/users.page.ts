@@ -33,7 +33,7 @@ export class UsersPage implements OnInit {
     this.loadUsers();
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   async loadUsers(event?) {
     const token_value = (await this.loginService.getToken()).value;
@@ -149,18 +149,16 @@ export class UsersPage implements OnInit {
     var headers = { 'token': token_value, 'users_to_delete': this.getUsernamesToDelete() };
     console.log('headers.users_to_delete: ', headers.users_to_delete);
 
-    this.http.delete('/admin/utenti', { headers }).pipe(
-      map((data: any) => data.esito),
-      switchMap(esito => { return esito; })).subscribe(
-        async (res) => {
-          this.deleteUsersFromTable();
-          this.toggleBulkEdit();
-          const message = 'Gli utenti selezionati sono stati eliminati';
-          this.alertCreator.createInfoAlert('Eliminazione completata', message);
-        },
-        async (res) => {
-          this.errorManager.stampaErrore(res, 'Eliminazione Fallita');
-        });
+    this.http.delete('/admin/utenti', { headers }).subscribe(
+      async (res) => {
+        this.deleteUsersFromTable();
+        this.toggleBulkEdit();
+        const message = 'Gli utenti selezionati sono stati eliminati';
+        this.alertCreator.createInfoAlert('Eliminazione completata', message);
+      },
+      async (res) => {
+        this.errorManager.stampaErrore(res, 'Eliminazione Fallita');
+      });
   }
 
   /**
