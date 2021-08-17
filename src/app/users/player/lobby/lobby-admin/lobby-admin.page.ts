@@ -1,12 +1,9 @@
 import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creator.service';
 import { Component, OnInit } from '@angular/core';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
-import { HttpClient } from '@angular/common/http';
 import { LoadingController } from '@ionic/angular';
 import { LobbyManagerService } from 'src/app/services/lobby-manager/lobby-manager.service';
-import { LoginService } from 'src/app/services/login-service/login.service';
 import { TimerServiceService } from 'src/app/services/timer-service/timer-service.service';
-import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-lobby-admin',
@@ -22,10 +19,8 @@ export class LobbyAdminPage implements OnInit {
   constructor(
     private alertCreator: AlertCreatorService,
     private errorManager: ErrorManagerService,
-    private http: HttpClient,
     private loadingController: LoadingController,
     private lobbyManager: LobbyManagerService,
-    private loginService: LoginService,
     private timerService: TimerServiceService
   ) {
     this.loadInfoLobby();
