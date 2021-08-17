@@ -79,9 +79,7 @@ export class AccountPage implements OnInit {
       'token': token_value,
     }
 
-    this.http.put('/player/profilo', to_send).pipe(
-      map((data: any) => data.esito),
-      switchMap(esito => { return esito; })).subscribe(
+    this.http.put('/player/profilo', to_send).subscribe(
         async (res) => {
           await this.aggiornaUsername(token_value);
           loading.dismiss();
@@ -132,9 +130,7 @@ export class AccountPage implements OnInit {
       'token': token_value
     }
     if (this.passwords.value.new_password == this.passwords.value.password_confirmed) {
-      this.http.put('/modifica/password', to_send).pipe(
-        map((data: any) => data.esito),
-        switchMap(esito => { return esito; })).subscribe(
+      this.http.put('/modifica/password', to_send).subscribe(
           async (res) => {
             const text = 'La password del tuo account è stata aggiornata';
             await loading.dismiss();
