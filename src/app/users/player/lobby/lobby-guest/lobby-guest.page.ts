@@ -1,8 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LobbyManagerService } from 'src/app/services/lobby-manager/lobby-manager.service';
-import { LoginService } from 'src/app/services/login-service/login.service';
 import { TimerServiceService } from 'src/app/services/timer-service/timer-service.service';
 
 @Component({
@@ -17,8 +15,6 @@ export class LobbyGuestPage implements OnInit {
   private timerGiocatori;
 
   constructor(
-    private http: HttpClient,
-    private loginService: LoginService,
     private errorManager: ErrorManagerService,
     private timerService: TimerServiceService,
     private lobbyManager: LobbyManagerService
