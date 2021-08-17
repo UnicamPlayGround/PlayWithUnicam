@@ -11,7 +11,7 @@
   <ion-toolbar>
     <ion-row>
       <ion-button (click)="toggleBulkEdit()" expand="full">Seleziona</ion-button>
-      <ion-button (click)="presentAlertConfirm()" expand="full" color="danger" *ngIf="bulkEdit">
+      <ion-button (click)="bulkDelete()" expand="full" color="danger" *ngIf="bulkEdit">
         Elimina
         <ion-icon slot="end" name="trash"></ion-icon>
       </ion-button>

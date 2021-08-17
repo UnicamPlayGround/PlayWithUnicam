@@ -1,5 +1,17 @@
 <ion-content color="primary">
-  <ion-list>
+  <ion-list *ngIf="ospite">
+    <ion-item button="true" lines="full" (click)="openRegistration()">
+      <ion-icon name="accessibility-outline" slot="start"></ion-icon>
+      Registrati
+    </ion-item>
+
+    <ion-item button="true" lines="full" (click)="logout()">
+      <ion-icon name="log-out-outline" slot="start"></ion-icon>
+      Esci
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="!ospite">
     <ion-item button="true" lines="full" (click)="openProfile()">
       <ion-icon name="accessibility-outline" slot="start"></ion-icon>
       Account

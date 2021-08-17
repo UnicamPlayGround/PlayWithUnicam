@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
 import { map, switchMap } from 'rxjs/operators';
+import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creator.service';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LoginService } from 'src/app/services/login-service/login.service';
 import { EditUserPage } from '../modal-pages/edit-user/edit-user.page';
@@ -25,15 +26,14 @@ export class UsersPage implements OnInit {
   constructor(
     private http: HttpClient,
     private modalController: ModalController,
-    private alertController: AlertController,
     private loginService: LoginService,
-    private errorManager: ErrorManagerService
+    private errorManager: ErrorManagerService,
+    private alertCreator: AlertCreatorService
   ) {
     this.loadUsers();
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   async loadUsers(event?) {
     const token_value = (await this.loginService.getToken()).value;
@@ -46,7 +46,6 @@ export class UsersPage implements OnInit {
         // this.reloadManager.completaReload(event);
       },
       async (res) => {
-        //TODO:gestione stampa errore
         this.errorManager.stampaErrore(res, 'Errore!');
         // this.reloadManager.completaReload(event);
       });
@@ -60,6 +59,10 @@ export class UsersPage implements OnInit {
     // if (this.page === this.maximum_pages) event.target.disabled = true;
   }
 
+  /**
+   * 
+   * @param key
+   */
   sortBy(key) {
     this.sortKey = key;
     this.sortDirection++;
@@ -85,13 +88,19 @@ export class UsersPage implements OnInit {
     }
   }
 
-  // Abilita il selezionamento multiplo degli elementi per l'eliminazione
+  /**
+   * Abilita il selezionamento multiplo degli elementi per l'eliminazione.
+   */
   toggleBulkEdit() {
     this.bulkEdit = !this.bulkEdit;
     this.edit = {};
   }
 
-  // Rimuove tutti gli utenti selezionati dall'array degli utenti e ritorna un array con i loro username
+  /**
+   * Rimuove tutti gli utenti selezionati dall'array degli utenti e ritorna un array con i loro username.
+   * 
+   * @returns un array con gli username degli utenti da eliminare dal database
+   */
   getUsernamesToDelete() {
     let toDelete = Object.keys(this.edit);
     const indexes_to_delete = toDelete.filter(index => this.edit[index]).map(key => +key);
@@ -104,6 +113,9 @@ export class UsersPage implements OnInit {
     return usernames_to_delete;
   }
 
+  /**
+   * Elimina gli utenti dalla tabella nel front-end.
+   */
   deleteUsersFromTable() {
     let toDelete = Object.keys(this.edit);
     const indexes_to_delete = toDelete.filter(index => this.edit[index]).map(key => +key);
@@ -113,41 +125,26 @@ export class UsersPage implements OnInit {
     }
   }
 
-  //TODO: crea component/service
-  async presentAlertConfirm() {
+  /**
+   * Mostra un alert per chiedere conferma dell'eliminazione e in caso positivo elimina gli utenti.
+   */
+  async bulkDelete() {
     if (this.edit && Object.keys(this.edit).length != 0 && this.edit.constructor === Object) {
       var messaggio = "Sei sicuro di voler eliminare gli utenti selezionati?";
 
-      const alert = await this.alertController.create({
-        header: 'Conferma',
-        message: messaggio,
-        buttons: [
-          {
-            text: 'Cancel',
-            role: 'cancel',
-          },
-          {
-            text: 'Okay',
-            handler: () => {
-              this.bulkDelete();
-            }
-          }
-        ]
-      });
-
-      await alert.present();
+      this.alertCreator.createConfirmationAlert(messaggio, () => { this.deleteUsers(); });
     } else {
-      const alert = await this.alertController.create({
-        header: 'Errore',
-        message: 'Seleziona prima qualche elemento!',
-        buttons: ['OK'],
-      });
-      await alert.present();
+      var messaggio = 'Seleziona prima qualche elemento!';
+
+      this.alertCreator.createInfoAlert('Errore', messaggio);
     }
   }
 
-  //TODO: mettere alert per chiedere conferma
-  async bulkDelete() {
+  /**
+   * Effettua la chiamata REST per eliminare gli utenti selezionati dal database e se l'esito è
+   * positivo li elimina anche dalla tabella nel front-end.
+   */
+  async deleteUsers() {
     const token_value = (await this.loginService.getToken()).value;
     var headers = { 'token': token_value, 'users_to_delete': this.getUsernamesToDelete() };
     console.log('headers.users_to_delete: ', headers.users_to_delete);
@@ -157,20 +154,22 @@ export class UsersPage implements OnInit {
       switchMap(esito => { return esito; })).subscribe(
         async (res) => {
           this.deleteUsersFromTable();
-          const text = 'Gli utenti selezionati sono stati eliminati';
-          const alert = await this.alertController.create({
-            header: 'Eliminazione completata',
-            message: text,
-            buttons: ['OK'],
-          });
           this.toggleBulkEdit();
-          await alert.present();
+          const message = 'Gli utenti selezionati sono stati eliminati';
+          this.alertCreator.createInfoAlert('Eliminazione completata', message);
         },
         async (res) => {
           this.errorManager.stampaErrore(res, 'Eliminazione Fallita');
         });
   }
 
+  /**
+   * Apre una modal per modificare i dati dell'account dell'utente selezionato.
+   * 
+   * @param user l'utente selezionato nella tabella
+   * @param index l'indice della riga dell'utente selezionato nella tabella
+   * @returns 
+   */
   async editUser(user, index) {
     const modal = await this.modalController.create({
       component: EditUserPage,

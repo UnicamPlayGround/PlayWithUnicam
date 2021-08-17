@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController, LoadingController, ModalController } from '@ionic/angular';
+import { LoadingController, ModalController } from '@ionic/angular';
 import { map, switchMap } from 'rxjs/operators';
+import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creator.service';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LoginService } from 'src/app/services/login-service/login.service';
 
@@ -21,7 +22,7 @@ export class CreaLobbyPage implements OnInit {
     private errorManager: ErrorManagerService,
     private loadingController: LoadingController,
     private modalController: ModalController,
-    private alertController: AlertController,
+    private alertCreator: AlertCreatorService,
     private loginService: LoginService
   ) { }
 
@@ -47,15 +48,11 @@ export class CreaLobbyPage implements OnInit {
       map((data: any) => data.esito),
       switchMap(esito => { return esito; })).subscribe(
         async (res) => {
-          const alert = await this.alertController.create({
-            header: 'Lobby creata',
-            message: "La Lobby è stata creata, ora è possibile iniziare a giocare.",
-            buttons: ['OK'],
-          });
+          var message = "La Lobby è stata creata, ora è possibile iniziare a giocare.";
+          this.alertCreator.createInfoAlert('Lobby creata', message);
           this.modalController.dismiss();
-          this.router.navigateByUrl('/lobby', { replaceUrl: true });
+          this.router.navigateByUrl('/lobby-guest', { replaceUrl: true });
           await loading.dismiss();
-          await alert.present();
         },
         async (res) => {
           await loading.dismiss();
