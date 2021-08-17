@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LoginService } from 'src/app/services/login-service/login.service';
-import { TimerServiceService } from 'src/app/services/timer-service.service';
+import { TimerServiceService } from 'src/app/services/timer-service/timer-service.service';
 
 @Component({
   selector: 'app-lobby-guest',
