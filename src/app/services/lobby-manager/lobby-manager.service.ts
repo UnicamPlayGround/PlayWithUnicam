@@ -13,6 +13,14 @@ export class LobbyManagerService {
     private http: HttpClient
   ) { }
 
+  async loadInfoLobby() {
+    const token_value = (await this.loginService.getToken()).value;
+    const headers = { 'token': token_value };
+
+    return this.http.get('/lobby/info', { headers });
+  }
+
+
   async getPartecipanti() {
     const token_value = (await this.loginService.getToken()).value;
     const headers = { 'token': token_value };

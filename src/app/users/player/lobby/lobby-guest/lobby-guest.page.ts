@@ -37,10 +37,7 @@ export class LobbyGuestPage implements OnInit {
 
   //TODO commentare
   async loadInfoLobby() {
-    const token_value = (await this.loginService.getToken()).value;
-    const headers = { 'token': token_value };
-
-    this.http.get('/lobby/info', { headers }).subscribe(
+    (await this.lobbyManager.loadInfoLobby()).subscribe(
       async (res) => {
         this.lobby = res['results'][0];
         console.log(this.lobby);
@@ -64,5 +61,4 @@ export class LobbyGuestPage implements OnInit {
         this.errorManager.stampaErrore(res, 'Impossibile caricare la Lobby!');
       });
   }
-
 }
