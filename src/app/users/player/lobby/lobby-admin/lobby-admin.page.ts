@@ -16,7 +16,7 @@ export class LobbyAdminPage implements OnInit {
   lobby = { codice: null, admin_lobby: null, pubblica: false, min_giocatori: 0, max_giocatori: 0 };
   giocatori = [];
   private timerGiocatori;
-
+  private timerPing;
 
   constructor(
     private alertCreator: AlertCreatorService,
@@ -28,14 +28,12 @@ export class LobbyAdminPage implements OnInit {
   ) {
     this.loadInfoLobby();
     this.loadGiocatori();
+    this.ping();
     this.timerGiocatori = timerService.getTimer(() => { this.loadGiocatori() }, 5000);
+    this.timerPing = timerService.getTimer(() => { this.ping() }, 4000);
 
     window.addEventListener('beforeunload', (event) => {
       event.returnValue = '';
-    });
-
-    window.addEventListener('unload', () => {
-      this.abbandonaLobby();
     });
   }
 
@@ -116,4 +114,16 @@ export class LobbyAdminPage implements OnInit {
         );
       })
   }
+
+  async ping() {
+    console.log("ping...");
+    (await this.lobbyManager.ping()).subscribe(
+      async (res) => { },
+      async (res) => {
+        this.timerService.stopTimer(this.timerPing);
+        this.errorManager.stampaErrore(res, 'Ping fallito');
+      }
+    );
+  }
+
 }

@@ -7,6 +7,7 @@ const game = require('./backend/multiplayer/game');
 const lobby = require('./backend/multiplayer/lobby');
 const partita = require('./backend/multiplayer/partita');
 const utente = require('./backend/utente');
+const giocatore = require('./backend/multiplayer/giocatore');
 
 //TODO
 const SECRET_PWD = "secret";
@@ -14,9 +15,10 @@ const SECRET_KEY = "secret_jwt";
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const { error } = require('protractor');
 
 const ERRORE_JWT = "Errore, JWT non valido! Rieffettua il Login."
+
+const timerGiocatoriInattivi = setInterval(() => { controllaGiocatoriInattivi(); }, 5000);
 
 //Run the app by serving the static files in the dist directory
 app.use(express.static(__dirname + '/www'));
@@ -81,6 +83,10 @@ function formatDataLobby(lobbies) {
         var data = tmp.getDate() + '/' + (tmp.getMonth() + 1) + '/' + tmp.getFullYear();
         lobby.data_creazione = data;
     })
+}
+
+function controllaGiocatoriInattivi() {
+    giocatore.controllaInattivi();
 }
 
 /**
@@ -405,6 +411,24 @@ app.post('/lobby/partecipa', (req, res) => {
             lobby.partecipaLobby(decoded_token.username, req.body.codice_lobby, res);
         } else return res.status(401).send(ERRORE_JWT);
     } catch (error) {
+        return res.status(400).send(error);
+    }
+})
+
+//TODO commentare
+app.post('/lobby/ping', (req, res) => {
+    try {
+        if (verificaJWT(req.body.token)) {
+            giocatore.ping(jwt.decode(req.body.token).username, res, (err, results) => {
+                if (err) {
+                    console.log(err);
+                    return res.status(500).send('Server Error!');
+                }
+                return res.status(200).send({ 'esito': "1" });
+            });
+        } else return res.status(401).send(ERRORE_JWT);
+    } catch (error) {
+        console.log(error);
         return res.status(400).send(error);
     }
 })

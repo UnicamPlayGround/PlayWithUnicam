@@ -74,3 +74,33 @@ exports.eliminaGiocatore = (username, cb) => {
             cb(error, results);
         });
 }
+
+exports.ping = (username, response, cb) => {
+    lobby.cercaLobbyByUsername(username, (error, results) => {
+        if (error) return response.status(400).send("Non è stato possibile trovare la Lobby");
+        if (controller.controllaRisultatoQuery(results))
+            return response.status(400).send("Errore: Devi partecipare ad una Lobby!");
+
+        db.pool.query('UPDATE public.giocatori SET ping = NOW() WHERE username = $1', [username], (error, results) => {
+            cb(error, results)
+        });
+    })
+}
+
+exports.controllaInattivi = () => {
+    db.pool.query('SELECT * FROM public.giocatori', (error, results) => {
+        //TODO error
+        const giocatori = JSON.parse(JSON.stringify(results.rows));
+
+        giocatori.forEach(giocatore => {
+            var dif = Date.now() - Date.parse(giocatore.ping);
+
+            //10 secondi
+            if (dif > 10000) {
+                db.pool.query('DELETE FROM public.giocatori WHERE username=$1', [giocatore.username], (error, results) => {
+                    //TODO error
+                });
+            }
+        });
+    });
+}

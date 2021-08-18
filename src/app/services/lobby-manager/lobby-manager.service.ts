@@ -20,7 +20,6 @@ export class LobbyManagerService {
     return this.http.get('/lobby/info', { headers });
   }
 
-
   async getPartecipanti() {
     const token_value = (await this.loginService.getToken()).value;
     const headers = { 'token': token_value };
@@ -55,5 +54,12 @@ export class LobbyManagerService {
 
     const headers = { 'token': token_value }
     return this.http.delete('/lobby/abbandona', { headers });
+  }
+
+  async ping() {
+    const token_value = (await this.loginService.getToken()).value;
+    const toSend = { 'token': token_value }
+
+    return this.http.post('/lobby/ping', toSend);
   }
 }
