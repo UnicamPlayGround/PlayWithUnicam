@@ -54,9 +54,9 @@ exports.creaGiocatore = (username, codiceLobby, response, cb) => {
  * @param {*} username l'username del giocatore da eliminare
  * @param {*} cb callback
  */
-exports.cancellaGiocatore = (username, cb) => {
-    db.pool.query('DELETE from public.giocatori WHERE username = $1',
-        [username], (error, results) => {
+exports.cancellaGiocatore = (username, codice_lobby, cb) => {
+    db.pool.query('DELETE from public.giocatori WHERE username = $1 AND codice_lobby = $2',
+        [username, codice_lobby], (error, results) => {
             cb(error, results);
         });
 }

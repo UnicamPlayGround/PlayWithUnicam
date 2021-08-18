@@ -10,7 +10,7 @@ import { TimerServiceService } from 'src/app/services/timer-service/timer-servic
 })
 export class LobbyGuestPage implements OnInit {
   segment: string = "impostazioni";
-  lobby = { codice: null, pubblica: false, min_giocatori: 0, max_giocatori: 0 };
+  lobby = { codice: null, admin_lobby: null, pubblica: false, min_giocatori: 0, max_giocatori: 0 };
   giocatori = [];
   private timerGiocatori;
 

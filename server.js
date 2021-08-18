@@ -195,10 +195,21 @@ app.get('/lobby/info', (req, res) => {
 app.get('/lobby/giocatori', (req, res) => {
     if (verificaJWT(req.headers.token)) {
         const decoded_token = jwt.decode(req.headers.token);
-        lobby.getGiocatoriLobby(decoded_token.username, (err, results) => {
+        lobby.getGiocatoriLobby(decoded_token.username, res, (err, results) => {
             if (err) return res.status(500).send('Server error!');
             sendDataInJSON(res, results);
         })
+    } else return res.status(401).send(ERRORE_JWT);
+});
+
+app.delete('/lobby/player', (req, res) => {
+    if (verificaJWT(req.headers.token)) {
+        const decoded_token = jwt.decode(req.headers.token);
+        try {
+            lobby.eliminaPartecipante(decoded_token.username, req.headers.username, res);
+        } catch (error) {
+            return res.status(400).send(error);
+        }
     } else return res.status(401).send(ERRORE_JWT);
 });
 
@@ -237,7 +248,7 @@ app.put('/player/profilo', (req, res) => {
         if (verificaJWT(req.body.token)) {
             decoded_token = jwt.decode(req.body.token);
             utente.modificaNomeCognome(decoded_token.username, req.body.nome, req.body.cognome, res);
-        }else return res.status(401).send(ERRORE_JWT);
+        } else return res.status(401).send(ERRORE_JWT);
     } catch (error) {
         return res.status(400).send(error);
     }
@@ -246,7 +257,7 @@ app.put('/player/profilo', (req, res) => {
 /**
  * REST - Modifica username di un utente
  */
- app.put('/player/username', (req, res) => {
+app.put('/player/username', (req, res) => {
     try {
         if (verificaJWT(req.body.token)) {
             decoded_token = jwt.decode(req.body.token);
@@ -254,7 +265,7 @@ app.put('/player/profilo', (req, res) => {
                 if (error) { return res.status(400).send('Errore dati query'); }
                 sendAccessToken(res, { username: req.body.new_username, tipo: decoded_token.tipo });
             });
-        }else return res.status(401).send(ERRORE_JWT);
+        } else return res.status(401).send(ERRORE_JWT);
     } catch (error) {
         return res.status(400).send(error);
     }

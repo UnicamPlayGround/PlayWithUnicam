@@ -50,12 +50,14 @@
         <ion-list>
           <ion-list-header>GIOCATORI</ion-list-header>
 
-          <ion-item *ngFor="let giocatore of giocatori">
+          <ion-item lines="full" *ngFor="let giocatore of giocatori, let i = index;" [ngClass]="{'admin' : giocatore.username == lobby.admin_lobby}">
             <ion-avatar slot="start">
               <img src="https://image.flaticon.com/icons/png/512/4333/4333609.png" alt="avatar player">
             </ion-avatar>
 
             <ion-label>{{ giocatore.username }}</ion-label>
+            <ion-icon slot="end" name="diamond-outline" *ngIf="giocatore.username == lobby.admin_lobby"></ion-icon>
+            <ion-icon slot="end" name="trash-outline" tappable (click)="eliminaPartecipante(giocatore.username, i)" *ngIf="giocatore.username != lobby.admin_lobby"></ion-icon>
           </ion-item>
 
         </ion-list>

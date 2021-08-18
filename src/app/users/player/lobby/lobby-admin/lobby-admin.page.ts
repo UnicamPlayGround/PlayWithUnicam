@@ -12,9 +12,10 @@ import { TimerServiceService } from 'src/app/services/timer-service/timer-servic
 })
 export class LobbyAdminPage implements OnInit {
   segment: string = "impostazioni";
-  lobby = { codice: null, pubblica: false, min_giocatori: 0, max_giocatori: 0 };
+  lobby = { codice: null, admin_lobby: null, pubblica: false, min_giocatori: 0, max_giocatori: 0 };
   giocatori = [];
   private timerGiocatori;
+
 
   constructor(
     private alertCreator: AlertCreatorService,
@@ -26,6 +27,14 @@ export class LobbyAdminPage implements OnInit {
     this.loadInfoLobby();
     this.loadGiocatori();
     this.timerGiocatori = timerService.getTimer(() => { this.loadGiocatori() }, 5000);
+
+    window.addEventListener('beforeunload', (event) => {
+      event.returnValue = '';
+    });
+
+    window.addEventListener('unload', () => {
+      // this.eliminaPartecipante(giocatore);
+    });
   }
 
   ngOnInit() { }
@@ -53,7 +62,6 @@ export class LobbyAdminPage implements OnInit {
     (await this.lobbyManager.getPartecipanti()).subscribe(
       async (res) => {
         this.giocatori = res['results'];
-        console.log(this.giocatori);
       },
       async (res) => {
         this.timerService.stopTimer(this.timerGiocatori);
@@ -75,7 +83,20 @@ export class LobbyAdminPage implements OnInit {
         this.errorManager.stampaErrore(res, 'Modifica Fallita');
       }
     );
-
   }
 
+  async eliminaPartecipante(username, index) {
+    this.alertCreator.createConfirmationAlert('Sei sicuro di voler cacciare il giocatore selezionato?',
+      async () => {
+        (await this.lobbyManager.eliminaPartecipante(username)).subscribe(
+          async (res) => {
+            this.giocatori.splice(index, 1);
+            this.alertCreator.createInfoAlert("Partecipante eliminato", "Il giocatore " + username + " è stato rimosso.");
+          },
+          async (res) => {
+            this.errorManager.stampaErrore(res, 'Eliminazione Fallita');
+          }
+        );
+      })
+  }
 }
