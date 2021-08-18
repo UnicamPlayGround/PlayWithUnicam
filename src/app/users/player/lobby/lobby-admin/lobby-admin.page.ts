@@ -4,6 +4,7 @@ import { ErrorManagerService } from 'src/app/services/error-manager/error-manage
 import { LoadingController } from '@ionic/angular';
 import { LobbyManagerService } from 'src/app/services/lobby-manager/lobby-manager.service';
 import { TimerServiceService } from 'src/app/services/timer-service/timer-service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-lobby-admin',
@@ -22,7 +23,8 @@ export class LobbyAdminPage implements OnInit {
     private errorManager: ErrorManagerService,
     private loadingController: LoadingController,
     private lobbyManager: LobbyManagerService,
-    private timerService: TimerServiceService
+    private timerService: TimerServiceService,
+    private router: Router
   ) {
     this.loadInfoLobby();
     this.loadGiocatori();
@@ -80,7 +82,7 @@ export class LobbyAdminPage implements OnInit {
       },
       async (res) => {
         await loading.dismiss();
-        this.errorManager.stampaErrore(res, 'Modifica Fallita');
+        this.errorManager.stampaErrore(res, 'Modifica fallita');
       }
     );
   }
@@ -94,7 +96,22 @@ export class LobbyAdminPage implements OnInit {
             this.alertCreator.createInfoAlert("Partecipante eliminato", "Il giocatore " + username + " è stato rimosso.");
           },
           async (res) => {
-            this.errorManager.stampaErrore(res, 'Eliminazione Fallita');
+            this.errorManager.stampaErrore(res, 'Eliminazione fallita');
+          }
+        );
+      })
+  }
+
+  async abbandonaLobby() {
+    this.alertCreator.createConfirmationAlert('Sei sicuro di voler abbandonare la lobby?',
+      async () => {
+        (await this.lobbyManager.abbandonaLobby()).subscribe(
+          async (res) => {
+            this.timerService.stopTimer(this.timerGiocatori);
+            this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
+          },
+          async (res) => {
+            this.errorManager.stampaErrore(res, 'Abbandono fallito');
           }
         );
       })

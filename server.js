@@ -202,11 +202,20 @@ app.get('/lobby/giocatori', (req, res) => {
     } else return res.status(401).send(ERRORE_JWT);
 });
 
-app.delete('/lobby/player', (req, res) => {
+app.delete('/lobby/admin/espelli', (req, res) => {
     if (verificaJWT(req.headers.token)) {
-        const decoded_token = jwt.decode(req.headers.token);
         try {
-            lobby.eliminaPartecipante(decoded_token.username, req.headers.username, res);
+            lobby.eliminaPartecipante(jwt.decode(req.headers.token).username, req.headers.username, res);
+        } catch (error) {
+            return res.status(400).send(error);
+        }
+    } else return res.status(401).send(ERRORE_JWT);
+});
+
+app.delete('/lobby/abbandona', (req, res) => {
+    if (verificaJWT(req.headers.token)) {
+        try {
+            lobby.abbandonaLobby(jwt.decode(req.headers.token).username, res);
         } catch (error) {
             return res.status(400).send(error);
         }

@@ -107,25 +107,23 @@ exports.cancellaLobby = (codice) => {
     db.pool.query('DELETE FROM public.lobby WHERE codice = $1', [codice], (error, results) => { })
 }
 
-exports.abbandonaLobby = (username) => {
-    giocatore.cancellaGiocatore(username, (error, results) => {
-        //TODO: rivedere
-        // if (error) return response.status(400).send("Non è stato possibile abbandonare la lobby");
-    });
-}
-
 exports.eliminaPartecipante = (admin, username, response) => {
-    console.log('admin-lobby:', admin);
     this.cercaLobbyByAdmin(admin, (err, results) => {
         if (controller.controllaRisultatoQuery(results)) return response.status(401).send("Solo l'admin può eliminare i partecipanti della lobby");
         const tmp = JSON.parse(JSON.stringify(results.rows));
 
-        console.log('lobby:', tmp[0]);
-        giocatore.cancellaGiocatore(username, tmp[0].codice, (error, results) => {
+        giocatore.espelliGiocatore(username, tmp[0].codice, (error, results) => {
             if (error) return response.status(400).send("Non è stato possibile cancellare il giocatore dalla lobby");
             return response.status(200).send({ 'esito': "1" });
         });
     })
+}
+
+exports.abbandonaLobby = (username, response) => {
+    giocatore.eliminaGiocatore(username, (error, results) => {
+        if (error) return response.status(400).send("Non è stato possibile abbandonare la lobby");
+        return response.status(200).send({ 'esito': "1" });
+    });
 }
 
 exports.creaLobby = (adminLobby, idGioco, pubblica, response) => {

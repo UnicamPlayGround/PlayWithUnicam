@@ -46,7 +46,13 @@ export class LobbyManagerService {
       'token': token_value,
       'username': username
     }
-    return this.http.delete('/lobby/player', { headers });
+    return this.http.delete('/lobby/admin/espelli', { headers });
   }
 
+  async abbandonaLobby() {
+    const token_value = (await this.loginService.getToken()).value;
+
+    const headers = { 'token': token_value }
+    return this.http.delete('/lobby/abbandona', { headers });
+  }
 }

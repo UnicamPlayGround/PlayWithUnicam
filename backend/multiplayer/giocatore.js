@@ -49,14 +49,28 @@ exports.creaGiocatore = (username, codiceLobby, response, cb) => {
 }
 
 /**
- * Elimina un giocatore dalla tabella dei giocatori.
+ * Espelle il giocatore selezionato dall'admin dalla tabella giocatori
+ * 
+ * @param {*} username l'username del giocatore da eliminare
+ * @param {*} codice_lobby il codice della lobby a cui appartiene il giocatore da espellere.
+ * @param {*} cb callback
+ */
+exports.espelliGiocatore = (username, codice_lobby, cb) => {
+    db.pool.query('DELETE from public.giocatori WHERE username = $1 AND codice_lobby = $2',
+        [username, codice_lobby], (error, results) => {
+            cb(error, results);
+        });
+}
+
+/**
+ * Elimina il giocatore che vuole abbandonare la lobby dalla tabella dei giocatori.
  * 
  * @param {*} username l'username del giocatore da eliminare
  * @param {*} cb callback
  */
-exports.cancellaGiocatore = (username, codice_lobby, cb) => {
-    db.pool.query('DELETE from public.giocatori WHERE username = $1 AND codice_lobby = $2',
-        [username, codice_lobby], (error, results) => {
+exports.eliminaGiocatore = (username, cb) => {
+    db.pool.query('DELETE from public.giocatori WHERE username = $1',
+        [username], (error, results) => {
             cb(error, results);
         });
 }
