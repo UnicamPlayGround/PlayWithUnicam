@@ -24,6 +24,10 @@ export class ErrorManagerService {
       this.loginService.logout();
       this.router.navigateByUrl('/home', { replaceUrl: true });
       return false;
+    } else if (res.error == 'Errore: Devi partecipare ad una Lobby!') {
+      this.stampa('Sei stato espulso', "L'Admin ti ha rimosso dalla Lobby.");
+      this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
+      return false;
     } else return true;
   }
 
