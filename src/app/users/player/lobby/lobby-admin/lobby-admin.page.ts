@@ -35,7 +35,7 @@ export class LobbyAdminPage implements OnInit {
     });
 
     window.addEventListener('unload', () => {
-      // this.eliminaPartecipante(giocatore);
+      this.abbandonaLobby();
     });
   }
 

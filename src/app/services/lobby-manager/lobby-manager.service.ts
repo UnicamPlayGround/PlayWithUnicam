@@ -50,6 +50,7 @@ export class LobbyManagerService {
   }
 
   async abbandonaLobby() {
+    console.log('HAI ABBANDONATO 2');
     const token_value = (await this.loginService.getToken()).value;
 
     const headers = { 'token': token_value }

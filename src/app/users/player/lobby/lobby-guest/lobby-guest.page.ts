@@ -26,6 +26,10 @@ export class LobbyGuestPage implements OnInit {
     this.loadInfoLobby();
     this.loadGiocatori();
     this.timerGiocatori = timerService.getTimer(() => { this.loadGiocatori() }, 5000);
+
+    window.addEventListener('beforeunload', (event) => {
+      event.returnValue = '';
+    });
   }
 
   ngOnInit() {
@@ -63,17 +67,23 @@ export class LobbyGuestPage implements OnInit {
   }
 
   async abbandonaLobby() {
-    this.alertCreator.createConfirmationAlert('Sei sicuro di voler abbandonare la lobby?',
-      async () => {
-        (await this.lobbyManager.abbandonaLobby()).subscribe(
-          async (res) => {
-            this.timerService.stopTimer(this.timerGiocatori);
-            this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
-          },
-          async (res) => {
-            this.errorManager.stampaErrore(res, 'Abbandono fallito');
-          }
-        );
-      })
+    this.alertCreator.createConfirmationAlert('Sei sicuro di voler abbandonare la lobby?', () => {
+      this.abbandona();
+    });
+  }
+
+  async abbandona() {
+    console.log('HAI ABBANDONATO');
+    async () => {
+      (await this.lobbyManager.abbandonaLobby()).subscribe(
+        async (res) => {
+          this.timerService.stopTimer(this.timerGiocatori);
+          this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
+        },
+        async (res) => {
+          this.errorManager.stampaErrore(res, 'Abbandono fallito');
+        }
+      );
+    }
   }
 }
