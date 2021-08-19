@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingController, ModalController } from '@ionic/angular';
-import { map, switchMap } from 'rxjs/operators';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LoginService } from 'src/app/services/login-service/login.service';
 
