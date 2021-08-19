@@ -4,6 +4,8 @@ import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creato
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LobbyManagerService } from 'src/app/services/lobby-manager/lobby-manager.service';
 import { TimerServiceService } from 'src/app/services/timer-service/timer-service.service';
+import jwt_decode from 'jwt-decode';
+import { LoginService } from 'src/app/services/login-service/login.service';
 
 @Component({
   selector: 'app-lobby-guest',
@@ -22,6 +24,7 @@ export class LobbyGuestPage implements OnInit {
     private timerService: TimerServiceService,
     private lobbyManager: LobbyManagerService,
     private alertCreator: AlertCreatorService,
+    private loginService: LoginService,
     private router: Router
   ) {
     this.loadInfoLobby();
@@ -49,6 +52,14 @@ export class LobbyGuestPage implements OnInit {
       async (res) => {
         this.lobby = res['results'][0];
         console.log(this.lobby);
+        const decoded_token: any = jwt_decode((await this.loginService.getToken()).value);
+
+        if (decoded_token.username === this.lobby.admin_lobby) {
+          this.timerService.stopTimer(this.timerGiocatori);
+          this.timerService.stopTimer(this.timerPing);
+          this.router.navigateByUrl('/lobby-admin', { replaceUrl: true });
+          this.alertCreator.createInfoAlert("Sei il nuovo admin", "Il vecchio admin ha abbandonato la partita e sei stato scelto per prendere il suo posto!");
+        }
       },
       async (res) => {
         this.timerService.stopTimer(this.timerGiocatori);

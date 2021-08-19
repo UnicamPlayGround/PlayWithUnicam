@@ -148,7 +148,8 @@ app.get('/admin/utenti', (req, res) => {
  */
 app.get('/lobby/pubbliche', (req, res) => {
     if (verificaJWT(req.headers.token)) {
-        lobby.getLobbyPubbliche((err, results) => {
+        const decoded_token = jwt.decode(req.headers.token);
+        lobby.getLobbyPubbliche(decoded_token.username, (err, results) => {
             if (err) return res.status(500).send('Server error!');
 
             const lobbies = JSON.parse(JSON.stringify(results.rows));

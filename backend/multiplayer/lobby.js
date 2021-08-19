@@ -58,7 +58,9 @@ exports.cercaLobbyByAdmin = (adminLobby, cb) => {
 
 //TODO
 exports.cercaLobbyByCodice = (codice, cb) => {
-    db.pool.query('SELECT * FROM public.lobby WHERE codice=$1',
+    db.pool.query('SELECT codice, data_creazione, admin_lobby, min_giocatori, max_giocatori, pubblica FROM ' +
+        '(public.giocatori INNER JOIN public.lobby ON public.giocatori.codice_lobby = public.lobby.codice) ' +
+        'INNER JOIN public.giochi ON public.lobby.id_gioco = public.giochi.id WHERE codice = $1',
         [codice], (error, results) => {
             cb(error, results)
         });
@@ -74,9 +76,9 @@ exports.cercaLobbyByUsername = (username, cb) => {
         });
 }
 
-exports.getLobbyPubbliche = (cb) => {
+exports.getLobbyPubbliche = (username, cb) => {
     db.pool.query('SELECT codice, admin_lobby, data_creazione, id_gioco, nome, max_giocatori, min_giocatori FROM public.lobby' +
-        ' INNER JOIN public.giochi ON public.lobby.id_gioco = public.giochi.id WHERE pubblica=$1', [true], (error, results) => {
+        ' INNER JOIN public.giochi ON public.lobby.id_gioco = public.giochi.id WHERE pubblica=$1 AND admin_lobby <> $2', [true, username], (error, results) => {
             cb(error, results)
         });
 }
@@ -201,9 +203,28 @@ exports.partecipaLobby = (username, codice_lobby, response) => {
         if (controller.controllaRisultatoQuery(results))
             return response.status(401).send("Non è stata trovata alcuna lobby corrispondente al codice inserito!");
 
-        giocatore.creaGiocatore(username, codice_lobby, response, (error, results) => {
-            if (error) return response.status(400).send("Non è stato possibile partecipare alla lobby.");
-            return response.status(200).send({ 'esito': "1" });
-        });
+        const tmp = JSON.parse(JSON.stringify(results.rows));
+        const lobby = tmp[0];
+
+        console.log("tmp", tmp);
+        console.log("lobby", lobby);
+
+        this.getNumeroGiocatoriLobby(codice_lobby, (err, results) => {
+            if (err) return response.status(500).send('Server error!');
+            const tmp2 = JSON.parse(JSON.stringify(results.rows));
+            const count = tmp2[0].count;
+
+            console.log("count", count);
+            console.log("max_giocatori", lobby.max_giocatori);
+
+            if (count < lobby.max_giocatori) {
+                giocatore.creaGiocatore(username, codice_lobby, response, (error, results) => {
+                    if (error) return response.status(400).send("Non è stato possibile partecipare alla lobby.");
+                    return response.status(200).send({ 'esito': "1" });
+                });
+            } else {
+                return response.status(409).send('La lobby selezionata è già al completo!');
+            }
+        })
     })
 }

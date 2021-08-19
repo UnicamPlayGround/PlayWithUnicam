@@ -24,13 +24,15 @@
     <div class="lobby">
 
       <ion-card>
-        <ion-card-header>
-          <ion-card-subtitle style="text-align: center;">Codice Lobby</ion-card-subtitle>
-          <ion-card-title style="font-size: 25px; font-weight:bold; text-align: center;">{{lobby.codice}}
-          </ion-card-title>
-        </ion-card-header>
-
         <ion-list lines="none">
+          <ion-list-header color="primary">DATI LOBBY</ion-list-header>
+
+          <ion-card-header>
+            <ion-card-subtitle style="text-align: center;">Codice Lobby</ion-card-subtitle>
+            <ion-card-title style="font-size: 25px; font-weight:bold; text-align: center;">{{lobby.codice}}
+            </ion-card-title>
+          </ion-card-header>
+
           <ion-item>
             <ion-label>Categoria lobby:</ion-label>
             <p *ngIf="lobby.pubblica">Pubblica</p>
@@ -53,7 +55,8 @@
         <ion-list>
           <ion-list-header color="primary">GIOCATORI</ion-list-header>
 
-          <ion-item lines="full" *ngFor="let giocatore of giocatori" [ngClass]="{'admin' : giocatore.username == lobby.admin_lobby}">
+          <ion-item lines="full" *ngFor="let giocatore of giocatori"
+            [ngClass]="{'admin' : giocatore.username == lobby.admin_lobby}">
             <ion-avatar slot="start">
               <img src="https://image.flaticon.com/icons/png/512/4333/4333609.png" alt="avatar player">
             </ion-avatar>
