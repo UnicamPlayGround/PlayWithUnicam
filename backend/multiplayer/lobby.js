@@ -121,12 +121,13 @@ exports.eliminaPartecipante = (admin, username, response) => {
 
 exports.abbandonaLobby = (username, response) => {
     this.cercaLobbyByAdmin(username, (error, results) => {
+        if (error) return response.status(400).send("Non è stato possibile trovare la lobby");
         if (controller.controllaRisultatoQuery(results)) {
             giocatore.eliminaGiocatore(username, (error, results) => {
                 if (error) return response.status(400).send("Non è stato possibile abbandonare la lobby");
                 return response.status(200).send({ 'esito': "1" });
             });
-        }else {
+        } else {
             const tmp = JSON.parse(JSON.stringify(results.rows));
             const codiceLobby = tmp[0].codice;
             this.getGiocatoriLobby(username, response, (error, results) => {
@@ -135,12 +136,16 @@ exports.abbandonaLobby = (username, response) => {
                 console.log(giocatori);
                 if (giocatori.length > 1) {
                     const admin = giocatori[1].username;
-                    this.impostaAdminLobby(admin, codiceLobby, response);
-                    giocatore.eliminaGiocatore(username, (error, results) => {
-                        if (error) return response.status(400).send("Non è stato possibile abbandonare la lobby");
-                        //return response.status(200).send({ 'esito': "1" });
+                    console.log(admin);
+                    console.log(username);
+                    this.impostaAdminLobby(admin, codiceLobby, (error, results) => {
+                        if (error) return response.status(400).send("Non è stato possibile impostare l'Admin della Lobby!");
+                        giocatore.eliminaGiocatore(username, (error, results) => {
+                            if (error) return response.status(400).send("Non è stato possibile abbandonare la lobby");
+                            return response.status(200).send({ 'esito': "1" });
+                        });
                     });
-                }else{
+                } else {
                     giocatore.eliminaGiocatore(username, (error, results) => {
                         if (error) return response.status(400).send("Non è stato possibile abbandonare la lobby");
                         return response.status(200).send({ 'esito': "1" });
@@ -149,9 +154,6 @@ exports.abbandonaLobby = (username, response) => {
             })
         }
     })
-
-
-
 }
 
 exports.creaLobby = (adminLobby, idGioco, pubblica, response) => {
@@ -175,22 +177,24 @@ exports.creaLobby = (adminLobby, idGioco, pubblica, response) => {
                             console.log(err);
                             return response.status(400).send("Non è stato possibile creare la lobby!");
                         }
-                        this.impostaAdminLobby(adminLobby, codiceLobby, response);
+                        this.impostaAdminLobby(adminLobby, codiceLobby, (error, results) => {
+                            if (error) return response.status(400).send("Non è stato possibile impostare l'Admin della Lobby!");
+                            return response.status(200).send({ 'esito': "1" });
+                        });
                     });
                 })
         })
     })
 }
 
-exports.impostaAdminLobby = (adminLobby, codiceLobby, response) => {
+exports.impostaAdminLobby = (adminLobby, codiceLobby, cb) => {
     giocatore.cercaGiocatore(adminLobby, (err, results) => {
         if (controller.controllaRisultatoQuery(results)) return response.status(400).send("Il Giocatore '" + adminLobby + "' non esiste!");
 
         db.pool.query('UPDATE public.lobby SET admin_lobby = $1 WHERE codice = $2',
             [adminLobby, codiceLobby], (error, results) => {
                 //TODO fare controlli
-                if (error) return response.status(400).send("Non è stato possibile impostare l'Admin della Lobby!");
-                return response.status(200).send({ 'esito': "1" });
+                cb(error, results);
             })
     })
 }

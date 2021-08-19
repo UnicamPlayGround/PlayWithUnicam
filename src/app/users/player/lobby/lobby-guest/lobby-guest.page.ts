@@ -63,6 +63,7 @@ export class LobbyGuestPage implements OnInit {
       async (res) => {
         this.giocatori = res['results'];
         console.log(this.giocatori);
+        this.loadInfoLobby();
       },
       async (res) => {
         this.timerService.stopTimer(this.timerGiocatori);
@@ -71,25 +72,19 @@ export class LobbyGuestPage implements OnInit {
   }
 
   async abbandonaLobby() {
-    this.alertCreator.createConfirmationAlert('Sei sicuro di voler abbandonare la lobby?', () => {
-      this.abbandona();
-    });
-  }
-
-  async abbandona() {
-    console.log('HAI ABBANDONATO');
-    async () => {
-      (await this.lobbyManager.abbandonaLobby()).subscribe(
-        async (res) => {
-          this.timerService.stopTimer(this.timerGiocatori);
-          this.timerService.stopTimer(this.timerPing);
-          this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
-        },
-        async (res) => {
-          this.errorManager.stampaErrore(res, 'Abbandono fallito');
-        }
-      );
-    }
+    this.alertCreator.createConfirmationAlert('Sei sicuro di voler abbandonare la lobby?',
+      async () => {
+        (await this.lobbyManager.abbandonaLobby()).subscribe(
+          async (res) => {
+            this.timerService.stopTimer(this.timerGiocatori);
+            this.timerService.stopTimer(this.timerPing);
+            this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
+          },
+          async (res) => {
+            this.errorManager.stampaErrore(res, 'Abbandono fallito');
+          }
+        );
+      });
   }
 
   async ping() {
