@@ -82,6 +82,7 @@ export class LobbyGuestPage implements OnInit {
       (await this.lobbyManager.abbandonaLobby()).subscribe(
         async (res) => {
           this.timerService.stopTimer(this.timerGiocatori);
+          this.timerService.stopTimer(this.timerPing);
           this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
         },
         async (res) => {
