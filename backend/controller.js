@@ -23,7 +23,7 @@ exports.controllaNotNull = function (toControl, errorText) {
  * @param {String} password password da controllare
  */
 exports.controllaPassword = function (password) {
-    if (password == null || password.length < 8 || password.length > 16)
+    if (password.trim() == "" || password.length < 8 || password.length > 16)
         throw "La password deve essere compresa tra 8 e 16 caratteri.";
 }
 
@@ -33,7 +33,8 @@ exports.controllaPassword = function (password) {
  * @param {String} errorText Errore da stampare
  */
  exports.controllaString = function (toControl, errorText) {
-    if (toControl == null || toControl == "") throw errorText;
+     console.log("parola da controllare: "+toControl);
+    if (toControl == null || toControl.trim() == "") throw errorText;
 }
 
 exports.controllaDatiAccount = function (dati) {

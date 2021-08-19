@@ -26,9 +26,9 @@ exports.cercaOspiteByUsername = (username, cb) => {
 //TODO
 exports.creaUtente = (body, response) => {
     //TODO: metterli tutti in un unico metodo
-    controller.controllaNotNull(body.username, "Il campo 'Username' non deve essere vuoto!");
-    controller.controllaNotNull(body.nome, "Il campo 'Nome' non deve essere vuoto!");
-    controller.controllaNotNull(body.cognome, "Il campo 'Cognome' non deve essere vuoto!");
+    controller.controllaString(body.username, "Il campo 'Username' non deve essere vuoto!");
+    controller.controllaString(body.nome, "Il campo 'Nome' non deve essere vuoto!");
+    controller.controllaString(body.cognome, "Il campo 'Cognome' non deve essere vuoto!");
     controller.controllaPassword(body.password);
 
     const salt = bcrypt.genSaltSync(10);

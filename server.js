@@ -340,53 +340,53 @@ app.post('/login/utente', (req, res) => {
     }
 });
 
-//TODO
+/**
+ * REST - Login dell'ospite
+ */
 app.post('/login/ospiti', (req, res) => {
     try {
-        utente.cercaUtenteByUsername(req.body.username, (err, results) => {
-            if (err) return res.status(500).send('Server Error!');
-            if (!controller.controllaRisultatoQuery(results)) return res.status(404).send("L'username " + req.body.username + " è già in uso!");
-
-            utente.cercaOspiteByUsername(req.body.username, (err, results) => {
+        if (req.body.username.trim() != "") {
+            utente.cercaUtenteByUsername(req.body.username, (err, results) => {
                 if (err) return res.status(500).send('Server Error!');
                 if (!controller.controllaRisultatoQuery(results)) return res.status(404).send("L'username " + req.body.username + " è già in uso!");
+                utente.cercaOspiteByUsername(req.body.username, (err, results) => {
+                    if (err) return res.status(500).send('Server Error!');
+                    if (!controller.controllaRisultatoQuery(results)) return res.status(404).send("L'username " + req.body.username + " è già in uso!");
 
-                utente.creaOspite(req.body.username, (err, results) => {
-                    if (err) return res.status(400).send("NON E' STATO POSSIBILE CREARE L'OSPITE!");
-                    sendAccessToken(res, { username: req.body.username, tipo: "OSPITE" });
-                });
+                    utente.creaOspite(req.body.username, (err, results) => {
+                        if (err) return res.status(400).send("NON E' STATO POSSIBILE CREARE L'OSPITE!");
+                        sendAccessToken(res, { username: req.body.username, tipo: "OSPITE" });
+                    });
+                })
             })
-        })
-    } catch (error) {
-        return res.status(400).send(error);
-    }
+        } else { return res.status(400).send("L'username deve contenere dei caratteri!"); }
+    } catch (error) { return res.status(400).send(error); }
 })
 
 /**
- * REST - Registrazione
+ * REST - Registrazione dell'utente
  */
 app.post('/register/utente', (req, res) => {
     try {
-        utente.cercaOspiteByUsername(req.body.username, (err, results) => {
-            if (err) return res.status(500).send('Server Error!');
-            if (!controller.controllaRisultatoQuery(results)) return res.status(404).send("L'username " + req.body.username + " è già in uso!");
-
-
-
-            utente.cercaUtenteByUsername(req.body.username, (err, results) => {
-                try {
-                    if (err) return res.status(500).send('Server error!');
-                    const users = JSON.parse(JSON.stringify(results.rows));
-
-                    if (users.length == 0)
-                        utente.creaUtente(req.body, res);
-                    else return res.status(400).send("L'username \'" + users[0].username + "\' è già stato usato!");
-                } catch (error) {
-                    console.log(error);
-                    return res.status(400).send(error);
-                }
+        if (req.body.username.trim() != "") {
+            utente.cercaOspiteByUsername(req.body.username, (err, results) => {
+                if (err) return res.status(500).send('Server Error!');
+                if (!controller.controllaRisultatoQuery(results)) return res.status(404).send("L'username " + req.body.username + " è già in uso!");
+                
+                utente.cercaUtenteByUsername(req.body.username, (err, results) => {
+                    try {
+                        if (err) return res.status(500).send('Server error!');
+                        const users = JSON.parse(JSON.stringify(results.rows));
+                        if (users.length == 0)
+                            utente.creaUtente(req.body, res);
+                        else return res.status(400).send("L'username \'" + users[0].username + "\' è già stato usato!");
+                    } catch (error) {
+                        console.log(error);
+                        return res.status(400).send(error);
+                    }
+                });
             });
-        });
+        } else { return res.status(400).send("L'username deve contenere dei caratteri!"); }
     } catch (error) {
         return res.status(400).send(error);
     }
