@@ -76,7 +76,7 @@ exports.getGiocatoriLobby = (username, response, cb) => {
             return response.status(400).send("Errore: Devi partecipare ad una Lobby!");
 
         const tmp = JSON.parse(JSON.stringify(results.rows));
-        db.pool.query('SELECT * FROM public.giocatori WHERE codice_lobby = $1', [tmp[0].codice], (error, results) => {
+        db.pool.query('SELECT * FROM public.giocatori WHERE codice_lobby = $1 ORDER BY ping ASC', [tmp[0].codice], (error, results) => {
             cb(error, results)
         });
     })
