@@ -30,12 +30,12 @@ exports.creaGiocatore = (username, codiceLobby, response, cb) => {
 
                 this.cercaGiocatore(username, (err, results) => {
                     if (controller.controllaRisultatoQuery(results)) {
-                        db.pool.query('INSERT INTO public.giocatori (username, codice_lobby) VALUES ($1, $2)',
+                        db.pool.query('INSERT INTO public.giocatori (username, codice_lobby, data_ingresso) VALUES ($1, $2, NOW())',
                             [username, codiceLobby], (error, results) => {
                                 cb(error, results);
                             });
                     } else {
-                        db.pool.query('UPDATE public.giocatori SET codice_lobby = $1 WHERE username = $2',
+                        db.pool.query('UPDATE public.giocatori SET codice_lobby = $1, data_ingresso = NOW() WHERE username = $2',
                             [codiceLobby, username], (error, results) => {
                                 cb(error, results);
                             });

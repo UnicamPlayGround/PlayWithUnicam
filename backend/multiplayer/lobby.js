@@ -76,7 +76,7 @@ exports.getGiocatoriLobby = (username, response, cb) => {
             return response.status(400).send("Errore: Devi partecipare ad una Lobby!");
 
         const tmp = JSON.parse(JSON.stringify(results.rows));
-        db.pool.query('SELECT * FROM public.giocatori WHERE codice_lobby = $1 ORDER BY ping ASC', [tmp[0].codice], (error, results) => {
+        db.pool.query('SELECT * FROM public.giocatori WHERE codice_lobby = $1 ORDER BY data_ingresso ASC', [tmp[0].codice], (error, results) => {
             cb(error, results)
         });
     })
@@ -120,10 +120,38 @@ exports.eliminaPartecipante = (admin, username, response) => {
 }
 
 exports.abbandonaLobby = (username, response) => {
-    giocatore.eliminaGiocatore(username, (error, results) => {
-        if (error) return response.status(400).send("Non è stato possibile abbandonare la lobby");
-        return response.status(200).send({ 'esito': "1" });
-    });
+    this.cercaLobbyByAdmin(username, (error, results) => {
+        if (controller.controllaRisultatoQuery(results)) {
+            giocatore.eliminaGiocatore(username, (error, results) => {
+                if (error) return response.status(400).send("Non è stato possibile abbandonare la lobby");
+                return response.status(200).send({ 'esito': "1" });
+            });
+        }else {
+            const tmp = JSON.parse(JSON.stringify(results.rows));
+            const codiceLobby = tmp[0].codice;
+            this.getGiocatoriLobby(username, response, (error, results) => {
+                if (error) return response.status(500).send("Server error");
+                var giocatori = JSON.parse(JSON.stringify(results.rows));
+                console.log(giocatori);
+                if (giocatori.length > 1) {
+                    const admin = giocatori[1].username;
+                    this.impostaAdminLobby(admin, codiceLobby, response);
+                    giocatore.eliminaGiocatore(username, (error, results) => {
+                        if (error) return response.status(400).send("Non è stato possibile abbandonare la lobby");
+                        //return response.status(200).send({ 'esito': "1" });
+                    });
+                }else{
+                    giocatore.eliminaGiocatore(username, (error, results) => {
+                        if (error) return response.status(400).send("Non è stato possibile abbandonare la lobby");
+                        return response.status(200).send({ 'esito': "1" });
+                    });
+                }
+            })
+        }
+    })
+
+
+
 }
 
 exports.creaLobby = (adminLobby, idGioco, pubblica, response) => {

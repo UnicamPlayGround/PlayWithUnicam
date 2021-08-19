@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS public.giocatori
     codice_lobby character varying(20) NOT NULL,
     ruolo character varying(20),
 	ping timestamp with time zone,
+    data_ingresso timestamp with time zone NOT NULL,
     PRIMARY KEY (username)
 );
 
