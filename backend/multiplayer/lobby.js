@@ -32,6 +32,18 @@ function getDataOdierna() {
 }
 
 /**
+ * Elimina un Giocatore e ritorna una Response 
+ * @param {*} username Giocatore da eliminare
+ * @param {*} response 
+ */
+function eliminaGiocatore(username, response) {
+    giocatore.eliminaGiocatore(username, (error, results) => {
+        if (error) return response.status(400).send("Non è stato possibile abbandonare la lobby");
+        return response.status(200).send({ 'esito': "1" });
+    });
+}
+
+/**
  * Controlla se esistono lobby che hanno come admin l'username passato.
  * 
  * @param {*} adminLobby l'username da controllare
@@ -123,34 +135,19 @@ exports.abbandonaLobby = (username, response) => {
     this.cercaLobbyByAdmin(username, (error, results) => {
         if (error) return response.status(400).send("Non è stato possibile trovare la lobby");
         if (controller.controllaRisultatoQuery(results)) {
-            giocatore.eliminaGiocatore(username, (error, results) => {
-                if (error) return response.status(400).send("Non è stato possibile abbandonare la lobby");
-                return response.status(200).send({ 'esito': "1" });
-            });
+            eliminaGiocatore(username, response);
         } else {
             const tmp = JSON.parse(JSON.stringify(results.rows));
             const codiceLobby = tmp[0].codice;
             this.getGiocatoriLobby(username, response, (error, results) => {
                 if (error) return response.status(500).send("Server error");
                 var giocatori = JSON.parse(JSON.stringify(results.rows));
-                console.log(giocatori);
                 if (giocatori.length > 1) {
-                    const admin = giocatori[1].username;
-                    console.log(admin);
-                    console.log(username);
-                    this.impostaAdminLobby(admin, codiceLobby, (error, results) => {
+                    this.impostaAdminLobby(giocatori[1].username, codiceLobby, (error, results) => {
                         if (error) return response.status(400).send("Non è stato possibile impostare l'Admin della Lobby!");
-                        giocatore.eliminaGiocatore(username, (error, results) => {
-                            if (error) return response.status(400).send("Non è stato possibile abbandonare la lobby");
-                            return response.status(200).send({ 'esito': "1" });
-                        });
+                        eliminaGiocatore(username, response);
                     });
-                } else {
-                    giocatore.eliminaGiocatore(username, (error, results) => {
-                        if (error) return response.status(400).send("Non è stato possibile abbandonare la lobby");
-                        return response.status(200).send({ 'esito': "1" });
-                    });
-                }
+                } else eliminaGiocatore(username, response);
             })
         }
     })
