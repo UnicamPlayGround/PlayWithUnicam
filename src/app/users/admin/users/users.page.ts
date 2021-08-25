@@ -126,10 +126,24 @@ export class UsersPage implements OnInit {
   }
 
   /**
+   * Controlla se ci sono utenti selezionati tramite le checkbox.
+   * 
+   * @returns true se almeno un elemento è selezionato, false altrimenti
+   */
+  checkSelectedUsers() {
+    var selected = false;
+    let keys = Object.keys(this.edit);
+    while (keys.length) {
+      if (this.edit[keys.pop()]) selected = true;
+    }
+    return selected;
+  }
+
+  /**
    * Mostra un alert per chiedere conferma dell'eliminazione e in caso positivo elimina gli utenti.
    */
   async bulkDelete() {
-    if (this.edit && Object.keys(this.edit).length != 0 && this.edit.constructor === Object) {
+    if (this.edit && Object.keys(this.edit).length != 0 && this.edit.constructor === Object && this.checkSelectedUsers()) {
       var messaggio = "Sei sicuro di voler eliminare gli utenti selezionati?";
 
       this.alertCreator.createConfirmationAlert(messaggio, () => { this.deleteUsers(); });

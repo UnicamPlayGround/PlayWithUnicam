@@ -15,10 +15,14 @@
 
   <ion-searchbar placeholder="Cerca giochi"></ion-searchbar>
 
+  <ion-item lines="full" *ngIf="this.games.length == 0">
+    <ion-label style="text-align: center; color:grey">Non è stato trovato alcun gioco!</ion-label>
+  </ion-item>
+
   <div class="row">
     <a *ngFor="let game of games" class="column">
       <div class="container">
-        <img [src]="game.img" class="image" />
+        <img src="https://bit.ly/376IQJU" class="image" />
         <div class="overlay" (click)="openIntroLobby(game)">
           <div class="text">GIOCA ORA!</div>
         </div>

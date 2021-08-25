@@ -1,4 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
+import { LoginService } from 'src/app/services/login-service/login.service';
 
 @Component({
   selector: 'app-games',
@@ -9,25 +12,11 @@ export class GamesPage implements OnInit {
   segment: string = "lista";
   games = [];
 
-  giochi = [
-    { name: 'Gioco 1', min_players: 2, max_players: 6, img: 'https://bit.ly/376IQJU' },
-    { name: 'Gioco 2', min_players: 2, max_players: 6, img: 'https://bit.ly/376IQJU' },
-    { name: 'Gioco 3', min_players: 2, max_players: 6, img: 'https://bit.ly/376IQJU' },
-    { name: 'Gioco 4', min_players: 2, max_players: 6, img: 'https://bit.ly/376IQJU' },
-    { name: 'Gioco 5', min_players: 2, max_players: 6, img: 'https://bit.ly/376IQJU' },
-    { name: 'Gioco 6', min_players: 2, max_players: 6, img: 'https://bit.ly/376IQJU' },
-    { name: 'Gioco 7', min_players: 2, max_players: 6, img: 'https://bit.ly/376IQJU' },
-    { name: 'Gioco 8', min_players: 2, max_players: 6, img: 'https://bit.ly/376IQJU' },
-    { name: 'Gioco 9', min_players: 2, max_players: 6, img: 'https://bit.ly/376IQJU' },
-    { name: 'Gioco 10', min_players: 2, max_players: 6, img: 'https://bit.ly/376IQJU' },
-    { name: 'Gioco 11', min_players: 2, max_players: 6, img: 'https://bit.ly/376IQJU' },
-    { name: 'Gioco 12', min_players: 2, max_players: 6, img: 'https://bit.ly/376IQJU' },
-    { name: 'Gioco 13', min_players: 2, max_players: 6, img: 'https://bit.ly/376IQJU' },
-    { name: 'Gioco 14', min_players: 2, max_players: 6, img: 'https://bit.ly/376IQJU' },
-    { name: 'Gioco 15', min_players: 2, max_players: 6, img: 'https://bit.ly/376IQJU' }
-  ]
-
-  constructor() {
+  constructor(
+    private http: HttpClient,
+    private loginService: LoginService,
+    private errorManager: ErrorManagerService
+  ) {
     this.loadGames();
   }
 
@@ -38,7 +27,16 @@ export class GamesPage implements OnInit {
     this.segment = ev.detail.value;
   }
 
-  loadGames(event?) {
-    this.games = this.games.concat(this.giochi);
+  async loadGames(event?) {
+    const token_value = (await this.loginService.getToken()).value;
+    const headers = { 'token': token_value };
+
+    this.http.get('/games', { headers }).subscribe(
+      async (res) => {
+        this.games = this.games.concat(res['results']);
+      },
+      async (res) => {
+        this.errorManager.stampaErrore(res, 'Impossibile caricare i giochi!');
+      });
   }
 }

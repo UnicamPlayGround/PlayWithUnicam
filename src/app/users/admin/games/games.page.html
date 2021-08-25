@@ -28,19 +28,23 @@
       <ion-label>Elenco dei giochi aggiunti:</ion-label>
     </ion-item>
 
+    <ion-item lines="full" *ngIf="this.games.length == 0">
+      <ion-label style="text-align: center; color:grey">Non è stato trovato alcun gioco!</ion-label>
+    </ion-item>
+
     <div class="row">
       <a *ngFor="let game of games" class="column">
         <div class="container">
-          <img [src]="game.img" class="image" />
+          <img src="https://bit.ly/376IQJU" class="image" />
           <div class="overlay">
             <div class="text">MODIFICA</div>
           </div>
           <div class="info">
             <ion-label>
-              <h1><strong>{{game.name}}</strong></h1>
+              <h1><strong>{{game.nome}}</strong></h1>
               <h2>
                 <ion-icon name="people-outline"></ion-icon>
-                Giocatori {{game.min_players}} - {{game.max_players}}
+                Giocatori {{game.min_giocatori}} - {{game.max_giocatori}}
               </h2>
             </ion-label>
           </div>
@@ -115,21 +119,21 @@
         <h2><strong>Anteprima</strong></h2>
       </ion-list-header>
 
-        <div class="preview">
-          <img src="https://bit.ly/376IQJU" class="image" />
-          <div class="overlay">
-            <div class="text">GIOCA ORA!</div>
-          </div>
-          <div class="info">
-            <ion-label>
-              <h1><strong>Gioco dell'Oca</strong></h1>
-              <h2>
-                <ion-icon name="people-outline"></ion-icon>
-                Giocatori 2 - 6
-              </h2>
-            </ion-label>
-          </div>
+      <div class="preview">
+        <img src="https://bit.ly/376IQJU" class="image" />
+        <div class="overlay">
+          <div class="text">GIOCA ORA!</div>
         </div>
+        <div class="info">
+          <ion-label>
+            <h1><strong>Gioco dell'Oca</strong></h1>
+            <h2>
+              <ion-icon name="people-outline"></ion-icon>
+              Giocatori 2 - 6
+            </h2>
+          </ion-label>
+        </div>
+      </div>
 
     </ion-list>
 
