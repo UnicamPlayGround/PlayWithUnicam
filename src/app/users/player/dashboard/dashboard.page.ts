@@ -53,13 +53,13 @@ export class DashboardPage implements OnInit {
     const token_value = (await this.loginService.getToken()).value;
     const headers = { 'token': token_value };
 
-    // this.http.get('/games', { headers }).subscribe(
-    //   async (res) => {
-    //     this.games = this.games.concat(res['results']);
-    //   },
-    //   async (res) => {
-    //     this.errorManager.stampaErrore(res, 'Impossibile caricare i giochi!');
-    //   });
+    this.http.get('/games', { headers }).subscribe(
+      async (res) => {
+        this.games = this.games.concat(res['results']);
+      },
+      async (res) => {
+        this.errorManager.stampaErrore(res, 'Impossibile caricare i giochi!');
+      });
   }
 
   loadMore(event) {
