@@ -249,7 +249,8 @@ app.delete('/admin/utenti', (req, res) => {
 app.put('/admin/utenti/:username', (req, res) => {
     if (verificaAdmin(req.body.token)) {
         try {
-            admin.modificaUtente(req, res);
+            console.log(req.body.new_username+" " +req.body.new_nome+" "+ req.body.new_cognome+ " " +req.body.new_tipo);
+            admin.modificaUtente(req.params.username, req.body.new_username, req.body.new_nome, req.body.new_cognome, req.body.new_tipo, res);
         } catch (error) {
             return res.status(400).send(error);
         }
