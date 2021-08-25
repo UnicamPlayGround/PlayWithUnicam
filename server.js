@@ -249,7 +249,8 @@ app.delete('/admin/utenti', (req, res) => {
 app.put('/admin/utenti/:username', (req, res) => {
     if (verificaAdmin(req.body.token)) {
         try {
-            admin.modificaUtente(req, res);
+            console.log(req.body.new_username+" " +req.body.new_nome+" "+ req.body.new_cognome+ " " +req.body.new_tipo);
+            admin.modificaUtente(req.params.username, req.body.new_username, req.body.new_nome, req.body.new_cognome, req.body.new_tipo, res);
         } catch (error) {
             return res.status(400).send(error);
         }
@@ -308,7 +309,7 @@ app.put('/modifica/password', (req, res) => {
     const token = req.body.token;
     if (verificaJWT(token)) {
         try {
-            utente.cambiaPassword(req, res, jwt.decode(token));
+            utente.cambiaPassword(req.body.new_password, req.body.old_password, res, jwt.decode(token));
         } catch (error) {
             return res.status(400).send(error);
         }
@@ -372,13 +373,13 @@ app.post('/register/utente', (req, res) => {
             utente.cercaOspiteByUsername(req.body.username, (err, results) => {
                 if (err) return res.status(500).send('Server Error!');
                 if (!controller.controllaRisultatoQuery(results)) return res.status(404).send("L'username " + req.body.username + " è già in uso!");
-                
+
                 utente.cercaUtenteByUsername(req.body.username, (err, results) => {
                     try {
                         if (err) return res.status(500).send('Server error!');
                         const users = JSON.parse(JSON.stringify(results.rows));
                         if (users.length == 0)
-                            utente.creaUtente(req.body, res);
+                            utente.creaUtente(req.body.username, req.body.nome, req.body.cognome, req.body.password, res);
                         else return res.status(400).send("L'username \'" + users[0].username + "\' è già stato usato!");
                     } catch (error) {
                         console.log(error);

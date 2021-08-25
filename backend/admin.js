@@ -28,21 +28,21 @@ exports.eliminaUtenti = (utenti, response) => {
     return response.status(200).send({ 'esito': "1" });
 }
 
-//TODO: fare commento
-exports.modificaUtente = (request, response) => {
-    controller.controllaString(request.params.username, "L'username non è valido");
-    controller.controllaDatiAccount(request.body);
+//TODO: se non modifichi l'username da errore. Guardare la modifica dell'utente
+exports.modificaUtente = (username, new_username, new_nome, new_cognome, new_tipo, response) => {
+    controller.controllaString(username, "L'username non è valido");
+    controller.controllaDatiAccount(new_username, new_nome, new_cognome);
 
-    utente.cercaUtenteByUsername(request.params.username, (err, results) => {
+    utente.cercaUtenteByUsername(username, (err, results) => {
         if (err) return response.status(500).send('Server Error!');
         if (controller.controllaRisultatoQuery(results)) return response.status(404).send('Utente non trovato!');
 
-        utente.cercaUtenteByUsername(request.body.new_username, (err, results) => {
+        utente.cercaUtenteByUsername(new_username, (err, results) => {
             if (err) return response.status(500).send('Server Error!');
             if (!controller.controllaRisultatoQuery(results)) return response.status(404).send("L'username inserito è già stato usato!");
 
             db.pool.query('UPDATE public.utenti SET username = $1, nome = $2, cognome = $3, tipo = $4 WHERE username = $5',
-                [request.body.new_username, request.body.new_nome, request.body.new_cognome, request.body.new_tipo, request.params.username], (error, results) => {
+                [new_username, new_nome, new_cognome, new_tipo, username], (error, results) => {
                     if (error) return response.status(400).send('Errore dati query');
                     return response.status(200).send({ 'esito': "1" });
                 })

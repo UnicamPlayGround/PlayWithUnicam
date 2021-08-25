@@ -33,20 +33,19 @@ exports.controllaPassword = function (password) {
  * @param {String} errorText Errore da stampare
  */
  exports.controllaString = function (toControl, errorText) {
-     console.log("parola da controllare: "+toControl);
     if (toControl == null || toControl.trim() == "") throw errorText;
 }
 
-exports.controllaDatiAccount = function (dati) {
-    this.controllaString(dati.username, "Il nuovo username non è valido");
-    this.controllaString(dati.nome,"Il nuovo nome non è valido");
-    this.controllaString(dati.cognome,"Il nuovo cognome non è valido");
+exports.controllaDatiAccount = function (new_nome, new_cognome, new_username) {
+    this.controllaString(new_username, "Il nuovo username non è valido");
+    this.controllaString(new_nome,"Il nuovo nome non è valido");
+    this.controllaString(new_cognome,"Il nuovo cognome non è valido");
 }
 
-exports.controllaDatiAccountAsAdmin = function(dati){
-    this.controllaDatiAccount(dati);
+exports.controllaDatiAccountAsAdmin = function(new_nome, new_cognome, new_username, new_tipo){
+    this.controllaDatiAccount(new_nome, new_cognome, new_username);
     //TODO: controlla bene
-    this.controllaString(dati.new_tipo,"Il nuovo tipo non è valido");
+    this.controllaString(new_tipo,"Il nuovo tipo non è valido");
 
 
 }
