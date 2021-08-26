@@ -20,10 +20,10 @@
   </ion-item>
 
   <div class="row">
-    <a *ngFor="let game of games" class="column">
+    <a *ngFor="let game of games" class="column" tappable (click)="openIntroLobby(game)">
       <div class="container">
         <img src="../../../../assets/Immagini/game_icon.jpg" class="image" />
-        <div class="overlay" (click)="openIntroLobby(game)">
+        <div class="overlay">
           <div class="text">GIOCA ORA!</div>
         </div>
         <div class="info">

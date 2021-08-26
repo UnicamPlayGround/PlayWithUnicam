@@ -39,4 +39,8 @@ export class GamesPage implements OnInit {
         this.errorManager.stampaErrore(res, 'Impossibile caricare i giochi!');
       });
   }
+
+  async editGame(){
+    //TODO
+  }
 }

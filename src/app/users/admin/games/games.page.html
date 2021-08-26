@@ -33,7 +33,7 @@
     </ion-item>
 
     <div class="row">
-      <a *ngFor="let game of games" class="column">
+      <a *ngFor="let game of games" class="column" tappable (click)="editGame()">
         <div class="container">
           <img src="../../../../assets/Immagini/game_icon.jpg" class="image" />
           <div class="overlay">

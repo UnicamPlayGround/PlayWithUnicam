@@ -40,7 +40,12 @@ const routes: Routes = [
   {
     path: 'account',
     loadChildren: () => import('./users/account/account.module').then( m => m.AccountPageModule)
+  },
+  {
+    path: 'goose-game',
+    loadChildren: () => import('../games/goose-game/goose-game.module').then( m => m.GooseGamePageModule)
   }
+
 
 ];
 
