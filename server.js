@@ -111,7 +111,7 @@ app.get('/game/status', (req, res) => {
 
     //TODO controllare che il JWT sia di un giocatore
     if (verificaJWT(token)) {
-        partita.getInfoPartita(jwt.decode(token), (err, results) => {
+        partita.getInfoPartita(jwt.decode(token).username, (err, results) => {
             if (err) return res.status(500).send('Server error!');
 
             const toReturn = JSON.parse(JSON.stringify(results.rows));
@@ -310,6 +310,20 @@ app.put('/modifica/password', (req, res) => {
     if (verificaJWT(token)) {
         try {
             utente.cambiaPassword(req.body.new_password, req.body.old_password, res, jwt.decode(token));
+        } catch (error) {
+            return res.status(400).send(error);
+        }
+    } else return res.status(401).send('JWT non valido!');
+});
+
+/**
+ * REST - Modifica le Informazioni di una Partita 
+ */
+app.put('/game/save', (req, res) => {
+    if (verificaJWT(req.body.token)) {
+        try {
+            decoded_token = jwt.decode(req.body.token);
+            partita.salvaInfoGiocatore(decoded_token.username, req.body.info_giocatore, res);
         } catch (error) {
             return res.status(400).send(error);
         }
