@@ -28,21 +28,6 @@ exports.eliminaUtenti = (utenti, response) => {
     return response.status(200).send({ 'esito': "1" });
 }
 
-exports.modificaNomeCognome = (username, new_nome, new_cognome, response) => {
-    utente.cercaUtenteByUsername(username, (err, results) => {
-        if (err) return response.status(500).send('Server Error!');
-        if (controller.controllaRisultatoQuery(results)) return response.status(404).send('Utente non trovato!');
-
-        db.pool.query('UPDATE public.utenti SET nome = $1, cognome = $2 WHERE username = $3',
-            [new_nome, new_cognome, username], (error, results) => {
-                if (error){
-                    console.log(error);
-                    return response.status(400).send('Errore dati query');
-                } 
-                return response.status(200).send({ 'esito': "1" });
-            })
-    })
-}
 
 //TODO controllare se si puo usare lo stesso metodo di utente
 exports.modificaUsername = (username, new_username, new_nome, new_cognome, response) => {
@@ -75,7 +60,7 @@ exports.modificaUtente = (username, new_username, new_nome, new_cognome, respons
     controller.controllaDatiAccount(new_username, new_nome, new_cognome);
 
     if (username === new_username) {
-        this.modificaNomeCognome(username, new_nome, new_cognome, response);
+        utente.modificaNomeCognome(username, new_nome, new_cognome, response);
     } else {
         this.modificaUsername(username, new_username, new_nome, new_cognome, response);
     }
