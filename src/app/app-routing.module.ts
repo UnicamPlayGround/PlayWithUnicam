@@ -43,10 +43,8 @@ const routes: Routes = [
   },
   {
     path: 'goose-game',
-    loadChildren: () => import('../games/goose-game/goose-game.module').then( m => m.GooseGamePageModule)
+    loadChildren: () => import('./mgp_games/goose-game/goose-game.module').then( m => m.GooseGamePageModule)
   }
-
-
 ];
 
 @NgModule({

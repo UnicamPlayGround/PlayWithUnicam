@@ -29,6 +29,16 @@
                 "glob": "**/*.svg",
                 "input": "node_modules/ionicons/dist/ionicons/svg",
                 "output": "./svg"
+              },
+              {
+                "glob": "**/*.png",
+                "input": "src/app/mgp_games",
+                "output": "game-assets"
+              },
+              {
+                "glob": "**/*.jpg",
+                "input": "src/app/mgp_games",
+                "output": "game-assets"
               }
             ],
             "styles": ["src/theme/variables.scss", "src/global.scss"],
