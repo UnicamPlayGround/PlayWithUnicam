@@ -62,4 +62,11 @@ export class LobbyManagerService {
 
     return this.http.post('/lobby/ping', toSend);
   }
+
+  async iniziaPartita() {
+    const token_value = (await this.loginService.getToken()).value;
+    const toSend = { 'token': token_value }
+
+    return this.http.post('/partita', toSend);
+  }
 }

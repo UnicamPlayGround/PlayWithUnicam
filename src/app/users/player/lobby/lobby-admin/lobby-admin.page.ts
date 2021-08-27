@@ -64,6 +64,7 @@ export class LobbyAdminPage implements OnInit {
         this.giocatori = res['results'];
       },
       async (res) => {
+        //TODO rivedere lo stop dei Timer
         this.timerService.stopTimer(this.timerGiocatori);
         this.errorManager.stampaErrore(res, 'Impossibile caricare la Lobby!');
       });
@@ -125,6 +126,18 @@ export class LobbyAdminPage implements OnInit {
         this.errorManager.stampaErrore(res, 'Ping fallito');
       }
     );
+  }
+
+  async iniziaPartita() {
+    (await this.lobbyManager.iniziaPartita()).subscribe(
+      async (res) => {
+        console.log("partita iniziata");
+      },
+      async (res) => {
+        this.timerService.stopTimer(this.timerGiocatori);
+        this.timerService.stopTimer(this.timerPing);
+        this.errorManager.stampaErrore(res, 'Impossibile iniziare la Partita!');
+      });
   }
 
 }
