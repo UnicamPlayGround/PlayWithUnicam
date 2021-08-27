@@ -449,6 +449,32 @@ app.post('/lobby/ping', (req, res) => {
     }
 })
 
+//TODO commentare
+app.post('/partita', (req, res) => {
+    try {
+        if (verificaJWT(req.body.token)) {
+            decoded_token = jwt.decode(req.body.token);
+            lobby.cercaLobbyByAdmin(decoded_token.username, (err, results) => {
+                if (err) {
+                    console.log(err);
+                    return res.status(500).send('Server Error!');
+                }
+
+                if (controller.controllaRisultatoQuery(results))
+                    return res.status(404).send("Devi essere Admin di una Lobby per creare una partita!");
+                else {
+                    tmp = JSON.parse(JSON.stringify(results.rows));
+                    const lobby = tmp[0];
+                    //TODO controllare che il gioco richieda il giocatore corrente
+                    partita.creaPartita(lobby.codice, decoded_token.username, res);
+                }
+            })
+        } else return res.status(401).send(ERRORE_JWT);
+    } catch (error) {
+        return res.status(400).send(error);
+    }
+})
+
 app.get('/*', function (req, res) {
     res.sendFile('index.html', { root: __dirname + '/www' });
 });

@@ -15,3 +15,11 @@ exports.lancioDado = (nFacce) => {
 
     return Math.floor(Math.random() * nFacce) + 1;
 }
+
+//TODO commentare
+exports.getInfoGioco = (idGioco, cb) => {
+    return db.pool.query('select id, nome, tipo, max_giocatori, min_giocatori, link from public.giochi where id=$1',
+        [idGioco], (error, results) => {
+            cb(error, results)
+        });
+}

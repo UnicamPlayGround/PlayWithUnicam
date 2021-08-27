@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS public.partite
     codice_lobby character varying(20) NOT NULL,
     giocatore_corrente character varying(30),
     vincitore character varying(30),
-    info_partita json,
+    info json,
     PRIMARY KEY (codice)
 );
 
