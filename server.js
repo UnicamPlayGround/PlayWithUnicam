@@ -113,9 +113,7 @@ app.get('/game/status', (req, res) => {
     if (verificaJWT(token)) {
         partita.getInfoPartita(jwt.decode(token).username, (err, results) => {
             if (err) return res.status(500).send('Server error!');
-
-            const toReturn = JSON.parse(JSON.stringify(results.rows));
-            res.status(200).send(toReturn[0]);
+            sendDataInJSON(res, results);
         });
     } else return res.status(401).send(ERRORE_JWT);
 });
@@ -463,8 +461,7 @@ app.post('/partita', (req, res) => {
                 if (controller.controllaRisultatoQuery(results))
                     return res.status(404).send("Devi essere Admin di una Lobby per creare una partita!");
                 else {
-                    tmp = JSON.parse(JSON.stringify(results.rows));
-                    const lobby = tmp[0];
+                    const lobby = JSON.parse(JSON.stringify(results.rows))[0];
                     //TODO controllare che il gioco richieda il giocatore corrente
                     partita.creaPartita(lobby.codice, decoded_token.username, res);
                 }

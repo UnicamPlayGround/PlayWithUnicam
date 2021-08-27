@@ -39,22 +39,21 @@ function salvaInformazioni(username, partita, infoGiocatore, response) {
                 console.log(error);
                 return response.status(400).send("Non è stato possibile caricare le informazioni del Giocatore!");
             }
-            cambiaGiocatoreCorrente(username, partita.codice_lobby);
-            return response.status(200).send({ 'esito': "1" });
+            cambiaGiocatoreCorrente(username, partita.codice_lobby, response);
         })
 }
 
-function cambiaGiocatoreCorrente(username, codiceLobby) {
+function cambiaGiocatoreCorrente(username, codiceLobby, response) {
     var nuovoGiocatore;
 
-    lobby.getGiocatoriLobby(username, (error, results) => {
+    lobby.getGiocatoriLobby(username, response, (error, results) => {
         if (error) {
             console.log(error);
-            return res.status(500).send('Server error!');
+            return response.status(500).send('Server error!');
         }
 
-        const tmp = JSON.parse(JSON.stringify(results.rows));
-        const giocatori = tmp[0];
+        const giocatori = JSON.parse(JSON.stringify(results.rows));
+        console.log('giocatori', giocatori);
 
         for (let i = 0; i < giocatori.length; i++)
             if (giocatori[i].username == username) {
@@ -64,12 +63,16 @@ function cambiaGiocatoreCorrente(username, codiceLobby) {
                     nuovoGiocatore = giocatori[i + 1];
             }
 
-        db.pool.query('UPDATE public.partite SET giocatore_corrente = $1 WHERE codice = $2',
-            [nuovoGiocatore, codiceLobby], (error, results) => {
+
+        console.log('nuovoGiocatore', nuovoGiocatore);
+
+        db.pool.query('UPDATE public.partite SET giocatore_corrente = $1 WHERE codice_lobby = $2',
+            [nuovoGiocatore.username, codiceLobby], (error, results) => {
                 if (error) {
                     console.log(error);
                     return response.status(400).send("Non è stato possibile aggiornare il Giocatore Corrente!");
                 }
+                return response.status(200).send({ 'esito': "1" });
             })
     })
 }
@@ -106,7 +109,7 @@ exports.salvaInfoGiocatore = (username, infoGiocatore, response) => {
         if (error) return response.status(500).send('Server error!');
         if (controller.controllaRisultatoQuery(results)) return response.status(404).send('Nessuna partita trovata!');
 
-        const tmp = JSON.parse(JSON.stringify(results.rows));
+        var tmp = JSON.parse(JSON.stringify(results.rows));
         const partita = tmp[0];
 
         game.getInfoGioco(partita.id_gioco, (error, results) => {
