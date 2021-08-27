@@ -1,6 +1,7 @@
 const db = require('../database');
 const controller = require('../controller');
 const game = require('./game');
+const lobby = require('./lobby');
 
 //TODO refactor con creaCodice di Lobby
 function creaCodice() {
@@ -38,8 +39,39 @@ function salvaInformazioni(username, partita, infoGiocatore, response) {
                 console.log(error);
                 return response.status(400).send("Non è stato possibile caricare le informazioni del Giocatore!");
             }
+            cambiaGiocatoreCorrente(username, partita.codice_lobby);
             return response.status(200).send({ 'esito': "1" });
         })
+}
+
+function cambiaGiocatoreCorrente(username, codiceLobby) {
+    var nuovoGiocatore;
+
+    lobby.getGiocatoriLobby(username, (error, results) => {
+        if (error) {
+            console.log(error);
+            return res.status(500).send('Server error!');
+        }
+
+        const tmp = JSON.parse(JSON.stringify(results.rows));
+        const giocatori = tmp[0];
+
+        for (let i = 0; i < giocatori.length; i++)
+            if (giocatori[i].username == username) {
+                if (i == (giocatori.length - 1))
+                    nuovoGiocatore = giocatori[0];
+                else
+                    nuovoGiocatore = giocatori[i + 1];
+            }
+
+        db.pool.query('UPDATE public.partite SET giocatore_corrente = $1 WHERE codice = $2',
+            [nuovoGiocatore, codiceLobby], (error, results) => {
+                if (error) {
+                    console.log(error);
+                    return response.status(400).send("Non è stato possibile aggiornare il Giocatore Corrente!");
+                }
+            })
+    })
 }
 
 exports.creaPartita = (codiceLobby, giocatoreCorrente, response) => {
