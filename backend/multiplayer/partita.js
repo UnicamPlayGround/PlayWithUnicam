@@ -77,13 +77,37 @@ function cambiaGiocatoreCorrente(username, codiceLobby, response) {
     })
 }
 
+exports.cercaPartitaByCodiceLobby = (codiceLobby, cb) => {
+    db.pool.query('SELECT * FROM public.partite WHERE codice_lobby=$1',
+        [codiceLobby], (error, results) => {
+            cb(error, results);
+        })
+}
+
 exports.creaPartita = (codiceLobby, giocatoreCorrente, response) => {
     //TODO controllare che la condizione dei giocatore minimi sia rispettata
-    db.pool.query('INSERT INTO public.partite (codice, codice_lobby, giocatore_corrente) VALUES ($1, $2, $3)',
-        [creaCodice(), codiceLobby, giocatoreCorrente], (error, results) => {
-            if (error) return response.status(400).send("Non è stato possibile creare la partita!");
-            return response.status(200).send({ 'esito': "1" });
-        })
+
+    this.cercaPartitaByCodiceLobby(codiceLobby, (error, results) => {
+        if (error) return response.status(400).send("Non è stato possibile creare la partita!");
+
+        if (controller.controllaRisultatoQuery(results)) {
+            db.pool.query('INSERT INTO public.partite (codice, codice_lobby, giocatore_corrente) VALUES ($1, $2, $3)',
+                [creaCodice(), codiceLobby, giocatoreCorrente], (error, results) => {
+                    if (error) return response.status(400).send("Non è stato possibile creare la partita!");
+                    return response.status(200).send({ 'esito': "1" });
+                })
+        } else {
+            db.pool.query('UPDATE public.partite SET codice = $1, giocatore_corrente = $2 WHERE codice_lobby = $3',
+                [creaCodice(), giocatoreCorrente, codiceLobby], (error, results) => {
+                    if (error) {
+                        console.log(error);
+                        return response.status(400).send("Non è stato possibile creare la partita!");
+                    }
+                    return response.status(200).send({ 'esito': "1" });
+                })
+        }
+    })
+
 }
 
 //TODO commentare
