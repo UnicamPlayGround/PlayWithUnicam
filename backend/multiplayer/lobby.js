@@ -198,8 +198,8 @@ exports.impostaAdminLobby = (adminLobby, codiceLobby, cb) => {
     })
 }
 
-exports.partecipaLobby = (username, codice_lobby, response) => {
-    this.cercaLobbyByCodice(codice_lobby, (err, results) => {
+exports.partecipaLobby = (username, codiceLobby, response) => {
+    this.cercaLobbyByCodice(codiceLobby, (err, results) => {
         if (controller.controllaRisultatoQuery(results))
             return response.status(401).send("Non è stata trovata alcuna lobby corrispondente al codice inserito!");
 
@@ -209,7 +209,7 @@ exports.partecipaLobby = (username, codice_lobby, response) => {
         console.log("tmp", tmp);
         console.log("lobby", lobby);
 
-        this.getNumeroGiocatoriLobby(codice_lobby, (err, results) => {
+        this.getNumeroGiocatoriLobby(codiceLobby, (err, results) => {
             if (err) return response.status(500).send('Server error!');
             const tmp2 = JSON.parse(JSON.stringify(results.rows));
             const count = tmp2[0].count;
@@ -218,7 +218,7 @@ exports.partecipaLobby = (username, codice_lobby, response) => {
             console.log("max_giocatori", lobby.max_giocatori);
 
             if (count < lobby.max_giocatori) {
-                giocatore.creaGiocatore(username, codice_lobby, response, (error, results) => {
+                giocatore.creaGiocatore(username, codiceLobby, response, (error, results) => {
                     if (error) return response.status(400).send("Non è stato possibile partecipare alla lobby.");
                     return response.status(200).send({ 'esito': "1" });
                 });

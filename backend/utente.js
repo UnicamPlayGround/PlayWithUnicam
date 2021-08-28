@@ -69,29 +69,29 @@ exports.modificaNomeCognome = (username, nome, cognome, response) => {
     });
 }
 
-exports.modificaUsername = (old_username, new_username, response, cb) => {
-    controller.controllaString(new_username, "Il nuovo username non è valido!");
+exports.modificaUsername = (oldUsername, newUsername, response, cb) => {
+    controller.controllaString(newUsername, "Il nuovo username non è valido!");
 
-    this.cercaUtenteByUsername(old_username, (err, results) => {
+    this.cercaUtenteByUsername(oldUsername, (err, results) => {
         if (err) return response.status(500).send('Server Error!');
         if (controller.controllaRisultatoQuery(results)) return response.status(404).send('Utente non trovato!');
 
-        this.cercaUtenteByUsername(new_username, (err, results) => {
+        this.cercaUtenteByUsername(newUsername, (err, results) => {
             if (!controller.controllaRisultatoQuery(results)) return response.status(404).send("Il nuovo username è già utilizzato!");
             db.pool.query('UPDATE public.utenti SET username = $1 WHERE username = $2',
-                [new_username, old_username], (error, results) => {
+                [newUsername, oldUsername], (error, results) => {
                     cb(error, results);
                 })
         })
     });
 }
 
-exports.cambiaPassword = (newPassord, oldPassword, response, decoded_token) => {
+exports.cambiaPassword = (newPassword, oldPassword, response, username) => {
     try {
-        controller.controllaPassword(newPassord);
+        controller.controllaPassword(newPassword);
     } catch (error) { return response.status(401).send('La password non è corretta'); }
 
-    this.cercaUtenteByUsername(decoded_token.username, (err, results) => {
+    this.cercaUtenteByUsername(username, (err, results) => {
         if (err) return response.status(500).send('Server Error!');
         if (controller.controllaRisultatoQuery(results))
             return response.status(404).send('Utente non trovato!');
@@ -104,10 +104,10 @@ exports.cambiaPassword = (newPassord, oldPassword, response, decoded_token) => {
         const hash = bcrypt.hashSync(oldPassword + SECRET_PWD, data.salt);
 
         if (hash == data.password) {
-            const new_hash = bcrypt.hashSync(newPassord + SECRET_PWD, data.salt);
+            const newHash = bcrypt.hashSync(newPassword + SECRET_PWD, data.salt);
 
             db.pool.query('UPDATE public.utenti SET password = $1 WHERE username = $2',
-                [new_hash, decoded_token.username], (error, results) => {
+                [newHash, username], (error, results) => {
                     if (error) return response.status(400).send(db.ERRORE_DATI_QUERY);
                     return response.status(200).send({ 'esito': "1" });
                 });

@@ -17,9 +17,9 @@ exports.getUtenti = (username, cb) => {
 
 //TODO: capire perché vuole per forza String()
 exports.eliminaUtenti = (utenti, response) => {
-    const users_to_delete = utenti.split(",");
+    const usersToDelete = utenti.split(",");
 
-    users_to_delete.forEach(username => {
+    usersToDelete.forEach(username => {
         db.pool.query('delete from public.utenti where username = $1',
             [String(username)], (error, results) => {
                 if (error) return response.status(400).send('Errore nella query');
@@ -30,21 +30,21 @@ exports.eliminaUtenti = (utenti, response) => {
 
 
 //TODO controllare se si puo usare lo stesso metodo di utente
-exports.modificaUsername = (username, new_username, new_nome, new_cognome, response) => {
+exports.modificaUsername = (username, newUsername, nome, cognome, response) => {
     utente.cercaUtenteByUsername(username, (err, results) => {
         if (err) return response.status(500).send('Server Error!');
         if (controller.controllaRisultatoQuery(results)) return response.status(404).send('Utente non trovato!');
 
-        utente.cercaUtenteByUsername(new_username, (err, results) => {
-            if (err){
+        utente.cercaUtenteByUsername(newUsername, (err, results) => {
+            if (err) {
                 console.log(error);
                 return response.status(500).send('Server Error!');
-            } 
+            }
             if (!controller.controllaRisultatoQuery(results)) return response.status(404).send("L'username inserito è già stato usato!");
 
             db.pool.query('UPDATE public.utenti SET username = $1, nome = $2, cognome = $3 WHERE username = $4',
-                [new_username, new_nome, new_cognome, username], (error, results) => {
-                    if (error){
+                [newUsername, nome, cognome, username], (error, results) => {
+                    if (error) {
                         console.log(error);
                         return response.status(400).send('Errore dati query');
                     }
@@ -55,14 +55,14 @@ exports.modificaUsername = (username, new_username, new_nome, new_cognome, respo
 }
 
 //TODO: se non modifichi l'username da errore. Guardare la modifica dell'utente
-exports.modificaUtente = (username, new_username, new_nome, new_cognome, response) => {
+exports.modificaUtente = (username, newUsername, nome, cognome, response) => {
     controller.controllaString(username, "L'username non è valido");
-    controller.controllaDatiAccount(new_username, new_nome, new_cognome);
+    controller.controllaDatiAccount(newUsername, nome, cognome);
 
-    if (username === new_username) {
-        utente.modificaNomeCognome(username, new_nome, new_cognome, response);
+    if (username === newUsername) {
+        utente.modificaNomeCognome(username, nome, cognome, response);
     } else {
-        this.modificaUsername(username, new_username, new_nome, new_cognome, response);
+        this.modificaUsername(username, newUsername, nome, cognome, response);
     }
 }
 
