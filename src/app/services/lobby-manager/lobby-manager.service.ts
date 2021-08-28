@@ -14,35 +14,35 @@ export class LobbyManagerService {
   ) { }
 
   async loadInfoLobby() {
-    const token_value = (await this.loginService.getToken()).value;
-    const headers = { 'token': token_value };
+    const tokenValue = (await this.loginService.getToken()).value;
+    const headers = { 'token': tokenValue };
 
     return this.http.get('/lobby/info', { headers });
   }
 
   async getPartecipanti() {
-    const token_value = (await this.loginService.getToken()).value;
-    const headers = { 'token': token_value };
+    const tokenValue = (await this.loginService.getToken()).value;
+    const headers = { 'token': tokenValue };
 
     return this.http.get('/lobby/giocatori', { headers });
   }
 
   async modificaLobby(pubblica) {
-    const token_value = (await this.loginService.getToken()).value;
+    const tokenValue = (await this.loginService.getToken()).value;
 
-    const to_send = {
+    const toSend = {
       'pubblica': pubblica,
-      'token': token_value
+      'token': tokenValue
     }
 
-    return this.http.put('/lobby', to_send);
+    return this.http.put('/lobby', toSend);
   }
 
   async eliminaPartecipante(username) {
-    const token_value = (await this.loginService.getToken()).value;
+    const tokenValue = (await this.loginService.getToken()).value;
 
     const headers = {
-      'token': token_value,
+      'token': tokenValue,
       'username': username
     }
     return this.http.delete('/lobby/admin/espelli', { headers });
@@ -50,22 +50,22 @@ export class LobbyManagerService {
 
   async abbandonaLobby() {
     console.log('HAI ABBANDONATO 2');
-    const token_value = (await this.loginService.getToken()).value;
+    const tokenValue = (await this.loginService.getToken()).value;
 
-    const headers = { 'token': token_value }
+    const headers = { 'token': tokenValue }
     return this.http.delete('/lobby/abbandona', { headers });
   }
 
   async ping() {
-    const token_value = (await this.loginService.getToken()).value;
-    const toSend = { 'token': token_value }
+    const tokenValue = (await this.loginService.getToken()).value;
+    const toSend = { 'token': tokenValue }
 
     return this.http.post('/lobby/ping', toSend);
   }
 
   async iniziaPartita() {
-    const token_value = (await this.loginService.getToken()).value;
-    const toSend = { 'token': token_value }
+    const tokenValue = (await this.loginService.getToken()).value;
+    const toSend = { 'token': tokenValue }
 
     return this.http.post('/partita', toSend);
   }

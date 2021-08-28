@@ -50,8 +50,8 @@ export class AccountPage implements OnInit {
   async getDatiProfilo() {
     const loading = await this.loadingController.create();
     await loading.present();
-    const token_value = (await this.logService.getToken()).value;
-    const headers = { 'token': token_value };
+    const tokenValue = (await this.logService.getToken()).value;
+    const headers = { 'token': tokenValue };
 
     this.http.get('/info/utente', { headers }).subscribe(
       async (res) => {
@@ -72,22 +72,22 @@ export class AccountPage implements OnInit {
     const loading = await this.loadingController.create();
     await loading.present();
 
-    const token_value = (await this.logService.getToken()).value;
-    var to_send = {
+    const tokenValue = (await this.logService.getToken()).value;
+    var toSend = {
       'nome': this.dati.value.nome,
       'cognome': this.dati.value.cognome,
-      'token': token_value,
+      'token': tokenValue,
     }
 
-    this.http.put('/player/profilo', to_send).subscribe(
-        async (res) => {
-          await this.aggiornaUsername(token_value);
-          loading.dismiss();
-        },
-        async (res) => {
-          await loading.dismiss();
-          this.errorManager.stampaErrore(res, 'Modifica Fallita');
-        });
+    this.http.put('/player/profilo', toSend).subscribe(
+      async (res) => {
+        await this.aggiornaUsername(tokenValue);
+        loading.dismiss();
+      },
+      async (res) => {
+        await loading.dismiss();
+        this.errorManager.stampaErrore(res, 'Modifica Fallita');
+      });
   }
 
   //TODO
@@ -96,12 +96,12 @@ export class AccountPage implements OnInit {
     if (this.user.username === this.dati.value.username) {
       this.alertCreator.createInfoAlert("Profilo aggiornato", "Il profilo è stato aggiornato");
     } else {
-      var to_send = {
+      var toSend = {
         'new_username': this.dati.value.username,
         'token': token,
       }
 
-      this.http.put('/player/username', to_send).pipe(
+      this.http.put('/player/username', toSend).pipe(
         map((data: any) => data.accessToken),
         switchMap(token => {
           console.log("nuovo token: " + token);
@@ -123,23 +123,25 @@ export class AccountPage implements OnInit {
     const loading = await this.loadingController.create();
     await loading.present();
 
-    const token_value = (await this.logService.getToken()).value;
-    const to_send = {
+    const tokenValue = (await this.logService.getToken()).value;
+    
+    const toSend = {
       'old_password': this.passwords.value.old_password,
       'new_password': this.passwords.value.new_password,
-      'token': token_value
+      'token': tokenValue
     }
+
     if (this.passwords.value.new_password == this.passwords.value.password_confirmed) {
-      this.http.put('/modifica/password', to_send).subscribe(
-          async (res) => {
-            const text = 'La password del tuo account è stata aggiornata';
-            await loading.dismiss();
-            this.alertCreator.createInfoAlert("Password aggiornata", "La password è stata aggiornata");
-          },
-          async (res) => {
-            await loading.dismiss();
-            this.errorManager.stampaErrore(res, 'Modifica Fallita');
-          });
+      this.http.put('/modifica/password', toSend).subscribe(
+        async (res) => {
+          const text = 'La password del tuo account è stata aggiornata';
+          await loading.dismiss();
+          this.alertCreator.createInfoAlert("Password aggiornata", "La password è stata aggiornata");
+        },
+        async (res) => {
+          await loading.dismiss();
+          this.errorManager.stampaErrore(res, 'Modifica Fallita');
+        });
     }
     else {
       this.alertCreator.createInfoAlert("Le password non corrispondono", "La password di conferma non corrsiponde alla nuova password");

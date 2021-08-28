@@ -36,10 +36,10 @@ export class CreaLobbyPage implements OnInit {
     const loading = await this.loadingController.create();
     await loading.present();
 
-    const token_value = (await this.loginService.getToken()).value;
+    const tokenValue = (await this.loginService.getToken()).value;
 
     const toSend = {
-      token: token_value,
+      token: tokenValue,
       idGioco: this.giocoSelezionato.id,
       pubblica: this.tipo
     }

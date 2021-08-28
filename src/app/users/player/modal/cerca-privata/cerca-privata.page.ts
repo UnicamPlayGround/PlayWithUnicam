@@ -39,14 +39,14 @@ export class CercaPrivataPage implements OnInit {
     const loading = await this.loadingController.create();
     await loading.present();
 
-    const token_value = (await this.loginService.getToken()).value;
+    const tokenValue = (await this.loginService.getToken()).value;
 
-    const to_send = {
-      'token': token_value,
+    const toSend = {
+      'token': tokenValue,
       'codice_lobby': this.codiceForm.value.codice
     }
 
-    this.http.post('/lobby/partecipa', to_send).subscribe(
+    this.http.post('/lobby/partecipa', toSend).subscribe(
       async (res) => {
         this.modalController.dismiss(true);
         this.router.navigateByUrl('/lobby-guest', { replaceUrl: true });

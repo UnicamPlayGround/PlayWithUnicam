@@ -33,8 +33,8 @@ export class CercaPubblicaPage implements OnInit {
   }
 
   async loadLobby() {
-    const token_value = (await this.loginService.getToken()).value;
-    const headers = { 'token': token_value };
+    const tokenValue = (await this.loginService.getToken()).value;
+    const headers = { 'token': tokenValue };
 
     this.http.get('/lobby/pubbliche', { headers }).subscribe(
       async (res) => {
@@ -71,8 +71,8 @@ export class CercaPubblicaPage implements OnInit {
     const loading = await this.loadingController.create();
     await loading.present();
 
-    const token_value = (await this.loginService.getToken()).value;
-    const toSend = { 'token': token_value, 'codice_lobby': lobby.codice }
+    const tokenValue = (await this.loginService.getToken()).value;
+    const toSend = { 'token': tokenValue, 'codice_lobby': lobby.codice }
 
     return this.http.post('/lobby/partecipa', toSend).subscribe(
       async (res) => {

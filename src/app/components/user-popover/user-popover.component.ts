@@ -24,9 +24,9 @@ export class UserPopoverComponent implements OnInit {
 
   async getTipoUtente() {
     const token = (await this.loginService.getToken()).value;
-    const decoded_token: any = jwt_decode(token);
-    if (decoded_token.tipo === 'OSPITE') this.ospite = true;
-    else if (decoded_token.tipo === 'GIOCATORE') this.ospite = false;
+    const decodedToken: any = jwt_decode(token);
+    if (decodedToken.tipo === 'OSPITE') this.ospite = true;
+    else if (decodedToken.tipo === 'GIOCATORE') this.ospite = false;
   }
 
   openProfile() {

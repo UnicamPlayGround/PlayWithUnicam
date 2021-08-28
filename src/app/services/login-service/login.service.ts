@@ -22,8 +22,8 @@ export class LoginService {
   async loadToken() {
     const token = await Storage.get({ key: TOKEN_KEY });
     if (token && token.value) {
-      const decoded_token: any = jwt_decode(token.value);
-      this.tipologiaAccount.next(decoded_token.tipo);
+      const decodedToken: any = jwt_decode(token.value);
+      this.tipologiaAccount.next(decodedToken.tipo);
     } else {
       this.tipologiaAccount.next("");
     }
@@ -41,11 +41,11 @@ export class LoginService {
     return this.http.post('/login/utente', credenziali).pipe(
       map((data: any) => data.accessToken),
       switchMap(token => {
-        const decoded_token: any = jwt_decode(token);
+        const decodedToken: any = jwt_decode(token);
         Storage.set({ key: TOKEN_KEY, value: token });
         console.log(token);
 
-        switch (decoded_token.tipo) {
+        switch (decodedToken.tipo) {
           case "GIOCATORE": return "1";
           case "ADMIN": return "2";
           default: return "0";

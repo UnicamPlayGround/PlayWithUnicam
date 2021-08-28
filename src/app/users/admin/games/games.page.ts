@@ -28,8 +28,8 @@ export class GamesPage implements OnInit {
   }
 
   async loadGames(event?) {
-    const token_value = (await this.loginService.getToken()).value;
-    const headers = { 'token': token_value };
+    const tokenValue = (await this.loginService.getToken()).value;
+    const headers = { 'token': tokenValue };
 
     this.http.get('/games', { headers }).subscribe(
       async (res) => {
@@ -40,7 +40,7 @@ export class GamesPage implements OnInit {
       });
   }
 
-  async editGame(){
+  async editGame() {
     //TODO
   }
 }

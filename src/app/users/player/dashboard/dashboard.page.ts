@@ -50,8 +50,8 @@ export class DashboardPage implements OnInit {
   }
 
   async loadGames(event?) {
-    const token_value = (await this.loginService.getToken()).value;
-    const headers = { 'token': token_value };
+    const tokenValue = (await this.loginService.getToken()).value;
+    const headers = { 'token': tokenValue };
 
     this.http.get('/games', { headers }).subscribe(
       async (res) => {

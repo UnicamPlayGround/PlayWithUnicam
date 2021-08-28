@@ -36,8 +36,8 @@ export class UsersPage implements OnInit {
   ngOnInit() { }
 
   async loadUsers(event?) {
-    const token_value = (await this.loginService.getToken()).value;
-    const headers = { 'token': token_value };
+    const tokenValue = (await this.loginService.getToken()).value;
+    const headers = { 'token': tokenValue };
 
     this.http.get('/admin/utenti', { headers }).subscribe(
       async (res) => {
@@ -103,14 +103,14 @@ export class UsersPage implements OnInit {
    */
   getUsernamesToDelete() {
     let toDelete = Object.keys(this.edit);
-    const indexes_to_delete = toDelete.filter(index => this.edit[index]).map(key => +key);
-    const usernames_to_delete = [];
+    const indexesToDelete = toDelete.filter(index => this.edit[index]).map(key => +key);
+    const usernamesToDelete = [];
 
-    while (indexes_to_delete.length) {
-      usernames_to_delete.push(this.users[indexes_to_delete.pop()].username)
+    while (indexesToDelete.length) {
+      usernamesToDelete.push(this.users[indexesToDelete.pop()].username)
     }
 
-    return usernames_to_delete;
+    return usernamesToDelete;
   }
 
   /**
@@ -118,10 +118,10 @@ export class UsersPage implements OnInit {
    */
   deleteUsersFromTable() {
     let toDelete = Object.keys(this.edit);
-    const indexes_to_delete = toDelete.filter(index => this.edit[index]).map(key => +key);
+    const indexesToDelete = toDelete.filter(index => this.edit[index]).map(key => +key);
 
-    while (indexes_to_delete.length) {
-      this.users.splice(indexes_to_delete.pop(), 1);
+    while (indexesToDelete.length) {
+      this.users.splice(indexesToDelete.pop(), 1);
     }
   }
 
@@ -159,8 +159,8 @@ export class UsersPage implements OnInit {
    * positivo li elimina anche dalla tabella nel front-end.
    */
   async deleteUsers() {
-    const token_value = (await this.loginService.getToken()).value;
-    var headers = { 'token': token_value, 'users_to_delete': this.getUsernamesToDelete() };
+    const tokenValue = (await this.loginService.getToken()).value;
+    var headers = { 'token': tokenValue, 'users_to_delete': this.getUsernamesToDelete() };
     console.log('headers.users_to_delete: ', headers.users_to_delete);
 
     this.http.delete('/admin/utenti', { headers }).subscribe(
@@ -195,11 +195,11 @@ export class UsersPage implements OnInit {
     });
 
     modal.onDidDismiss().then((data) => {
-      const mod_user = data['data'];
-      console.log('mod_user', mod_user);
+      const modUser = data['data'];
+      console.log('mod_user', modUser);
 
-      if (mod_user)
-        this.users[index] = mod_user;
+      if (modUser)
+        this.users[index] = modUser;
     });
 
     return await modal.present();

@@ -58,9 +58,10 @@ export class EditUserPage implements OnInit {
     const loading = await this.loadingController.create();
     await loading.present();
 
-    const token_value = (await this.loginService.getToken()).value;
-    const to_send = {
-      'token': token_value,
+    const tokenValue = (await this.loginService.getToken()).value;
+
+    const toSend = {
+      'token': tokenValue,
       'new_username': this.data.value.username,
       'new_nome': this.data.value.nome,
       'new_cognome': this.data.value.cognome,
@@ -69,7 +70,7 @@ export class EditUserPage implements OnInit {
 
     //TODO: fare chiamata REST per modificare l'utente
 
-    this.http.put('/admin/utenti/' + this.username, to_send).subscribe(
+    this.http.put('/admin/utenti/' + this.username, toSend).subscribe(
       async (res) => {
         this.modalController.dismiss(this.data.value);
         const message = "I dati dell'utente sono stati aggiornati";
