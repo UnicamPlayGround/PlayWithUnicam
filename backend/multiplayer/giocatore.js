@@ -40,7 +40,7 @@ exports.controllaInattivi = () => {
  * Una volta verificato che l'username appartenga ad un utente/ospite, crea un nuovo giocatore
  * con l'username in questione o, se già ne esiste uno, lo aggiorna modificandone il codice lobby.
  * 
- * @param {*} username l'username con cui creare un nuovo giocatore
+ * @param {string} username l'username con cui creare un nuovo giocatore
  * @param {*} codiceLobby il codice della lobby a cui si vuole partecipare
  * @param {*} response 
  * @param {*} cb callback
@@ -77,7 +77,7 @@ exports.creaGiocatore = (username, codiceLobby, response, cb) => {
 /**
  * Espelle il giocatore selezionato dall'admin dalla tabella giocatori.
  * 
- * @param {*} username l'username del giocatore da eliminare
+ * @param {string} username l'username del giocatore da eliminare
  * @param {*} codiceLobby il codice della lobby a cui appartiene il giocatore da espellere.
  * @param {*} cb callback
  */
@@ -91,7 +91,7 @@ exports.espelliGiocatore = (username, codiceLobby, cb) => {
 /**
  * Elimina il giocatore che vuole abbandonare la lobby dalla tabella dei giocatori.
  * 
- * @param {*} username l'username del giocatore da eliminare
+ * @param {string} username l'username del giocatore da eliminare
  * @param {*} cb callback
  */
 exports.eliminaGiocatore = (username, cb) => {
@@ -103,7 +103,7 @@ exports.eliminaGiocatore = (username, cb) => {
 
 /**
  * Esegue l'operazione di Ping per permettere al Server di capire quali Giocatori risultino inattivi.
- * @param {*} username Username del Giocatore che sta effettuando il Ping
+ * @param {string} username Username del Giocatore che sta effettuando il Ping
  * @param {*} response 
  * @param {*} cb Callback
  */
