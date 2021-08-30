@@ -56,9 +56,9 @@ function verificaUtente(token) {
  */
 function sendDataInJSON(response, results) {
     const data = JSON.parse(JSON.stringify(results.rows));
-    const to_return = { 'results': data };
+    const toReturn = { 'results': data };
 
-    response.status(200).send(to_return);
+    response.status(200).send(toReturn);
 }
 
 /**

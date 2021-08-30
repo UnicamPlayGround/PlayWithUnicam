@@ -21,7 +21,7 @@ export class UsersPage implements OnInit {
   edit = {};
   sortDirection = 0;
   sortKey = null;
-  maximum_pages = 2;
+  maximumPages = 2;
 
   constructor(
     private http: HttpClient,
@@ -56,7 +56,7 @@ export class UsersPage implements OnInit {
     // this.page++;
     // this.loadUsers(event);
 
-    // if (this.page === this.maximum_pages) event.target.disabled = true;
+    // if (this.page === this.maximumPages) event.target.disabled = true;
   }
 
   /**

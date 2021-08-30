@@ -14,7 +14,7 @@ import { IntroLobbyPopoverComponent } from '../popover/intro-lobby-popover/intro
 export class DashboardPage implements OnInit {
   games = [];
   page = 0;
-  maximum_pages = 3;
+  maximumPages = 3;
 
   constructor(
     private popoverController: PopoverController,
@@ -66,6 +66,6 @@ export class DashboardPage implements OnInit {
     this.page++;
     this.loadGames(event);
 
-    if (this.page === this.maximum_pages) event.target.disabled = true;
+    if (this.page === this.maximumPages) event.target.disabled = true;
   }
 }

@@ -52,9 +52,9 @@ export class LobbyGuestPage implements OnInit {
       async (res) => {
         this.lobby = res['results'][0];
         console.log(this.lobby);
-        const decoded_token: any = jwt_decode((await this.loginService.getToken()).value);
+        const decodedToken: any = jwt_decode((await this.loginService.getToken()).value);
 
-        if (decoded_token.username === this.lobby.admin_lobby) {
+        if (decodedToken.username === this.lobby.admin_lobby) {
           this.timerService.stopTimer(this.timerGiocatori);
           this.timerService.stopTimer(this.timerPing);
           this.router.navigateByUrl('/lobby-admin', { replaceUrl: true });

@@ -30,7 +30,7 @@
         <ion-col size="3"></ion-col>
       </ion-row>
 
-      <ion-row *ngFor="let lobby of lobbies_da_visualizzare;" class="data-row">
+      <ion-row *ngFor="let lobby of lobbiesDaVisualizzare;" class="data-row">
         <ion-col size="3">
           <ion-label>
             <strong>{{lobby.nome}}</strong>
@@ -58,7 +58,7 @@
     </ion-item>
 
     <div class="ion-hide-xl-up">
-      <ion-card *ngFor="let lobby of lobbies_da_visualizzare;" class="lobby-card">
+      <ion-card *ngFor="let lobby of lobbiesDaVisualizzare;" class="lobby-card">
 
         <ion-card-header>
           <ion-label>

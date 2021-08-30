@@ -31,9 +31,9 @@ export class AccountPage implements OnInit {
 
   ngOnInit() {
     this.passwords = this.fb.group({
-      old_password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16)],],
-      new_password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16)],],
-      password_confirmed: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16)],],
+      oldPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16)],],
+      newPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16)],],
+      passwordConfirmed: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16)],],
     });
     this.riempiForm();
 
@@ -126,12 +126,12 @@ export class AccountPage implements OnInit {
     const tokenValue = (await this.logService.getToken()).value;
     
     const toSend = {
-      'old_password': this.passwords.value.old_password,
-      'new_password': this.passwords.value.new_password,
+      'old_password': this.passwords.value.oldPassword,
+      'new_password': this.passwords.value.newPassword,
       'token': tokenValue
     }
 
-    if (this.passwords.value.new_password == this.passwords.value.password_confirmed) {
+    if (this.passwords.value.newPassword == this.passwords.value.passwordConfirmed) {
       this.http.put('/modifica/password', toSend).subscribe(
         async (res) => {
           const text = 'La password del tuo account è stata aggiornata';

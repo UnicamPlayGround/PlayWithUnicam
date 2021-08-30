@@ -12,7 +12,7 @@ import { LoginService } from 'src/app/services/login-service/login.service';
 })
 export class CercaPubblicaPage implements OnInit {
   lobbies = [];
-  lobbies_da_visualizzare = [];
+  lobbiesDaVisualizzare = [];
 
   constructor(
     private http: HttpClient,
@@ -56,7 +56,7 @@ export class CercaPubblicaPage implements OnInit {
         async (res) => {
           var tmp = await res['results'];
           lobby['partecipanti'] = tmp[0].count;
-          if (lobby.partecipanti < lobby.max_giocatori) this.lobbies_da_visualizzare.push(lobby);
+          if (lobby.partecipanti < lobby.max_giocatori) this.lobbiesDaVisualizzare.push(lobby);
         },
         async (res) => {
           this.errorManager.stampaErrore(res, 'Impossibile reperire i partecipanti della lobby!');
