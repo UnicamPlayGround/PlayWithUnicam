@@ -36,12 +36,25 @@ exports.controllaPassword = function (password) {
     if (toControl == null || toControl.trim() == "") throw errorText;
 }
 
+/**
+ * Controlla il nome, cognome e username di un Account
+ * @param {String} newNome il nuovo nome dell'account
+ * @param {String} newCognome il nuovo cognome dell'account
+ * @param {String} newUsername il nuovo username dell'account
+ */
 exports.controllaDatiAccount = function (newNome, newCognome, newUsername) {
     this.controllaString(newUsername, "Il nuovo username non è valido");
     this.controllaString(newNome,"Il nuovo nome non è valido");
     this.controllaString(newCognome,"Il nuovo cognome non è valido");
 }
 
+/**
+ * Controlla i dati di un account compreso il tipo
+ * @param {String} newNome  il nuovo nome dell'account
+ * @param {String} newCognome  il nuovo cognome dell'account
+ * @param {String} newUsername  il nuovo username nome dell'account
+ * @param {String} newTipo  il nuovo tipo dell'account
+ */
 exports.controllaDatiAccountAsAdmin = function(newNome, newCognome, newUsername, newTipo){
     this.controllaDatiAccount(newNome, newCognome, newUsername);
     //TODO: controlla bene

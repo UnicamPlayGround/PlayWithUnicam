@@ -56,6 +56,11 @@ exports.cercaLobbyByAdmin = (adminLobby, cb) => {
         });
 }
 
+/**
+ * Controlla se esiste già una lobby con il codice uguale a quello passato
+ * @param {*} codice codice della lobby da cercare
+ * @param {*} cb callback
+ */
 //TODO
 exports.cercaLobbyByCodice = (codice, cb) => {
     db.pool.query('SELECT codice, data_creazione, admin_lobby, min_giocatori, max_giocatori, pubblica FROM ' +
@@ -66,6 +71,11 @@ exports.cercaLobbyByCodice = (codice, cb) => {
         });
 }
 
+/**
+ * Controlla se esiste una lobby in cui è presente l'username passato
+ * @param {String} username l'username utilizzato per controllare se esiste una lobby in cui è presente
+ * @param {*} cb callback
+ */
 //TODO
 exports.cercaLobbyByUsername = (username, cb) => {
     db.pool.query('SELECT codice, data_creazione, admin_lobby, id_gioco, public.giochi.nome, min_giocatori, max_giocatori, pubblica FROM ' +
@@ -76,6 +86,11 @@ exports.cercaLobbyByUsername = (username, cb) => {
         });
 }
 
+/**
+ * Resituisce tutte le lobby pubbliche tranne quella in cui l'username passato è admin
+ * @param {String} username username dell'utente che ha effettuato la richiesta 
+ * @param {*} cb callback
+ */
 exports.getLobbyPubbliche = (username, cb) => {
     db.pool.query('SELECT codice, admin_lobby, data_creazione, id_gioco, nome, max_giocatori, min_giocatori FROM public.lobby' +
         ' INNER JOIN public.giochi ON public.lobby.id_gioco = public.giochi.id WHERE pubblica=$1 AND admin_lobby <> $2', [true, username], (error, results) => {
@@ -83,6 +98,12 @@ exports.getLobbyPubbliche = (username, cb) => {
         });
 }
 
+/**
+ * Restituisce i giocatori di una lobby cercandola tramite l' username di un Utente
+ * @param {*} username username usato per cercare la lobby
+ * @param {*} response 
+ * @param {*} cb callback
+ */
 exports.getGiocatoriLobby = (username, response, cb) => {
     this.cercaLobbyByUsername(username, (error, results) => {
         if (error) return response.status(400).send("Non è stato possibile trovare la Lobby");
@@ -96,6 +117,11 @@ exports.getGiocatoriLobby = (username, response, cb) => {
     })
 }
 
+/**
+ * Restituisce in numero dei giocatori che si trovano all'interno di una Lobby
+ * @param {*} codiceLobby il codice della lobby da cui prendere il numero dei giocatori
+ * @param {*} cb callback
+ */
 exports.getNumeroGiocatoriLobby = (codiceLobby, cb) => {
     db.pool.query('SELECT COUNT(*) FROM public.giocatori WHERE codice_lobby = $1', [codiceLobby], (error, results) => {
         cb(error, results)
@@ -103,6 +129,12 @@ exports.getNumeroGiocatoriLobby = (codiceLobby, cb) => {
 }
 
 //TODO
+/**
+ * Permette di modificare una lobby impostandola da privata a pubblica o viceversa
+ * @param {String} username username dell'admin che intende modificare una lobby
+ * @param {Boolean} pubblica attributo per indicare se una lobby è privata o pubblica
+ * @param {*} response 
+ */
 exports.modificaLobby = (username, pubblica, response) => {
     this.cercaLobbyByAdmin(username, (err, results) => {
         if (controller.controllaRisultatoQuery(results)) return response.status(401).send("Solo l'admin può modificare la lobby");
@@ -117,10 +149,20 @@ exports.modificaLobby = (username, pubblica, response) => {
 }
 
 //TODO
+/**
+ * Cancella dal Database una lobby
+ * @param {*} codice codice della lobby da cancellare
+ */
 exports.cancellaLobby = (codice) => {
     db.pool.query('DELETE FROM public.lobby WHERE codice = $1', [codice], (error, results) => { })
 }
 
+/**
+ * Elimina un utente da una lobby
+ * @param {String} admin username dell'admin della lobby 
+ * @param {*} username username dell'utente da cancellare dalla lobby
+ * @param {*} response 
+ */
 exports.eliminaPartecipante = (admin, username, response) => {
     this.cercaLobbyByAdmin(admin, (err, results) => {
         if (controller.controllaRisultatoQuery(results)) return response.status(401).send("Solo l'admin può eliminare i partecipanti della lobby");
@@ -133,6 +175,12 @@ exports.eliminaPartecipante = (admin, username, response) => {
     })
 }
 
+/**
+ * Permette ad un utente di abbandonare una lobby.
+ * Se l'utente era l'admin della lobby, il ruolo di admin verrà passato ad un altro partecipante
+ * @param {*} username username dell'utente che deve abbandonare la lobby
+ * @param {*} response 
+ */
 exports.abbandonaLobby = (username, response) => {
     this.cercaLobbyByAdmin(username, (error, results) => {
         if (error) return response.status(400).send("Non è stato possibile trovare la lobby");
@@ -155,6 +203,13 @@ exports.abbandonaLobby = (username, response) => {
     })
 }
 
+/**
+ * Crea una lobby di gioco
+ * @param {*} adminLobby username dell'admin della lobby
+ * @param {*} idGioco id del gioco a cui la lobby fa riferimento 
+ * @param {*} pubblica parametro per indicare se la lobby è privata o pubblica
+ * @param {*} response 
+ */
 exports.creaLobby = (adminLobby, idGioco, pubblica, response) => {
     this.cercaLobbyByAdmin(adminLobby, (err, results) => {
         controllaLobbyAdmin(results);
@@ -186,6 +241,12 @@ exports.creaLobby = (adminLobby, idGioco, pubblica, response) => {
     })
 }
 
+/**
+ * Imposta un nuovo admin nella lobby con lo stesso codice passato in input
+ * @param {*} adminLobby l'username del nuovo admin della lobby
+ * @param {*} codiceLobby id della lobby in cui cambiare admin
+ * @param {*} cb callback
+ */
 exports.impostaAdminLobby = (adminLobby, codiceLobby, cb) => {
     giocatore.cercaGiocatore(adminLobby, (err, results) => {
         if (controller.controllaRisultatoQuery(results)) return response.status(400).send("Il Giocatore '" + adminLobby + "' non esiste!");
@@ -198,6 +259,13 @@ exports.impostaAdminLobby = (adminLobby, codiceLobby, cb) => {
     })
 }
 
+/**
+ * Permette ad un giocatore di entrare nella lobby desiderata.
+ * Se la lobby è piena, al giocatore non sarà possibile accedere alla lobby
+ * @param {*} username username dell'utente
+ * @param {*} codiceLobby codidce della lobby in cui inserire il nuovo giocatore
+ * @param {*} response 
+ */
 exports.partecipaLobby = (username, codiceLobby, response) => {
     this.cercaLobbyByCodice(codiceLobby, (err, results) => {
         if (controller.controllaRisultatoQuery(results))
@@ -205,9 +273,6 @@ exports.partecipaLobby = (username, codiceLobby, response) => {
 
         const tmp = JSON.parse(JSON.stringify(results.rows));
         const lobby = tmp[0];
-
-        console.log("tmp", tmp);
-        console.log("lobby", lobby);
 
         this.getNumeroGiocatoriLobby(codiceLobby, (err, results) => {
             if (err) return response.status(500).send('Server error!');
