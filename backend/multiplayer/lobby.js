@@ -33,7 +33,7 @@ function getDataOdierna() {
 
 /**
  * Elimina un Giocatore e ritorna una Response 
- * @param {*} username Giocatore da eliminare
+ * @param {String} username Giocatore da eliminare
  * @param {*} response 
  */
 function eliminaGiocatore(username, response) {
@@ -46,7 +46,7 @@ function eliminaGiocatore(username, response) {
 /**
  * Controlla se esistono lobby che hanno come admin l'username passato.
  * 
- * @param {*} adminLobby l'username da controllare
+ * @param {String} adminLobby l'username da controllare
  * @param {*} cb callback
  */
 exports.cercaLobbyByAdmin = (adminLobby, cb) => {
@@ -100,7 +100,7 @@ exports.getLobbyPubbliche = (username, cb) => {
 
 /**
  * Restituisce i giocatori di una lobby cercandola tramite l' username di un Utente
- * @param {*} username username usato per cercare la lobby
+ * @param {String} username username usato per cercare la lobby
  * @param {*} response 
  * @param {*} cb callback
  */
@@ -160,7 +160,7 @@ exports.cancellaLobby = (codice) => {
 /**
  * Elimina un utente da una lobby
  * @param {String} admin username dell'admin della lobby 
- * @param {*} username username dell'utente da cancellare dalla lobby
+ * @param {String} username username dell'utente da cancellare dalla lobby
  * @param {*} response 
  */
 exports.eliminaPartecipante = (admin, username, response) => {
@@ -178,7 +178,7 @@ exports.eliminaPartecipante = (admin, username, response) => {
 /**
  * Permette ad un utente di abbandonare una lobby.
  * Se l'utente era l'admin della lobby, il ruolo di admin verrà passato ad un altro partecipante
- * @param {*} username username dell'utente che deve abbandonare la lobby
+ * @param {String} username username dell'utente che deve abbandonare la lobby
  * @param {*} response 
  */
 exports.abbandonaLobby = (username, response) => {
@@ -205,9 +205,9 @@ exports.abbandonaLobby = (username, response) => {
 
 /**
  * Crea una lobby di gioco
- * @param {*} adminLobby username dell'admin della lobby
+ * @param {String} adminLobby username dell'admin della lobby
  * @param {*} idGioco id del gioco a cui la lobby fa riferimento 
- * @param {*} pubblica parametro per indicare se la lobby è privata o pubblica
+ * @param {Boolean} pubblica parametro per indicare se la lobby è privata o pubblica
  * @param {*} response 
  */
 exports.creaLobby = (adminLobby, idGioco, pubblica, response) => {
@@ -243,7 +243,7 @@ exports.creaLobby = (adminLobby, idGioco, pubblica, response) => {
 
 /**
  * Imposta un nuovo admin nella lobby con lo stesso codice passato in input
- * @param {*} adminLobby l'username del nuovo admin della lobby
+ * @param {String} adminLobby l'username del nuovo admin della lobby
  * @param {*} codiceLobby id della lobby in cui cambiare admin
  * @param {*} cb callback
  */
@@ -262,7 +262,7 @@ exports.impostaAdminLobby = (adminLobby, codiceLobby, cb) => {
 /**
  * Permette ad un giocatore di entrare nella lobby desiderata.
  * Se la lobby è piena, al giocatore non sarà possibile accedere alla lobby
- * @param {*} username username dell'utente
+ * @param {String} username username dell'utente
  * @param {*} codiceLobby codidce della lobby in cui inserire il nuovo giocatore
  * @param {*} response 
  */
