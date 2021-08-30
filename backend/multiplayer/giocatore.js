@@ -3,11 +3,37 @@ const db = require('../database');
 const lobby = require('./lobby');
 const utente = require('../utente');
 
+/**
+ * Ricerca un Giocatore tramite il suo Username.
+ * @param {string} username Username del Giocatore da ricercare
+ * @param {*} cb Callback
+ */
 exports.cercaGiocatore = (username, cb) => {
-    return db.pool.query('SELECT username FROM public.giocatori WHERE username=$1',
+    db.pool.query('SELECT username FROM public.giocatori WHERE username=$1',
         [username], (error, results) => {
             cb(error, results)
         });
+}
+
+/**
+ * Controlla se sono presenti Giocatori che non effettuano l'operazione di ping per più di 10 secondi, 
+ * in caso positivo vengono eliminati dalla Tabella "giocatori".
+ */
+exports.controllaInattivi = () => {
+    db.pool.query('SELECT * FROM public.giocatori', (error, results) => {
+        //TODO error
+        const giocatori = JSON.parse(JSON.stringify(results.rows));
+
+        giocatori.forEach(giocatore => {
+            var dif = Date.now() - Date.parse(giocatore.ping);
+
+            //10 secondi
+            if (dif > 10000)
+                db.pool.query('DELETE FROM public.giocatori WHERE username=$1', [giocatore.username], (error, results) => {
+                    //TODO error
+                });
+        });
+    });
 }
 
 /**
@@ -49,7 +75,7 @@ exports.creaGiocatore = (username, codiceLobby, response, cb) => {
 }
 
 /**
- * Espelle il giocatore selezionato dall'admin dalla tabella giocatori
+ * Espelle il giocatore selezionato dall'admin dalla tabella giocatori.
  * 
  * @param {*} username l'username del giocatore da eliminare
  * @param {*} codiceLobby il codice della lobby a cui appartiene il giocatore da espellere.
@@ -75,6 +101,12 @@ exports.eliminaGiocatore = (username, cb) => {
         });
 }
 
+/**
+ * Esegue l'operazione di Ping per permettere al Server di capire quali Giocatori risultino inattivi.
+ * @param {*} username Username del Giocatore che sta effettuando il Ping
+ * @param {*} response 
+ * @param {*} cb Callback
+ */
 exports.ping = (username, response, cb) => {
     lobby.cercaLobbyByUsername(username, (error, results) => {
         if (error) return response.status(400).send("Non è stato possibile trovare la Lobby");
@@ -85,22 +117,4 @@ exports.ping = (username, response, cb) => {
             cb(error, results)
         });
     })
-}
-
-exports.controllaInattivi = () => {
-    db.pool.query('SELECT * FROM public.giocatori', (error, results) => {
-        //TODO error
-        const giocatori = JSON.parse(JSON.stringify(results.rows));
-
-        giocatori.forEach(giocatore => {
-            var dif = Date.now() - Date.parse(giocatore.ping);
-
-            //10 secondi
-            if (dif > 10000) {
-                db.pool.query('DELETE FROM public.giocatori WHERE username=$1', [giocatore.username], (error, results) => {
-                    //TODO error
-                });
-            }
-        });
-    });
 }
