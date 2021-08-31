@@ -51,7 +51,7 @@ export class LobbyAdminPage implements OnInit {
         console.log(this.lobby);
       },
       async (res) => {
-        this.timerService.stopTimer(this.timerGiocatori);
+        this.timerService.stopTimers(this.timerGiocatori, this.timerPing);
         this.errorManager.stampaErrore(res, 'Impossibile caricare la Lobby!');
       });
   }
@@ -65,7 +65,7 @@ export class LobbyAdminPage implements OnInit {
       },
       async (res) => {
         //TODO rivedere lo stop dei Timer
-        this.timerService.stopTimer(this.timerGiocatori);
+        this.timerService.stopTimers(this.timerGiocatori, this.timerPing);
         this.errorManager.stampaErrore(res, 'Impossibile caricare la Lobby!');
       });
   }
@@ -106,8 +106,7 @@ export class LobbyAdminPage implements OnInit {
       async () => {
         (await this.lobbyManager.abbandonaLobby()).subscribe(
           async (res) => {
-            this.timerService.stopTimer(this.timerGiocatori);
-            this.timerService.stopTimer(this.timerPing);
+            this.timerService.stopTimers(this.timerGiocatori, this.timerPing);
             this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
           },
           async (res) => {
@@ -122,7 +121,7 @@ export class LobbyAdminPage implements OnInit {
     (await this.lobbyManager.ping()).subscribe(
       async (res) => { },
       async (res) => {
-        this.timerService.stopTimer(this.timerPing);
+        this.timerService.stopTimers(this.timerGiocatori, this.timerPing);
         this.errorManager.stampaErrore(res, 'Ping fallito');
       }
     );
@@ -134,8 +133,7 @@ export class LobbyAdminPage implements OnInit {
         console.log("partita iniziata");
       },
       async (res) => {
-        this.timerService.stopTimer(this.timerGiocatori);
-        this.timerService.stopTimer(this.timerPing);
+        this.timerService.stopTimers(this.timerGiocatori, this.timerPing);
         this.errorManager.stampaErrore(res, 'Impossibile iniziare la Partita!');
       });
   }

@@ -18,10 +18,12 @@ export class TimerServiceService {
   }
 
   /**
-   * Ferma il Timer.
-   * @param timer Timer da fermare
+   * Ferma uno o più timers passati come argomenti.
+   * @param timers I timers da fermare
    */
-  stopTimer(timer) {
-    clearTimeout(timer);
+  stopTimers(...timers) {
+    timers.forEach(timer => {
+      clearTimeout(timer);
+    });
   }
 }

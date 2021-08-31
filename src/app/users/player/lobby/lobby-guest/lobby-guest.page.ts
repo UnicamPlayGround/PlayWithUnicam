@@ -55,14 +55,13 @@ export class LobbyGuestPage implements OnInit {
         const decodedToken: any = jwt_decode((await this.loginService.getToken()).value);
 
         if (decodedToken.username === this.lobby.admin_lobby) {
-          this.timerService.stopTimer(this.timerGiocatori);
-          this.timerService.stopTimer(this.timerPing);
+          this.timerService.stopTimers(this.timerGiocatori, this.timerPing);
           this.router.navigateByUrl('/lobby-admin', { replaceUrl: true });
           this.alertCreator.createInfoAlert("Sei il nuovo admin", "Il vecchio admin ha abbandonato la partita e sei stato scelto per prendere il suo posto!");
         }
       },
       async (res) => {
-        this.timerService.stopTimer(this.timerGiocatori);
+        this.timerService.stopTimers(this.timerGiocatori, this.timerPing);
         this.errorManager.stampaErrore(res, 'Impossibile caricare la Lobby!');
       });
   }
@@ -77,7 +76,7 @@ export class LobbyGuestPage implements OnInit {
         this.loadInfoLobby();
       },
       async (res) => {
-        this.timerService.stopTimer(this.timerGiocatori);
+        this.timerService.stopTimers(this.timerGiocatori, this.timerPing);
         this.errorManager.stampaErrore(res, 'Impossibile caricare la Lobby!');
       });
   }
@@ -87,8 +86,7 @@ export class LobbyGuestPage implements OnInit {
       async () => {
         (await this.lobbyManager.abbandonaLobby()).subscribe(
           async (res) => {
-            this.timerService.stopTimer(this.timerGiocatori);
-            this.timerService.stopTimer(this.timerPing);
+            this.timerService.stopTimers(this.timerGiocatori, this.timerPing);
             this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
           },
           async (res) => {
@@ -103,7 +101,7 @@ export class LobbyGuestPage implements OnInit {
     (await this.lobbyManager.ping()).subscribe(
       async (res) => { },
       async (res) => {
-        this.timerService.stopTimer(this.timerPing);
+        this.timerService.stopTimers(this.timerGiocatori, this.timerPing);
         this.errorManager.stampaErrore(res, 'Ping fallito');
       }
     );
