@@ -322,6 +322,19 @@ app.put('/game/save', (req, res) => {
 });
 
 /**
+ * REST - Finisce il turno del Giocatore
+ */
+app.put('/game/fine-turno', (req, res) => {
+    if (verificaJWT(req.body.token)) {
+        try {
+            partita.cambiaGiocatoreCorrente(jwt.decode(req.body.token).username, res);
+        } catch (error) {
+            return res.status(400).send(error);
+        }
+    } else return res.status(401).send(ERRORE_JWT);
+});
+
+/**
  * REST - POST
  */
 
