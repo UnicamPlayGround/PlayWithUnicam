@@ -118,6 +118,15 @@ app.get('/game/status', (req, res) => {
     } else return res.status(401).send(ERRORE_JWT);
 });
 
+app.get('/game/config', (req, res) => {
+    if (verificaJWT(req.headers.token)) {
+        game.getConfigGioco(jwt.decode(req.headers.token).username, (err, results) => {
+            if (err) return res.status(500).send('Server error!');
+            sendDataInJSON(res, results);
+        })
+    } else return res.status(401).send(ERRORE_JWT);
+});
+
 //TODO commentare
 app.get('/dado/:nFacce', (req, res) => {
     try {
