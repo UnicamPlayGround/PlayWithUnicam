@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Modifica gioco</ion-title>
+
+    <ion-button fill="clear" slot="start" (click)="closeModal()">
+      <ion-icon slot="icon-only" name="close-outline" style="color:white"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <form (ngSubmit)="salvaModifiche()" [formGroup]="data">
+    <ion-item>
+      <ion-label position="floating">Nome</ion-label>
+      <ion-input type="name" name="nome" formControlName="nome" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Tipo</ion-label>
+      <ion-input type="name" name="tipo" formControlName="tipo" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Max</ion-label>
+      <ion-input type="name" name="maxGiocatori" formControlName="maxGiocatori" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Min</ion-label>
+      <ion-input type="name" name="minGiocatori" formControlName="minGiocatori" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Link</ion-label>
+      <ion-input type="name" name="link" formControlName="link" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Attivo</ion-label>
+      <ion-input type="name" name="attivo" formControlName="attivo" required></ion-input>
+    </ion-item>
+
+    <!-- <ion-item>
+      <ion-label position="floating">Tipologia</ion-label>
+      <ion-select interface="popover" formControlName="tipo" value="this.tipo">
+        <ion-select-option value="GIOCATORE">GIOCATORE</ion-select-option>
+        <ion-select-option value="ADMIN">ADMIN</ion-select-option>
+      </ion-select>
+    </ion-item> -->
+
+    <br>
+
+    <ion-button type="submit" color="primary" expand="block">Salva Modifiche</ion-button>
+  </form>
+
+</ion-content>

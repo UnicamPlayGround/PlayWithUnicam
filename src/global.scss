@@ -52,9 +52,32 @@ ion-modal.lobby-pubbliche {
     --border-radius: 0;
 }
 
+ion-modal.edit-user {
+    --width: 35%;
+    --height: 70%;
+    --border-radius: 0;
+}
+
+ion-modal.edit-game {
+    --width: 60%;
+    --height: 80%;
+    --border-radius: 0;
+}
+
 /* Mobile/Small Tablet Styles */
 @media only screen and (max-width: 819px){
     ion-modal.lobby-pubbliche {
+        --width: 100%;
+        --height: 100%;
+        --border-radius: 0;
+    }
+    ion-modal.edit-user {
+        --width: 100%;
+        --height: 100%;
+        --border-radius: 0;
+    }
+    
+    ion-modal.edit-game {
         --width: 100%;
         --height: 100%;
         --border-radius: 0;

@@ -191,7 +191,7 @@ export class UsersPage implements OnInit {
         cognome: user.cognome,
         tipo: user.tipo
       },
-      cssClass: 'fullheight'
+      cssClass: 'edit-user'
     });
 
     modal.onDidDismiss().then((data) => {
