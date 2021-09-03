@@ -27,8 +27,8 @@ exports.controllaInattivi = () => {
         giocatori.forEach(giocatore => {
             var dif = Date.now() - Date.parse(giocatore.ping);
 
-            //10 secondi
-            if (dif > 10000)
+            //30 secondi
+            if (dif > 30000)
                 db.pool.query('DELETE FROM public.giocatori WHERE username=$1', [giocatore.username], (error, results) => {
                     //TODO error
                 });
