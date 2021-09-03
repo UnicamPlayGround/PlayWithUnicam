@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AlertCreatorService } from '../alert-creator/alert-creator.service';
 import { LoginService } from '../login-service/login.service';
 
 @Injectable({

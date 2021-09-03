@@ -5,6 +5,8 @@ import { LoadingController } from '@ionic/angular';
 import { LobbyManagerService } from 'src/app/services/lobby-manager/lobby-manager.service';
 import { TimerServiceService } from 'src/app/services/timer-service/timer-service.service';
 import { Router } from '@angular/router';
+import { LoginService } from 'src/app/services/login-service/login.service';
+import jwt_decode from 'jwt-decode';
 
 @Component({
   selector: 'app-lobby-admin',
@@ -15,6 +17,7 @@ export class LobbyAdminPage implements OnInit {
   segment: string = "impostazioni";
   lobby = { codice: null, admin_lobby: null, pubblica: false, min_giocatori: 0, max_giocatori: 0 };
   giocatori = [];
+  private timerInfoLobby;
   private timerGiocatori;
   private timerPing;
 
@@ -24,11 +27,13 @@ export class LobbyAdminPage implements OnInit {
     private loadingController: LoadingController,
     private lobbyManager: LobbyManagerService,
     private timerService: TimerServiceService,
+    private loginService: LoginService,
     private router: Router
   ) {
     this.loadInfoLobby();
     this.loadGiocatori();
     this.ping();
+    this.timerInfoLobby = timerService.getTimer(() => { this.loadInfoLobby() }, 5000);
     this.timerGiocatori = timerService.getTimer(() => { this.loadGiocatori() }, 5000);
     this.timerPing = timerService.getTimer(() => { this.ping() }, 4000);
 
@@ -45,13 +50,20 @@ export class LobbyAdminPage implements OnInit {
 
   //TODO commentare
   async loadInfoLobby() {
+    const tokenValue = (await this.loginService.getToken()).value;
+    const decodedToken: any = jwt_decode(tokenValue);
+
     (await this.lobbyManager.loadInfoLobby()).subscribe(
       async (res) => {
         this.lobby = res['results'][0];
-        console.log(this.lobby);
+        if (this.lobby.admin_lobby != decodedToken.username) {
+          this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing);
+          this.router.navigateByUrl('/lobby-guest', { replaceUrl: true });
+        }
       },
       async (res) => {
-        this.timerService.stopTimers(this.timerGiocatori, this.timerPing);
+        this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing);
+        this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
         this.errorManager.stampaErrore(res, 'Impossibile caricare la Lobby!');
       });
   }
@@ -65,7 +77,8 @@ export class LobbyAdminPage implements OnInit {
       },
       async (res) => {
         //TODO rivedere lo stop dei Timer
-        this.timerService.stopTimers(this.timerGiocatori, this.timerPing);
+        this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing);
+        this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
         this.errorManager.stampaErrore(res, 'Impossibile caricare la Lobby!');
       });
   }
@@ -106,7 +119,7 @@ export class LobbyAdminPage implements OnInit {
       async () => {
         (await this.lobbyManager.abbandonaLobby()).subscribe(
           async (res) => {
-            this.timerService.stopTimers(this.timerGiocatori, this.timerPing);
+            this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing);
             this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
           },
           async (res) => {
@@ -121,7 +134,8 @@ export class LobbyAdminPage implements OnInit {
     (await this.lobbyManager.ping()).subscribe(
       async (res) => { },
       async (res) => {
-        this.timerService.stopTimers(this.timerGiocatori, this.timerPing);
+        this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing);
+        this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
         this.errorManager.stampaErrore(res, 'Ping fallito');
       }
     );
@@ -133,7 +147,8 @@ export class LobbyAdminPage implements OnInit {
         console.log("partita iniziata");
       },
       async (res) => {
-        this.timerService.stopTimers(this.timerGiocatori, this.timerPing);
+        this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing);
+        this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
         this.errorManager.stampaErrore(res, 'Impossibile iniziare la Partita!');
       });
   }
