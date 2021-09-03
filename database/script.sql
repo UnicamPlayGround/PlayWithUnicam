@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS public.giochi
     min_giocatori numeric NOT NULL,
     link text NOT NULL,
     attivo boolean NOT NULL,
+	config json,
     PRIMARY KEY (id)
 );
 
