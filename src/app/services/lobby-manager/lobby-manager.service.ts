@@ -19,6 +19,13 @@ export class LobbyManagerService {
     return this.http.get('/lobby/info', { headers });
   }
 
+  async loadInfoPartita() {
+    const tokenValue = (await this.loginService.getToken()).value;
+    const headers = { 'token': tokenValue };
+
+    return this.http.get('/game/status', { headers });
+  }
+
   async getPartecipanti() {
     const tokenValue = (await this.loginService.getToken()).value;
     const headers = { 'token': tokenValue };
