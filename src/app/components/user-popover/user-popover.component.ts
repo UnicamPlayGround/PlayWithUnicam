@@ -41,6 +41,7 @@ export class UserPopoverComponent implements OnInit {
   }
 
   openRegistration() {
-
+    this.popoverController.dismiss();
+    this.router.navigateByUrl('/registration', { replaceUrl: true });
   }
 }
