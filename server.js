@@ -464,21 +464,7 @@ app.post('/lobby/ping', (req, res) => {
 app.post('/partita', (req, res) => {
     try {
         if (verificaJWT(req.body.token)) {
-            const decodedToken = jwt.decode(req.body.token);
-            lobby.cercaLobbyByAdmin(decodedToken.username, (err, results) => {
-                if (err) {
-                    console.log(err);
-                    return res.status(500).send('Server Error!');
-                }
-
-                if (controller.controllaRisultatoQuery(results))
-                    return res.status(404).send("Devi essere Admin di una Lobby per creare una partita!");
-                else {
-                    const lobby = JSON.parse(JSON.stringify(results.rows))[0];
-                    //TODO controllare che il gioco richieda il giocatore corrente
-                    partita.creaPartita(lobby.codice, decodedToken.username, res);
-                }
-            })
+            partita.creaPartita(jwt.decode(req.body.token).username, res);
         } else return res.status(401).send(ERRORE_JWT);
     } catch (error) {
         return res.status(400).send(error);
