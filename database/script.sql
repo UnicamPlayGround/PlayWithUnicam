@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS public.giochi
 
 CREATE TABLE IF NOT EXISTS public.utenti
 (
-    username character varying(30) NOT NULL,
+    username character varying(10) NOT NULL,
 	nome character varying(35) NOT NULL,
 	cognome character varying(35) NOT NULL,
     password text NOT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS public.utenti
 
 CREATE TABLE IF NOT EXISTS public.giocatori
 (
-    username character varying(30) NOT NULL,
+    username character varying(10) NOT NULL,
     codice_lobby character varying(20) NOT NULL,
     ruolo character varying(20),
 	ping timestamp with time zone,
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS public.giocatori
 
 CREATE TABLE IF NOT EXISTS public.ospiti
 (
-    username character varying(30) NOT NULL,
+    username character varying(10) NOT NULL,
     PRIMARY KEY (username)
 );
 
