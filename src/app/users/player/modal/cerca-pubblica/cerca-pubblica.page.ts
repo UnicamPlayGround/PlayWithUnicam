@@ -33,6 +33,7 @@ export class CercaPubblicaPage implements OnInit {
   }
 
   async loadLobby() {
+    this.lobbiesDaVisualizzare = [];
     const tokenValue = (await this.loginService.getToken()).value;
     const headers = { 'token': tokenValue };
 
