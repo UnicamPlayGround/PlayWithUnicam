@@ -9,7 +9,7 @@
   </ion-toolbar>
 
   <ion-toolbar>
-    <ion-segment (ionChange)="segmentChanged($event)" value="lista">
+    <ion-segment (ionChange)="clearForm()" [(ngModel)]="segment" value="lista">
       <ion-segment-button value="lista">
         <ion-label>Lista</ion-label>
       </ion-segment-button>
@@ -33,7 +33,7 @@
     </ion-item>
 
     <div class="row">
-      <a *ngFor="let game of games" class="column" tappable (click)="editGame()">
+      <a *ngFor="let game of games" class="column" tappable (click)="editGame(game)">
         <div class="container">
           <img src="../../../../assets/Immagini/game_icon.jpg" class="image" />
           <div class="overlay">
@@ -56,63 +56,109 @@
 
   <div *ngIf="segment === 'crea'" class="segment-div">
 
-    <ion-list lines="inset">
-      <ion-list-header>
-        <h2><strong>Info</strong></h2>
-      </ion-list-header>
-
-      <ion-item style="font-size: 20px;">
-        <ion-label position="floating">Nome</ion-label>
-        <ion-input type="text" placeholder="Inserisci il nome del gioco"></ion-input>
-      </ion-item>
-
-      <ion-item lines="none">
-        <ion-label>Giocatori</ion-label>
-      </ion-item>
-
-      <ion-item lines="none">
+    <form (ngSubmit)="creaGioco()" [formGroup]="data">
+      <ion-grid>
         <ion-row>
-          <ion-col>
-            <ion-item>
-              <ion-label position="floating">Min</ion-label>
-              <ion-input type="number"></ion-input>
-            </ion-item>
+          <ion-col size="12">
+            <h2><strong>Info</strong></h2>
           </ion-col>
-          <ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
             <ion-item>
-              <ion-label position="floating">Max</ion-label>
-              <ion-input type="number"></ion-input>
+              <ion-label position="floating">Nome</ion-label>
+              <ion-input type="text" style="font-size: 20px;" placeholder="Inserisci il nome del gioco" name="nome"
+                formControlName="nome" required></ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
-      </ion-item>
 
-      <ion-item>
-        <ion-label position="floating">Tipologia</ion-label>
-        <ion-input type="text" placeholder="Inserisci il tipo del gioco"></ion-input>
-      </ion-item>
-    </ion-list>
+        <ion-row>
+          <ion-col size-lg="4" size-md="4" size-sm="6" size="12">
+            <ion-item>
+              <ion-label position="floating">Tipologia</ion-label>
+              <ion-select value="NORMALE" okText="Ok" cancelText="Annulla" formControlName="tipo" required>
+                <ion-select-option value="NORMALE">Normale</ion-select-option>
+                <ion-select-option value="TURNI">Turni</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
 
-    <ion-list lines="inset">
-      <ion-list-header>
-        <h2><strong>Impostazioni</strong></h2>
-      </ion-list-header>
-      <ion-item>
-        <ion-label>
-          Attiva
-          <p>Una volta caricato, il gioco sarà visibile a tutti i giocatori.</p>
-        </ion-label>
-        <ion-toggle slot="end"></ion-toggle>
-      </ion-item>
+          <ion-col size-lg="8" size-md="8" size-sm="8" size="12">
+            <ion-item>
+              <ion-label position="floating">Link</ion-label>
+              <ion-input type="text" placeholder="Inserisci il link del gioco" name="link" formControlName="link"
+                required></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
 
-      <ion-item>
-        <ion-label>
-          Consenti multiplayer
-          <p>Se abilitato, l'utente potrà giocare con altri giocatori online</p>
-        </ion-label>
-        <ion-toggle slot="end"></ion-toggle>
-      </ion-item>
-    </ion-list>
+        <ion-row>
+          <ion-col size-lg="4" size-md="4" size-sm="4" size="12">
+            <ion-item lines="none">
+              <ion-label>Giocatori:</ion-label>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size-lg="4" size-md="4" size-sm="4" size="12">
+            <ion-item>
+              <ion-item lines="none">
+                <ion-label position="floating">Min</ion-label>
+                <ion-input type="number" min="1" name="minGiocatori" formControlName="minGiocatori" required>
+                </ion-input>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-label position="floating">Max</ion-label>
+                <ion-input type="number" min="1" name="maxGiocatori" formControlName="maxGiocatori" required>
+                </ion-input>
+              </ion-item>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <h2><strong>Impostazioni</strong></h2>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <ion-item>
+              <ion-label>
+                Attiva
+                <p>Una volta attivato, il gioco sarà visibile a tutti i giocatori online.</p>
+              </ion-label>
+              <ion-toggle slot="end" [(ngModel)]="attivo" [ngModelOptions]="{standalone: true}"></ion-toggle>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <ion-item lines="none">
+              <ion-label>Aggiungi file di configurazione
+                <p>Consente di aggiungere un file JSON utilizzabile per salvare parametri avanzati di configurazione del
+                  gioco.</p>
+              </ion-label>
+              <ion-toggle slot="end" [(ngModel)]="mostraConfig" [ngModelOptions]="{standalone: true}"></ion-toggle>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row *ngIf="mostraConfig">
+          <ion-col size="12">
+            <ion-textarea style="height: 100%; border: 1px solid var(--ion-color-primary);"
+              placeholder="Scrivi qui il JSON di configurazione" auto-grow="true" name="config" [(ngModel)]="config"
+              [ngModelOptions]="{standalone: true}"></ion-textarea>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-button type="submit" color="primary" expand="block" shape="round">Crea gioco</ion-button>
+    </form>
+
   </div>
 
 </ion-content>

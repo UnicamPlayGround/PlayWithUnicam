@@ -59,13 +59,31 @@ ion-modal.edit-user {
 }
 
 ion-modal.edit-game {
-    --width: 60%;
+    --width: 45%;
     --height: 80%;
     --border-radius: 0;
 }
 
 /* Mobile/Small Tablet Styles */
-@media only screen and (max-width: 819px){
+@media only screen and (max-width: 1228px){
+    ion-modal.lobby-pubbliche {
+        --width: 100%;
+        --height: 100%;
+        --border-radius: 0;
+    }
+    ion-modal.edit-user {
+        --width: 100%;
+        --height: 100%;
+        --border-radius: 0;
+    }   
+    ion-modal.edit-game {
+        --width: 100%;
+        --height: 100%;
+        --border-radius: 0;
+    }
+}
+
+@media only screen and (max-height: 780px){
     ion-modal.lobby-pubbliche {
         --width: 100%;
         --height: 100%;
@@ -76,7 +94,6 @@ ion-modal.edit-game {
         --height: 100%;
         --border-radius: 0;
     }
-    
     ion-modal.edit-game {
         --width: 100%;
         --height: 100%;

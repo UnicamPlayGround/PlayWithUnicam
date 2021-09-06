@@ -120,7 +120,7 @@ app.get('/game/status', (req, res) => {
 
 app.get('/game/config', (req, res) => {
     if (verificaJWT(req.headers.token)) {
-        game.getConfigGioco(jwt.decode(req.headers.token).username, (err, results) => {
+        game.getConfigGioco(jwt.decode(req.headers.token).username, res, (err, results) => {
             if (err) return res.status(500).send('Server error!');
             sendDataInJSON(res, results);
         })
@@ -467,6 +467,17 @@ app.post('/partita', (req, res) => {
             partita.creaPartita(jwt.decode(req.body.token).username, res);
         } else return res.status(401).send(ERRORE_JWT);
     } catch (error) {
+        return res.status(400).send(error);
+    }
+})
+
+app.post('/game/crea', (req, res) => {
+    try {
+        if (verificaAdmin(req.body.token)) {
+            game.creaGioco(req.body, res);
+        } else return res.status(401).send(ERRORE_JWT);
+    } catch (error) {
+        console.log(error);
         return res.status(400).send(error);
     }
 })

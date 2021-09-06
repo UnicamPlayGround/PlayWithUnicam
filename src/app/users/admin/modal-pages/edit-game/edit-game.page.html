@@ -11,47 +11,64 @@
 <ion-content>
 
   <form (ngSubmit)="salvaModifiche()" [formGroup]="data">
-    <ion-item>
-      <ion-label position="floating">Nome</ion-label>
-      <ion-input type="name" name="nome" formControlName="nome" required></ion-input>
-    </ion-item>
+    <ion-list lines="inset" class="modal">
+      <ion-list-header>
+        <h2><strong>Info</strong></h2>
+      </ion-list-header>
 
-    <ion-item>
-      <ion-label position="floating">Tipo</ion-label>
-      <ion-input type="name" name="tipo" formControlName="tipo" required></ion-input>
-    </ion-item>
+      <ion-item style="font-size: 20px;">
+        <ion-label position="floating">Nome</ion-label>
+        <ion-input type="text" name="nome" formControlName="nome" required></ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="floating">Max</ion-label>
-      <ion-input type="name" name="maxGiocatori" formControlName="maxGiocatori" required></ion-input>
-    </ion-item>
+      <ion-item>
+        <ion-label position="floating">Tipologia</ion-label>
+        <ion-select okText="Ok" cancelText="Annulla" formControlName="tipo" required>
+          <ion-select-option value="TURNI">TURNI</ion-select-option>
+          <ion-select-option value="NORMALE">NORMALE</ion-select-option>
+        </ion-select>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="floating">Min</ion-label>
-      <ion-input type="name" name="minGiocatori" formControlName="minGiocatori" required></ion-input>
-    </ion-item>
+      <ion-item lines="none">
+        <ion-label>Giocatori</ion-label>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="floating">Link</ion-label>
-      <ion-input type="name" name="link" formControlName="link" required></ion-input>
-    </ion-item>
+      <ion-item lines="none">
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label position="floating">Min</ion-label>
+              <ion-input type="number" name="minGiocatori" formControlName="minGiocatori" required></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-item>
+              <ion-label position="floating">Max</ion-label>
+              <ion-input type="number" name="maxGiocatori" formControlName="maxGiocatori" required></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="floating">Attivo</ion-label>
-      <ion-input type="name" name="attivo" formControlName="attivo" required></ion-input>
-    </ion-item>
+      <ion-item>
+        <ion-label position="floating">Link</ion-label>
+        <ion-input type="name" name="link" formControlName="link" required></ion-input>
+      </ion-item>
 
-    <!-- <ion-item>
-      <ion-label position="floating">Tipologia</ion-label>
-      <ion-select interface="popover" formControlName="tipo" value="this.tipo">
-        <ion-select-option value="GIOCATORE">GIOCATORE</ion-select-option>
-        <ion-select-option value="ADMIN">ADMIN</ion-select-option>
-      </ion-select>
-    </ion-item> -->
+      <ion-list-header>
+        <h2><strong>Impostazioni</strong></h2>
+      </ion-list-header>
+      <ion-item>
+        <ion-label>
+          Attiva
+          <p style="min-width: 30em;">Una volta attivato, il gioco sarà visibile a tutti i giocatori online.</p>
+        </ion-label>
+        <ion-toggle slot="end" type="boolean" name="attivo" formControlName="attivo" required></ion-toggle>
+      </ion-item>
 
-    <br>
+      <ion-button type="submit" color="primary" expand="block">Salva Modifiche</ion-button>
 
-    <ion-button type="submit" color="primary" expand="block">Salva Modifiche</ion-button>
+    </ion-list>
   </form>
 
 </ion-content>

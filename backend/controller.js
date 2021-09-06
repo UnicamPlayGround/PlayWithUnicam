@@ -32,7 +32,7 @@ exports.controllaPassword = function (password) {
  * @param {String} toControl Dato da controllare
  * @param {String} errorText Errore da stampare
  */
- exports.controllaString = function (toControl, errorText) {
+exports.controllaString = function (toControl, errorText) {
     if (toControl == null || toControl.trim() == "") throw errorText;
 }
 
@@ -44,8 +44,8 @@ exports.controllaPassword = function (password) {
  */
 exports.controllaDatiAccount = function (newNome, newCognome, newUsername) {
     this.controllaString(newUsername, "Il nuovo username non è valido");
-    this.controllaString(newNome,"Il nuovo nome non è valido");
-    this.controllaString(newCognome,"Il nuovo cognome non è valido");
+    this.controllaString(newNome, "Il nuovo nome non è valido");
+    this.controllaString(newCognome, "Il nuovo cognome non è valido");
 }
 
 /**
@@ -55,10 +55,22 @@ exports.controllaDatiAccount = function (newNome, newCognome, newUsername) {
  * @param {String} newUsername  il nuovo username nome dell'account
  * @param {String} newTipo  il nuovo tipo dell'account
  */
-exports.controllaDatiAccountAsAdmin = function(newNome, newCognome, newUsername, newTipo){
+exports.controllaDatiAccountAsAdmin = function (newNome, newCognome, newUsername, newTipo) {
     this.controllaDatiAccount(newNome, newCognome, newUsername);
     //TODO: controlla bene
-    this.controllaString(newTipo,"Il nuovo tipo non è valido");
+    this.controllaString(newTipo, "Il nuovo tipo non è valido");
+}
 
 
+exports.controllaDatiGioco = function (nome, tipo, minGiocatori, maxGiocatori, link, attivo) {
+    this.controllaString(nome, "Il nome del gioco non è valido");
+    this.controllaString(link, "Il link del gioco non è valido");
+
+    if (Number.isInteger(minGiocatori) && Number.isInteger(maxGiocatori)) {
+        if (minGiocatori < 1 || maxGiocatori < 1) throw "Il numero minimo o massimo dei giocatori non può essere minore di uno!";
+        else if (minGiocatori > maxGiocatori) throw "Il numero minimo dei giocatori non può essere maggiore del numero massimo!";
+    } else throw "Il numero minimo o massimo dei giocatori deve essere un intero!";
+
+    if (tipo != 'TURNI' || tipo != 'NORMALE') throw "Il tipo di gioco non è valido!";
+    if (typeof attivo != "boolean") throw "Il parametro attivo non è valido!";
 }

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -13,10 +13,11 @@ import { EditGamePageModule } from '../modal-pages/edit-game/edit-game.module';
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     IonicModule,
     GamesPageRoutingModule,
     EditGamePageModule
   ],
   declarations: [GamesPage]
 })
-export class GamesPageModule {}
+export class GamesPageModule { }

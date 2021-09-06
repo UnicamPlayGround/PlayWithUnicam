@@ -27,7 +27,7 @@ exports.getInfoGioco = (idGioco, cb) => {
 }
 
 //TODO commentare
-exports.getConfigGioco = (username, cb) => {
+exports.getConfigGioco = (username, response, cb) => {
     lobby.cercaLobbyByUsername(username, (error, results) => {
         if (error) return response.status(400).send("Non è stato possibile trovare la Lobby");
         if (controller.controllaRisultatoQuery(results))
@@ -39,4 +39,18 @@ exports.getConfigGioco = (username, cb) => {
             cb(error, results)
         });
     })
+}
+
+//TODO commentare
+exports.creaGioco = (data, response) => {
+    controller.controllaDatiGioco(data.nome, data.tipo, data.minGiocatori, data.maxGiocatori, data.link, data.attivo);
+
+    return db.pool.query('INSERT INTO public.giochi (nome, tipo, max_giocatori, min_giocatori, link, attivo, config) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+        [data.nome, data.tipo, data.maxGiocatori, data.minGiocatori, data.link, data.attivo, data.config], (error, results) => {
+            if (error) {
+                console.log(error);
+                return response.status(400).send("Non è stato possibile creare il gioco!");
+            }
+            return response.status(200).send({ 'esito': "1" });
+        })
 }

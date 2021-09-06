@@ -19,7 +19,7 @@ export class EditGamePage implements OnInit {
     private navParams: NavParams) { }
 
   ngOnInit() {
-    this.game = this.navParams.get('username');
+    this.game = this.navParams.get('game');
 
     this.data = this.fb.group({
       nome: [this.game.nome],
@@ -35,7 +35,7 @@ export class EditGamePage implements OnInit {
     this.modalController.dismiss();
   }
 
-  salvaModifiche(){
+  salvaModifiche() {
 
   }
 }
