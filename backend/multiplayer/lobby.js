@@ -44,19 +44,23 @@ function eliminaGiocatore(username, response) {
 }
 
 /**
+ * //TODO rifare il commento
  * Controlla se esistono lobby che hanno come admin l'username passato.
  * 
  * @param {String} adminLobby l'username da controllare
  * @param {*} cb callback
  */
 exports.cercaLobbyByAdmin = (adminLobby, cb) => {
-    db.pool.query('SELECT * FROM public.lobby WHERE admin_lobby=$1',
+    db.pool.query('SELECT codice, data_creazione, admin_lobby, id_gioco, min_giocatori, max_giocatori, pubblica FROM ' +
+        '(public.giocatori INNER JOIN public.lobby ON public.giocatori.codice_lobby = public.lobby.codice) ' +
+        'INNER JOIN public.giochi ON public.lobby.id_gioco = public.giochi.id WHERE admin_lobby = $1',
         [adminLobby], (error, results) => {
             cb(error, results)
         });
 }
 
 /**
+ * //TODO rifare commento
  * Controlla se esiste già una lobby con il codice uguale a quello passato
  * @param {*} codice codice della lobby da cercare
  * @param {*} cb callback
@@ -72,6 +76,7 @@ exports.cercaLobbyByCodice = (codice, cb) => {
 }
 
 /**
+ * //TODO rifare commento
  * Controlla se esiste una lobby in cui è presente l'username passato
  * @param {String} username l'username utilizzato per controllare se esiste una lobby in cui è presente
  * @param {*} cb callback
@@ -210,6 +215,7 @@ exports.abbandonaLobby = (username, response) => {
  * @param {Boolean} pubblica parametro per indicare se la lobby è privata o pubblica
  * @param {*} response 
  */
+//TODO rimuovere ultima_richiesta
 exports.creaLobby = (adminLobby, idGioco, pubblica, response) => {
     this.cercaLobbyByAdmin(adminLobby, (err, results) => {
         controllaLobbyAdmin(results);

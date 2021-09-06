@@ -49,6 +49,37 @@ function salvaInformazioni(username, partita, infoGiocatore, response) {
         })
 }
 
+//TODO commentare
+function controllaGiocatoriMinini(adminLobby, cb) {
+    lobby.cercaLobbyByAdmin(adminLobby, (error, results) => {
+        if (error) {
+            console.log(error);
+            return cb(error, "Non è stato possibile creare la partita!", null);
+        }
+
+        if (controller.controllaRisultatoQuery(results)) {
+            return cb(true, "Devi essere l'Admin della Lobby per creare una partita!", null);
+        }
+
+        const lobbyInfo = JSON.parse(JSON.stringify(results.rows))[0];
+
+        lobby.getNumeroGiocatoriLobby(lobbyInfo.codice, (error, results) => {
+            if (error) {
+                console.log(error);
+                return cb(error, "Non è stato possibile creare la partita!", null);
+            }
+
+            const numeroGiocatori = JSON.parse(JSON.stringify(results.rows))[0];
+
+            if (lobbyInfo.min_giocatori > numeroGiocatori.count) {
+                return cb(true, "Non ci sono abbastanza Giocatori per iniziare!", null);
+            }
+
+            return cb(null, null, lobbyInfo);
+        })
+    })
+}
+
 /**
  * Modifica il Giocatore Corrente di una Partita.
  * @param {string} username Username dell'attuale Giocatore Corrente
@@ -108,35 +139,36 @@ exports.cercaPartitaByCodiceLobby = (codiceLobby, cb) => {
 }
 
 /**
+ * //TODO rivedere commento e fare refactor
  * Crea una nuova Partita.
- * @param {*} codiceLobby Codice della Lobby collegata alla Partita
- * @param {string} giocatoreCorrente Giocatore Corrente, che sarà l'Admin della Lobby
+ * @param {string} adminLobby Giocatore Corrente, che sarà l'Admin della Lobby
  * @param {*} response 
  */
-exports.creaPartita = (codiceLobby, giocatoreCorrente, response) => {
-    //TODO controllare che la condizione dei giocatore minimi sia rispettata
+exports.creaPartita = (adminLobby, response) => {
+    controllaGiocatoriMinini(adminLobby, (error, errorText, lobbyInfo) => {
+        if (error) return response.status(400).send(errorText);
 
-    this.cercaPartitaByCodiceLobby(codiceLobby, (error, results) => {
-        if (error) return response.status(400).send("Non è stato possibile creare la partita!");
+        this.cercaPartitaByCodiceLobby(lobbyInfo.codice, (error, results) => {
+            if (error) return response.status(400).send("Non è stato possibile creare la partita!");
 
-        if (controller.controllaRisultatoQuery(results)) {
-            db.pool.query('INSERT INTO public.partite (codice, codice_lobby, giocatore_corrente) VALUES ($1, $2, $3)',
-                [creaCodice(), codiceLobby, giocatoreCorrente], (error, results) => {
-                    if (error) return response.status(400).send("Non è stato possibile creare la partita!");
-                    return response.status(200).send({ 'esito': "1" });
-                })
-        } else {
-            db.pool.query('UPDATE public.partite SET codice = $1, giocatore_corrente = $2 WHERE codice_lobby = $3',
-                [creaCodice(), giocatoreCorrente, codiceLobby], (error, results) => {
-                    if (error) {
-                        console.log(error);
-                        return response.status(400).send("Non è stato possibile creare la partita!");
-                    }
-                    return response.status(200).send({ 'esito': "1" });
-                })
-        }
+            if (controller.controllaRisultatoQuery(results)) {
+                db.pool.query('INSERT INTO public.partite (codice, codice_lobby, giocatore_corrente) VALUES ($1, $2, $3)',
+                    [creaCodice(), lobbyInfo.codice, adminLobby], (error, results) => {
+                        if (error) return response.status(400).send("Non è stato possibile creare la partita!");
+                        return response.status(200).send({ 'esito': "1" });
+                    });
+            } else {
+                db.pool.query('UPDATE public.partite SET codice = $1, giocatore_corrente = $2 WHERE codice_lobby = $3',
+                    [creaCodice(), adminLobby, lobbyInfo.codice], (error, results) => {
+                        if (error) {
+                            console.log(error);
+                            return response.status(400).send("Non è stato possibile creare la partita!");
+                        }
+                        return response.status(200).send({ 'esito': "1" });
+                    });
+            }
+        })
     })
-
 }
 
 /**
