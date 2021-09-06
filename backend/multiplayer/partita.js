@@ -179,8 +179,8 @@ exports.creaPartita = (adminLobby, response) => {
                         return response.status(200).send({ 'esito': "1" });
                     });
             } else {
-                db.pool.query('UPDATE public.partite SET codice = $1, giocatore_corrente = $2 WHERE codice_lobby = $3',
-                    [creaCodice(), adminLobby, lobbyInfo.codice], (error, results) => {
+                db.pool.query('UPDATE public.partite SET codice = $1, giocatore_corrente = $2, info = $3 WHERE codice_lobby = $4',
+                    [creaCodice(), adminLobby, null, lobbyInfo.codice], (error, results) => {
                         if (error) {
                             console.log(error);
                             return response.status(400).send("Non è stato possibile creare la partita!");
