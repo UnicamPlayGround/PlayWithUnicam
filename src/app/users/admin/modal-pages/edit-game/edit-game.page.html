@@ -6,69 +6,105 @@
       <ion-icon slot="icon-only" name="close-outline" style="color:white"></ion-icon>
     </ion-button>
   </ion-toolbar>
+
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="segment" value="info">
+      <ion-segment-button value="info">
+        <ion-label>Info</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="config">
+        <ion-label>Config</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
-  <form (ngSubmit)="salvaModifiche()" [formGroup]="data">
-    <ion-list lines="inset" class="modal">
-      <ion-list-header>
-        <h2><strong>Info</strong></h2>
-      </ion-list-header>
-
-      <ion-item style="font-size: 20px;">
-        <ion-label position="floating">Nome</ion-label>
-        <ion-input type="text" name="nome" formControlName="nome" required></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label position="floating">Tipologia</ion-label>
-        <ion-select okText="Ok" cancelText="Annulla" formControlName="tipo" required>
-          <ion-select-option value="TURNI">TURNI</ion-select-option>
-          <ion-select-option value="NORMALE">NORMALE</ion-select-option>
-        </ion-select>
-      </ion-item>
-
-      <ion-item lines="none">
-        <ion-label>Giocatori</ion-label>
-      </ion-item>
-
-      <ion-item lines="none">
+  <div *ngIf="segment === 'info'" class="modal">
+    <form (ngSubmit)="salvaModifiche()" [formGroup]="data">
+      <ion-grid>
         <ion-row>
-          <ion-col>
-            <ion-item>
-              <ion-label position="floating">Min</ion-label>
-              <ion-input type="number" name="minGiocatori" formControlName="minGiocatori" required></ion-input>
-            </ion-item>
+          <ion-col size="12">
+            <h2><strong>Info</strong></h2>
           </ion-col>
-          <ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
             <ion-item>
-              <ion-label position="floating">Max</ion-label>
-              <ion-input type="number" name="maxGiocatori" formControlName="maxGiocatori" required></ion-input>
+              <ion-label position="floating">Nome</ion-label>
+              <ion-input type="text" style="font-size: 20px;" placeholder="Inserisci il nome del gioco" name="nome"
+                formControlName="nome" required></ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
-      </ion-item>
 
-      <ion-item>
-        <ion-label position="floating">Link</ion-label>
-        <ion-input type="name" name="link" formControlName="link" required></ion-input>
-      </ion-item>
+        <ion-row>
+          <ion-col size-lg="4" size-md="4" size-sm="6" size="12">
+            <ion-item>
+              <ion-label position="floating">Tipologia</ion-label>
+              <ion-select value="NORMALE" okText="Ok" cancelText="Annulla" formControlName="tipo" required>
+                <ion-select-option value="NORMALE">Normale</ion-select-option>
+                <ion-select-option value="TURNI">Turni</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
 
-      <ion-list-header>
-        <h2><strong>Impostazioni</strong></h2>
-      </ion-list-header>
-      <ion-item>
-        <ion-label>
-          Attiva
-          <p style="min-width: 30em;">Una volta attivato, il gioco sarà visibile a tutti i giocatori online.</p>
-        </ion-label>
-        <ion-toggle slot="end" type="boolean" name="attivo" formControlName="attivo" required></ion-toggle>
-      </ion-item>
+          <ion-col size-lg="8" size-md="8" size-sm="8" size="12">
+            <ion-item>
+              <ion-label position="floating">Link</ion-label>
+              <ion-input type="text" placeholder="Inserisci il link del gioco" name="link" formControlName="link"
+                required></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
 
-      <ion-button type="submit" color="primary" expand="block">Salva Modifiche</ion-button>
+        <ion-row>
+          <ion-col size-lg="4" size-md="4" size-sm="4" size="12">
+            <ion-item lines="none">
+              <ion-label>Giocatori:</ion-label>
+            </ion-item>
+          </ion-col>
 
-    </ion-list>
-  </form>
+          <ion-col size-lg="4" size-md="4" size-sm="4" size="12">
+            <ion-item>
+              <ion-item lines="none">
+                <ion-label position="floating">Min</ion-label>
+                <ion-input type="number" min="1" name="minGiocatori" formControlName="minGiocatori" required>
+                </ion-input>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-label position="floating">Max</ion-label>
+                <ion-input type="number" min="1" name="maxGiocatori" formControlName="maxGiocatori" required>
+                </ion-input>
+              </ion-item>
+            </ion-item>
+          </ion-col>
+        </ion-row>
 
+        <ion-row>
+          <ion-col size="12">
+            <h2><strong>Impostazioni</strong></h2>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <ion-item>
+              <ion-label>
+                Attiva
+                <p>Se attivato, il gioco sarà visibile a tutti i giocatori online.</p>
+              </ion-label>
+              <ion-toggle slot="end" [(ngModel)]="attivo" [ngModelOptions]="{standalone: true}"></ion-toggle>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-button type="submit" color="primary" expand="block" shape="round">Salva modifiche</ion-button>
+    </form>
+  </div>
+
+  <div *ngIf="segment === 'config'" class="modal"></div>
 </ion-content>

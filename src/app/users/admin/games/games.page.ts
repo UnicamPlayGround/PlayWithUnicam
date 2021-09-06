@@ -19,7 +19,6 @@ export class GamesPage implements OnInit {
   data: FormGroup;
   attivo = true;
   config: string = "";
-  isSaved = true;
 
   constructor(
     private http: HttpClient,
