@@ -71,6 +71,6 @@ exports.controllaDatiGioco = function (nome, tipo, minGiocatori, maxGiocatori, l
         else if (minGiocatori > maxGiocatori) throw "Il numero minimo dei giocatori non può essere maggiore del numero massimo!";
     } else throw "Il numero minimo o massimo dei giocatori deve essere un intero!";
 
-    if (tipo != 'TURNI' || tipo != 'NORMALE') throw "Il tipo di gioco non è valido!";
+    if (tipo != 'TURNI' && tipo != 'NORMALE') throw "Il tipo di gioco non è valido!";
     if (typeof attivo != "boolean") throw "Il parametro attivo non è valido!";
 }
