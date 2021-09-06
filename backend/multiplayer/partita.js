@@ -49,17 +49,20 @@ function salvaInformazioni(username, partita, infoGiocatore, response) {
         })
 }
 
-//TODO commentare
-function controllaGiocatoriMinini(adminLobby, cb) {
+/**
+ * Controlla che i vincoli dei Giocatori Minimi e Massimi siano rispettati prima di creare una Partita.
+ * @param {*} adminLobby Admin della Lobby
+ * @param {*} cb Callback
+ */
+function controllaNumeroGiocatori(adminLobby, cb) {
     lobby.cercaLobbyByAdmin(adminLobby, (error, results) => {
         if (error) {
             console.log(error);
             return cb(error, "Non è stato possibile creare la partita!", null);
         }
 
-        if (controller.controllaRisultatoQuery(results)) {
+        if (controller.controllaRisultatoQuery(results))
             return cb(true, "Devi essere l'Admin della Lobby per creare una partita!", null);
-        }
 
         const lobbyInfo = JSON.parse(JSON.stringify(results.rows))[0];
 
@@ -71,13 +74,35 @@ function controllaGiocatoriMinini(adminLobby, cb) {
 
             const numeroGiocatori = JSON.parse(JSON.stringify(results.rows))[0];
 
-            if (lobbyInfo.min_giocatori > numeroGiocatori.count) {
+            if (lobbyInfo.min_giocatori > numeroGiocatori.count)
                 return cb(true, "Non ci sono abbastanza Giocatori per iniziare!", null);
-            }
+
+            if (lobbyInfo.max_giocatori < numeroGiocatori.count)
+                return cb(true, "Ci sono troppi Giocatori per iniziare!", null);
 
             return cb(null, null, lobbyInfo);
         })
     })
+}
+
+/**
+ * Trova il prossimo Giocatore Corrente della Partita.
+ * @param {[{username:string}]} giocatori Array dei Giocatori della Partita
+ * @param {string} usernameGiocatoreCorrente Username dell'attuale Giocatore Corrente
+ * @returns Il Nuovo Giocatore Corrente
+ */
+function getNuovoGiocatore(giocatori, usernameGiocatoreCorrente) {
+    var nuovoGiocatore;
+
+    for (let i = 0; i < giocatori.length; i++)
+        if (giocatori[i].username == usernameGiocatoreCorrente) {
+            if (i == (giocatori.length - 1))
+                nuovoGiocatore = giocatori[0];
+            else
+                nuovoGiocatore = giocatori[i + 1];
+        }
+
+    return nuovoGiocatore;
 }
 
 /**
@@ -86,8 +111,6 @@ function controllaGiocatoriMinini(adminLobby, cb) {
  * @param {*} response 
  */
 exports.cambiaGiocatoreCorrente = (username, response) => {
-    var nuovoGiocatore;
-
     exports.getInfoPartita(username, (error, results) => {
         if (error) {
             console.log(error);
@@ -105,14 +128,7 @@ exports.cambiaGiocatoreCorrente = (username, response) => {
             }
 
             const giocatori = JSON.parse(JSON.stringify(results.rows));
-
-            for (let i = 0; i < giocatori.length; i++)
-                if (giocatori[i].username == username) {
-                    if (i == (giocatori.length - 1))
-                        nuovoGiocatore = giocatori[0];
-                    else
-                        nuovoGiocatore = giocatori[i + 1];
-                }
+            var nuovoGiocatore = getNuovoGiocatore(giocatori, username);
 
             db.pool.query('UPDATE public.partite SET giocatore_corrente = $1 WHERE codice_lobby = $2',
                 [nuovoGiocatore.username, partita.codice_lobby], (error, results) => {
@@ -139,13 +155,12 @@ exports.cercaPartitaByCodiceLobby = (codiceLobby, cb) => {
 }
 
 /**
- * //TODO rivedere commento e fare refactor
- * Crea una nuova Partita.
- * @param {string} adminLobby Giocatore Corrente, che sarà l'Admin della Lobby
+ * Crea una nuova Partita, controllando che i vincoli sui Giocatori minimi e massimi siano rispettati.
+ * @param {string} adminLobby Admin della Lobby, che vuole creare la Partita
  * @param {*} response 
  */
 exports.creaPartita = (adminLobby, response) => {
-    controllaGiocatoriMinini(adminLobby, (error, errorText, lobbyInfo) => {
+    controllaNumeroGiocatori(adminLobby, (error, errorText, lobbyInfo) => {
         if (error) return response.status(400).send(errorText);
 
         this.cercaPartitaByCodiceLobby(lobbyInfo.codice, (error, results) => {
