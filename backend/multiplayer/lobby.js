@@ -38,7 +38,10 @@ function getDataOdierna() {
  */
 function eliminaGiocatore(username, response) {
     giocatore.eliminaGiocatore(username, (error, results) => {
-        if (error) return response.status(400).send("Non è stato possibile abbandonare la lobby");
+        if (error) {
+            console.log(error);
+            return response.status(400).send("Non è stato possibile abbandonare la lobby");
+        }
         return response.status(200).send({ 'esito': "1" });
     });
 }
@@ -111,7 +114,10 @@ exports.getLobbyPubbliche = (username, cb) => {
  */
 exports.getGiocatoriLobby = (username, response, cb) => {
     this.cercaLobbyByUsername(username, (error, results) => {
-        if (error) return response.status(400).send("Non è stato possibile trovare la Lobby");
+        if (error) {
+            console.log(error);
+            return response.status(400).send("Non è stato possibile trovare la Lobby");
+        }
         if (controller.controllaRisultatoQuery(results))
             return response.status(400).send("Errore: Devi partecipare ad una Lobby!");
 
@@ -147,7 +153,10 @@ exports.modificaLobby = (username, pubblica, response) => {
 
         db.pool.query('UPDATE public.lobby SET pubblica = $1 WHERE codice = $2',
             [pubblica, tmp[0].codice], (error, results) => {
-                if (error) return response.status(400).send("Non è stato possibile modificare la lobby");
+                if (error) {
+                    console.log(error);
+                    return response.status(400).send("Non è stato possibile modificare la lobby");
+                }
                 return response.status(200).send({ 'esito': "1" });
             })
     })
@@ -174,7 +183,10 @@ exports.eliminaPartecipante = (admin, username, response) => {
         const tmp = JSON.parse(JSON.stringify(results.rows));
 
         giocatore.espelliGiocatore(username, tmp[0].codice, (error, results) => {
-            if (error) return response.status(400).send("Non è stato possibile cancellare il giocatore dalla lobby");
+            if (error) {
+                console.log(error);
+                return response.status(400).send("Non è stato possibile cancellare il giocatore dalla lobby");
+            }
             return response.status(200).send({ 'esito': "1" });
         });
     })
@@ -188,18 +200,27 @@ exports.eliminaPartecipante = (admin, username, response) => {
  */
 exports.abbandonaLobby = (username, response) => {
     this.cercaLobbyByAdmin(username, (error, results) => {
-        if (error) return response.status(400).send("Non è stato possibile trovare la lobby");
+        if (error) {
+            console.log(error);
+            return response.status(400).send("Non è stato possibile trovare la lobby");
+        }
         if (controller.controllaRisultatoQuery(results)) {
             eliminaGiocatore(username, response);
         } else {
             const tmp = JSON.parse(JSON.stringify(results.rows));
             const codiceLobby = tmp[0].codice;
             this.getGiocatoriLobby(username, response, (error, results) => {
-                if (error) return response.status(500).send("Server error");
+                if (error) {
+                    console.log(error);
+                    return response.status(500).send("Server error");
+                }
                 var giocatori = JSON.parse(JSON.stringify(results.rows));
                 if (giocatori.length > 1) {
                     this.impostaAdminLobby(giocatori[1].username, codiceLobby, (error, results) => {
-                        if (error) return response.status(400).send("Non è stato possibile impostare l'Admin della Lobby!");
+                        if (error) {
+                            console.log(error);
+                            return response.status(400).send("Non è stato possibile impostare l'Admin della Lobby!");
+                        }
                         eliminaGiocatore(username, response);
                     });
                 } else eliminaGiocatore(username, response);
@@ -232,13 +253,16 @@ exports.creaLobby = (adminLobby, idGioco, pubblica, response) => {
                         return response.status(400).send("Non è stato possibile creare la Lobby!");
                     }
 
-                    giocatore.creaGiocatore(adminLobby, codiceLobby, response, (err, results) => {
-                        if (err) {
-                            console.log(err);
+                    giocatore.creaGiocatore(adminLobby, codiceLobby, response, (error, results) => {
+                        if (error) {
+                            console.log(error);
                             return response.status(400).send("Non è stato possibile creare la lobby!");
                         }
                         this.impostaAdminLobby(adminLobby, codiceLobby, (error, results) => {
-                            if (error) return response.status(400).send("Non è stato possibile impostare l'Admin della Lobby!");
+                            if (error) {
+                                console.log(error);
+                                return response.status(400).send("Non è stato possibile impostare l'Admin della Lobby!");
+                            }
                             return response.status(200).send({ 'esito': "1" });
                         });
                     });
@@ -280,8 +304,11 @@ exports.partecipaLobby = (username, codiceLobby, response) => {
         const tmp = JSON.parse(JSON.stringify(results.rows));
         const lobby = tmp[0];
 
-        this.getNumeroGiocatoriLobby(codiceLobby, (err, results) => {
-            if (err) return response.status(500).send('Server error!');
+        this.getNumeroGiocatoriLobby(codiceLobby, (error, results) => {
+            if (error) {
+                console.log(error);
+                return response.status(500).send('Server error!');
+            }
             const tmp2 = JSON.parse(JSON.stringify(results.rows));
             const count = tmp2[0].count;
 
@@ -290,7 +317,10 @@ exports.partecipaLobby = (username, codiceLobby, response) => {
 
             if (count < lobby.max_giocatori) {
                 giocatore.creaGiocatore(username, codiceLobby, response, (error, results) => {
-                    if (error) return response.status(400).send("Non è stato possibile partecipare alla lobby.");
+                    if (error) {
+                        console.log(error);
+                        return response.status(400).send("Non è stato possibile partecipare alla lobby.");
+                    }
                     return response.status(200).send({ 'esito': "1" });
                 });
             } else {

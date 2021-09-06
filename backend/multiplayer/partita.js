@@ -164,12 +164,18 @@ exports.creaPartita = (adminLobby, response) => {
         if (error) return response.status(400).send(errorText);
 
         this.cercaPartitaByCodiceLobby(lobbyInfo.codice, (error, results) => {
-            if (error) return response.status(400).send("Non è stato possibile creare la partita!");
+            if (error) {
+                console.log(error);
+                return response.status(400).send("Non è stato possibile creare la partita!");
+            }
 
             if (controller.controllaRisultatoQuery(results)) {
                 db.pool.query('INSERT INTO public.partite (codice, codice_lobby, giocatore_corrente) VALUES ($1, $2, $3)',
                     [creaCodice(), lobbyInfo.codice, adminLobby], (error, results) => {
-                        if (error) return response.status(400).send("Non è stato possibile creare la partita!");
+                        if (error) {
+                            console.log(error);
+                            return response.status(400).send("Non è stato possibile creare la partita!");
+                        }
                         return response.status(200).send({ 'esito': "1" });
                     });
             } else {
@@ -211,14 +217,20 @@ exports.salvaInfoGiocatore = (username, infoGiocatore, response) => {
 
     //TODO da finire
     this.getInfoPartita(username, (error, results) => {
-        if (error) return response.status(500).send('Server error!');
+        if (error) {
+            console.log(error);
+            return response.status(500).send('Server error!');
+        }
         if (controller.controllaRisultatoQuery(results)) return response.status(404).send('Nessuna partita trovata!');
 
         var tmp = JSON.parse(JSON.stringify(results.rows));
         const partita = tmp[0];
 
         game.getInfoGioco(partita.id_gioco, (error, results) => {
-            if (error) return response.status(500).send('Server error!');
+            if (error) {
+                console.log(error);
+                return response.status(500).send('Server error!');
+            }
 
             tmp = JSON.parse(JSON.stringify(results.rows));
             const gioco = tmp[0];

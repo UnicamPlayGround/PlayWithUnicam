@@ -29,7 +29,10 @@ exports.getInfoGioco = (idGioco, cb) => {
 //TODO commentare
 exports.getConfigGioco = (username, response, cb) => {
     lobby.cercaLobbyByUsername(username, (error, results) => {
-        if (error) return response.status(400).send("Non è stato possibile trovare la Lobby");
+        if (error) {
+            console.log(error);
+            return response.status(400).send("Non è stato possibile trovare la Lobby");
+        }
         if (controller.controllaRisultatoQuery(results))
             return response.status(400).send("Errore: Devi partecipare ad una Lobby!");
 

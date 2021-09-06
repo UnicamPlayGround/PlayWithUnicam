@@ -48,13 +48,26 @@ exports.controllaInattivi = () => {
 exports.creaGiocatore = (username, codiceLobby, response, cb) => {
     try {
         var utenteNonTrovato = false;
-        utente.cercaUtenteByUsername(username, (err, results) => {
+        utente.cercaUtenteByUsername(username, (error, results) => {
+            if (error) {
+                console.log(error);
+                return response.status(400).send("Non è stato possibile creare il Giocatore!");
+            }
             if (controller.controllaRisultatoQuery(results)) utenteNonTrovato = true;
 
-            utente.cercaOspiteByUsername(username, (err, results) => {
+            utente.cercaOspiteByUsername(username, (error, results) => {
+                if (error) {
+                    console.log(error);
+                    return response.status(400).send("Non è stato possibile creare il Giocatore!");
+                }
                 if (utenteNonTrovato && controller.controllaRisultatoQuery(results)) return response.status(404).send("L'Utente '" + username + "' non esiste!");
 
-                this.cercaGiocatore(username, (err, results) => {
+                this.cercaGiocatore(username, (error, results) => {
+                    if (error) {
+                        console.log(error);
+                        return response.status(400).send("Non è stato possibile creare il Giocatore!");
+                    }
+
                     if (controller.controllaRisultatoQuery(results)) {
                         db.pool.query('INSERT INTO public.giocatori (username, codice_lobby, data_ingresso) VALUES ($1, $2, NOW())',
                             [username, codiceLobby], (error, results) => {
@@ -109,7 +122,10 @@ exports.eliminaGiocatore = (username, cb) => {
  */
 exports.ping = (username, response, cb) => {
     lobby.cercaLobbyByUsername(username, (error, results) => {
-        if (error) return response.status(400).send("Non è stato possibile trovare la Lobby");
+        if (error) {
+            console.log(error);
+            return response.status(400).send("Non è stato possibile trovare la Lobby");
+        }
         if (controller.controllaRisultatoQuery(results))
             return response.status(400).send("Errore: Devi partecipare ad una Lobby!");
 

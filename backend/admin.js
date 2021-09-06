@@ -22,7 +22,10 @@ exports.eliminaUtenti = (utenti, response) => {
     usersToDelete.forEach(username => {
         db.pool.query('delete from public.utenti where username = $1',
             [String(username)], (error, results) => {
-                if (error) return response.status(400).send('Errore nella query');
+                if (error) {
+                    console.log(error);
+                    return response.status(400).send('Errore nella query');
+                }
             });
     });
     return response.status(200).send({ 'esito': "1" });
@@ -31,12 +34,15 @@ exports.eliminaUtenti = (utenti, response) => {
 
 //TODO controllare se si puo usare lo stesso metodo di utente
 exports.modificaUsername = (username, newUsername, nome, cognome, response) => {
-    utente.cercaUtenteByUsername(username, (err, results) => {
-        if (err) return response.status(500).send('Server Error!');
+    utente.cercaUtenteByUsername(username, (error, results) => {
+        if (error) {
+            console.log(error);
+            return response.status(500).send('Server Error!');
+        }
         if (controller.controllaRisultatoQuery(results)) return response.status(404).send('Utente non trovato!');
 
-        utente.cercaUtenteByUsername(newUsername, (err, results) => {
-            if (err) {
+        utente.cercaUtenteByUsername(newUsername, (error, results) => {
+            if (error) {
                 console.log(error);
                 return response.status(500).send('Server Error!');
             }

@@ -99,7 +99,10 @@ app.get('/games', (req, res) => {
 
     if (verificaJWT(token)) {
         game.getListaGiochi((err, results) => {
-            if (err) return res.status(500).send('Server error!');
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Server error!');
+            }
             sendDataInJSON(res, results);
         });
     } else return res.status(401).send(ERRORE_JWT);
@@ -112,7 +115,10 @@ app.get('/game/status', (req, res) => {
     //TODO controllare che il JWT sia di un giocatore
     if (verificaJWT(token)) {
         partita.getInfoPartita(jwt.decode(token).username, (err, results) => {
-            if (err) return res.status(500).send('Server error!');
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Server error!');
+            }
             sendDataInJSON(res, results);
         });
     } else return res.status(401).send(ERRORE_JWT);
@@ -121,7 +127,10 @@ app.get('/game/status', (req, res) => {
 app.get('/game/config', (req, res) => {
     if (verificaJWT(req.headers.token)) {
         game.getConfigGioco(jwt.decode(req.headers.token).username, res, (err, results) => {
-            if (err) return res.status(500).send('Server error!');
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Server error!');
+            }
             sendDataInJSON(res, results);
         })
     } else return res.status(401).send(ERRORE_JWT);
@@ -143,7 +152,10 @@ app.get('/dado/:nFacce', (req, res) => {
 app.get('/admin/utenti', (req, res) => {
     if (verificaAdmin(req.headers.token)) {
         admin.getUtenti(jwt.decode(req.headers.token).username, (err, results) => {
-            if (err) return res.status(500).send('Server error!');
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Server error!');
+            }
             sendDataInJSON(res, results);
         });
     } else return res.status(401).send(ERRORE_JWT);
@@ -155,7 +167,10 @@ app.get('/admin/utenti', (req, res) => {
 app.get('/lobby/pubbliche', (req, res) => {
     if (verificaJWT(req.headers.token)) {
         lobby.getLobbyPubbliche(jwt.decode(req.headers.token).username, (err, results) => {
-            if (err) return res.status(500).send('Server error!');
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Server error!');
+            }
 
             const lobbies = JSON.parse(JSON.stringify(results.rows));
             formatDataLobby(lobbies);
@@ -172,7 +187,10 @@ app.get('/lobby/pubbliche', (req, res) => {
 app.get('/lobby/giocatori/:codiceLobby', (req, res) => {
     if (verificaJWT(req.headers.token)) {
         lobby.getNumeroGiocatoriLobby(req.params.codiceLobby, (err, results) => {
-            if (err) return res.status(500).send('Server error!');
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Server error!');
+            }
             sendDataInJSON(res, results);
         })
     } else return res.status(401).send(ERRORE_JWT);
@@ -185,7 +203,10 @@ app.get('/info/utente', (req, res) => {
     const token = req.headers.token;
     if (verificaJWT(req.headers.token)) {
         utente.getUserInfo(jwt.decode(token).username, (err, results) => {
-            if (err) return res.status(500).send('Server error!');
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Server error!');
+            }
             sendDataInJSON(res, results);
         })
     } else return res.status(401).send(ERRORE_JWT);
@@ -197,7 +218,10 @@ app.get('/info/utente', (req, res) => {
 app.get('/lobby/info', (req, res) => {
     if (verificaJWT(req.headers.token)) {
         lobby.cercaLobbyByUsername(jwt.decode(req.headers.token).username, (err, results) => {
-            if (err) return res.status(500).send('Server error!');
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Server error!');
+            }
             sendDataInJSON(res, results);
         })
     } else return res.status(401).send(ERRORE_JWT);
@@ -206,7 +230,10 @@ app.get('/lobby/info', (req, res) => {
 app.get('/lobby/giocatori', (req, res) => {
     if (verificaJWT(req.headers.token)) {
         lobby.getGiocatoriLobby(jwt.decode(req.headers.token).username, res, (err, results) => {
-            if (err) return res.status(500).send('Server error!');
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Server error!');
+            }
             sendDataInJSON(res, results);
         })
     } else return res.status(401).send(ERRORE_JWT);
@@ -280,8 +307,11 @@ app.put('/player/username', (req, res) => {
     try {
         if (verificaJWT(req.body.token)) {
             const decodedToken = jwt.decode(req.body.token);
-            utente.modificaUsername(decodedToken.username, req.body.new_username, res, (error, results) => {
-                if (error) { return res.status(400).send('Errore dati query'); }
+            utente.modificaUsername(decodedToken.username, req.body.new_username, res, (err, results) => {
+                if (err) {
+                    console.log(err);
+                    return res.status(400).send('Errore dati query');
+                }
                 sendAccessToken(res, { username: req.body.new_username, tipo: decodedToken.tipo });
             });
         } else return res.status(401).send(ERRORE_JWT);
@@ -353,7 +383,10 @@ app.put('/game/fine-turno', (req, res) => {
 app.post('/login/utente', (req, res) => {
     try {
         utente.cercaUtenteByUsername(req.body.username, (err, results) => {
-            if (err) return res.status(500).send('Server Error!');
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Server error!');
+            }
             if (controller.controllaRisultatoQuery(results)) return res.status(404).send('Utente non trovato!');
 
             const user = JSON.parse(JSON.stringify(results.rows));
@@ -375,14 +408,23 @@ app.post('/login/ospiti', (req, res) => {
     try {
         if (req.body.username.trim() != "") {
             utente.cercaUtenteByUsername(req.body.username, (err, results) => {
-                if (err) return res.status(500).send('Server Error!');
+                if (err) {
+                    console.log(err);
+                    return res.status(500).send('Server error!');
+                }
                 if (!controller.controllaRisultatoQuery(results)) return res.status(404).send("L'username " + req.body.username + " è già in uso!");
                 utente.cercaOspiteByUsername(req.body.username, (err, results) => {
-                    if (err) return res.status(500).send('Server Error!');
+                    if (err) {
+                        console.log(err);
+                        return res.status(500).send('Server error!');
+                    }
                     if (!controller.controllaRisultatoQuery(results)) return res.status(404).send("L'username " + req.body.username + " è già in uso!");
 
                     utente.creaOspite(req.body.username, (err, results) => {
-                        if (err) return res.status(400).send("NON E' STATO POSSIBILE CREARE L'OSPITE!");
+                        if (err) {
+                            console.log(err);
+                            return res.status(400).send("NON E' STATO POSSIBILE CREARE L'OSPITE!");
+                        }
                         sendAccessToken(res, { username: req.body.username, tipo: "OSPITE" });
                     });
                 })
@@ -398,12 +440,18 @@ app.post('/register/utente', (req, res) => {
     try {
         if (req.body.username.trim() != "") {
             utente.cercaOspiteByUsername(req.body.username, (err, results) => {
-                if (err) return res.status(500).send('Server Error!');
+                if (err) {
+                    console.log(err);
+                    return res.status(500).send('Server error!');
+                }
                 if (!controller.controllaRisultatoQuery(results)) return res.status(404).send("L'username " + req.body.username + " è già in uso!");
 
                 utente.cercaUtenteByUsername(req.body.username, (err, results) => {
                     try {
-                        if (err) return res.status(500).send('Server error!');
+                        if (err) {
+                            console.log(err);
+                            return res.status(500).send('Server error!');
+                        }
                         const users = JSON.parse(JSON.stringify(results.rows));
                         if (users.length == 0)
                             utente.creaUtente(req.body.username, req.body.nome, req.body.cognome, req.body.password, res);
