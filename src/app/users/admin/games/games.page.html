@@ -138,6 +138,26 @@
         <ion-row>
           <ion-col size="12">
             <ion-item lines="none">
+              <ion-label>Aggiungi regolamento
+                <p>Consente di aggiungere il regolamento del gioco, che sarà poi mostrato ai giocatori durante l'attesa
+                  pre-partita nella lobby.</p>
+              </ion-label>
+              <ion-toggle slot="end" [(ngModel)]="mostraRegolamento" [ngModelOptions]="{standalone: true}"></ion-toggle>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row *ngIf="mostraRegolamento">
+          <ion-col size="12">
+            <ion-textarea style="height: 100%; border: 1px solid var(--ion-color-primary);"
+              placeholder="Scrivi qui regolamento del gioco" auto-grow="true" name="regolamento"
+              [(ngModel)]="regolamento" [ngModelOptions]="{standalone: true}"></ion-textarea>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <ion-item lines="none">
               <ion-label>Aggiungi file di configurazione
                 <p>Consente di aggiungere un file JSON utilizzabile per salvare parametri avanzati di configurazione del
                   gioco.</p>

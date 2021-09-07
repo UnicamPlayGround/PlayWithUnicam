@@ -62,9 +62,10 @@ exports.controllaDatiAccountAsAdmin = function (newNome, newCognome, newUsername
 }
 
 
-exports.controllaDatiGioco = function (nome, tipo, minGiocatori, maxGiocatori, link, attivo) {
+exports.controllaDatiGioco = function (nome, tipo, minGiocatori, maxGiocatori, link, attivo, regolamento) {
     this.controllaString(nome, "Il nome del gioco non è valido");
     this.controllaString(link, "Il link del gioco non è valido");
+    if (regolamento) this.controllaString(regolamento, "Il regolamento del gioco non è valido");
 
     if (Number.isInteger(minGiocatori) && Number.isInteger(maxGiocatori)) {
         if (minGiocatori < 1 || maxGiocatori < 1) throw "Il numero minimo o massimo dei giocatori non può essere minore di uno!";

@@ -522,7 +522,7 @@ app.post('/partita', (req, res) => {
 app.post('/game/crea', (req, res) => {
     try {
         if (verificaAdmin(req.body.token)) {
-            game.creaGioco(req.body, res);
+            game.creaGioco(req.body.nome, req.body.tipo, req.body.minGiocatori, req.body.maxGiocatori, req.body.link, req.body.attivo, req.body.config, req.body.regolamento, res);
         } else return res.status(401).send(ERRORE_JWT);
     } catch (error) {
         console.log(error);

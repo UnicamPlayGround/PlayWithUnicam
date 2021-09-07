@@ -45,11 +45,11 @@ exports.getConfigGioco = (username, response, cb) => {
 }
 
 //TODO commentare
-exports.creaGioco = (data, response) => {
-    controller.controllaDatiGioco(data.nome, data.tipo, data.minGiocatori, data.maxGiocatori, data.link, data.attivo);
+exports.creaGioco = (nome, tipo, minGiocatori, maxGiocatori, link, attivo, config, regolamento, response) => {
+    controller.controllaDatiGioco(nome, tipo, minGiocatori, maxGiocatori, link, attivo, regolamento);
 
-    return db.pool.query('INSERT INTO public.giochi (nome, tipo, max_giocatori, min_giocatori, link, attivo, config) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-        [data.nome, data.tipo, data.maxGiocatori, data.minGiocatori, data.link, data.attivo, data.config], (error, results) => {
+    return db.pool.query('INSERT INTO public.giochi (nome, tipo, max_giocatori, min_giocatori, link, attivo, config, regolamento) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
+        [nome, tipo, maxGiocatori, minGiocatori, link, attivo, config, regolamento], (error, results) => {
             if (error) {
                 console.log(error);
                 return response.status(400).send("Non è stato possibile creare il gioco!");

@@ -15,10 +15,12 @@ import { EditGamePage } from '../modal-pages/edit-game/edit-game.page';
 export class GamesPage implements OnInit {
   segment: string = "lista";
   games = [];
-  mostraConfig = false;
   data: FormGroup;
   attivo = true;
+  mostraConfig = false;
   config: string = "";
+  mostraRegolamento = false;
+  regolamento: string = "";
 
   constructor(
     private http: HttpClient,
@@ -93,6 +95,9 @@ export class GamesPage implements OnInit {
       const tokenValue = (await this.loginService.getToken()).value;
       var toSend = this.data.value;
       toSend.attivo = this.attivo;
+
+      if (this.mostraRegolamento) toSend.regolamento = this.regolamento;
+      else toSend.regolamento = null;
 
       if (this.mostraConfig) toSend.config = JSON.parse(this.config);
       else toSend.config = null;

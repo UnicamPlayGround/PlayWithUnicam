@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS public.giochi
     link text NOT NULL,
     attivo boolean NOT NULL,
 	config json,
+	regolamento text,
     PRIMARY KEY (id)
 );
 
