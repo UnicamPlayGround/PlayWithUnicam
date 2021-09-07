@@ -65,7 +65,7 @@
             </ion-item>
 
             <ion-card-content style="padding: 20px;">
-              <p>Se attivo, permette a tutti i giocatori online di trovare la lobby e diparteciparvi.</p>
+              <p>Se la visibilità è pubblica, tutti i giocatori online possono trovare la lobby e parteciparvi.</p>
             </ion-card-content>
           </ion-list>
         </ion-card>
@@ -108,8 +108,7 @@
             </ion-item>
 
             <ion-card-content style="padding: 20px;" *ngIf="mostraInfoLobby">
-              <p>Se attivo, permette a tutti i giocatori online di trovare la lobby e di
-                parteciparvi.</p>
+              <p>Se la visibilità è pubblica, tutti i giocatori online possono trovare la lobby e parteciparvi.</p>
             </ion-card-content>
           </ion-list>
         </ion-card>
@@ -143,7 +142,7 @@
 
             <ion-slides [options]="{ slidesPerView: 'auto', zoom: false, grabCursor: true }" style="padding:15px;">
               <ion-slide *ngFor="let giocatore of giocatori, let i = index;"
-                style="width: 100px; height: 150px; border-radius: 20px;"
+                style="width: 100px; height: 130px; border-radius: 20px;"
                 [ngClass]="{'admin' : giocatore.username == lobby.admin_lobby}">
                 <ion-col style="align-items: center;">
                   <ion-label>{{ giocatore.username }}</ion-label>
@@ -151,9 +150,11 @@
                     <img src="../../../../../assets/lobby-player.png" alt="avatar player">
                   </ion-avatar>
                   <br>
+
                   <p *ngIf="giocatore.username == lobby.admin_lobby" class="admin-label"
-                    style="position:absolute; margin-top: -18px; margin-left: 23px; z-index: 1;">ADMIN</p>
-                  <ion-icon size="large" name="diamond-outline" *ngIf="giocatore.username == lobby.admin_lobby">
+                    style="position:absolute; margin-top: -15px; margin-left: 15px; z-index: 1;">ADMIN</p>
+                  <ion-icon  name="diamond-outline" *ngIf="giocatore.username == lobby.admin_lobby"
+                  style="position:absolute; margin-top: -15px; margin-left: 20px; z-index: 1;">
                   </ion-icon>
                 </ion-col>
               </ion-slide>
