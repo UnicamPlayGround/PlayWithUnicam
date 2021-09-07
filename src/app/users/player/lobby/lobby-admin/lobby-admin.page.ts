@@ -14,12 +14,13 @@ import jwt_decode from 'jwt-decode';
   styleUrls: ['./lobby-admin.page.scss'],
 })
 export class LobbyAdminPage implements OnInit {
-  segment: string = "impostazioni";
   lobby = { codice: null, admin_lobby: null, pubblica: false, min_giocatori: 0, max_giocatori: 0 };
   giocatori = [];
-  private timerInfoLobby: NodeJS.Timeout;
-  private timerGiocatori: NodeJS.Timeout;
-  private timerPing: NodeJS.Timeout;
+  private timerInfoLobby;
+  private timerGiocatori;
+  private timerPing;
+  mostraInfoLobby = false;
+  mostraInfoGioco = false;
 
   constructor(
     private alertCreator: AlertCreatorService,
@@ -44,8 +45,12 @@ export class LobbyAdminPage implements OnInit {
 
   ngOnInit() { }
 
-  segmentChanged(ev: any) {
-    this.segment = ev.detail.value;
+  espandiInfoLobby() {
+    this.mostraInfoLobby = !this.mostraInfoLobby;
+  }
+
+  espandiInfoGioco() {
+    this.mostraInfoGioco = !this.mostraInfoGioco;
   }
 
   /**
