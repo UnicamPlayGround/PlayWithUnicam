@@ -13,15 +13,8 @@ import { LoginService } from 'src/app/services/login-service/login.service';
   styleUrls: ['./lobby-guest.page.scss'],
 })
 export class LobbyGuestPage implements OnInit {
-  lobby = { codice: '62705', admin_lobby: 'rondy', pubblica: true, min_giocatori: 2, max_giocatori: 6, link: null };
-  giocatori = [
-    { username: 'rondy' },
-    { username: 'cipo' },
-    { username: 'tom' },
-    { username: 'cla' },
-    { username: 'gre' },
-    { username: 'paoletto' }
-  ];
+  lobby = { codice: null, admin_lobby: null, pubblica: false, min_giocatori: 0, max_giocatori: 0, link: null };
+  giocatori = [];
   private timerInfoLobby;
   private timerGiocatori;
   private timerPing;
