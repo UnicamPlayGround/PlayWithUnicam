@@ -46,10 +46,16 @@ export class LobbyGuestPage implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * Cambia il valore di 'mostraInfoLobby' che determina l'espansione della relativa card
+   */
   espandiInfoLobby() {
     this.mostraInfoLobby = !this.mostraInfoLobby;
   }
 
+  /**
+   * Cambia il valore di 'mostraInfoGioco' che determina l'espansione della relativa card
+   */
   espandiInfoGioco() {
     this.mostraInfoGioco = !this.mostraInfoGioco;
   }

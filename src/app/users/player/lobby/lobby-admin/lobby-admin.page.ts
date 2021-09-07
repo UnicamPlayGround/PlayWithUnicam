@@ -45,14 +45,19 @@ export class LobbyAdminPage implements OnInit {
 
   ngOnInit() { }
 
-  espandiInfoLobby() {
+  /**
+   * Cambia il valore di 'mostraInfoLobby' che determina l'espansione della relativa card
+   */
+   espandiInfoLobby() {
     this.mostraInfoLobby = !this.mostraInfoLobby;
   }
 
+  /**
+   * Cambia il valore di 'mostraInfoGioco' che determina l'espansione della relativa card
+   */
   espandiInfoGioco() {
     this.mostraInfoGioco = !this.mostraInfoGioco;
   }
-
   /**
    * Carica le Informazioni della Lobby, se l'Utente corrente non corrisponde
    * all'Admin della Lobby allora viene reinderizzato alla pagina "/lobby-guest".
