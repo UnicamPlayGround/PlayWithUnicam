@@ -14,6 +14,7 @@ export class ErrorManagerService {
     private loginService: LoginService
   ) { }
 
+  //TODO commentare
   stampaErrore(res, headerText) {
     if (this.controllaRes(res)) this.stampa(headerText, res.error)
   }

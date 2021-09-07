@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingController, ModalController } from '@ionic/angular';
-import { map, switchMap } from 'rxjs/operators';
 import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creator.service';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LoginService } from 'src/app/services/login-service/login.service';
@@ -28,10 +27,16 @@ export class CreaLobbyPage implements OnInit {
 
   ngOnInit() { }
 
+  /**
+   * Chiude la Modal.
+   */
   async closeModal() {
     this.modalController.dismiss();
   }
 
+  /**
+   * Crea una nuova Lobby.
+   */
   async creaLobby() {
     const loading = await this.loadingController.create();
     await loading.present();
@@ -44,7 +49,7 @@ export class CreaLobbyPage implements OnInit {
       pubblica: this.tipo
     }
 
-    return this.http.post('/lobby', toSend).subscribe(
+    this.http.post('/lobby', toSend).subscribe(
       async (res) => {
         var message = "La Lobby è stata creata, ora è possibile iniziare a giocare.";
         this.alertCreator.createInfoAlert('Lobby creata', message);

@@ -32,6 +32,9 @@ export class RegistrationPage implements OnInit {
     })
   }
 
+  /**
+   * Effettua la Registrazione dell'Utente.
+   */
   async register() {
     const loading = await this.loadingController.create();
     await loading.present();

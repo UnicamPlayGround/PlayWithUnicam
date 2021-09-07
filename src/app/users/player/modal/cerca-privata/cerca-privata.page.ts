@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingController, ModalController } from '@ionic/angular';
-import { map, switchMap } from 'rxjs/operators';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LoginService } from 'src/app/services/login-service/login.service';
 
@@ -31,10 +30,16 @@ export class CercaPrivataPage implements OnInit {
     });
   }
 
+  /**
+   * Chiude la Modal.
+   */
   async closeModal() {
     this.modalController.dismiss();
   }
 
+  /**
+   * Partecipa alla Lobby attraverso il codice inserito dall'Utente.
+   */
   async partecipa() {
     const loading = await this.loadingController.create();
     await loading.present();

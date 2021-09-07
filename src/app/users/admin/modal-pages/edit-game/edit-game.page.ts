@@ -44,6 +44,9 @@ export class EditGamePage implements OnInit {
     });
   }
 
+  /**
+   * Chiude la Modal.
+   */
   async closeModal() {
     this.modalController.dismiss();
   }

@@ -28,10 +28,16 @@ export class CercaPubblicaPage implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * Chiude la Modal.
+   */
   async closeModal() {
     this.modalController.dismiss();
   }
 
+  /**
+   * Carica le Informazioni delle Lobby Pubbliche.
+   */
   async loadLobby() {
     this.lobbiesDaVisualizzare = [];
     const tokenValue = (await this.loginService.getToken()).value;
@@ -41,17 +47,17 @@ export class CercaPubblicaPage implements OnInit {
       async (res) => {
         this.lobbies = await res['results'];
         await this.getPartecipantiLobby(headers);
-
-        //TODO
-        // this.reloadManager.completaReload(event);
       },
       async (res) => {
         this.errorManager.stampaErrore(res, 'Impossibile caricare le Lobby!');
-        // this.reloadManager.completaReload(event);
       });
   }
 
-  async getPartecipantiLobby(headers) {
+  /**
+   * Carica i Partecipanti di una Lobby e li salva all'interno dell'array "lobbiesDaVisualizzare".
+   * @param headers Headers con il token dell'Utente
+   */
+  private async getPartecipantiLobby(headers) {
     this.lobbies.forEach(lobby => {
       this.http.get('/lobby/giocatori/' + lobby.codice, { headers }).subscribe(
         async (res) => {
@@ -61,13 +67,14 @@ export class CercaPubblicaPage implements OnInit {
         },
         async (res) => {
           this.errorManager.stampaErrore(res, 'Impossibile reperire i partecipanti della lobby!');
-          //TODO:
-          // this.reloadManager.completaReload(event);
         });
     })
   }
 
-  //TODO commentare
+  /**
+   * Partecipa ad una Lobby.
+   * @param lobby Lobby a cui partecipare
+   */
   async partecipa(lobby) {
     const loading = await this.loadingController.create();
     await loading.present();
@@ -75,7 +82,7 @@ export class CercaPubblicaPage implements OnInit {
     const tokenValue = (await this.loginService.getToken()).value;
     const toSend = { 'token': tokenValue, 'codice_lobby': lobby.codice }
 
-    return this.http.post('/lobby/partecipa', toSend).subscribe(
+    this.http.post('/lobby/partecipa', toSend).subscribe(
       async (res) => {
         this.modalController.dismiss();
         this.router.navigateByUrl('/lobby-guest', { replaceUrl: true });

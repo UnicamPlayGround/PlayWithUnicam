@@ -29,10 +29,16 @@ export class HomePage implements OnInit {
     });
   }
 
+  /**
+   * Apre la pagina del Login.
+   */
   openLogin() {
     this.router.navigateByUrl('/login', { replaceUrl: true });
   }
 
+  /**
+   * Effettua la Registrazione ed il Login di un Ospite.
+   */
   async loginOspiti() {
     console.log("username : " + this.credenziali.value);
     const loading = await this.loadingController.create();

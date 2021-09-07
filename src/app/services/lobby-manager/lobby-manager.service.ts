@@ -12,6 +12,7 @@ export class LobbyManagerService {
     private http: HttpClient,
   ) { }
 
+  //TODO commentare
   async loadInfoLobby() {
     const tokenValue = (await this.loginService.getToken()).value;
     const headers = { 'token': tokenValue };

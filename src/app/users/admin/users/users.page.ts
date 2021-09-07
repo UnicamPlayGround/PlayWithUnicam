@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { AlertController, ModalController } from '@ionic/angular';
-import { map, switchMap } from 'rxjs/operators';
+import { ModalController } from '@ionic/angular';
 import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creator.service';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LoginService } from 'src/app/services/login-service/login.service';
@@ -35,19 +34,19 @@ export class UsersPage implements OnInit {
 
   ngOnInit() { }
 
-  async loadUsers(event?) {
+  /**
+   * Carica le Informazioni degli Utenti della Piattaforma.
+   */
+  async loadUsers() {
     const tokenValue = (await this.loginService.getToken()).value;
     const headers = { 'token': tokenValue };
 
     this.http.get('/admin/utenti', { headers }).subscribe(
       async (res) => {
         this.users = this.users.concat(res['results']);
-        //TODO
-        // this.reloadManager.completaReload(event);
       },
       async (res) => {
         this.errorManager.stampaErrore(res, 'Errore!');
-        // this.reloadManager.completaReload(event);
       });
   }
 
@@ -60,8 +59,8 @@ export class UsersPage implements OnInit {
   }
 
   /**
-   * 
-   * @param key
+   * Ordina l'Array degli Utenti attraverso una key.
+   * @param key Attributo degli Utenti su cui effettuare l'Ordinamento
    */
   sortBy(key) {
     this.sortKey = key;
@@ -69,6 +68,10 @@ export class UsersPage implements OnInit {
     this.sort();
   }
 
+  /**
+   * Ordina l'Array degli Utenti.
+   * //TODO finire commento
+   */
   sort() {
     if (this.sortDirection == 1) {
       this.users = this.users.sort((a, b) => {

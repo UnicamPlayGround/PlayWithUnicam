@@ -32,6 +32,8 @@ export class GamesPage implements OnInit {
     this.loadGames();
   }
 
+  //TODO finire commenti
+
   ngOnInit() {
     this.data = this.fb.group({
       nome: ['', Validators.required],
@@ -50,7 +52,7 @@ export class GamesPage implements OnInit {
     this.data.reset();
   }
 
-  async loadGames(event?) {
+  async loadGames() {
     const tokenValue = (await this.loginService.getToken()).value;
     const headers = { 'token': tokenValue };
 

@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login-service/login.service';
 import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creator.service';
 
-
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.page.html',
@@ -37,6 +36,9 @@ export class MenuPage implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * Effettua l'operazione di Logout.
+   */
   async logout() {
     var message = 'Sei sicuro di voler uscire?';
     this.alertCreator.createConfirmationAlert(message, () => {

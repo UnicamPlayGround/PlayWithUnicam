@@ -49,10 +49,16 @@ export class EditUserPage implements OnInit {
     });
   }
 
+  /**
+   * Chiude la Modal.
+   */
   async closeModal() {
     this.modalController.dismiss();
   }
 
+  /**
+   * Modifica le Informazioni dell'Utente.
+   */
   async editUser() {
     const loading = await this.loadingController.create();
     await loading.present();
@@ -66,8 +72,6 @@ export class EditUserPage implements OnInit {
       'new_cognome': this.data.value.cognome,
       'new_tipo': this.data.value.tipo
     }
-
-    //TODO: fare chiamata REST per modificare l'utente
 
     this.http.put('/admin/utenti/' + this.username, toSend).subscribe(
       async (res) => {

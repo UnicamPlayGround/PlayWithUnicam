@@ -17,7 +17,6 @@ export class AccountPage implements OnInit {
   passwords: FormGroup;
   user = { 'username': null, 'nome': null, 'cognome': null, 'password': null, 'salt': null, 'tipo': null };
 
-
   constructor(
     private loadingController: LoadingController,
     private logService: LoginService,
@@ -124,7 +123,7 @@ export class AccountPage implements OnInit {
     await loading.present();
 
     const tokenValue = (await this.logService.getToken()).value;
-    
+
     const toSend = {
       'old_password': this.passwords.value.oldPassword,
       'new_password': this.passwords.value.newPassword,

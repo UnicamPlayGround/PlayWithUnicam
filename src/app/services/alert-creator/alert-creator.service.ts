@@ -8,6 +8,7 @@ export class AlertCreatorService {
 
   constructor(private alertController: AlertController) { }
 
+  //TODO commentare
   async createConfirmationAlert(messaggio, cb) {
     var buttons = [
       { text: 'ANNULLA', role: 'cancel' },

@@ -38,6 +38,7 @@ export class DashboardPage implements OnInit {
     return await popover.present();
   }
 
+  //TODO fare commento
   async openIntroLobby(game) {
     const giocoSelezionato = game;
     const popover = await this.popoverController.create({
@@ -49,7 +50,10 @@ export class DashboardPage implements OnInit {
     return await popover.present();
   }
 
-  async loadGames(event?) {
+  /**
+   * Carica le Informazioni dei Giochi della Piattaforma.
+   */
+  async loadGames() {
     const tokenValue = (await this.loginService.getToken()).value;
     const headers = { 'token': tokenValue };
 
@@ -64,7 +68,7 @@ export class DashboardPage implements OnInit {
 
   loadMore(event) {
     this.page++;
-    this.loadGames(event);
+    this.loadGames();
 
     if (this.page === this.maximumPages) event.target.disabled = true;
   }

@@ -30,6 +30,13 @@ export class LoginPage implements OnInit {
     });
   }
 
+  /**
+   * Effettua il Login dell'Utente:
+   * * Se l'esito del Login è uguale ad 1 allora l'Utente verrà reindirizzato
+   * alla pagina "/player/dashboard".
+   * * Se l'esito del Login è uguale a 2 allora l'Utente verrà reindirizzato
+   * alla pagina "/admin".
+   */
   async login() {
     const loading = await this.loadingController.create();
     await loading.present();
