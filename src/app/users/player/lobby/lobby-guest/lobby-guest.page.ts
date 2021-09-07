@@ -13,7 +13,7 @@ import { LoginService } from 'src/app/services/login-service/login.service';
   styleUrls: ['./lobby-guest.page.scss'],
 })
 export class LobbyGuestPage implements OnInit {
-  lobby = { codice: null, admin_lobby: null, pubblica: false, min_giocatori: 0, max_giocatori: 0, link: null };
+  lobby = { codice: null, admin_lobby: null, pubblica: false, min_giocatori: 0, max_giocatori: 0, nome: null, link: null, regolamento: null };
   giocatori = [];
   private timerInfoLobby;
   private timerGiocatori;

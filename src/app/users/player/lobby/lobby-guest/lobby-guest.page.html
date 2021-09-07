@@ -173,16 +173,13 @@
 
             <ion-card-header>
               <ion-card-subtitle style="text-align: center; color:rgb(16, 64, 85);">Nome</ion-card-subtitle>
-              <ion-card-title style="font-size: 22px; font-weight:bold; text-align: center;">Gioco dell'Oca
+              <ion-card-title style="font-size: 22px; font-weight:bold; text-align: center;">{{ lobby.nome }}
               </ion-card-title>
             </ion-card-header>
 
             <ion-card-content>
-              <h2>Regolamento</h2>
-              <ion-card-subtitle style="color:rgb(16, 64, 85);">Il gioco dell'Oca è un gioco a turni in cui, in ogni
-                turno, il giocatore corrente tira
-                un dado ed in base al risultato del lancio sposta la propria pedina in avanti su un tabellone di caselle
-              </ion-card-subtitle>
+              <h2 *ngIf="lobby.regolamento">Regolamento</h2>
+              <ion-card-subtitle *ngIf="lobby.regolamento" style="color:rgb(16, 64, 85);">{{ lobby.regolamento }}</ion-card-subtitle>
             </ion-card-content>
           </ion-list>
         </ion-card>
@@ -197,16 +194,13 @@
 
             <ion-card-header *ngIf="mostraInfoGioco">
               <ion-card-subtitle style="text-align: center; color:rgb(16, 64, 85);">Nome</ion-card-subtitle>
-              <ion-card-title style="font-size: 22px; font-weight:bold; text-align: center;">Gioco dell'Oca
+              <ion-card-title style="font-size: 22px; font-weight:bold; text-align: center;">{{ lobby.nome }}
               </ion-card-title>
             </ion-card-header>
 
             <ion-card-content *ngIf="mostraInfoGioco">
-              <h2>Regolamento</h2>
-              <ion-card-subtitle style="color:rgb(16, 64, 85);">Il gioco dell'Oca è un gioco a turni in cui, in ogni
-                turno, il giocatore corrente tira
-                un dado ed in base al risultato del lancio sposta la propria pedina in avanti su un tabellone di caselle
-              </ion-card-subtitle>
+              <h2 *ngIf="lobby.regolamento">Regolamento</h2>
+              <ion-card-subtitle *ngIf="lobby.regolamento" style="color:rgb(16, 64, 85);">{{ lobby.regolamento }}</ion-card-subtitle>
             </ion-card-content>
           </ion-list>
         </ion-card>

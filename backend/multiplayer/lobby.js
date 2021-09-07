@@ -86,7 +86,7 @@ exports.cercaLobbyByCodice = (codice, cb) => {
  */
 //TODO
 exports.cercaLobbyByUsername = (username, cb) => {
-    db.pool.query('SELECT codice, data_creazione, admin_lobby, id_gioco, public.giochi.nome, min_giocatori, max_giocatori, pubblica, link FROM ' +
+    db.pool.query('SELECT codice, data_creazione, admin_lobby, id_gioco, public.giochi.nome, min_giocatori, max_giocatori, pubblica, regolamento, link FROM ' +
         '(public.giocatori INNER JOIN public.lobby ON public.giocatori.codice_lobby = public.lobby.codice) ' +
         'INNER JOIN public.giochi ON public.lobby.id_gioco = public.giochi.id WHERE username = $1',
         [username], (error, results) => {

@@ -14,8 +14,7 @@ import jwt_decode from 'jwt-decode';
   styleUrls: ['./lobby-admin.page.scss'],
 })
 export class LobbyAdminPage implements OnInit {
-  segment: string = "impostazioni";
-  lobby = { codice: null, admin_lobby: null, pubblica: false, min_giocatori: 0, max_giocatori: 0, link: null };
+  lobby = { codice: null, admin_lobby: null, pubblica: false, min_giocatori: 0, max_giocatori: 0, nome: null, link: null, regolamento: null };
   giocatori = [];
   private timerInfoLobby;
   private timerGiocatori;
@@ -49,7 +48,7 @@ export class LobbyAdminPage implements OnInit {
   /**
    * Cambia il valore di 'mostraInfoLobby' che determina l'espansione della relativa card
    */
-   espandiInfoLobby() {
+  espandiInfoLobby() {
     this.mostraInfoLobby = !this.mostraInfoLobby;
   }
 
