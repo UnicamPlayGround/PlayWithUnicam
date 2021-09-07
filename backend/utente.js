@@ -205,7 +205,6 @@ exports.eliminaOspiti = () => {
         ospiti.forEach(ospite => {
             var dataOspite = new Date(ospite.data_creazione);
             if ((data.getTime() - dataOspite.getTime()) > 86400000) {
-                console.log("ospite eliminato è: "+ospite.username);
                 db.pool.query('DELETE FROM public.ospiti WHERE username=$1', [ospite.username], (error, results) => {
                     if (error) {
                         console.log(error);
