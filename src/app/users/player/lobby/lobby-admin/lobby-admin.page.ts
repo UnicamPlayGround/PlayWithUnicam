@@ -17,9 +17,9 @@ export class LobbyAdminPage implements OnInit {
   segment: string = "impostazioni";
   lobby = { codice: null, admin_lobby: null, pubblica: false, min_giocatori: 0, max_giocatori: 0 };
   giocatori = [];
-  private timerInfoLobby;
-  private timerGiocatori;
-  private timerPing;
+  private timerInfoLobby: NodeJS.Timeout;
+  private timerGiocatori: NodeJS.Timeout;
+  private timerPing: NodeJS.Timeout;
 
   constructor(
     private alertCreator: AlertCreatorService,
@@ -48,8 +48,11 @@ export class LobbyAdminPage implements OnInit {
     this.segment = ev.detail.value;
   }
 
-  //TODO commentare
-  async loadInfoLobby() {
+  /**
+   * Carica le Informazioni della Lobby, se l'Utente corrente non corrisponde
+   * all'Admin della Lobby allora viene reinderizzato alla pagina "/lobby-guest".
+   */
+  private async loadInfoLobby() {
     const tokenValue = (await this.loginService.getToken()).value;
     const decodedToken: any = jwt_decode(tokenValue);
 
@@ -68,7 +71,10 @@ export class LobbyAdminPage implements OnInit {
       });
   }
 
-  async loadGiocatori() {
+  /**
+   * Carica i Partecipanti alla Lobby.
+   */
+  private async loadGiocatori() {
     console.log("sto caricando i giocatori...");
 
     (await this.lobbyManager.getPartecipanti()).subscribe(
@@ -83,6 +89,9 @@ export class LobbyAdminPage implements OnInit {
       });
   }
 
+  /**
+   * Modifica lo stato (Pubblica o Privata) della Lobby.
+   */
   async modificaLobby() {
     const loading = await this.loadingController.create();
     await loading.present();
@@ -99,8 +108,13 @@ export class LobbyAdminPage implements OnInit {
     );
   }
 
+  /**
+   * Espelle un Giocatore dalla Lobby.
+   * @param username Username del Giocatore da espellere
+   * @param index Indice del Giocatore da espellere
+   */
   async eliminaPartecipante(username, index) {
-    this.alertCreator.createConfirmationAlert('Sei sicuro di voler cacciare il giocatore selezionato?',
+    this.alertCreator.createConfirmationAlert('Sei sicuro di voler espellere il giocatore selezionato?',
       async () => {
         (await this.lobbyManager.eliminaPartecipante(username)).subscribe(
           async (res) => {
@@ -114,6 +128,9 @@ export class LobbyAdminPage implements OnInit {
       })
   }
 
+  /**
+   * Abbandona la Lobby.
+   */
   async abbandonaLobby() {
     this.alertCreator.createConfirmationAlert('Sei sicuro di voler abbandonare la lobby?',
       async () => {
@@ -129,7 +146,11 @@ export class LobbyAdminPage implements OnInit {
       })
   }
 
-  async ping() {
+  /**
+   * Esegue l'operazione di Ping per segnalare al Server
+   * che è ancora presente all'interno della Lobby.
+   */
+  private async ping() {
     console.log("ping...");
     (await this.lobbyManager.ping()).subscribe(
       async (res) => { },
@@ -141,6 +162,9 @@ export class LobbyAdminPage implements OnInit {
     );
   }
 
+  /**
+   * Inizia una nuova Partita e viene reinderizzato alla pagina del Gioco .
+   */
   async iniziaPartita() {
     (await this.lobbyManager.iniziaPartita()).subscribe(
       async (res) => {

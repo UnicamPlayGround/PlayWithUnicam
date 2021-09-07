@@ -54,8 +54,12 @@ export class LobbyGuestPage implements OnInit {
     this.mostraInfoGioco = !this.mostraInfoGioco;
   }
 
-  //TODO commentare
-  async loadInfoLobby() {
+  /**
+   * Carica le Informazioni della Lobby; se il vecchio admin abbandona la Lobby e 
+   * l'Utente corrente viene scelto come nuovo
+   * Admin, allora viene reinderizzato alla pagina "/lobby-admin".
+   */
+  private async loadInfoLobby() {
     (await this.lobbyManager.loadInfoLobby()).subscribe(
       async (res) => {
         this.lobby = res['results'][0];
@@ -65,7 +69,7 @@ export class LobbyGuestPage implements OnInit {
         if (decodedToken.username === this.lobby.admin_lobby) {
           this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing, this.timerPartita);
           this.router.navigateByUrl('/lobby-admin', { replaceUrl: true });
-          this.alertCreator.createInfoAlert("Sei il nuovo admin", "Il vecchio admin ha abbandonato la partita e sei stato scelto per prendere il suo posto!");
+          this.alertCreator.createInfoAlert("Sei il nuovo Admin", "Il vecchio admin ha abbandonato la partita e sei stato scelto per prendere il suo posto!");
         }
       },
       async (res) => {
@@ -75,7 +79,10 @@ export class LobbyGuestPage implements OnInit {
       });
   }
 
-  async loadGiocatori() {
+  /**
+   * Carica i Partecipanti alla Lobby.
+   */
+  private async loadGiocatori() {
     console.log("sto caricando i giocatori...");
 
     (await this.lobbyManager.getPartecipanti()).subscribe(
@@ -90,7 +97,11 @@ export class LobbyGuestPage implements OnInit {
       });
   }
 
-  async loadInfoPartita() {
+  /**
+   * Carica le Informazioni della Partita, appena l'Admin avvia la partita 
+   * il Giocatore viene reinderizzato alla Pagina del Gioco.
+   */
+  private async loadInfoPartita() {
     (await this.lobbyManager.loadInfoPartita()).subscribe(
       async (res) => {
         var partita = res['results'][0];
@@ -106,6 +117,9 @@ export class LobbyGuestPage implements OnInit {
       });
   }
 
+  /**
+   * Abbandona la Lobby.
+   */
   async abbandonaLobby() {
     this.alertCreator.createConfirmationAlert('Sei sicuro di voler abbandonare la lobby?',
       async () => {
@@ -121,7 +135,11 @@ export class LobbyGuestPage implements OnInit {
       });
   }
 
-  async ping() {
+  /**
+   * Esegue l'operazione di Ping per segnalare al Server
+   * che è ancora presente all'interno della Lobby.
+   */
+  private async ping() {
     console.log("ping...");
     (await this.lobbyManager.ping()).subscribe(
       async (res) => { },
