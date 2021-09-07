@@ -14,7 +14,8 @@ import jwt_decode from 'jwt-decode';
   styleUrls: ['./lobby-admin.page.scss'],
 })
 export class LobbyAdminPage implements OnInit {
-  lobby = { codice: null, admin_lobby: null, pubblica: false, min_giocatori: 0, max_giocatori: 0 };
+  segment: string = "impostazioni";
+  lobby = { codice: null, admin_lobby: null, pubblica: false, min_giocatori: 0, max_giocatori: 0, link: null };
   giocatori = [];
   private timerInfoLobby;
   private timerGiocatori;
@@ -178,7 +179,7 @@ export class LobbyAdminPage implements OnInit {
   async iniziaPartita() {
     (await this.lobbyManager.iniziaPartita()).subscribe(
       async (res) => {
-        console.log("partita iniziata");
+        this.router.navigateByUrl(this.lobby.link, { replaceUrl: true });
       },
       async (res) => {
         this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing);
