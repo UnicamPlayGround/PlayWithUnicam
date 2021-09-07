@@ -21,7 +21,10 @@ exports.cercaGiocatore = (username, cb) => {
  */
 exports.controllaInattivi = () => {
     db.pool.query('SELECT * FROM public.giocatori', (error, results) => {
-        //TODO error
+        if (error) {
+            console.log(error);
+            return response.status(400).send('Errore nella query');
+        }
         const giocatori = JSON.parse(JSON.stringify(results.rows));
 
         giocatori.forEach(giocatore => {
@@ -30,7 +33,10 @@ exports.controllaInattivi = () => {
             //30 secondi
             if (dif > 30000 || giocatore.ping == null)
                 db.pool.query('DELETE FROM public.giocatori WHERE username=$1', [giocatore.username], (error, results) => {
-                    //TODO error
+                    if (error) {
+                        console.log(error);
+                        return response.status(400).send('Errore nella query');
+                    }
                 });
         });
     });

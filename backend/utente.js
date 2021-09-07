@@ -81,10 +81,11 @@ exports.cercaUtenteByUsername = (username, cb) => {
  * @param {*} cb Callback
  */
 exports.creaOspite = (username, cb) => {
+    var data = new Date();
     controller.controllaNotNull(username, "L'username non deve essere vuoto!");
 
-    db.pool.query('INSERT INTO public.ospiti (username) VALUES ($1)',
-        [username], (error, results) => {
+    db.pool.query('INSERT INTO public.ospiti (username, data_creazione) VALUES ($1, $2)',
+        [username, data], (error, results) => {
             cb(error, results)
         })
 }
@@ -184,4 +185,34 @@ exports.modificaUsername = (oldUsername, newUsername, response, cb) => {
                 })
         })
     });
+}
+
+/**
+ * Elimina tutti gli ospiti che si sono registrati più di 24 ore fa.
+ * * 86400000 millisecondi corispondono ad un'ora
+ */
+exports.eliminaOspiti = () => {
+    var data = new Date();
+
+    db.pool.query('select * from public.ospiti', (error, results) => {
+        if (error) {
+            console.log(error);
+            return response.status(400).send('Errore nella query');
+        }
+
+        const ospiti = JSON.parse(JSON.stringify(results.rows));
+        
+        ospiti.forEach(ospite => {
+            var dataOspite = new Date(ospite.data_creazione);
+            if ((data.getTime() - dataOspite.getTime()) > 86400000) {
+                console.log("ospite eliminato è: "+ospite.username);
+                db.pool.query('DELETE FROM public.ospiti WHERE username=$1', [ospite.username], (error, results) => {
+                    if (error) {
+                        console.log(error);
+                        return response.status(400).send('Errore nella query');
+                    }
+                });
+            }
+        });
+    })
 }
