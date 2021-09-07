@@ -222,6 +222,9 @@ app.get('/lobby/info', (req, res) => {
                 console.log(err);
                 return res.status(500).send('Server error!');
             }
+            if (controller.controllaRisultatoQuery(results))
+                return res.status(400).send("Errore: Devi partecipare ad una Lobby!");
+
             sendDataInJSON(res, results);
         })
     } else return res.status(401).send(ERRORE_JWT);
@@ -259,6 +262,17 @@ app.delete('/lobby/abbandona', (req, res) => {
     } else return res.status(401).send(ERRORE_JWT);
 });
 
+app.delete('/partita/termina', (req, res) => {
+    if (verificaJWT(req.headers.token)) {
+        try {
+            partita.terminaPartita(jwt.decode(req.headers.token).username, res);
+        } catch (error) {
+            console.log(error);
+            return res.status(400).send(error);
+        }
+    } else return res.status(401).send(ERRORE_JWT);
+});
+
 /**
  * //TODO riguardare commento
  * REST - Ritorna la lista degli Utenti
@@ -268,6 +282,7 @@ app.delete('/admin/utenti', (req, res) => {
         try {
             admin.eliminaUtenti(req.headers.users_to_delete, res);
         } catch (error) {
+            console.log(error);
             return res.status(400).send(error);
         }
     } else return res.status(401).send(ERRORE_JWT);

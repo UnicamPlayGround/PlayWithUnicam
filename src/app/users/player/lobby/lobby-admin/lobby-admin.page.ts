@@ -31,12 +31,7 @@ export class LobbyAdminPage implements OnInit {
     private loginService: LoginService,
     private router: Router
   ) {
-    this.loadInfoLobby();
-    this.loadGiocatori();
-    this.ping();
-    this.timerInfoLobby = timerService.getTimer(() => { this.loadInfoLobby() }, 5000);
-    this.timerGiocatori = timerService.getTimer(() => { this.loadGiocatori() }, 5000);
-    this.timerPing = timerService.getTimer(() => { this.ping() }, 4000);
+    this.avviaTimers();
 
     window.addEventListener('beforeunload', (event) => {
       event.returnValue = '';
@@ -58,6 +53,17 @@ export class LobbyAdminPage implements OnInit {
   espandiInfoGioco() {
     this.mostraInfoGioco = !this.mostraInfoGioco;
   }
+
+  //TODO
+  private avviaTimers() {
+    this.loadInfoLobby();
+    this.loadGiocatori();
+    this.ping();
+    this.timerInfoLobby = this.timerService.getTimer(() => { this.loadInfoLobby() }, 5000);
+    this.timerGiocatori = this.timerService.getTimer(() => { this.loadGiocatori() }, 5000);
+    this.timerPing = this.timerService.getTimer(() => { this.ping() }, 4000);
+  }
+
   /**
    * Carica le Informazioni della Lobby, se l'Utente corrente non corrisponde
    * all'Admin della Lobby allora viene reinderizzato alla pagina "/lobby-guest".
@@ -144,12 +150,13 @@ export class LobbyAdminPage implements OnInit {
   async abbandonaLobby() {
     this.alertCreator.createConfirmationAlert('Sei sicuro di voler abbandonare la lobby?',
       async () => {
+        this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing);
         (await this.lobbyManager.abbandonaLobby()).subscribe(
           async (res) => {
-            this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing);
             this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
           },
           async (res) => {
+            this.avviaTimers();
             this.errorManager.stampaErrore(res, 'Abbandono fallito');
           }
         );
@@ -178,6 +185,7 @@ export class LobbyAdminPage implements OnInit {
   async iniziaPartita() {
     (await this.lobbyManager.iniziaPartita()).subscribe(
       async (res) => {
+        this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing);
         this.router.navigateByUrl(this.lobby.link, { replaceUrl: true });
       },
       async (res) => {

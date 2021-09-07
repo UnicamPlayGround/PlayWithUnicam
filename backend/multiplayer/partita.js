@@ -242,3 +242,29 @@ exports.salvaInfoGiocatore = (username, infoGiocatore, response) => {
         })
     })
 }
+
+//TODO commentare
+exports.terminaPartita = (adminLobby, response) => {
+    lobby.cercaLobbyByAdmin(adminLobby, (error, results) => {
+        if (error) {
+            console.log(error);
+            return response.status(500).send('Server error!');
+        }
+        if (controller.controllaRisultatoQuery(results))
+            return response.status(404).send("Devi essere l'Admin della Lobby per cancellare la Partita!");
+
+        const lobby = JSON.parse(JSON.stringify(results.rows))[0];
+
+        console.log(lobby);
+
+        db.pool.query('DELETE from public.partite WHERE codice_lobby = $1',
+            [lobby.codice], (error, results) => {
+                if (error) {
+                    console.log(error);
+                    return response.status(500).send('Server error!');
+                }
+
+                return response.status(200).send({ 'esito': "1" });
+            });
+    })
+}
