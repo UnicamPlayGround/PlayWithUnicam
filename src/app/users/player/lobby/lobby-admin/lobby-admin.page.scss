@@ -1,50 +1,103 @@
-.main-div {
-    max-width: 1500px;
-    padding-top: 30px;
-    padding-bottom: 30px;
-    padding-inline: 30px;
-    text-align: center;
-    margin: auto;
-    background-color: lightblue;
+p{
+    color:rgb(16, 64, 85);
 }
 
-.list-div{
-    max-width: 300px;
-    padding-top: 30px;
-    padding-bottom: 30px;
-    padding-inline: 50px;
-    text-align: center;
-    max-height: 500px;
+.info-card{
+    background: #96c6da;
+    border-radius: 20px;
+
+    ion-list{
+        background: rgba(0, 0, 0, 0);
+
+        ion-title{
+            color: #fff;
+            font-size: 18px;
+        }
+        ion-item{
+            color: #fff;
+            --background: rgba(0, 0, 0, 0);
+        }
+    }
 }
 
-.impostazioni-div{
-    margin-top: 100px;
-    margin-right: 200px;
-}
+.players-card{
+    background: #44a2b9;
+    color: #fff;
+    border-radius: 20px;
 
-.game-div {
-    max-width: 1000px;
-    height: 600px;
-    padding-top: 30px;
-    padding-bottom: 30px;
-    padding-inline: 30px;
-    text-align: center;
-    margin: auto;
-    background-color: lightblue;
-}
+    ion-list{
+        background: rgba(0, 0, 0, 0);
 
-.lobby{
-    max-width: 600px;
-}
-
-/* Tablet Styles */
-@media only screen and (min-width: 560px) and (max-width: 819px){
-    .lobby {
-      flex: 50%;
-      max-width: 50%;
+        ion-title{
+            color: #fff;
+            font-size: 18px;
+        }
+        ion-item{
+            color: #fff;
+            --background: rgba(0, 0, 0, 0);
+        }
     }
 }
 
 .admin{
-    --background: rgb(198, 234, 255);
+    background: rgb(109, 194, 206) !important;
+}
+
+.admin-label{
+    color:#fff !important;
+    font-size: 13px;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.game-card{
+    background: #4fc5c5;
+    color: #fff;
+    border-radius: 20px;
+
+    ion-list{
+        background: rgba(0, 0, 0, 0);
+
+        ion-title{
+            color: #fff;
+            font-size: 18px;
+        }
+        ion-item{
+            color: #fff;
+            --background: rgba(0, 0, 0, 0);
+        }
+    }
+}
+
+.start-button-footer{
+    align-items: center;
+}
+
+@media only screen and (min-width: 993px){
+    #expandable-info-card{
+        display: none;
+    }
+    #slide-players-card{
+        display: none;
+    }
+    #expandable-game-card{
+        display: none;
+    }
+    .start-button-footer{
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 992px){
+    #normal-info-card{
+        display: none;
+    }
+    #normal-players-card{
+        display: none;
+    }
+    #normal-game-card{
+        display: none;
+    }
+    .start-button-row{
+        display: none;
+    }
 }
