@@ -13,13 +13,21 @@ import { LoginService } from 'src/app/services/login-service/login.service';
   styleUrls: ['./lobby-guest.page.scss'],
 })
 export class LobbyGuestPage implements OnInit {
-  segment: string = "impostazioni";
-  lobby = { codice: null, admin_lobby: null, pubblica: false, min_giocatori: 0, max_giocatori: 0, link: null };
-  giocatori = [];
+  lobby = { codice: '62705', admin_lobby: 'rondy', pubblica: true, min_giocatori: 2, max_giocatori: 6, link: null };
+  giocatori = [
+    { username: 'rondy' },
+    { username: 'cipo' },
+    { username: 'tom' },
+    { username: 'cla' },
+    { username: 'gre' },
+    { username: 'paoletto' }
+  ];
   private timerInfoLobby;
   private timerGiocatori;
   private timerPing;
   private timerPartita;
+  mostraInfoLobby = false;
+  mostraInfoGioco = false;
 
   constructor(
     private errorManager: ErrorManagerService,
@@ -45,8 +53,12 @@ export class LobbyGuestPage implements OnInit {
   ngOnInit() {
   }
 
-  segmentChanged(ev: any) {
-    this.segment = ev.detail.value;
+  espandiInfoLobby() {
+    this.mostraInfoLobby = !this.mostraInfoLobby;
+  }
+
+  espandiInfoGioco() {
+    this.mostraInfoGioco = !this.mostraInfoGioco;
   }
 
   //TODO commentare
