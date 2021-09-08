@@ -2,8 +2,7 @@
   <ion-toolbar color="primary">
     <ion-title>Lobby di gioco</ion-title>
 
-    <ion-button slot="end" (click)="abbandonaLobby()" fill="clear" shape="round" class="ion-hide-md-down"
-      style="color: #fff;">
+    <ion-button slot="end" (click)="abbandonaLobby()" fill="clear" color="light" shape="round" class="ion-hide-md-down">
       <ion-label>Abbandona lobby</ion-label>
       <ion-icon slot="start" name="exit-outline"></ion-icon>
     </ion-button>
@@ -153,8 +152,8 @@
 
                   <p *ngIf="giocatore.username == lobby.admin_lobby" class="admin-label"
                     style="position:absolute; margin-top: -15px; margin-left: 15px; z-index: 1;">ADMIN</p>
-                  <ion-icon  name="diamond-outline" *ngIf="giocatore.username == lobby.admin_lobby"
-                  style="position:absolute; margin-top: -15px; margin-left: 20px; z-index: 1;">
+                  <ion-icon name="diamond-outline" *ngIf="giocatore.username == lobby.admin_lobby"
+                    style="position:absolute; margin-top: -15px; margin-left: 20px; z-index: 1;">
                   </ion-icon>
                 </ion-col>
               </ion-slide>
@@ -179,7 +178,8 @@
 
             <ion-card-content>
               <h2 *ngIf="lobby.regolamento">Regolamento</h2>
-              <ion-card-subtitle *ngIf="lobby.regolamento" style="color:rgb(16, 64, 85);">{{ lobby.regolamento }}</ion-card-subtitle>
+              <ion-card-subtitle *ngIf="lobby.regolamento" style="color:rgb(16, 64, 85);">{{ lobby.regolamento }}
+              </ion-card-subtitle>
             </ion-card-content>
           </ion-list>
         </ion-card>
@@ -200,7 +200,8 @@
 
             <ion-card-content *ngIf="mostraInfoGioco">
               <h2 *ngIf="lobby.regolamento">Regolamento</h2>
-              <ion-card-subtitle *ngIf="lobby.regolamento" style="color:rgb(16, 64, 85);">{{ lobby.regolamento }}</ion-card-subtitle>
+              <ion-card-subtitle *ngIf="lobby.regolamento" style="color:rgb(16, 64, 85);">{{ lobby.regolamento }}
+              </ion-card-subtitle>
             </ion-card-content>
           </ion-list>
         </ion-card>

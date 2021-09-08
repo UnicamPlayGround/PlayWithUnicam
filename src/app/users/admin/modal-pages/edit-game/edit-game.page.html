@@ -12,6 +12,9 @@
       <ion-segment-button value="info">
         <ion-label>Info</ion-label>
       </ion-segment-button>
+      <ion-segment-button value="regolamento">
+        <ion-label>Regolamento</ion-label>
+      </ion-segment-button>
       <ion-segment-button value="config">
         <ion-label>Config</ion-label>
       </ion-segment-button>
@@ -96,15 +99,52 @@
                 Attiva
                 <p>Se attivato, il gioco sarà visibile a tutti i giocatori online.</p>
               </ion-label>
-              <ion-toggle slot="end" [(ngModel)]="attivo" [ngModelOptions]="{standalone: true}"></ion-toggle>
+              <ion-toggle slot="end" name="attivo" formControlName="attivo" required></ion-toggle>
             </ion-item>
           </ion-col>
         </ion-row>
       </ion-grid>
-
-      <ion-button type="submit" color="primary" expand="block" shape="round">Salva modifiche</ion-button>
     </form>
   </div>
 
-  <div *ngIf="segment === 'config'" class="modal"></div>
+  <div *ngIf="segment === 'regolamento'" class="modal">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12">
+          <h2><strong>Regolamento</strong></h2>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="12">
+          <ion-textarea style="height: 100%; border: 1px solid var(--ion-color-primary); padding:15px;" auto-grow="true"
+            name="regolamento" [(ngModel)]="regolamento" [ngModelOptions]="{standalone: true}"></ion-textarea>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <div *ngIf="segment === 'config'" class="modal">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12">
+          <h2><strong>Config</strong></h2>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="12">
+          <ion-textarea style="height: 100%; border: 1px solid var(--ion-color-primary); padding:15px;" auto-grow="true"
+            name="config" [(ngModel)]="config" [ngModelOptions]="{standalone: true}"></ion-textarea>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar color="primary">
+    <ion-button type="submit" fill="clear" color="light" expand="full" (click)="salvaModifiche()">Salva modifiche
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

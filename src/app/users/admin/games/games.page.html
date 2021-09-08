@@ -150,7 +150,7 @@
         <ion-row *ngIf="mostraRegolamento">
           <ion-col size="12">
             <ion-textarea style="height: 100%; border: 1px solid var(--ion-color-primary);"
-              placeholder="Scrivi qui regolamento del gioco" auto-grow="true" name="regolamento"
+              placeholder="Scrivi qui il regolamento del gioco" auto-grow="true" name="regolamento"
               [(ngModel)]="regolamento" [ngModelOptions]="{standalone: true}"></ion-textarea>
           </ion-col>
         </ion-row>
@@ -174,9 +174,15 @@
               [ngModelOptions]="{standalone: true}"></ion-textarea>
           </ion-col>
         </ion-row>
-      </ion-grid>
 
-      <ion-button type="submit" color="primary" expand="block" shape="round">Crea gioco</ion-button>
+        <ion-row>
+          <ion-col size-lg="4" size-md="4" size-sm="0" size="12"></ion-col>
+          <ion-col size-lg="4" size-md="4" size-sm="12" size="12">
+            <ion-button type="submit" color="primary" expand="block" shape="round">Crea gioco</ion-button>
+          </ion-col>
+          <ion-col size-lg="4" size-md="4" size-sm="0" size="12"></ion-col>
+        </ion-row>
+      </ion-grid>
     </form>
 
   </div>

@@ -58,7 +58,7 @@ export class GamesPage implements OnInit {
     const tokenValue = (await this.loginService.getToken()).value;
     const headers = { 'token': tokenValue };
 
-    this.http.get('/games', { headers }).subscribe(
+    this.http.get('/games/admin', { headers }).subscribe(
       async (res) => {
         this.games = res['results'];
       },
@@ -76,13 +76,12 @@ export class GamesPage implements OnInit {
       cssClass: 'edit-game'
     });
 
-    // modal.onDidDismiss().then((data) => {
-    //   const modUser = data['data'];
-    //   console.log('mod_user', modUser);
+    modal.onDidDismiss().then((data) => {
+      const giocoModificato = data['data'];
 
-    //   if (modUser)
-    //     this.users[index] = modUser;
-    // });
+      if (giocoModificato)
+        this.loadGames();
+    });
 
     return await modal.present();
   }

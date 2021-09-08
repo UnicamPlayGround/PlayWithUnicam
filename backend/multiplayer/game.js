@@ -11,6 +11,14 @@ exports.getListaGiochi = (cb) => {
 }
 
 //TODO commentare
+exports.getListaGiochiAsAdmin = (cb) => {
+    return db.pool.query('select id, nome, tipo, max_giocatori, min_giocatori, link, attivo, config, regolamento from public.giochi',
+        (error, results) => {
+            cb(error, results)
+        });
+}
+
+//TODO commentare
 exports.lancioDado = (nFacce) => {
     if (nFacce == 0 || nFacce == null || isNaN(parseInt(nFacce)))
         throw "Errore, il numero delle facce del dado deve essere un numero maggiore di 0!";
@@ -50,6 +58,20 @@ exports.creaGioco = (nome, tipo, minGiocatori, maxGiocatori, link, attivo, confi
 
     return db.pool.query('INSERT INTO public.giochi (nome, tipo, max_giocatori, min_giocatori, link, attivo, config, regolamento) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
         [nome, tipo, maxGiocatori, minGiocatori, link, attivo, config, regolamento], (error, results) => {
+            if (error) {
+                console.log(error);
+                return response.status(400).send("Non è stato possibile creare il gioco!");
+            }
+            return response.status(200).send({ 'esito': "1" });
+        })
+}
+
+//TODO commentare
+exports.modificaGioco = (id ,nome, tipo, minGiocatori, maxGiocatori, link, attivo, config, regolamento, response) => {
+    controller.controllaDatiGioco(nome, tipo, minGiocatori, maxGiocatori, link, attivo, regolamento);
+
+    return db.pool.query('UPDATE public.giochi SET nome=$1, tipo=$2, max_giocatori=$3, min_giocatori=$4, link=$5, attivo=$6, config=$7, regolamento=$8 WHERE id=$9',
+        [nome, tipo, maxGiocatori, minGiocatori, link, attivo, config, regolamento, id], (error, results) => {
             if (error) {
                 console.log(error);
                 return response.status(400).send("Non è stato possibile creare il gioco!");

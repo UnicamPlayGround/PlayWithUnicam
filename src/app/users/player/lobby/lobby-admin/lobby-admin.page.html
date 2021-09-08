@@ -2,8 +2,7 @@
   <ion-toolbar color="primary">
     <ion-title>Lobby di gioco</ion-title>
 
-    <ion-button slot="end" (click)="abbandonaLobby()" fill="clear" shape="round" class="ion-hide-md-down"
-      style="color: #fff;">
+    <ion-button slot="end" (click)="abbandonaLobby()" fill="clear" color="light" shape="round" class="ion-hide-md-down">
       <ion-label>Abbandona lobby</ion-label>
       <ion-icon slot="start" name="exit-outline"></ion-icon>
     </ion-button>
@@ -183,7 +182,8 @@
 
             <ion-card-content>
               <h2 *ngIf="lobby.regolamento">Regolamento</h2>
-              <ion-card-subtitle *ngIf="lobby.regolamento" style="color:rgb(16, 64, 85);">{{ lobby.regolamento }}</ion-card-subtitle>
+              <ion-card-subtitle *ngIf="lobby.regolamento" style="color:rgb(16, 64, 85);">{{ lobby.regolamento }}
+              </ion-card-subtitle>
             </ion-card-content>
           </ion-list>
         </ion-card>
@@ -204,7 +204,8 @@
 
             <ion-card-content *ngIf="mostraInfoGioco">
               <h2 *ngIf="lobby.regolamento">Regolamento</h2>
-              <ion-card-subtitle *ngIf="lobby.regolamento" style="color:rgb(16, 64, 85);">{{ lobby.regolamento }}</ion-card-subtitle>
+              <ion-card-subtitle *ngIf="lobby.regolamento" style="color:rgb(16, 64, 85);">{{ lobby.regolamento }}
+              </ion-card-subtitle>
             </ion-card-content>
           </ion-list>
         </ion-card>
@@ -216,6 +217,6 @@
 
 <ion-footer class="start-button-footer">
   <ion-toolbar color="primary">
-    <ion-button fill="clear" expand="block" (click)="iniziaPartita()" style="color:#fff;">INIZIA PARTITA!</ion-button>
+    <ion-button fill="clear" color="light" expand="full" (click)="iniziaPartita()">INIZIA PARTITA!</ion-button>
   </ion-toolbar>
 </ion-footer>

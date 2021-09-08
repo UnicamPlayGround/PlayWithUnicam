@@ -312,9 +312,6 @@ exports.partecipaLobby = (username, codiceLobby, response) => {
             const tmp2 = JSON.parse(JSON.stringify(results.rows));
             const count = tmp2[0].count;
 
-            console.log("count", count);
-            console.log("max_giocatori", lobby.max_giocatori);
-
             if (count < lobby.max_giocatori) {
                 giocatore.creaGiocatore(username, codiceLobby, response, (error, results) => {
                     if (error) {

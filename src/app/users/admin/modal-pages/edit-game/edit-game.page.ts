@@ -18,6 +18,7 @@ export class EditGamePage implements OnInit {
   data: FormGroup;
   attivo = true;
   config: string = "";
+  regolamento: string = "";
 
   @Input() game: any;
 
@@ -29,7 +30,8 @@ export class EditGamePage implements OnInit {
     private loadingController: LoadingController,
     private fb: FormBuilder,
     private alertCreator: AlertCreatorService,
-    private navParams: NavParams) { }
+    private navParams: NavParams) {
+  }
 
   ngOnInit() {
     this.game = this.navParams.get('game');
@@ -37,11 +39,14 @@ export class EditGamePage implements OnInit {
     this.data = this.fb.group({
       nome: [this.game.nome],
       tipo: [this.game.tipo],
-      minGiocatori: [this.game.min_giocatori],
-      maxGiocatori: [this.game.max_giocatori],
+      minGiocatori: [parseInt(this.game.min_giocatori)],
+      maxGiocatori: [parseInt(this.game.max_giocatori)],
       link: [this.game.link],
       attivo: [this.game.attivo]
     });
+
+    this.config = JSON.stringify(this.game.config);
+    this.regolamento = this.game.regolamento;
   }
 
   /**
@@ -51,11 +56,53 @@ export class EditGamePage implements OnInit {
     this.modalController.dismiss();
   }
 
-  salvaModifiche() {
+  //TODO commentare
+  async salvaModifiche() {
+    if (this.controllaCampi()) {
+      const loading = await this.loadingController.create();
+      await loading.present();
 
+      const tokenValue = (await this.loginService.getToken()).value;
+      var toSend = this.data.value;
+      toSend.id = this.game.id;
+
+      toSend.regolamento = this.regolamento;
+      toSend.config = JSON.parse(this.config);
+      toSend.token = tokenValue;
+
+      this.http.put('/game/modifica', toSend).subscribe(
+        async (res) => {
+          this.modalController.dismiss(true);
+          loading.dismiss();
+          this.alertCreator.createInfoAlert("Modifica completata", "Il gioco è stato modificato con successo!")
+        },
+        async (res) => {
+          this.modalController.dismiss();
+          await loading.dismiss();
+          this.errorManager.stampaErrore(res, 'Modifica Fallita');
+        });
+    }
   }
 
-  salvaConfig() {
-
+  controllaCampi() {
+    if (this.data.value.minGiocatori < 1 || this.data.value.maxGiocatori < 1) {
+      this.alertCreator.createInfoAlert('Errore nei dati', 'Il numero dei giocatori non può essere negativo!');
+      return false;
+    }
+    if (this.data.value.minGiocatori > this.data.value.maxGiocatori) {
+      this.alertCreator.createInfoAlert('Errore nei dati', 'Il numero minimo dei giocatori non può essere maggiore del numero massimo!');
+      return false;
+    }
+    if (!this.config) {
+      this.alertCreator.createInfoAlert('Errore nei dati', 'Scrivi qualcosa nel JSON di configurazione!');
+      return false;
+    }
+    try {
+      const tmp = JSON.parse(this.config);
+    } catch (error) {
+      this.alertCreator.createInfoAlert('Errore nei dati', 'Il JSON di configurazione contiene errori nella sintassi!');
+      return false;
+    }
+    return true;
   }
 }

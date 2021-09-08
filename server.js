@@ -114,6 +114,21 @@ app.get('/games', (req, res) => {
 })
 
 //TODO commentare
+app.get('/games/admin', (req, res) => {
+    const token = req.headers.token;
+
+    if (verificaAdmin(token)) {
+        game.getListaGiochiAsAdmin((err, results) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Server error!');
+            }
+            sendDataInJSON(res, results);
+        });
+    } else return res.status(401).send(ERRORE_JWT);
+})
+
+//TODO commentare
 app.get('/game/status', (req, res) => {
     const token = req.headers.token;
 
@@ -361,6 +376,20 @@ app.put('/modifica/password', (req, res) => {
     if (verificaJWT(token)) {
         try {
             utente.cambiaPassword(req.body.new_password, req.body.old_password, res, jwt.decode(token).username);
+        } catch (error) {
+            return res.status(400).send(error);
+        }
+    } else return res.status(401).send(ERRORE_JWT);
+});
+
+/**
+ * REST - Modifica le Informazioni di una Gioco 
+ */
+app.put('/game/modifica', (req, res) => {
+    if (verificaAdmin(req.body.token)) {
+        try {
+            game.modificaGioco(req.body.id, req.body.nome, req.body.tipo, req.body.minGiocatori,
+                req.body.maxGiocatori, req.body.link, req.body.attivo, req.body.config, req.body.regolamento, res);
         } catch (error) {
             return res.status(400).send(error);
         }
