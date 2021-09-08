@@ -282,17 +282,6 @@ app.delete('/lobby/abbandona', (req, res) => {
     } else return res.status(401).send(ERRORE_JWT);
 });
 
-app.delete('/partita/termina', (req, res) => {
-    if (verificaJWT(req.headers.token)) {
-        try {
-            partita.terminaPartita(jwt.decode(req.headers.token).username, res);
-        } catch (error) {
-            console.log(error);
-            return res.status(400).send(error);
-        }
-    } else return res.status(401).send(ERRORE_JWT);
-});
-
 /**
  * //TODO riguardare commento
  * REST - Ritorna la lista degli Utenti
@@ -422,6 +411,18 @@ app.put('/game/fine-turno', (req, res) => {
     } else return res.status(401).send(ERRORE_JWT);
 });
 
+//TODO commentare
+app.put('/partita/termina', (req, res) => {
+    if (verificaJWT(req.body.token)) {
+        try {
+            partita.terminaPartita(jwt.decode(req.body.token).username, res);
+        } catch (error) {
+            console.log(error);
+            return res.status(400).send(error);
+        }
+    } else return res.status(401).send(ERRORE_JWT);
+});
+
 /**
  * REST - POST
  */
@@ -526,7 +527,7 @@ app.post('/lobby', (req, res) => {
     } catch (error) {
         return res.status(400).send(error);
     }
-})
+});
 
 //TODO commentare
 app.post('/lobby/partecipa', (req, res) => {
@@ -537,7 +538,7 @@ app.post('/lobby/partecipa', (req, res) => {
     } catch (error) {
         return res.status(400).send(error);
     }
-})
+});
 
 //TODO commentare
 app.post('/lobby/ping', (req, res) => {
@@ -555,7 +556,7 @@ app.post('/lobby/ping', (req, res) => {
         console.log(error);
         return res.status(400).send(error);
     }
-})
+});
 
 //TODO commentare
 app.post('/partita', (req, res) => {
@@ -566,7 +567,7 @@ app.post('/partita', (req, res) => {
     } catch (error) {
         return res.status(400).send(error);
     }
-})
+});
 
 app.post('/game/crea', (req, res) => {
     try {
@@ -577,7 +578,7 @@ app.post('/game/crea', (req, res) => {
         console.log(error);
         return res.status(400).send(error);
     }
-})
+});
 
 app.get('/*', function (req, res) {
     res.sendFile('index.html', { root: __dirname + '/www' });

@@ -170,8 +170,8 @@ exports.creaPartita = (adminLobby, response) => {
             }
 
             if (controller.controllaRisultatoQuery(results)) {
-                db.pool.query('INSERT INTO public.partite (codice, codice_lobby, giocatore_corrente) VALUES ($1, $2, $3)',
-                    [creaCodice(), lobbyInfo.codice, adminLobby], (error, results) => {
+                db.pool.query('INSERT INTO public.partite (codice, codice_lobby, giocatore_corrente, terminata) VALUES ($1, $2, $3, $4)',
+                    [creaCodice(), lobbyInfo.codice, adminLobby, false], (error, results) => {
                         if (error) {
                             console.log(error);
                             return response.status(400).send("Non è stato possibile creare la partita!");
@@ -179,8 +179,8 @@ exports.creaPartita = (adminLobby, response) => {
                         return response.status(200).send({ 'esito': "1" });
                     });
             } else {
-                db.pool.query('UPDATE public.partite SET codice = $1, giocatore_corrente = $2, info = $3 WHERE codice_lobby = $4',
-                    [creaCodice(), adminLobby, null, lobbyInfo.codice], (error, results) => {
+                db.pool.query('UPDATE public.partite SET codice = $1, giocatore_corrente = $2, info = $3, terminata = $4 WHERE codice_lobby = $5',
+                    [creaCodice(), adminLobby, null, false, lobbyInfo.codice], (error, results) => {
                         if (error) {
                             console.log(error);
                             return response.status(400).send("Non è stato possibile creare la partita!");
@@ -196,10 +196,10 @@ exports.creaPartita = (adminLobby, response) => {
  * Ritorna le Informazioni della Partita.
  * @param {string} username Username del Giocatore collegato alla Partita
  * @param {*} cb Callback
- * @returns le Informazioni della Partita (codice, codice_lobby, giocatore_corrente, vincitore, info)
+ * @returns le Informazioni della Partita (codice, codice_lobby, giocatore_corrente, terminata, info, id_gioco)
  */
 exports.getInfoPartita = (username, cb) => {
-    return db.pool.query('SELECT partite.codice, partite.codice_lobby, giocatore_corrente, vincitore, info, id_gioco FROM' +
+    return db.pool.query('SELECT partite.codice, partite.codice_lobby, giocatore_corrente, terminata, info, id_gioco FROM' +
         ' (partite INNER JOIN lobby ON partite.codice_lobby=lobby.codice)' +
         ' INNER JOIN giocatori ON giocatori.codice_lobby=lobby.codice WHERE giocatori.username=$1',
         [username], (error, results) => {
@@ -244,21 +244,21 @@ exports.salvaInfoGiocatore = (username, infoGiocatore, response) => {
 }
 
 //TODO commentare
-exports.terminaPartita = (adminLobby, response) => {
-    lobby.cercaLobbyByAdmin(adminLobby, (error, results) => {
+exports.terminaPartita = (username, response) => {
+    this.getInfoPartita(username, (error, results) => {
         if (error) {
             console.log(error);
             return response.status(500).send('Server error!');
         }
         if (controller.controllaRisultatoQuery(results))
-            return response.status(404).send("Devi essere l'Admin della Lobby per cancellare la Partita!");
+            return response.status(404).send('Nessuna partita trovata!');
 
-        const lobby = JSON.parse(JSON.stringify(results.rows))[0];
+        const partita = JSON.parse(JSON.stringify(results.rows))[0];
 
-        console.log(lobby);
+        console.log(partita);
 
-        db.pool.query('DELETE from public.partite WHERE codice_lobby = $1',
-            [lobby.codice], (error, results) => {
+        db.pool.query('UPDATE public.partite SET terminata = $1 WHERE codice = $2',
+            [true, partita.codice], (error, results) => {
                 if (error) {
                     console.log(error);
                     return response.status(500).send('Server error!');

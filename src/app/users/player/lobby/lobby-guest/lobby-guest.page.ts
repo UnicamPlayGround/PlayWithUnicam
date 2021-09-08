@@ -111,10 +111,11 @@ export class LobbyGuestPage implements OnInit {
     (await this.lobbyManager.loadInfoPartita()).subscribe(
       async (res) => {
         var partita = res['results'][0];
-        if (partita) {
-          this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing, this.timerPartita);
-          this.router.navigateByUrl(this.lobby.link, { replaceUrl: true });
-        }
+        if (partita)
+          if (!partita.terminata) {
+            this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing, this.timerPartita);
+            this.router.navigateByUrl(this.lobby.link, { replaceUrl: true });
+          }
       },
       async (res) => {
         this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing, this.timerPartita);
