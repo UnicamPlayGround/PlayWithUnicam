@@ -69,6 +69,12 @@ ion-modal.edit-game {
     --border-radius: 0;
 }
 
+ion-modal.fullscreen {
+    --width: 100%;
+    --height: 100%;
+    --border-radius: 0;
+}
+
 /* Mobile/Small Tablet Styles */
 @media only screen and (max-width: 1228px){
     ion-modal.lobby-pubbliche {

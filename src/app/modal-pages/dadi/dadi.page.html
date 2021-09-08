@@ -1,0 +1,49 @@
+<ion-content>
+  <div class="dice">
+    <ol *ngFor="let dado of dadi" class="die-list even-roll" data-roll="1" id="{{ dado }}">
+      <li class="die-item" data-side="1">
+        <span class="dot"></span>
+      </li>
+      <li class="die-item" data-side="2">
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </li>
+      <li class="die-item" data-side="3">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </li>
+      <li class="die-item" data-side="4">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </li>
+      <li class="die-item" data-side="5">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </li>
+      <li class="die-item" data-side="6">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </li>
+    </ol>
+  </div>
+
+  <button class="roll-button" id="button" expand="block" (click)="rollDice()">Lancia Dado</button>
+</ion-content>
+
+<ion-footer id="footer">
+  <ion-toolbar color="primary">
+    <ion-button fill="clear" color="light" expand="full" (click)="rollDice()">
+      Lancia Dado
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>
