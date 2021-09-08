@@ -189,7 +189,7 @@ exports.modificaUsername = (oldUsername, newUsername, response, cb) => {
 
 /**
  * Elimina tutti gli ospiti che si sono registrati più di 24 ore fa.
- * * 86400000 millisecondi corispondono ad un'ora
+ * * 86400000 millisecondi corispondono a 24 ore
  */
 exports.eliminaOspiti = () => {
     var data = new Date();

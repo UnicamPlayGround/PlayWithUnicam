@@ -62,6 +62,7 @@ CREATE TABLE IF NOT EXISTS public.giocatori
 CREATE TABLE IF NOT EXISTS public.ospiti
 (
     username character varying(10) NOT NULL,
+    data_creazione date NOT NULL DEFAULT CURRENT_DATE,
     PRIMARY KEY (username)
 );
 
