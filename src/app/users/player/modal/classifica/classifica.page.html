@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>CLASSIFICA</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <br>
+  <ion-item lines="full" *ngFor="let giocatore of classifica; let i = index">
+    <img [ngClass]="'classifica'+i" />
+    <ion-label>{{ giocatore.username }}</ion-label>
+    <ion-badge color="secondary">{{ giocatore.posizione }}</ion-badge>
+  </ion-item>
+</ion-content>
+
+<div class="footer">
+  <ion-button (click)="closeModal()" color="danger">TORNA ALLA LOBBY</ion-button>
+</div>
