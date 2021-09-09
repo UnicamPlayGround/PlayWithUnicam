@@ -1,18 +1,38 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title>CLASSIFICA</ion-title>
+    <ion-title>Classifica finale</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <br>
-  <ion-item lines="full" *ngFor="let giocatore of classifica; let i = index">
-    <img [ngClass]="'classifica'+i" />
-    <ion-label>{{ giocatore.username }}</ion-label>
-    <ion-badge color="secondary">{{ giocatore.posizione }}</ion-badge>
-  </ion-item>
+  <ion-list class="modal">
+    <ion-list-header>
+      <p style="font-size: 16px;">Ecco la classifica finale dei giocatori!</p>
+    </ion-list-header>
+
+    <ion-item lines="full" *ngFor="let giocatore of classifica; let i = index">
+      <ion-avatar slot="start">
+        <img src="../../../assets/icon/lobby-player.png" alt="Giocatore {{ giocatore.username }}">
+      </ion-avatar>
+
+      <ion-label>{{ giocatore.username }}</ion-label>
+      <ion-badge color="secondary">{{ giocatore.posizione }}</ion-badge>
+
+      <ion-avatar *ngIf="i==0" slot="end" style="margin: auto;">
+        <img src="../../../assets/icon/gold-medal.png">
+      </ion-avatar>
+      <ion-avatar *ngIf="i==1" slot="end" style="margin: auto;">
+        <img src="../../../assets/icon/silver-medal.png">
+      </ion-avatar>
+    </ion-item>
+  </ion-list>
 </ion-content>
 
-<div class="footer">
-  <ion-button (click)="closeModal()" color="danger">TORNA ALLA LOBBY</ion-button>
-</div>
+<ion-footer>
+  <ion-toolbar color="danger">
+    <ion-button fill="clear" expand="block" color="light" (click)="closeModal()">
+      Torna alla lobby
+      <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

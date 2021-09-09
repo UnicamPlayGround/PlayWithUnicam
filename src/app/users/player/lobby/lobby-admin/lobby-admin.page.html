@@ -122,7 +122,7 @@
             <ion-item lines="full" *ngFor="let giocatore of giocatori, let i = index;"
               [ngClass]="{'admin' : giocatore.username == lobby.admin_lobby}">
               <ion-avatar slot="start">
-                <img src="../../../../../assets/icon/lobby-player.png" alt="avatar player">
+                <img src="../../../../../assets/icon/lobby-player.png" alt="Giocatore {{ giocatore.username }}">
               </ion-avatar>
 
               <ion-label>{{ giocatore.username }}</ion-label>
@@ -147,7 +147,7 @@
                 <ion-col style="align-items: center;">
                   <ion-label>{{ giocatore.username }}</ion-label>
                   <ion-avatar style="margin: auto;">
-                    <img src="../../../../../assets/icon/lobby-player.png" alt="avatar player">
+                    <img src="../../../../../assets/icon/lobby-player.png" alt="Giocatore {{ giocatore.username }}">
                   </ion-avatar>
                   <br>
                   <p *ngIf="giocatore.username == lobby.admin_lobby" class="admin-label"
