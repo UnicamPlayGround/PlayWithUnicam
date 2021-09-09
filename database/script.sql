@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS public.lobby
     data_creazione date NOT NULL DEFAULT CURRENT_DATE,
     ultima_richiesta date NOT NULL,
     id_gioco serial NOT NULL,
+    partita_iniziata boolean NOT NULL,
     PRIMARY KEY (codice)
 );
 
