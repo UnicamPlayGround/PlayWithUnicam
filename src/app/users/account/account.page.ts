@@ -85,7 +85,7 @@ export class AccountPage implements OnInit {
       },
       async (res) => {
         await loading.dismiss();
-        this.errorManager.stampaErrore(res, 'Modifica Fallita');
+        this.errorManager.stampaErrore(res, 'Modifica fallita');
       });
   }
 
@@ -113,7 +113,7 @@ export class AccountPage implements OnInit {
           },
           async (res) => {
             this.dati.value.username = this.user.username;
-            this.errorManager.stampaErrore(res, 'Modifica Fallita');
+            this.errorManager.stampaErrore(res, 'Modifica fallita');
           });
     }
   }
@@ -139,11 +139,11 @@ export class AccountPage implements OnInit {
         },
         async (res) => {
           await loading.dismiss();
-          this.errorManager.stampaErrore(res, 'Modifica Fallita');
+          this.errorManager.stampaErrore(res, 'Modifica fallita');
         });
     }
     else {
-      this.alertCreator.createInfoAlert("Le password non corrispondono", "La password di conferma non corrsiponde alla nuova password");
+      this.alertCreator.createInfoAlert("Le password non corrispondono", "La password di conferma non corrisponde alla nuova password");
       await loading.dismiss();
     }
 

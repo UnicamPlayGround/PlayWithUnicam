@@ -20,13 +20,13 @@ export class ErrorManagerService {
   }
 
   private controllaRes(res) {
-    if (res.error == 'Errore, JWT non valido! Rieffettua il Login.') {
-      this.stampa('Errore nella Sessione', 'Rieffettua il Login');
+    if (res.error == 'Errore, JWT non valido! Rieffettua il login.') {
+      this.stampa('Errore nella sessione', 'Rieffettua il login');
       this.loginService.logout();
       this.router.navigateByUrl('/home', { replaceUrl: true });
       return false;
-    } else if (res.error == 'Errore: Devi partecipare ad una Lobby!') {
-      this.stampa('Sei stato espulso', "L'Admin ti ha rimosso dalla Lobby.");
+    } else if (res.error == 'Errore: devi partecipare ad una lobby!') {
+      this.stampa('Sei stato espulso', "L'admin ti ha rimosso dalla lobby.");
       this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
       return false;
     } else return true;

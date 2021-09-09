@@ -21,7 +21,7 @@ exports.cambiaPassword = (newPassword, oldPassword, response, username) => {
     this.cercaUtenteByUsername(username, (error, results) => {
         if (error) {
             console.log(error);
-            return response.status(500).send('Server Error!');
+            return response.status(500).send('Server error!');
         }
 
         if (controller.controllaRisultatoQuery(results))
@@ -100,9 +100,9 @@ exports.creaOspite = (username, cb) => {
  */
 exports.creaUtente = (username, nome, cognome, password, response) => {
     //TODO: metterli tutti in un unico metodo
-    controller.controllaString(username, "Il campo 'Username' non deve essere vuoto!");
-    controller.controllaString(nome, "Il campo 'Nome' non deve essere vuoto!");
-    controller.controllaString(cognome, "Il campo 'Cognome' non deve essere vuoto!");
+    controller.controllaString(username, "Il campo 'username' non deve essere vuoto!");
+    controller.controllaString(nome, "Il campo 'nome' non deve essere vuoto!");
+    controller.controllaString(cognome, "Il campo 'cognome' non deve essere vuoto!");
     controller.controllaPassword(password);
 
     const salt = bcrypt.genSaltSync(10);
@@ -112,7 +112,7 @@ exports.creaUtente = (username, nome, cognome, password, response) => {
         [username, nome, cognome, hash, salt, "GIOCATORE"], (error, results) => {
             if (error) {
                 console.log(error);
-                return response.status(400).send("NON E' STATO POSSIBILE CREARE L'UTENTE!");
+                return response.status(400).send("Non è stato possibile creare l'utente");
             }
             return response.status(200).send({ 'esito': "1" });
         })
@@ -139,13 +139,13 @@ exports.getUserInfo = (username, cb) => {
  * @param {*} response 
  */
 exports.modificaNomeCognome = (username, nome, cognome, response) => {
-    controller.controllaString(nome, "Il campo 'Nome' non è valido!");
-    controller.controllaString(cognome, "Il campo 'Cognome' non è valido!");
+    controller.controllaString(nome, "Il campo 'nome' non è valido!");
+    controller.controllaString(cognome, "Il campo 'cognome' non è valido!");
 
     this.cercaUtenteByUsername(username, (error, results) => {
         if (error) {
             console.log(error);
-            return response.status(500).send('Server Error!');
+            return response.status(500).send('Server error!');
         }
         if (controller.controllaRisultatoQuery(results)) return response.status(404).send('Utente non trovato!');
 
@@ -173,7 +173,7 @@ exports.modificaUsername = (oldUsername, newUsername, response, cb) => {
     this.cercaUtenteByUsername(oldUsername, (error, results) => {
         if (error) {
             console.log(error);
-            return response.status(500).send('Server Error!');
+            return response.status(500).send('Server error!');
         }
         if (controller.controllaRisultatoQuery(results)) return response.status(404).send('Utente non trovato!');
 

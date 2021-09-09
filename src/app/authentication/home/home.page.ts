@@ -51,7 +51,7 @@ export class HomePage implements OnInit {
       },
       async (res) => {
         await loading.dismiss();
-        this.errorManager.stampaErrore(res, 'Login Fallito!');
+        this.errorManager.stampaErrore(res, 'Login fallito!');
       }
     );
   }

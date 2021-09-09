@@ -49,7 +49,7 @@ export class CercaPubblicaPage implements OnInit {
         await this.getPartecipantiLobby(headers);
       },
       async (res) => {
-        this.errorManager.stampaErrore(res, 'Impossibile caricare le Lobby!');
+        this.errorManager.stampaErrore(res, 'Impossibile caricare le lobby!');
       });
   }
 
@@ -91,7 +91,7 @@ export class CercaPubblicaPage implements OnInit {
       async (res) => {
         await loading.dismiss();
         this.modalController.dismiss();
-        this.errorManager.stampaErrore(res, 'Partecipazione a lobby fallita');
+        this.errorManager.stampaErrore(res, 'Partecipazione alla lobby fallita');
       });
   }
 }

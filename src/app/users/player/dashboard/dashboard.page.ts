@@ -66,10 +66,11 @@ export class DashboardPage implements OnInit {
       });
   }
 
-  loadMore(event) {
-    this.page++;
-    this.loadGames();
+  //TODO infinite scroll
+  // loadMore(event) {
+  //   this.page++;
+  //   this.loadGames();
 
-    if (this.page === this.maximumPages) event.target.disabled = true;
-  }
+  //   if (this.page === this.maximumPages) event.target.disabled = true;
+  // }
 }

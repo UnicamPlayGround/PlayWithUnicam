@@ -150,11 +150,11 @@ exports.getGiocatoriLobby = (username, response, cb) => {
     this.cercaLobbyByUsername(username, (error, results) => {
         if (error) {
             console.log(error);
-            if (response) return response.status(400).send("Non è stato possibile trovare la Lobby");
+            if (response) return response.status(400).send("Non è stato possibile trovare la lobby");
         }
 
         if (controller.controllaRisultatoQuery(results))
-            if (response) return response.status(400).send("Errore: Devi partecipare ad una Lobby!");
+            if (response) return response.status(400).send("Errore: devi partecipare ad una lobby!");
 
         const tmp = JSON.parse(JSON.stringify(results.rows));
         db.pool.query('SELECT * FROM public.giocatori WHERE codice_lobby = $1 ORDER BY data_ingresso ASC', [tmp[0].codice], (error, results) => {
@@ -220,7 +220,7 @@ exports.eliminaPartecipante = (admin, username, response) => {
         giocatore.espelliGiocatore(username, tmp[0].codice, (error, results) => {
             if (error) {
                 console.log(error);
-                return response.status(400).send("Non è stato possibile cancellare il giocatore dalla lobby");
+                return response.status(400).send("Non è stato possibile eliminare il giocatore dalla lobby");
             }
             return response.status(200).send({ 'esito': "1" });
         });
@@ -257,7 +257,7 @@ exports.abbandonaLobby = (username, response) => {
                     this.impostaAdminLobby(giocatori[1].username, codiceLobby, (error, results) => {
                         if (error) {
                             console.log(error);
-                            if (response) return response.status(400).send("Non è stato possibile impostare l'Admin della Lobby!");
+                            if (response) return response.status(400).send("Non è stato possibile impostare l'admin della Lobby!");
                         }
                         eliminaGiocatore(username, response);
                     });
@@ -288,7 +288,7 @@ exports.creaLobby = (adminLobby, idGioco, pubblica, response) => {
                 [codiceLobby, getDataOdierna(), idGioco, pubblica, false], (error, results) => {
                     if (error) {
                         console.log(error);
-                        return response.status(400).send("Non è stato possibile creare la Lobby!");
+                        return response.status(400).send("Non è stato possibile creare la lobby!");
                     }
 
                     giocatore.creaGiocatore(adminLobby, codiceLobby, response, (error, results) => {
@@ -299,7 +299,7 @@ exports.creaLobby = (adminLobby, idGioco, pubblica, response) => {
                         this.impostaAdminLobby(adminLobby, codiceLobby, (error, results) => {
                             if (error) {
                                 console.log(error);
-                                return response.status(400).send("Non è stato possibile impostare l'Admin della Lobby!");
+                                return response.status(400).send("Non è stato possibile impostare l'admin della lobby!");
                             }
                             return response.status(200).send({ 'esito': "1" });
                         });
@@ -317,7 +317,7 @@ exports.creaLobby = (adminLobby, idGioco, pubblica, response) => {
  */
 exports.impostaAdminLobby = (adminLobby, codiceLobby, cb) => {
     giocatore.cercaGiocatore(adminLobby, (err, results) => {
-        if (controller.controllaRisultatoQuery(results)) return response.status(400).send("Il Giocatore '" + adminLobby + "' non esiste!");
+        if (controller.controllaRisultatoQuery(results)) return response.status(400).send("Il giocatore '" + adminLobby + "' non esiste!");
 
         db.pool.query('UPDATE public.lobby SET admin_lobby = $1 WHERE codice = $2',
             [adminLobby, codiceLobby], (error, results) => {

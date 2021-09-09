@@ -34,6 +34,7 @@ export class LobbyAdminPage implements OnInit {
     this.avviaTimers();
 
     window.addEventListener('beforeunload', (event) => {
+      //TODO: vedere per Firefox
       event.returnValue = '';
     });
   }
@@ -83,7 +84,7 @@ export class LobbyAdminPage implements OnInit {
       async (res) => {
         this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing);
         this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
-        this.errorManager.stampaErrore(res, 'Impossibile caricare la Lobby!');
+        this.errorManager.stampaErrore(res, 'Impossibile caricare la lobby!');
       });
   }
 
@@ -101,7 +102,7 @@ export class LobbyAdminPage implements OnInit {
         //TODO rivedere lo stop dei Timer
         this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing);
         this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
-        this.errorManager.stampaErrore(res, 'Impossibile caricare la Lobby!');
+        this.errorManager.stampaErrore(res, 'Impossibile caricare la lobby!');
       });
   }
 
@@ -115,7 +116,7 @@ export class LobbyAdminPage implements OnInit {
     (await this.lobbyManager.modificaLobby(this.lobby.pubblica)).subscribe(
       async (res) => {
         await loading.dismiss();
-        this.alertCreator.createInfoAlert("Lobby Aggiornata", "Lo stato della Lobby è stato aggiornato.");
+        this.alertCreator.createInfoAlert("Lobby aggiornata", "Lo stato della lobby è stato aggiornato.");
       },
       async (res) => {
         await loading.dismiss();
@@ -189,7 +190,7 @@ export class LobbyAdminPage implements OnInit {
         this.router.navigateByUrl(this.lobby.link, { replaceUrl: true });
       },
       async (res) => {
-        this.errorManager.stampaErrore(res, 'Impossibile iniziare la Partita!');
+        this.errorManager.stampaErrore(res, 'Impossibile iniziare la partita!');
       });
   }
 

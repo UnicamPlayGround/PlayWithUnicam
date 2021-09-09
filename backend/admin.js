@@ -53,7 +53,7 @@ exports.modificaUtente = (username, newUsername, nome, cognome, response) => {
         utente.modificaUsername(username, newUsername, response, (error, results) => {
             if (error) {
                 console.log(error);
-                return response.status(500).send('Server Error!');
+                return response.status(500).send('Server error!');
             }
             utente.modificaNomeCognome(newUsername, nome, cognome, response);
         })

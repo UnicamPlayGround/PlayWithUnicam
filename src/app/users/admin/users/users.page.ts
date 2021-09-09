@@ -174,7 +174,7 @@ export class UsersPage implements OnInit {
         this.alertCreator.createInfoAlert('Eliminazione completata', message);
       },
       async (res) => {
-        this.errorManager.stampaErrore(res, 'Eliminazione Fallita');
+        this.errorManager.stampaErrore(res, 'Eliminazione fallita');
       });
   }
 

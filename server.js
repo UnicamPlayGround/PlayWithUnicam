@@ -16,7 +16,7 @@ const SECRET_KEY = "secret_jwt";
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
-const ERRORE_JWT = "Errore, JWT non valido! Rieffettua il Login."
+const ERRORE_JWT = "Errore, JWT non valido! Rieffettua il login."
 
 const timerGiocatoriInattivi = setInterval(() => { controllaGiocatoriInattivi(); }, 5000);
 const timerOspiti = setInterval(() => { controllaOspiti(); }, 3600000); //3600000 millis corrispondono ad un'ora

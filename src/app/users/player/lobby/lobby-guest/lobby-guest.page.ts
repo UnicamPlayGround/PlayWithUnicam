@@ -39,6 +39,7 @@ export class LobbyGuestPage implements OnInit {
     this.timerPartita = timerService.getTimer(() => { this.loadInfoPartita() }, 2000);
 
     window.addEventListener('beforeunload', (event) => {
+      //TODO vedere per Firefox
       event.returnValue = '';
     });
   }
@@ -74,13 +75,13 @@ export class LobbyGuestPage implements OnInit {
         if (decodedToken.username === this.lobby.admin_lobby) {
           this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing, this.timerPartita);
           this.router.navigateByUrl('/lobby-admin', { replaceUrl: true });
-          this.alertCreator.createInfoAlert("Sei il nuovo Admin", "Il vecchio admin ha abbandonato la partita e sei stato scelto per prendere il suo posto!");
+          this.alertCreator.createInfoAlert("Sei il nuovo admin", "Il vecchio admin ha abbandonato la partita e sei stato scelto per prendere il suo posto!");
         }
       },
       async (res) => {
         this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing, this.timerPartita);
         this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
-        this.errorManager.stampaErrore(res, 'Impossibile caricare la Lobby!');
+        this.errorManager.stampaErrore(res, 'Impossibile caricare la lobby!');
       });
   }
 
@@ -98,7 +99,7 @@ export class LobbyGuestPage implements OnInit {
       async (res) => {
         this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing, this.timerPartita);
         this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
-        this.errorManager.stampaErrore(res, 'Impossibile caricare la Lobby!');
+        this.errorManager.stampaErrore(res, 'Impossibile caricare la lobby!');
       });
   }
 
@@ -119,7 +120,7 @@ export class LobbyGuestPage implements OnInit {
       async (res) => {
         this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing, this.timerPartita);
         this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
-        this.errorManager.stampaErrore(res, 'Impossibile caricare la Lobby!');
+        this.errorManager.stampaErrore(res, 'Impossibile caricare la lobby!');
       });
   }
 

@@ -60,21 +60,21 @@ exports.creaGiocatore = (username, codiceLobby, response, cb) => {
         utente.cercaUtenteByUsername(username, (error, results) => {
             if (error) {
                 console.log(error);
-                return response.status(400).send("Non è stato possibile creare il Giocatore!");
+                return response.status(400).send("Non è stato possibile creare il giocatore!");
             }
             if (controller.controllaRisultatoQuery(results)) utenteNonTrovato = true;
 
             utente.cercaOspiteByUsername(username, (error, results) => {
                 if (error) {
                     console.log(error);
-                    return response.status(400).send("Non è stato possibile creare il Giocatore!");
+                    return response.status(400).send("Non è stato possibile creare il giocatore!");
                 }
                 if (utenteNonTrovato && controller.controllaRisultatoQuery(results)) return response.status(404).send("L'Utente '" + username + "' non esiste!");
 
                 this.cercaGiocatore(username, (error, results) => {
                     if (error) {
                         console.log(error);
-                        return response.status(400).send("Non è stato possibile creare il Giocatore!");
+                        return response.status(400).send("Non è stato possibile creare il giocatore!");
                     }
 
                     if (controller.controllaRisultatoQuery(results)) {
@@ -133,10 +133,10 @@ exports.ping = (username, response, cb) => {
     lobby.cercaLobbyByUsername(username, (error, results) => {
         if (error) {
             console.log(error);
-            return response.status(400).send("Non è stato possibile trovare la Lobby");
+            return response.status(400).send("Non è stato possibile trovare la lobby");
         }
         if (controller.controllaRisultatoQuery(results))
-            return response.status(400).send("Errore: Devi partecipare ad una Lobby!");
+            return response.status(400).send("Errore: devi partecipare ad una lobby!");
 
         db.pool.query('UPDATE public.giocatori SET ping = NOW() WHERE username = $1', [username], (error, results) => {
             cb(error, results)

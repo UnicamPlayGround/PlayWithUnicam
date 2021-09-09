@@ -53,12 +53,12 @@ export class LoginPage implements OnInit {
             this.router.navigateByUrl('/admin', { replaceUrl: true });
             break;
           default:
-            this.alertCreator.createInfoAlert('Login fallito', 'Rieffettua il Login');
+            this.alertCreator.createInfoAlert('Login fallito', 'Rieffettua il login');
         }
       },
       async (res) => {
         await loading.dismiss();
-        this.errorManager.stampaErrore(res, 'Login Fallito');
+        this.errorManager.stampaErrore(res, 'Login fallito');
       }
     );
   }

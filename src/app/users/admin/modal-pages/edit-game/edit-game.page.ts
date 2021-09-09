@@ -79,7 +79,7 @@ export class EditGamePage implements OnInit {
         async (res) => {
           this.modalController.dismiss();
           await loading.dismiss();
-          this.errorManager.stampaErrore(res, 'Modifica Fallita');
+          this.errorManager.stampaErrore(res, 'Modifica fallita');
         });
     }
   }

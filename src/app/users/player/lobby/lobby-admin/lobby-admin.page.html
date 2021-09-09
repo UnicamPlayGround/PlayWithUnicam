@@ -53,24 +53,26 @@
               </ion-col>
             </ion-item>
 
-            <ion-item lines="none">
+            <ion-item lines="none" style="padding-bottom: 0px !important;">
               <ion-col>
                 <ion-label>Visibilità pubblica</ion-label>
               </ion-col>
               <ion-toggle slot="end" [(ngModel)]="lobby.pubblica"></ion-toggle>
             </ion-item>
 
-            <ion-card-content style="padding: 20px;">
-              <p>Se attivo, permette a tutti i giocatori online di trovare la lobby e di parteciparvi.</p>
+            <ion-card-content style="padding: 20px; padding-top: 0px !important;">
+              <p style="padding-top: 0px !important;">
+                Se attivo, permette a tutti i giocatori online di trovare la lobby e di parteciparvi.
+              </p>
               <br>
               <ion-button shape="round" (click)="modificaLobby()" expand="block">Salva modifiche</ion-button>
             </ion-card-content>
           </ion-list>
         </ion-card>
 
-        <ion-card id="expandable-info-card" class="info-card" button="true" (click)="espandiInfoLobby()">
+        <ion-card id="expandable-info-card" class="info-card">
           <ion-list>
-            <ion-item lines="none">
+            <ion-item lines="none" button="true" (click)="espandiInfoLobby()">
               <ion-title style="text-align: left !important;">INFO LOBBY</ion-title>
               <ion-icon slot="end" name="chevron-forward-circle-outline" *ngIf="!mostraInfoLobby"></ion-icon>
               <ion-icon slot="end" name="chevron-down-circle-outline" *ngIf="mostraInfoLobby"></ion-icon>
@@ -95,16 +97,17 @@
               </ion-col>
             </ion-item>
 
-            <ion-item lines="none" *ngIf="mostraInfoLobby">
+            <ion-item lines="none" *ngIf="mostraInfoLobby" style="padding-bottom: 0px !important;">
               <ion-col>
                 <ion-label>Visibilità pubblica</ion-label>
               </ion-col>
               <ion-toggle slot="end" [(ngModel)]="lobby.pubblica"></ion-toggle>
             </ion-item>
 
-            <ion-card-content style="padding: 20px;" *ngIf="mostraInfoLobby">
-              <p>Se attivo, permette a tutti i giocatori online di trovare la lobby e di parteciparvi.</p>
-
+            <ion-card-content style="padding: 20px; padding-top: 0px !important;" *ngIf="mostraInfoLobby">
+              <p style="padding-top: 0px !important;">
+                Se attivo, permette a tutti i giocatori online di trovare la lobby e di parteciparvi.
+              </p>
               <br>
               <ion-button shape="round" (click)="modificaLobby()" expand="block">Salva modifiche</ion-button>
             </ion-card-content>
@@ -188,9 +191,9 @@
           </ion-list>
         </ion-card>
 
-        <ion-card id="expandable-game-card" class="game-card" button="true" (click)="espandiInfoGioco()">
+        <ion-card id="expandable-game-card" class="game-card">
           <ion-list>
-            <ion-item lines="none">
+            <ion-item lines="none" button="true" (click)="espandiInfoGioco()">
               <ion-title style="text-align: left !important;">INFO GIOCO</ion-title>
               <ion-icon slot="end" name="chevron-forward-circle-outline" *ngIf="!mostraInfoGioco"></ion-icon>
               <ion-icon slot="end" name="chevron-down-circle-outline" *ngIf="mostraInfoGioco"></ion-icon>

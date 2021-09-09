@@ -51,7 +51,7 @@ export class CreaLobbyPage implements OnInit {
 
     this.http.post('/lobby', toSend).subscribe(
       async (res) => {
-        var message = "La Lobby è stata creata, ora è possibile iniziare a giocare.";
+        var message = "La lobby è stata creata, ora è possibile iniziare a giocare.";
         this.alertCreator.createInfoAlert('Lobby creata', message);
         this.modalController.dismiss();
         this.router.navigateByUrl('/lobby-admin', { replaceUrl: true });
@@ -61,7 +61,7 @@ export class CreaLobbyPage implements OnInit {
         await loading.dismiss();
         this.modalController.dismiss();
         //TODO da fare
-        this.errorManager.stampaErrore(res, 'Creazione Lobby fallita');
+        this.errorManager.stampaErrore(res, 'Creazione lobby fallita');
       });
   }
 

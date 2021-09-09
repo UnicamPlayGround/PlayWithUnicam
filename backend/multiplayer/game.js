@@ -37,10 +37,10 @@ exports.getConfigGioco = (username, response, cb) => {
     lobby.cercaLobbyByUsername(username, (error, results) => {
         if (error) {
             console.log(error);
-            return response.status(400).send("Non è stato possibile trovare la Lobby");
+            return response.status(400).send("Non è stato possibile trovare la lobby");
         }
         if (controller.controllaRisultatoQuery(results))
-            return response.status(400).send("Errore: Devi partecipare ad una Lobby!");
+            return response.status(400).send("Errore: devi partecipare ad una lobby!");
 
         const lobby = JSON.parse(JSON.stringify(results.rows))[0];
 

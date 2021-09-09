@@ -43,7 +43,7 @@ function salvaInformazioni(username, partita, infoGiocatore, response) {
         [partita.info, partita.codice], (error, results) => {
             if (error) {
                 console.log(error);
-                return response.status(400).send("Non è stato possibile caricare le informazioni del Giocatore!");
+                return response.status(400).send("Non è stato possibile caricare le informazioni del giocatore!");
             }
             return response.status(200).send({ 'esito': "1" });
         })
@@ -62,7 +62,7 @@ function controllaNumeroGiocatori(adminLobby, cb) {
         }
 
         if (controller.controllaRisultatoQuery(results))
-            return cb(true, "Devi essere l'Admin della Lobby per creare una partita!", null);
+            return cb(true, "Devi essere l'admin della lobby per creare una partita!", null);
 
         const lobbyInfo = JSON.parse(JSON.stringify(results.rows))[0];
 
@@ -75,10 +75,10 @@ function controllaNumeroGiocatori(adminLobby, cb) {
             const numeroGiocatori = JSON.parse(JSON.stringify(results.rows))[0];
 
             if (lobbyInfo.min_giocatori > numeroGiocatori.count)
-                return cb(true, "Non ci sono abbastanza Giocatori per iniziare!", null);
+                return cb(true, "Non ci sono abbastanza giocatori per iniziare!", null);
 
             if (lobbyInfo.max_giocatori < numeroGiocatori.count)
-                return cb(true, "Ci sono troppi Giocatori per iniziare!", null);
+                return cb(true, "Ci sono troppi giocatori per iniziare!", null);
 
             return cb(null, null, lobbyInfo);
         })
@@ -134,7 +134,7 @@ exports.cambiaGiocatoreCorrente = (username, response) => {
                 [nuovoGiocatore.username, partita.codice_lobby], (error, results) => {
                     if (error) {
                         console.log(error);
-                        return response.status(400).send("Non è stato possibile aggiornare il Giocatore Corrente!");
+                        return response.status(400).send("Non è stato possibile aggiornare il giocatore corrente!");
                     }
                     return response.status(200).send({ 'esito': "1" });
                 })

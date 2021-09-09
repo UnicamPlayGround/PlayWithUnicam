@@ -48,7 +48,7 @@ export class RegistrationPage implements OnInit {
       },
       async (res) => {
         await loading.dismiss();
-        this.errorManager.stampaErrore(res, 'Registrazione Fallita');
+        this.errorManager.stampaErrore(res, 'Registrazione fallita');
       }
     );
   }
