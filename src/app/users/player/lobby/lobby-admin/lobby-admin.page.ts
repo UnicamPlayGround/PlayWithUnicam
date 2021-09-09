@@ -189,8 +189,6 @@ export class LobbyAdminPage implements OnInit {
         this.router.navigateByUrl(this.lobby.link, { replaceUrl: true });
       },
       async (res) => {
-        this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing);
-        this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
         this.errorManager.stampaErrore(res, 'Impossibile iniziare la Partita!');
       });
   }

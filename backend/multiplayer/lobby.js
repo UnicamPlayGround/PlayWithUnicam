@@ -204,16 +204,19 @@ exports.abbandonaLobby = (username, response) => {
             console.log(error);
             return response.status(400).send("Non è stato possibile trovare la lobby");
         }
+
         if (controller.controllaRisultatoQuery(results)) {
             eliminaGiocatore(username, response);
         } else {
             const tmp = JSON.parse(JSON.stringify(results.rows));
             const codiceLobby = tmp[0].codice;
+
             this.getGiocatoriLobby(username, response, (error, results) => {
                 if (error) {
                     console.log(error);
                     return response.status(500).send("Server error");
                 }
+
                 var giocatori = JSON.parse(JSON.stringify(results.rows));
                 if (giocatori.length > 1) {
                     this.impostaAdminLobby(giocatori[1].username, codiceLobby, (error, results) => {
