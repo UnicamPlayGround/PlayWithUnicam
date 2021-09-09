@@ -44,10 +44,6 @@ const routes: Routes = [
   {
     path: 'goose-game',
     loadChildren: () => import('./mgp_games/goose-game/goose-game.module').then( m => m.GooseGamePageModule)
-  },
-  {
-    path: 'dadi',
-    loadChildren: () => import('./modal-pages/dadi/dadi.module').then( m => m.DadiPageModule)
   }
 ];
 
