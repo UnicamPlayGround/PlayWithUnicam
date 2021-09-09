@@ -40,7 +40,7 @@ export class MenuPage implements OnInit {
    * Effettua l'operazione di Logout.
    */
   async logout() {
-    var message = 'Sei sicuro di voler uscire?';
+    var message = "Sei sicuro di voler effettuare il logout?";
     this.alertCreator.createConfirmationAlert(message, () => {
       this.loginService.logout();
       this.router.navigateByUrl('/home', { replaceUrl: true });

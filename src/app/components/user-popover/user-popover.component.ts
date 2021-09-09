@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { PopoverController } from '@ionic/angular';
 import { LoginService } from 'src/app/services/login-service/login.service';
 import jwt_decode from 'jwt-decode';
+import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creator.service';
 
 @Component({
   selector: 'app-user-popover',
@@ -15,7 +16,8 @@ export class UserPopoverComponent implements OnInit {
   constructor(
     private popoverController: PopoverController,
     private router: Router,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private alertCreator: AlertCreatorService
   ) {
     this.getTipoUtente()
   }
@@ -35,9 +37,12 @@ export class UserPopoverComponent implements OnInit {
   }
 
   logout() {
-    this.loginService.logout();
-    this.popoverController.dismiss();
-    this.router.navigateByUrl('/', { replaceUrl: true });
+    var message = "Sei sicuro di voler effettuare il logout?";
+    this.alertCreator.createConfirmationAlert(message, () => {
+      this.loginService.logout();
+      this.popoverController.dismiss();
+      this.router.navigateByUrl('/', { replaceUrl: true });
+    });
   }
 
   openRegistration() {
