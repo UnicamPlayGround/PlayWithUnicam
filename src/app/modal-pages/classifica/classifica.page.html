@@ -5,27 +5,42 @@
 </ion-header>
 
 <ion-content>
-  <ion-list class="modal">
-    <ion-list-header>
-      <p style="font-size: 16px;">Ecco la classifica finale dei giocatori!</p>
-    </ion-list-header>
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col size="12">
+        <ion-item lines="none">
+          <p style="font-size: 16px;">Ecco la classifica finale dei giocatori!</p>
+        </ion-item>
+      </ion-col>
+    </ion-row>
 
-    <ion-item lines="full" *ngFor="let giocatore of classifica; let i = index">
-      <ion-avatar slot="start">
-        <img src="../../../assets/icon/lobby-player.png" alt="Giocatore {{ giocatore.username }}">
-      </ion-avatar>
+    <ion-row *ngFor="let giocatore of classifica; let i = index">
+      <ion-col size-lg="10" size-md="10" size-sm="10" size="9.3">
+        <ion-item lines="full">
+          <ion-avatar slot="start">
+            <img src="../../../assets/icon/lobby-player.png" alt="Giocatore {{ giocatore.username }}">
+          </ion-avatar>
 
-      <ion-label>{{ giocatore.username }}</ion-label>
-      <ion-badge color="secondary">{{ giocatore.posizione }}</ion-badge>
+          <ion-label>{{ giocatore.username }}</ion-label>
+          <ion-badge color="secondary">{{ giocatore.posizione }}</ion-badge>
+        </ion-item>
+      </ion-col>
 
-      <ion-avatar *ngIf="i==0" slot="end" style="margin: auto;">
-        <img src="../../../assets/icon/gold-medal.png">
-      </ion-avatar>
-      <ion-avatar *ngIf="i==1" slot="end" style="margin: auto;">
-        <img src="../../../assets/icon/silver-medal.png">
-      </ion-avatar>
-    </ion-item>
-  </ion-list>
+      <ion-col size-lg="2" size-md="2" size-sm="2" size="2.7">
+        <ion-item lines="none">
+          <ion-avatar *ngIf="i==0">
+            <img src="../../../assets/icon/gold-medal.png">
+          </ion-avatar>
+          <ion-avatar *ngIf="i==1">
+            <img src="../../../assets/icon/silver-medal.png">
+          </ion-avatar>
+          <ion-avatar *ngIf="i==2">
+            <img src="../../../assets/icon/bronze-medal.png">
+          </ion-avatar>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
 
 <ion-footer>
