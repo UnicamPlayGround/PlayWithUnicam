@@ -156,16 +156,6 @@ app.get('/game/config', (req, res) => {
     } else return res.status(401).send(ERRORE_JWT);
 });
 
-//TODO commentare
-app.get('/dado/:nFacce', (req, res) => {
-    try {
-        const toReturn = game.lancioDado(req.params.nFacce);
-        res.status(200).send({ "results": toReturn });
-    } catch (error) {
-        return res.status(400).send(error);
-    }
-})
-
 /**
  * REST - Ritorna la lista degli Utenti
  */
