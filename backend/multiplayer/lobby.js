@@ -40,9 +40,9 @@ function eliminaGiocatore(username, response) {
     giocatore.eliminaGiocatore(username, (error, results) => {
         if (error) {
             console.log(error);
-            return response.status(400).send("Non è stato possibile abbandonare la lobby");
+            if (response) return response.status(400).send("Non è stato possibile abbandonare la lobby");
         }
-        return response.status(200).send({ 'esito': "1" });
+        if (response) return response.status(200).send({ 'esito': "1" });
     });
 }
 
@@ -116,10 +116,11 @@ exports.getGiocatoriLobby = (username, response, cb) => {
     this.cercaLobbyByUsername(username, (error, results) => {
         if (error) {
             console.log(error);
-            return response.status(400).send("Non è stato possibile trovare la Lobby");
+            if (response) return response.status(400).send("Non è stato possibile trovare la Lobby");
         }
+
         if (controller.controllaRisultatoQuery(results))
-            return response.status(400).send("Errore: Devi partecipare ad una Lobby!");
+            if (response) return response.status(400).send("Errore: Devi partecipare ad una Lobby!");
 
         const tmp = JSON.parse(JSON.stringify(results.rows));
         db.pool.query('SELECT * FROM public.giocatori WHERE codice_lobby = $1 ORDER BY data_ingresso ASC', [tmp[0].codice], (error, results) => {
@@ -202,7 +203,7 @@ exports.abbandonaLobby = (username, response) => {
     this.cercaLobbyByAdmin(username, (error, results) => {
         if (error) {
             console.log(error);
-            return response.status(400).send("Non è stato possibile trovare la lobby");
+            if (response) return response.status(400).send("Non è stato possibile trovare la lobby");
         }
 
         if (controller.controllaRisultatoQuery(results)) {
@@ -214,7 +215,7 @@ exports.abbandonaLobby = (username, response) => {
             this.getGiocatoriLobby(username, response, (error, results) => {
                 if (error) {
                     console.log(error);
-                    return response.status(500).send("Server error");
+                    if (response) return response.status(500).send("Server error");
                 }
 
                 var giocatori = JSON.parse(JSON.stringify(results.rows));
@@ -222,7 +223,7 @@ exports.abbandonaLobby = (username, response) => {
                     this.impostaAdminLobby(giocatori[1].username, codiceLobby, (error, results) => {
                         if (error) {
                             console.log(error);
-                            return response.status(400).send("Non è stato possibile impostare l'Admin della Lobby!");
+                            if (response) return response.status(400).send("Non è stato possibile impostare l'Admin della Lobby!");
                         }
                         eliminaGiocatore(username, response);
                     });

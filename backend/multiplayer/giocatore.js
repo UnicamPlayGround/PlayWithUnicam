@@ -21,23 +21,26 @@ exports.cercaGiocatore = (username, cb) => {
  */
 exports.controllaInattivi = () => {
     db.pool.query('SELECT * FROM public.giocatori', (error, results) => {
-        if (error) {
-            console.log(error);
-            return response.status(400).send('Errore nella query');
-        }
+        if (error) console.log(error);
+
         const giocatori = JSON.parse(JSON.stringify(results.rows));
 
         giocatori.forEach(giocatore => {
             var dif = Date.now() - Date.parse(giocatore.ping);
 
             //30 secondi
-            if (dif > 30000 || giocatore.ping == null)
-                db.pool.query('DELETE FROM public.giocatori WHERE username=$1', [giocatore.username], (error, results) => {
-                    if (error) {
-                        console.log(error);
-                        return response.status(400).send('Errore nella query');
-                    }
-                });
+            if (dif > 30000 || giocatore.ping == null) {
+                lobby.cercaLobbyByUsername(giocatore.username, (error, results) => {
+                    if (error) console.log(error);
+
+                    if (!controller.controllaRisultatoQuery(results))
+                        lobby.abbandonaLobby(giocatore.username, null)
+                    else
+                        db.pool.query('DELETE FROM public.giocatori WHERE username=$1', [giocatore.username], (error, results) => {
+                            if (error) console.log(error);
+                        });
+                })
+            }
         });
     });
 }
