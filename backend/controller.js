@@ -60,7 +60,16 @@ exports.controllaDatiAccountAsAdmin = function (newNome, newCognome, newUsername
     this.controllaString(newTipo, "Il nuovo tipo non è valido");
 }
 
-
+/**
+ * Controlla i dati di un gioco
+ * @param {String} nome 
+ * @param {String} tipo 
+ * @param {*} minGiocatori 
+ * @param {*} maxGiocatori 
+ * @param {String} link 
+ * @param {boolean} attivo 
+ * @param {String} regolamento 
+ */
 exports.controllaDatiGioco = function (nome, tipo, minGiocatori, maxGiocatori, link, attivo, regolamento) {
     this.controllaString(nome, "Il nome del gioco non è valido");
     this.controllaString(link, "Il link del gioco non è valido");
