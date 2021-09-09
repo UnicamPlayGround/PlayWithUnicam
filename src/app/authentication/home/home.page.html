@@ -1,8 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
-    <ion-title>
-      Home
-    </ion-title>
+    <ion-title>Home</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -14,23 +12,18 @@
     </ion-card-header>
 
     <ion-card-content>
-
       <form (ngSubmit)="loginOspiti()" [formGroup]="credenziali">
-        <ion-input style="font-size:25px" type="nickname" name="username" formControlName="username" placeholder="Inserisci un nickname" required>
+        <ion-input style="font-size:25px" type="nickname" name="username" formControlName="username"
+          placeholder="Inserisci un nickname" required>
         </ion-input>
-        <ion-button expand="block" type="submit">GIOCA ORA!</ion-button>
+        <ion-button expand="block" shape="round" type="submit">GIOCA ORA!</ion-button>
       </form>
-
       <br>
       <h2>Oppure</h2>
       <br>
-
-      <ion-button expand="block" color="danger" routerLink="/login">ACCEDI</ion-button>
-
+      <ion-button expand="block" shape="round" color="danger" routerLink="/login">ACCEDI</ion-button>
       <br>
-
       <h2>Non sei ancora registrato? <a routerLink="/registration">Registrati ora!</a></h2>
-
     </ion-card-content>
   </ion-card>
 

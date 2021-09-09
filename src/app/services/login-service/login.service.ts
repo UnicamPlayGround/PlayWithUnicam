@@ -43,8 +43,7 @@ export class LoginService {
       switchMap(token => {
         const decodedToken: any = jwt_decode(token);
         Storage.set({ key: TOKEN_KEY, value: token });
-        console.log(token);
-
+        
         switch (decodedToken.tipo) {
           case "GIOCATORE": return "1";
           case "ADMIN": return "2";

@@ -2,45 +2,47 @@
   <ion-toolbar color="primary">
     <ion-title>Crea una Lobby</ion-title>
 
-    <ion-button fill="clear" slot="start" (click)="closeModal()">
-      <ion-icon style="color:white" slot="icon-only" name="close-outline"></ion-icon>
+    <ion-button fill="clear" color="light" slot="start" (click)="closeModal()">
+      <ion-icon slot="icon-only" name="close-outline"></ion-icon>
     </ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
   <ion-list lines="full" class="modal">
 
-    <ion-item>
-      <h2><strong>Informazioni del Gioco:</strong></h2>
-    </ion-item>
+    <ion-card-header>
+      <ion-card-subtitle style="text-align: center;">Stai creando una lobby per</ion-card-subtitle>
+      <ion-card-title style="font-size: 25px; font-weight:bold; text-align: center;">{{giocoSelezionato.nome}}
+      </ion-card-title>
+    </ion-card-header>
 
     <ion-item>
-      <ion-label>Nome Gioco: {{giocoSelezionato.nome}}</ion-label>
+      <ion-label>Giocatori</ion-label>
+      <ion-col size="2.5">
+        <ion-label style="text-align: center;">
+          <p>MIN</p>
+          <h2>{{giocoSelezionato.min_giocatori}}</h2>
+        </ion-label>
+      </ion-col>
+
+      <ion-col size="2.5">
+        <ion-label style="text-align: center;">
+          <p>MAX</p>
+          <h2>{{giocoSelezionato.max_giocatori}}</h2>
+        </ion-label>
+      </ion-col>
     </ion-item>
 
-    <ion-item>
-      <span>Numero minimo di Giocatori: </span>
-      <span style="text-align: right; padding-right: 25px;" slot="end">{{giocoSelezionato.min_giocatori}}</span>
-    </ion-item>
-
-    <ion-item>
-      <span>Numero massimo di Giocatori:</span>
-      <span style="text-align: right; padding-right: 25px;" slot="end">{{giocoSelezionato.max_giocatori}}</span>
-    </ion-item>
-
-    <ion-item>
-      <ion-label>
-        Pubblica
-        <p>Imposta la Lobby come Pubblica</p>
+    <ion-item lines="none">
+      <ion-label text-wrap>
+        Visibilità pubblica
+        <p>Se attivo, permette a tutti i giocatori online di trovare la lobby e di parteciparvi.</p>
       </ion-label>
-      <ion-toggle [(ngModel)]="tipo"></ion-toggle>
+      <ion-toggle slot="end" [(ngModel)]="tipo"></ion-toggle>
     </ion-item>
 
     <br>
-
-    <ion-button type="submit" color="primary" expand="block" (click)="creaLobby()">Crea Lobby</ion-button>
+    <ion-button type="submit" shape="round" color="primary" expand="block" (click)="creaLobby()">Crea Lobby</ion-button>
   </ion-list>
-
 </ion-content>
