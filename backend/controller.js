@@ -1,4 +1,3 @@
-
 /**
  * Controlla che la Query abbia ritornato almeno un riga.
  * @param {*} results Risultato della query da controllare

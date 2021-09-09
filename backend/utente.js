@@ -53,7 +53,7 @@ exports.cambiaPassword = (newPassword, oldPassword, response, username) => {
  * Ricerca un Ospite tramite il suo Username.
  * @param {string} username Username dell'Ospite da ricercare
  * @param {*} cb Callback
- * @returns Ritorna le informazioni dell'Ospite
+ * @returns Le informazioni dell'Ospite
  */
 exports.cercaOspiteByUsername = (username, cb) => {
     controller.controllaNotNull(username, "L'username non deve essere vuoto!");
@@ -66,7 +66,7 @@ exports.cercaOspiteByUsername = (username, cb) => {
  * Ricerca un Utente tramite il suo Username.
  * @param {string} username Username dell'Utente da ricercare
  * @param {*} cb Callback
- * @returns Ritorna le informazioni dell'Utente
+ * @returns Le informazioni dell'Utente
  */
 exports.cercaUtenteByUsername = (username, cb) => {
     controller.controllaNotNull(username, "L'username non deve essere vuoto!");
@@ -122,7 +122,7 @@ exports.creaUtente = (username, nome, cognome, password, response) => {
  * Ritorna l'Username, il Nome ed il Cognome di un Utente.
  * @param {string} username Username dell'Utente
  * @param {*} cb Callback
- * @returns Ritorna le informazioni dell'Utente
+ * @returns Le informazioni dell'Utente
  */
 exports.getUserInfo = (username, cb) => {
     return db.pool.query('select username, nome, cognome from public.utenti where username=$1',
@@ -201,7 +201,7 @@ exports.eliminaOspiti = () => {
         }
 
         const ospiti = JSON.parse(JSON.stringify(results.rows));
-        
+
         ospiti.forEach(ospite => {
             var dataOspite = new Date(ospite.data_creazione);
             if ((data.getTime() - dataOspite.getTime()) > 86400000) {

@@ -54,7 +54,7 @@ exports.getConfigGioco = (username, response, cb) => {
  * Ritorna le Informazioni del Gioco.
  * @param {*} idGioco ID del Gioco
  * @param {*} cb Callback
- * @returns ritorna le Informazioni del Gioco (id, nome, tipo, max_giocatori, min_giocatori, link)
+ * @returns Le Informazioni del Gioco (id, nome, tipo, max_giocatori, min_giocatori, link)
  */
 exports.getInfoGioco = (idGioco, cb) => {
     return db.pool.query('select id, nome, tipo, max_giocatori, min_giocatori, link from public.giochi where id=$1',
@@ -66,7 +66,7 @@ exports.getInfoGioco = (idGioco, cb) => {
 /**
  * Ritorna le Informazioni dei Giochi che sono *"attivi"*.
  * @param {*} cb Callback
- * @returns ritorna le Informazioni dei Giochi (id, nome, tipo, max_giocatori, min_giocatori, link)
+ * @returns Le Informazioni dei Giochi (id, nome, tipo, max_giocatori, min_giocatori, link)
  */
 exports.getListaGiochi = (cb) => {
     return db.pool.query('select id, nome, tipo, max_giocatori, min_giocatori, link from public.giochi where attivo=$1',
@@ -78,7 +78,7 @@ exports.getListaGiochi = (cb) => {
 /**
  * Ritorna all'Admim della Piattaforma le Informazioni dei Giochi.
  * @param {*} cb Callback
- * @returns ritorna le Informazioni dei Giochi (id, nome, tipo, max_giocatori, min_giocatori, link, attivo, config, regolamento)
+ * @returns Le Informazioni dei Giochi (id, nome, tipo, max_giocatori, min_giocatori, link, attivo, config, regolamento)
  */
 exports.getListaGiochiAsAdmin = (cb) => {
     return db.pool.query('select id, nome, tipo, max_giocatori, min_giocatori, link, attivo, config, regolamento from public.giochi',

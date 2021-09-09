@@ -243,7 +243,11 @@ exports.salvaInfoGiocatore = (username, infoGiocatore, response) => {
     })
 }
 
-//TODO commentare
+/**
+ * Termina la Partita, impostando il valore *"terminata"* della Partita a *true*.
+ * @param {*} username Username del Giocatore che ha terminato per primo la Partita
+ * @param {*} response 
+ */
 exports.terminaPartita = (username, response) => {
     this.getInfoPartita(username, (error, results) => {
         if (error) {
