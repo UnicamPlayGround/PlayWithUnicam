@@ -69,7 +69,6 @@ export class LobbyGuestPage implements OnInit {
     (await this.lobbyManager.loadInfoLobby()).subscribe(
       async (res) => {
         this.lobby = res['results'][0];
-        console.log(this.lobby);
         const decodedToken: any = jwt_decode((await this.loginService.getToken()).value);
 
         if (decodedToken.username === this.lobby.admin_lobby) {
