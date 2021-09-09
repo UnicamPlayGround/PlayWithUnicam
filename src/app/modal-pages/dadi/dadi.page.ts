@@ -9,6 +9,7 @@ import { ModalController, NavParams } from '@ionic/angular';
 export class DadiPage implements OnInit {
   dadi = [];
   lancio = 0;
+  dieRollAudio;
 
   @Input() nDadi: any;
 
@@ -20,9 +21,17 @@ export class DadiPage implements OnInit {
     for (let i = 1; i < this.nDadi + 1; i++) {
       this.dadi.push('die-' + i);
     }
+
+    this.dieRollAudio = document.getElementById("die-roll-audio"); 
+
+    setTimeout(() => {
+      this.rollDice();
+    }, 100);
   }
 
-  rollDice() {
+  rollDice() {   
+    this.dieRollAudio.play();
+
     setTimeout(() => {
       this.modalController.dismiss(this.lancio);
     }, 2500);

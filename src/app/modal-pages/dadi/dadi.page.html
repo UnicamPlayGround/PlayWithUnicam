@@ -1,4 +1,9 @@
 <ion-content>
+  <audio id="die-roll-audio">
+    <source src="../../../assets/audio/die-roll-sound.wav" type="audio/wav">
+    <source src="../../../assets/audio/die-roll-sound.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
   <div class="dice">
     <ol *ngFor="let dado of dadi" class="die-list even-roll" data-roll="1" id="{{ dado }}">
       <li class="die-item" data-side="1">
@@ -36,14 +41,4 @@
       </li>
     </ol>
   </div>
-
-  <button class="roll-button" id="button" expand="block" (click)="rollDice()">Lancia Dado</button>
 </ion-content>
-
-<ion-footer id="footer">
-  <ion-toolbar color="primary">
-    <ion-button fill="clear" color="light" expand="full" (click)="rollDice()">
-      Lancia Dado
-    </ion-button>
-  </ion-toolbar>
-</ion-footer>

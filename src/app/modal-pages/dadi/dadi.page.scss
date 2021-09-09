@@ -7,7 +7,8 @@
     font-family: system-ui, sans-serif;
   }
   ion-content {
-    --background: linear-gradient(#045164, #2460a5, #39a3fa);
+    --background: transparent !important;
+    // --background: linear-gradient(#045164, #2460a5, #39a3fa);
     display: grid;
     grid-template-columns: 1fr;
     height: 100vh;
