@@ -1,6 +1,7 @@
 const controller = require('../controller');
 const db = require('../database');
 const giocatore = require('./giocatore');
+const partita = require('./partita');
 
 function creaCodice() {
     var toReturn = "" + Math.floor(Math.random() * 10);
@@ -47,6 +48,38 @@ function eliminaGiocatore(username, response) {
 }
 
 /**
+ * Imposta il parametro *partita_iniziata* della Lobby a **true**.
+ * @param {*} codiceLobby Codice della Lobby
+ * @param {*} response 
+ */
+exports.iniziaPartita = (codiceLobby, response) => {
+    db.pool.query('UPDATE public.lobby SET partita_iniziata = $1 WHERE codice = $2',
+        [true, codiceLobby], (error, results) => {
+            if (error) {
+                console.log(error);
+                return response.status(400).send("Non è stato possibile creare la partita!");
+            }
+            return response.status(200).send({ 'esito': "1" });
+        });
+}
+
+/**
+ * Imposta il parametro *partita_iniziata* della Lobby a **false**.
+ * @param {*} codiceLobby Codice della Lobby
+ * @param {*} response 
+ */
+exports.terminaPartita = (codiceLobby, response) => {
+    db.pool.query('UPDATE public.lobby SET partita_iniziata = $1 WHERE codice = $2',
+        [false, codiceLobby], (error, results) => {
+            if (error) {
+                console.log(error);
+                return response.status(400).send("Non è stato possibile terminare la partita!");
+            }
+            return response.status(200).send({ 'esito': "1" });
+        });
+}
+
+/**
  * //TODO rifare il commento
  * Controlla se esistono lobby che hanno come admin l'username passato.
  * 
@@ -72,8 +105,8 @@ exports.cercaLobbyByAdmin = (adminLobby, cb) => {
 exports.cercaLobbyByCodice = (codice, cb) => {
     db.pool.query('SELECT codice, data_creazione, admin_lobby, min_giocatori, max_giocatori, pubblica FROM ' +
         '(public.giocatori INNER JOIN public.lobby ON public.giocatori.codice_lobby = public.lobby.codice) ' +
-        'INNER JOIN public.giochi ON public.lobby.id_gioco = public.giochi.id WHERE codice = $1',
-        [codice], (error, results) => {
+        'INNER JOIN public.giochi ON public.lobby.id_gioco = public.giochi.id WHERE codice = $1 AND partita_iniziata = $2',
+        [codice, false], (error, results) => {
             cb(error, results)
         });
 }
@@ -101,7 +134,8 @@ exports.cercaLobbyByUsername = (username, cb) => {
  */
 exports.getLobbyPubbliche = (username, cb) => {
     db.pool.query('SELECT codice, admin_lobby, data_creazione, id_gioco, nome, max_giocatori, min_giocatori FROM public.lobby' +
-        ' INNER JOIN public.giochi ON public.lobby.id_gioco = public.giochi.id WHERE pubblica=$1 AND admin_lobby <> $2', [true, username], (error, results) => {
+        ' INNER JOIN public.giochi ON public.lobby.id_gioco = public.giochi.id WHERE pubblica=$1 AND admin_lobby <> $2' +
+        ' AND public.lobby.partita_iniziata = $3', [true, username, false], (error, results) => {
             cb(error, results)
         });
 }
@@ -250,8 +284,8 @@ exports.creaLobby = (adminLobby, idGioco, pubblica, response) => {
 
             const codiceLobby = creaCodice();
 
-            db.pool.query('INSERT INTO public.lobby (codice, data_creazione, ultima_richiesta, id_gioco, pubblica) VALUES ($1, $2, NOW(), $3, $4)',
-                [codiceLobby, getDataOdierna(), idGioco, pubblica], (error, results) => {
+            db.pool.query('INSERT INTO public.lobby (codice, data_creazione, ultima_richiesta, id_gioco, pubblica, partita_iniziata) VALUES ($1, $2, NOW(), $3, $4, $5)',
+                [codiceLobby, getDataOdierna(), idGioco, pubblica, false], (error, results) => {
                     if (error) {
                         console.log(error);
                         return response.status(400).send("Non è stato possibile creare la Lobby!");

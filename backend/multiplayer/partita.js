@@ -176,7 +176,7 @@ exports.creaPartita = (adminLobby, response) => {
                             console.log(error);
                             return response.status(400).send("Non è stato possibile creare la partita!");
                         }
-                        return response.status(200).send({ 'esito': "1" });
+                        lobby.iniziaPartita(lobbyInfo.codice, response);
                     });
             } else {
                 db.pool.query('UPDATE public.partite SET codice = $1, giocatore_corrente = $2, info = $3, terminata = $4 WHERE codice_lobby = $5',
@@ -185,7 +185,7 @@ exports.creaPartita = (adminLobby, response) => {
                             console.log(error);
                             return response.status(400).send("Non è stato possibile creare la partita!");
                         }
-                        return response.status(200).send({ 'esito': "1" });
+                        lobby.iniziaPartita(lobbyInfo.codice, response);
                     });
             }
         })
@@ -268,7 +268,7 @@ exports.terminaPartita = (username, response) => {
                     return response.status(500).send('Server error!');
                 }
 
-                return response.status(200).send({ 'esito': "1" });
+                lobby.terminaPartita(partita.codice_lobby, response);
             });
     })
 }
