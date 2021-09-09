@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { AuthAdminGuard } from './guards/auth-admin/auth-admin.guard';
+import { AuthGiocatoriGuard } from './guards/auth-giocatori/auth-giocatori.guard';
+import { AuthUtentiGuard } from './guards/auth-utenti/auth-utenti.guard';
 
 const routes: Routes = [
   {
@@ -21,29 +24,33 @@ const routes: Routes = [
   },
   {
     path: 'player/dashboard',
-    loadChildren: () => import('./users/player/dashboard/dashboard.module').then(m => m.DashboardPageModule)
-    //TODO: mettere authguard
+    loadChildren: () => import('./users/player/dashboard/dashboard.module').then(m => m.DashboardPageModule),
+    canLoad: [AuthGiocatoriGuard]
   },
   {
     path: 'admin',
-    loadChildren: () => import('./users/admin/menu/menu.module').then(m => m.MenuPageModule)
-    //TODO: mettere authguard
+    loadChildren: () => import('./users/admin/menu/menu.module').then(m => m.MenuPageModule),
+    canLoad: [AuthAdminGuard]
   },
   {
     path: 'lobby-admin',
-    loadChildren: () => import('./users/player/lobby/lobby-admin/lobby-admin.module').then(m => m.LobbyAdminPageModule)
+    loadChildren: () => import('./users/player/lobby/lobby-admin/lobby-admin.module').then(m => m.LobbyAdminPageModule),
+    canLoad: [AuthGiocatoriGuard]
   },
   {
     path: 'lobby-guest',
-    loadChildren: () => import('./users/player/lobby/lobby-guest/lobby-guest.module').then( m => m.LobbyGuestPageModule)
+    loadChildren: () => import('./users/player/lobby/lobby-guest/lobby-guest.module').then(m => m.LobbyGuestPageModule),
+    canLoad: [AuthGiocatoriGuard]
   },
   {
     path: 'account',
-    loadChildren: () => import('./users/account/account.module').then( m => m.AccountPageModule)
+    loadChildren: () => import('./users/account/account.module').then(m => m.AccountPageModule),
+    canLoad: [AuthUtentiGuard]
   },
   {
     path: 'goose-game',
-    loadChildren: () => import('./mgp_games/goose-game/goose-game.module').then( m => m.GooseGamePageModule)
+    loadChildren: () => import('./mgp_games/goose-game/goose-game.module').then(m => m.GooseGamePageModule),
+    canLoad: [AuthGiocatoriGuard]
   }
 ];
 
