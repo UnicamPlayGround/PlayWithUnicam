@@ -106,12 +106,4 @@ ALTER TABLE public.partite
 	ON UPDATE CASCADE
     NOT VALID;
 
-
-ALTER TABLE public.partite
-    ADD FOREIGN KEY (vincitore)
-    REFERENCES public.giocatori (username)
-    ON DELETE CASCADE
-	ON UPDATE CASCADE
-    NOT VALID;
-
 END;
