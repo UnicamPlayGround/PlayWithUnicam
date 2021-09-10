@@ -43,6 +43,14 @@ const CREAZIONE_PARTITA_ERROR = "Non è stato possibile creare la partita!";
  */
 const PARTITA_NON_TROVATA_ERROR = "Nessuna partita trovata!";
 
+//--------------------------------- GIOCO ---------------------------------
+
+/**
+ * Messaggio di errore:
+ * * la creazione di un Gioco ha determinato un errore.
+ */
+const CREAZIONE_GIOCO_ERROR = "Non è stato possibile creare il gioco!";
+
 module.exports = {
     ERRORE_JWT,
     SERVER_ERROR,
@@ -50,5 +58,6 @@ module.exports = {
     PARTECIPAZIONE_LOBBY_ERROR,
     CREAZIONE_LOBBY_ERROR,
     CREAZIONE_PARTITA_ERROR,
-    PARTITA_NON_TROVATA_ERROR
+    PARTITA_NON_TROVATA_ERROR,
+    CREAZIONE_GIOCO_ERROR
 }

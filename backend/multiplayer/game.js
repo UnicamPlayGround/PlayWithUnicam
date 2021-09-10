@@ -22,7 +22,7 @@ exports.creaGioco = (nome, tipo, minGiocatori, maxGiocatori, link, attivo, confi
         [nome, tipo, maxGiocatori, minGiocatori, link, attivo, config, regolamento], (error, results) => {
             if (error) {
                 console.log(error);
-                return response.status(400).send("Non è stato possibile creare il gioco!");
+                return response.status(400).send(messaggi.CREAZIONE_GIOCO_ERROR);
             }
             return response.status(200).send({ 'esito': "1" });
         })
@@ -108,7 +108,7 @@ exports.modificaGioco = (id, nome, tipo, minGiocatori, maxGiocatori, link, attiv
         [nome, tipo, maxGiocatori, minGiocatori, link, attivo, config, regolamento, id], (error, results) => {
             if (error) {
                 console.log(error);
-                return response.status(400).send("Non è stato possibile creare il gioco!");
+                return response.status(400).send(messaggi.CREAZIONE_GIOCO_ERROR);
             }
             return response.status(200).send({ 'esito': "1" });
         })
