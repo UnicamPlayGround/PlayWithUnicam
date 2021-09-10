@@ -42,6 +42,7 @@ function eliminaGiocatore(username, response) {
         if (error) {
             console.log(error);
             if (response) return response.status(400).send("Non è stato possibile abbandonare la lobby");
+            else return;
         }
         if (response) return response.status(200).send({ 'esito': "1" });
     });
@@ -151,10 +152,13 @@ exports.getGiocatoriLobby = (username, response, cb) => {
         if (error) {
             console.log(error);
             if (response) return response.status(400).send("Non è stato possibile trovare la lobby");
+            else return;
         }
 
-        if (controller.controllaRisultatoQuery(results))
+        if (controller.controllaRisultatoQuery(results)) {
             if (response) return response.status(400).send(messaggi.PARTECIPAZIONE_LOBBY_ERROR);
+            else return;
+        }
 
         const tmp = JSON.parse(JSON.stringify(results.rows));
         db.pool.query('SELECT * FROM public.giocatori WHERE codice_lobby = $1 ORDER BY data_ingresso ASC', [tmp[0].codice], (error, results) => {
@@ -238,6 +242,7 @@ exports.abbandonaLobby = (username, response) => {
         if (error) {
             console.log(error);
             if (response) return response.status(400).send("Non è stato possibile trovare la lobby");
+            else return;
         }
 
         if (controller.controllaRisultatoQuery(results)) {
@@ -250,6 +255,7 @@ exports.abbandonaLobby = (username, response) => {
                 if (error) {
                     console.log(error);
                     if (response) return response.status(500).send(messaggi.SERVER_ERROR);
+                    else return;
                 }
 
                 var giocatori = JSON.parse(JSON.stringify(results.rows));
@@ -258,6 +264,7 @@ exports.abbandonaLobby = (username, response) => {
                         if (error) {
                             console.log(error);
                             if (response) return response.status(400).send("Non è stato possibile impostare l'admin della Lobby!");
+                            else return;
                         }
                         eliminaGiocatore(username, response);
                     });
