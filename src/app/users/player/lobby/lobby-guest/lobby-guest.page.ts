@@ -30,8 +30,6 @@ export class LobbyGuestPage implements OnInit {
     private loginService: LoginService,
     private router: Router
   ) {
-    this.loadInfoLobby();
-    this.loadGiocatori();
     this.ping();
     this.timerInfoLobby = timerService.getTimer(() => { this.loadInfoLobby() }, 5000);
     this.timerGiocatori = timerService.getTimer(() => { this.loadGiocatori() }, 5000);
@@ -149,7 +147,10 @@ export class LobbyGuestPage implements OnInit {
   private async ping() {
     console.log("ping...");
     (await this.lobbyManager.ping()).subscribe(
-      async (res) => { },
+      async (res) => {
+        this.loadInfoLobby();
+        this.loadGiocatori();
+      },
       async (res) => {
         this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing, this.timerPartita);
         this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
