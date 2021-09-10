@@ -5,6 +5,7 @@ import { UserPopoverComponent } from 'src/app/components/user-popover/user-popov
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LoginService } from 'src/app/services/login-service/login.service';
 import { IntroLobbyPopoverComponent } from '../popover/intro-lobby-popover/intro-lobby-popover.component';
+import jwt_decode from 'jwt-decode';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,6 +16,7 @@ export class DashboardPage implements OnInit {
   games = [];
   page = 0;
   maximumPages = 3;
+  ospite = false;
 
   constructor(
     private popoverController: PopoverController,
@@ -26,6 +28,14 @@ export class DashboardPage implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  //TODO commentare
+  async getTipoUtente() {
+    const token = (await this.loginService.getToken()).value;
+    const decodedToken: any = jwt_decode(token);
+    if (decodedToken.tipo === 'OSPITE') this.ospite = true;
+    else if (decodedToken.tipo === 'GIOCATORE') this.ospite = false;
   }
 
   //TODO rinominare metodo
