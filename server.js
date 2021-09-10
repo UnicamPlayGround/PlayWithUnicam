@@ -462,7 +462,7 @@ app.post('/login/ospiti', (req, res) => {
                     utente.creaOspite(req.body.username, (err, results) => {
                         if (err) {
                             console.log(err);
-                            return res.status(400).send("NON E' STATO POSSIBILE CREARE L'OSPITE!");
+                            return res.status(400).send("Non è stato possibile creare l'ospite!");
                         }
                         sendAccessToken(res, { username: req.body.username, tipo: "OSPITE" });
                     });
