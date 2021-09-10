@@ -1,6 +1,7 @@
 const controller = require('./controller');
 const db = require('./database');
 const bcrypt = require('bcrypt');
+const messaggi = require('./messaggi');
 
 //TODO
 const SECRET_PWD = "secret";
@@ -21,15 +22,15 @@ exports.cambiaPassword = (newPassword, oldPassword, response, username) => {
     this.cercaUtenteByUsername(username, (error, results) => {
         if (error) {
             console.log(error);
-            return response.status(500).send('Server error!');
+            return response.status(500).send(messaggi.SERVER_ERROR);
         }
 
         if (controller.controllaRisultatoQuery(results))
-            return response.status(404).send('Utente non trovato!');
+            return response.status(404).send(messaggi.UTENTE_NON_TROVATO_ERROR);
 
         const risultati = JSON.parse(JSON.stringify(results.rows));
         if (risultati.length == 0)
-            return response.status(404).send('Utente non trovato!');
+            return response.status(404).send(messaggi.UTENTE_NON_TROVATO_ERROR);
 
         const data = risultati[0];
         const hash = bcrypt.hashSync(oldPassword + SECRET_PWD, data.salt);
@@ -145,9 +146,9 @@ exports.modificaNomeCognome = (username, nome, cognome, response) => {
     this.cercaUtenteByUsername(username, (error, results) => {
         if (error) {
             console.log(error);
-            return response.status(500).send('Server error!');
+            return response.status(500).send(messaggi.SERVER_ERROR);
         }
-        if (controller.controllaRisultatoQuery(results)) return response.status(404).send('Utente non trovato!');
+        if (controller.controllaRisultatoQuery(results)) return response.status(404).send(messaggi.UTENTE_NON_TROVATO_ERROR);
 
         db.pool.query('UPDATE public.utenti SET nome = $1, cognome = $2 WHERE username = $3',
             [nome, cognome, username], (error, results) => {
@@ -173,9 +174,9 @@ exports.modificaUsername = (oldUsername, newUsername, response, cb) => {
     this.cercaUtenteByUsername(oldUsername, (error, results) => {
         if (error) {
             console.log(error);
-            return response.status(500).send('Server error!');
+            return response.status(500).send(messaggi.SERVER_ERROR);
         }
-        if (controller.controllaRisultatoQuery(results)) return response.status(404).send('Utente non trovato!');
+        if (controller.controllaRisultatoQuery(results)) return response.status(404).send(messaggi.UTENTE_NON_TROVATO_ERROR);
 
         this.cercaUtenteByUsername(newUsername, (err, results) => {
             if (!controller.controllaRisultatoQuery(results)) return response.status(404).send("Il nuovo username è già utilizzato!");

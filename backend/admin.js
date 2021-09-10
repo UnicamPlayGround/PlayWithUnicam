@@ -1,6 +1,7 @@
 const db = require('./database');
 const utente = require('./utente');
 const controller = require('./controller');
+const messaggi = require('./messaggi');
 
 /**
  * Ritorna la lista degli Utenti che hanno tipo diverso da "ADMIN".
@@ -53,7 +54,7 @@ exports.modificaUtente = (username, newUsername, nome, cognome, response) => {
         utente.modificaUsername(username, newUsername, response, (error, results) => {
             if (error) {
                 console.log(error);
-                return response.status(500).send('Server error!');
+                return response.status(500).send(messaggi.SERVER_ERROR);
             }
             utente.modificaNomeCognome(newUsername, nome, cognome, response);
         })

@@ -2,6 +2,7 @@ const controller = require('../controller');
 const db = require('../database');
 const lobby = require('./lobby');
 const utente = require('../utente');
+const messaggi = require('../messaggi');
 
 /**
  * Ricerca un Giocatore tramite il suo Username.
@@ -136,7 +137,7 @@ exports.ping = (username, response, cb) => {
             return response.status(400).send("Non è stato possibile trovare la lobby");
         }
         if (controller.controllaRisultatoQuery(results))
-            return response.status(400).send("Errore: devi partecipare ad una lobby!");
+            return response.status(400).send(messaggi.PARTECIPAZIONE_LOBBY_ERROR);
 
         db.pool.query('UPDATE public.giocatori SET ping = NOW() WHERE username = $1', [username], (error, results) => {
             cb(error, results)

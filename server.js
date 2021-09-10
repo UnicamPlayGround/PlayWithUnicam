@@ -8,6 +8,7 @@ const lobby = require('./backend/multiplayer/lobby');
 const partita = require('./backend/multiplayer/partita');
 const utente = require('./backend/utente');
 const giocatore = require('./backend/multiplayer/giocatore');
+const messaggi = require('./backend/messaggi');
 
 //TODO
 const SECRET_PWD = "secret";
@@ -15,8 +16,6 @@ const SECRET_KEY = "secret_jwt";
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-
-const ERRORE_JWT = "Errore, JWT non valido! Rieffettua il login."
 
 const timerGiocatoriInattivi = setInterval(() => { controllaGiocatoriInattivi(); }, 5000);
 const timerOspiti = setInterval(() => { controllaOspiti(); }, 3600000); //3600000 millis corrispondono ad un'ora
@@ -106,11 +105,11 @@ app.get('/games', (req, res) => {
         game.getListaGiochi((err, results) => {
             if (err) {
                 console.log(err);
-                return res.status(500).send('Server error!');
+                return res.status(500).send(messaggi.SERVER_ERROR);
             }
             sendDataInJSON(res, results);
         });
-    } else return res.status(401).send(ERRORE_JWT);
+    } else return res.status(401).send(messaggi.ERRORE_JWT);
 })
 
 //TODO commentare
@@ -121,11 +120,11 @@ app.get('/games/admin', (req, res) => {
         game.getListaGiochiAsAdmin((err, results) => {
             if (err) {
                 console.log(err);
-                return res.status(500).send('Server error!');
+                return res.status(500).send(messaggi.SERVER_ERROR);
             }
             sendDataInJSON(res, results);
         });
-    } else return res.status(401).send(ERRORE_JWT);
+    } else return res.status(401).send(messaggi.ERRORE_JWT);
 })
 
 //TODO commentare
@@ -137,11 +136,11 @@ app.get('/game/status', (req, res) => {
         partita.getInfoPartita(jwt.decode(token).username, (err, results) => {
             if (err) {
                 console.log(err);
-                return res.status(500).send('Server error!');
+                return res.status(500).send(messaggi.SERVER_ERROR);
             }
             sendDataInJSON(res, results);
         });
-    } else return res.status(401).send(ERRORE_JWT);
+    } else return res.status(401).send(messaggi.ERRORE_JWT);
 });
 
 app.get('/game/config', (req, res) => {
@@ -149,11 +148,11 @@ app.get('/game/config', (req, res) => {
         game.getConfigGioco(jwt.decode(req.headers.token).username, res, (err, results) => {
             if (err) {
                 console.log(err);
-                return res.status(500).send('Server error!');
+                return res.status(500).send(messaggi.SERVER_ERROR);
             }
             sendDataInJSON(res, results);
         })
-    } else return res.status(401).send(ERRORE_JWT);
+    } else return res.status(401).send(messaggi.ERRORE_JWT);
 });
 
 /**
@@ -164,11 +163,11 @@ app.get('/admin/utenti', (req, res) => {
         admin.getUtenti(jwt.decode(req.headers.token).username, (err, results) => {
             if (err) {
                 console.log(err);
-                return res.status(500).send('Server error!');
+                return res.status(500).send(messaggi.SERVER_ERROR);
             }
             sendDataInJSON(res, results);
         });
-    } else return res.status(401).send(ERRORE_JWT);
+    } else return res.status(401).send(messaggi.ERRORE_JWT);
 });
 
 /**
@@ -179,7 +178,7 @@ app.get('/lobby/pubbliche', (req, res) => {
         lobby.getLobbyPubbliche(jwt.decode(req.headers.token).username, (err, results) => {
             if (err) {
                 console.log(err);
-                return res.status(500).send('Server error!');
+                return res.status(500).send(messaggi.SERVER_ERROR);
             }
 
             const lobbies = JSON.parse(JSON.stringify(results.rows));
@@ -188,7 +187,7 @@ app.get('/lobby/pubbliche', (req, res) => {
 
             res.status(200).send(toReturn);
         })
-    } else return res.status(401).send(ERRORE_JWT);
+    } else return res.status(401).send(messaggi.ERRORE_JWT);
 });
 
 /**
@@ -199,11 +198,11 @@ app.get('/lobby/giocatori/:codiceLobby', (req, res) => {
         lobby.getNumeroGiocatoriLobby(req.params.codiceLobby, (err, results) => {
             if (err) {
                 console.log(err);
-                return res.status(500).send('Server error!');
+                return res.status(500).send(messaggi.SERVER_ERROR);
             }
             sendDataInJSON(res, results);
         })
-    } else return res.status(401).send(ERRORE_JWT);
+    } else return res.status(401).send(messaggi.ERRORE_JWT);
 });
 
 /**
@@ -215,11 +214,11 @@ app.get('/info/utente', (req, res) => {
         utente.getUserInfo(jwt.decode(token).username, (err, results) => {
             if (err) {
                 console.log(err);
-                return res.status(500).send('Server error!');
+                return res.status(500).send(messaggi.SERVER_ERROR);
             }
             sendDataInJSON(res, results);
         })
-    } else return res.status(401).send(ERRORE_JWT);
+    } else return res.status(401).send(messaggi.ERRORE_JWT);
 });
 
 /**
@@ -230,14 +229,14 @@ app.get('/lobby/info', (req, res) => {
         lobby.cercaLobbyByUsername(jwt.decode(req.headers.token).username, (err, results) => {
             if (err) {
                 console.log(err);
-                return res.status(500).send('Server error!');
+                return res.status(500).send(messaggi.SERVER_ERROR);
             }
             if (controller.controllaRisultatoQuery(results))
-                return res.status(400).send("Errore: Devi partecipare ad una Lobby!");
+                return res.status(400).send(messaggi.PARTECIPAZIONE_LOBBY_ERROR);
 
             sendDataInJSON(res, results);
         })
-    } else return res.status(401).send(ERRORE_JWT);
+    } else return res.status(401).send(messaggi.ERRORE_JWT);
 });
 
 app.get('/lobby/giocatori', (req, res) => {
@@ -245,11 +244,11 @@ app.get('/lobby/giocatori', (req, res) => {
         lobby.getGiocatoriLobby(jwt.decode(req.headers.token).username, res, (err, results) => {
             if (err) {
                 console.log(err);
-                return res.status(500).send('Server error!');
+                return res.status(500).send(messaggi.SERVER_ERROR);
             }
             sendDataInJSON(res, results);
         })
-    } else return res.status(401).send(ERRORE_JWT);
+    } else return res.status(401).send(messaggi.ERRORE_JWT);
 });
 
 app.delete('/lobby/admin/espelli', (req, res) => {
@@ -259,7 +258,7 @@ app.delete('/lobby/admin/espelli', (req, res) => {
         } catch (error) {
             return res.status(400).send(error);
         }
-    } else return res.status(401).send(ERRORE_JWT);
+    } else return res.status(401).send(messaggi.ERRORE_JWT);
 });
 
 app.delete('/lobby/abbandona', (req, res) => {
@@ -269,7 +268,7 @@ app.delete('/lobby/abbandona', (req, res) => {
         } catch (error) {
             return res.status(400).send(error);
         }
-    } else return res.status(401).send(ERRORE_JWT);
+    } else return res.status(401).send(messaggi.ERRORE_JWT);
 });
 
 /**
@@ -284,7 +283,7 @@ app.delete('/admin/utenti', (req, res) => {
             console.log(error);
             return res.status(400).send(error);
         }
-    } else return res.status(401).send(ERRORE_JWT);
+    } else return res.status(401).send(messaggi.ERRORE_JWT);
 });
 
 /**
@@ -298,7 +297,7 @@ app.put('/admin/utenti/:username', (req, res) => {
             console.log(error);
             return res.status(400).send(error);
         }
-    } else return res.status(401).send(ERRORE_JWT);
+    } else return res.status(401).send(messaggi.ERRORE_JWT);
 });
 
 /**
@@ -308,7 +307,7 @@ app.put('/player/profilo', (req, res) => {
     try {
         if (verificaJWT(req.body.token)) {
             utente.modificaNomeCognome(jwt.decode(req.body.token).username, req.body.nome, req.body.cognome, res);
-        } else return res.status(401).send(ERRORE_JWT);
+        } else return res.status(401).send(messaggi.ERRORE_JWT);
     } catch (error) {
         return res.status(400).send(error);
     }
@@ -328,7 +327,7 @@ app.put('/player/username', (req, res) => {
                 }
                 sendAccessToken(res, { username: req.body.new_username, tipo: decodedToken.tipo });
             });
-        } else return res.status(401).send(ERRORE_JWT);
+        } else return res.status(401).send(messaggi.ERRORE_JWT);
     } catch (error) {
         return res.status(400).send(error);
     }
@@ -341,7 +340,7 @@ app.put('/lobby', (req, res) => {
     try {
         if (verificaJWT(req.body.token)) {
             lobby.modificaLobby(jwt.decode(req.body.token).username, req.body.pubblica, res);
-        } else return res.status(401).send(ERRORE_JWT);
+        } else return res.status(401).send(messaggi.ERRORE_JWT);
     } catch (error) {
         return res.status(400).send(error);
     }
@@ -358,7 +357,7 @@ app.put('/modifica/password', (req, res) => {
         } catch (error) {
             return res.status(400).send(error);
         }
-    } else return res.status(401).send(ERRORE_JWT);
+    } else return res.status(401).send(messaggi.ERRORE_JWT);
 });
 
 /**
@@ -372,7 +371,7 @@ app.put('/game/modifica', (req, res) => {
         } catch (error) {
             return res.status(400).send(error);
         }
-    } else return res.status(401).send(ERRORE_JWT);
+    } else return res.status(401).send(messaggi.ERRORE_JWT);
 });
 
 /**
@@ -385,7 +384,7 @@ app.put('/game/save', (req, res) => {
         } catch (error) {
             return res.status(400).send(error);
         }
-    } else return res.status(401).send(ERRORE_JWT);
+    } else return res.status(401).send(messaggi.ERRORE_JWT);
 });
 
 /**
@@ -398,7 +397,7 @@ app.put('/game/fine-turno', (req, res) => {
         } catch (error) {
             return res.status(400).send(error);
         }
-    } else return res.status(401).send(ERRORE_JWT);
+    } else return res.status(401).send(messaggi.ERRORE_JWT);
 });
 
 //TODO commentare
@@ -410,7 +409,7 @@ app.put('/partita/termina', (req, res) => {
             console.log(error);
             return res.status(400).send(error);
         }
-    } else return res.status(401).send(ERRORE_JWT);
+    } else return res.status(401).send(messaggi.ERRORE_JWT);
 });
 
 /**
@@ -425,9 +424,9 @@ app.post('/login/utente', (req, res) => {
         utente.cercaUtenteByUsername(req.body.username, (err, results) => {
             if (err) {
                 console.log(err);
-                return res.status(500).send('Server error!');
+                return res.status(500).send(messaggi.SERVER_ERROR);
             }
-            if (controller.controllaRisultatoQuery(results)) return res.status(404).send('Utente non trovato!');
+            if (controller.controllaRisultatoQuery(results)) return res.status(404).send(messaggi.UTENTE_NON_TROVATO_ERROR);
 
             const user = JSON.parse(JSON.stringify(results.rows));
 
@@ -450,13 +449,13 @@ app.post('/login/ospiti', (req, res) => {
             utente.cercaUtenteByUsername(req.body.username, (err, results) => {
                 if (err) {
                     console.log(err);
-                    return res.status(500).send('Server error!');
+                    return res.status(500).send(messaggi.SERVER_ERROR);
                 }
                 if (!controller.controllaRisultatoQuery(results)) return res.status(404).send("L'username " + req.body.username + " è già in uso!");
                 utente.cercaOspiteByUsername(req.body.username, (err, results) => {
                     if (err) {
                         console.log(err);
-                        return res.status(500).send('Server error!');
+                        return res.status(500).send(messaggi.SERVER_ERROR);
                     }
                     if (!controller.controllaRisultatoQuery(results)) return res.status(404).send("L'username " + req.body.username + " è già in uso!");
 
@@ -482,7 +481,7 @@ app.post('/register/utente', (req, res) => {
             utente.cercaOspiteByUsername(req.body.username, (err, results) => {
                 if (err) {
                     console.log(err);
-                    return res.status(500).send('Server error!');
+                    return res.status(500).send(messaggi.SERVER_ERROR);
                 }
                 if (!controller.controllaRisultatoQuery(results)) return res.status(404).send("L'username " + req.body.username + " è già in uso!");
 
@@ -490,7 +489,7 @@ app.post('/register/utente', (req, res) => {
                     try {
                         if (err) {
                             console.log(err);
-                            return res.status(500).send('Server error!');
+                            return res.status(500).send(messaggi.SERVER_ERROR);
                         }
                         const users = JSON.parse(JSON.stringify(results.rows));
                         if (users.length == 0)
@@ -513,7 +512,7 @@ app.post('/lobby', (req, res) => {
     try {
         if (verificaJWT(req.body.token)) {
             lobby.creaLobby(jwt.decode(req.body.token).username, req.body.idGioco, req.body.pubblica, res);
-        } else return res.status(401).send(ERRORE_JWT);
+        } else return res.status(401).send(messaggi.ERRORE_JWT);
     } catch (error) {
         return res.status(400).send(error);
     }
@@ -524,7 +523,7 @@ app.post('/lobby/partecipa', (req, res) => {
     try {
         if (verificaJWT(req.body.token)) {
             lobby.partecipaLobby(jwt.decode(req.body.token).username, req.body.codice_lobby, res);
-        } else return res.status(401).send(ERRORE_JWT);
+        } else return res.status(401).send(messaggi.ERRORE_JWT);
     } catch (error) {
         return res.status(400).send(error);
     }
@@ -537,11 +536,11 @@ app.post('/lobby/ping', (req, res) => {
             giocatore.ping(jwt.decode(req.body.token).username, res, (err, results) => {
                 if (err) {
                     console.log(err);
-                    return res.status(500).send('Server Error!');
+                    return res.status(500).send(messaggi.SERVER_ERROR);
                 }
                 return res.status(200).send({ 'esito': "1" });
             });
-        } else return res.status(401).send(ERRORE_JWT);
+        } else return res.status(401).send(messaggi.ERRORE_JWT);
     } catch (error) {
         console.log(error);
         return res.status(400).send(error);
@@ -553,7 +552,7 @@ app.post('/partita', (req, res) => {
     try {
         if (verificaJWT(req.body.token)) {
             partita.creaPartita(jwt.decode(req.body.token).username, res);
-        } else return res.status(401).send(ERRORE_JWT);
+        } else return res.status(401).send(messaggi.ERRORE_JWT);
     } catch (error) {
         return res.status(400).send(error);
     }
@@ -563,7 +562,7 @@ app.post('/game/crea', (req, res) => {
     try {
         if (verificaAdmin(req.body.token)) {
             game.creaGioco(req.body.nome, req.body.tipo, req.body.minGiocatori, req.body.maxGiocatori, req.body.link, req.body.attivo, req.body.config, req.body.regolamento, res);
-        } else return res.status(401).send(ERRORE_JWT);
+        } else return res.status(401).send(messaggi.ERRORE_JWT);
     } catch (error) {
         console.log(error);
         return res.status(400).send(error);

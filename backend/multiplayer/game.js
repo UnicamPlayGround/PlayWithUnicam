@@ -1,6 +1,7 @@
 const db = require('../database');
 const lobby = require('./lobby');
 const controller = require('../controller');
+const messaggi = require('../messaggi');
 
 /**
  * Crea un nuovo Gioco.
@@ -40,7 +41,7 @@ exports.getConfigGioco = (username, response, cb) => {
             return response.status(400).send("Non è stato possibile trovare la lobby");
         }
         if (controller.controllaRisultatoQuery(results))
-            return response.status(400).send("Errore: devi partecipare ad una lobby!");
+            return response.status(400).send(messaggi.PARTECIPAZIONE_LOBBY_ERROR);
 
         const lobby = JSON.parse(JSON.stringify(results.rows))[0];
 

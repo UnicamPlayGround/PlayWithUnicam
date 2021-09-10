@@ -2,6 +2,7 @@ const db = require('../database');
 const controller = require('../controller');
 const game = require('./game');
 const lobby = require('./lobby');
+const messaggi = require('../messaggi');
 
 //TODO refactor con creaCodice di Lobby
 function creaCodice() {
@@ -58,7 +59,7 @@ function controllaNumeroGiocatori(adminLobby, cb) {
     lobby.cercaLobbyByAdmin(adminLobby, (error, results) => {
         if (error) {
             console.log(error);
-            return cb(error, "Non è stato possibile creare la partita!", null);
+            return cb(error, messaggi.CREAZIONE_PARTITA_ERROR, null);
         }
 
         if (controller.controllaRisultatoQuery(results))
@@ -69,7 +70,7 @@ function controllaNumeroGiocatori(adminLobby, cb) {
         lobby.getNumeroGiocatoriLobby(lobbyInfo.codice, (error, results) => {
             if (error) {
                 console.log(error);
-                return cb(error, "Non è stato possibile creare la partita!", null);
+                return cb(error, messaggi.CREAZIONE_PARTITA_ERROR, null);
             }
 
             const numeroGiocatori = JSON.parse(JSON.stringify(results.rows))[0];
@@ -114,7 +115,7 @@ exports.cambiaGiocatoreCorrente = (username, response) => {
     exports.getInfoPartita(username, (error, results) => {
         if (error) {
             console.log(error);
-            return response.status(500).send('Server error!');
+            return response.status(500).send(messaggi.SERVER_ERROR);
         }
 
         const partita = JSON.parse(JSON.stringify(results.rows))[0];
@@ -124,7 +125,7 @@ exports.cambiaGiocatoreCorrente = (username, response) => {
         lobby.getGiocatoriLobby(username, response, (error, results) => {
             if (error) {
                 console.log(error);
-                return response.status(500).send('Server error!');
+                return response.status(500).send(messaggi.SERVER_ERROR);
             }
 
             const giocatori = JSON.parse(JSON.stringify(results.rows));
@@ -166,7 +167,7 @@ exports.creaPartita = (adminLobby, response) => {
         this.cercaPartitaByCodiceLobby(lobbyInfo.codice, (error, results) => {
             if (error) {
                 console.log(error);
-                return response.status(400).send("Non è stato possibile creare la partita!");
+                return response.status(400).send(messaggi.CREAZIONE_PARTITA_ERROR);
             }
 
             if (controller.controllaRisultatoQuery(results)) {
@@ -174,7 +175,7 @@ exports.creaPartita = (adminLobby, response) => {
                     [creaCodice(), lobbyInfo.codice, adminLobby, false], (error, results) => {
                         if (error) {
                             console.log(error);
-                            return response.status(400).send("Non è stato possibile creare la partita!");
+                            return response.status(400).send(messaggi.CREAZIONE_PARTITA_ERROR);
                         }
                         lobby.iniziaPartita(lobbyInfo.codice, response);
                     });
@@ -183,7 +184,7 @@ exports.creaPartita = (adminLobby, response) => {
                     [creaCodice(), adminLobby, null, false, lobbyInfo.codice], (error, results) => {
                         if (error) {
                             console.log(error);
-                            return response.status(400).send("Non è stato possibile creare la partita!");
+                            return response.status(400).send(messaggi.CREAZIONE_PARTITA_ERROR);
                         }
                         lobby.iniziaPartita(lobbyInfo.codice, response);
                     });
@@ -219,9 +220,9 @@ exports.salvaInfoGiocatore = (username, infoGiocatore, response) => {
     this.getInfoPartita(username, (error, results) => {
         if (error) {
             console.log(error);
-            return response.status(500).send('Server error!');
+            return response.status(500).send(messaggi.SERVER_ERROR);
         }
-        if (controller.controllaRisultatoQuery(results)) return response.status(404).send('Nessuna partita trovata!');
+        if (controller.controllaRisultatoQuery(results)) return response.status(404).send(messaggi.PARTITA_NON_TROVATA_ERROR);
 
         var tmp = JSON.parse(JSON.stringify(results.rows));
         const partita = tmp[0];
@@ -229,7 +230,7 @@ exports.salvaInfoGiocatore = (username, infoGiocatore, response) => {
         game.getInfoGioco(partita.id_gioco, (error, results) => {
             if (error) {
                 console.log(error);
-                return response.status(500).send('Server error!');
+                return response.status(500).send(messaggi.SERVER_ERROR);
             }
 
             tmp = JSON.parse(JSON.stringify(results.rows));
@@ -252,10 +253,10 @@ exports.terminaPartita = (username, response) => {
     this.getInfoPartita(username, (error, results) => {
         if (error) {
             console.log(error);
-            return response.status(500).send('Server error!');
+            return response.status(500).send(messaggi.SERVER_ERROR);
         }
         if (controller.controllaRisultatoQuery(results))
-            return response.status(404).send('Nessuna partita trovata!');
+            return response.status(404).send(messaggi.PARTITA_NON_TROVATA_ERROR);
 
         const partita = JSON.parse(JSON.stringify(results.rows))[0];
 
@@ -265,7 +266,7 @@ exports.terminaPartita = (username, response) => {
             [true, partita.codice], (error, results) => {
                 if (error) {
                     console.log(error);
-                    return response.status(500).send('Server error!');
+                    return response.status(500).send(messaggi.SERVER_ERROR);
                 }
 
                 lobby.terminaPartita(partita.codice_lobby, response);

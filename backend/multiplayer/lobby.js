@@ -1,7 +1,7 @@
 const controller = require('../controller');
 const db = require('../database');
 const giocatore = require('./giocatore');
-const partita = require('./partita');
+const messaggi = require('../messaggi');
 
 function creaCodice() {
     var toReturn = "" + Math.floor(Math.random() * 10);
@@ -57,7 +57,7 @@ exports.iniziaPartita = (codiceLobby, response) => {
         [true, codiceLobby], (error, results) => {
             if (error) {
                 console.log(error);
-                return response.status(400).send("Non è stato possibile creare la partita!");
+                return response.status(400).send(messaggi.CREAZIONE_PARTITA_ERROR);
             }
             return response.status(200).send({ 'esito': "1" });
         });
@@ -154,7 +154,7 @@ exports.getGiocatoriLobby = (username, response, cb) => {
         }
 
         if (controller.controllaRisultatoQuery(results))
-            if (response) return response.status(400).send("Errore: devi partecipare ad una lobby!");
+            if (response) return response.status(400).send(messaggi.PARTECIPAZIONE_LOBBY_ERROR);
 
         const tmp = JSON.parse(JSON.stringify(results.rows));
         db.pool.query('SELECT * FROM public.giocatori WHERE codice_lobby = $1 ORDER BY data_ingresso ASC', [tmp[0].codice], (error, results) => {
@@ -249,7 +249,7 @@ exports.abbandonaLobby = (username, response) => {
             this.getGiocatoriLobby(username, response, (error, results) => {
                 if (error) {
                     console.log(error);
-                    if (response) return response.status(500).send("Server error");
+                    if (response) return response.status(500).send(messaggi.SERVER_ERROR);
                 }
 
                 var giocatori = JSON.parse(JSON.stringify(results.rows));
@@ -288,13 +288,13 @@ exports.creaLobby = (adminLobby, idGioco, pubblica, response) => {
                 [codiceLobby, getDataOdierna(), idGioco, pubblica, false], (error, results) => {
                     if (error) {
                         console.log(error);
-                        return response.status(400).send("Non è stato possibile creare la lobby!");
+                        return response.status(400).send(messaggi.CREAZIONE_LOBBY_ERROR);
                     }
 
                     giocatore.creaGiocatore(adminLobby, codiceLobby, response, (error, results) => {
                         if (error) {
                             console.log(error);
-                            return response.status(400).send("Non è stato possibile creare la lobby!");
+                            return response.status(400).send(messaggi.CREAZIONE_LOBBY_ERROR);
                         }
                         this.impostaAdminLobby(adminLobby, codiceLobby, (error, results) => {
                             if (error) {
@@ -345,7 +345,7 @@ exports.partecipaLobby = (username, codiceLobby, response) => {
         this.getNumeroGiocatoriLobby(codiceLobby, (error, results) => {
             if (error) {
                 console.log(error);
-                return response.status(500).send('Server error!');
+                return response.status(500).send(messaggi.SERVER_ERROR);
             }
             const tmp2 = JSON.parse(JSON.stringify(results.rows));
             const count = tmp2[0].count;
