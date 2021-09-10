@@ -60,7 +60,6 @@ export class LobbyAdminPage implements OnInit {
     this.loadInfoLobby();
     this.loadGiocatori();
     this.ping();
-    this.timerInfoLobby = this.timerService.getTimer(() => { this.loadInfoLobby() }, 5000);
     this.timerGiocatori = this.timerService.getTimer(() => { this.loadGiocatori() }, 5000);
     this.timerPing = this.timerService.getTimer(() => { this.ping() }, 4000);
   }
@@ -76,6 +75,7 @@ export class LobbyAdminPage implements OnInit {
     (await this.lobbyManager.loadInfoLobby()).subscribe(
       async (res) => {
         this.lobby = res['results'][0];
+
         if (this.lobby.admin_lobby != decodedToken.username) {
           this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing);
           this.router.navigateByUrl('/lobby-guest', { replaceUrl: true });
@@ -115,6 +115,7 @@ export class LobbyAdminPage implements OnInit {
 
     (await this.lobbyManager.modificaLobby(this.lobby.pubblica)).subscribe(
       async (res) => {
+        this.loadInfoLobby();
         await loading.dismiss();
         this.alertCreator.createInfoAlert("Lobby aggiornata", "Lo stato della lobby è stato aggiornato.");
       },
