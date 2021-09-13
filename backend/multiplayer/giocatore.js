@@ -17,7 +17,7 @@ exports.cercaGiocatore = (username, cb) => {
 }
 
 /**
- * Controlla se sono presenti Giocatori che non effettuano l'operazione di ping per più di 10 secondi, 
+ * Controlla se sono presenti Giocatori che non effettuano l'operazione di ping per più di 15 secondi, 
  * in caso positivo vengono eliminati dalla Tabella "giocatori".
  */
 exports.controllaInattivi = () => {
@@ -29,13 +29,18 @@ exports.controllaInattivi = () => {
         giocatori.forEach(giocatore => {
             var dif = Date.now() - Date.parse(giocatore.ping);
 
-            //30 secondi
-            if (dif > 30000 || giocatore.ping == null) {
+            //15 secondi
+            if (dif > 15000 || giocatore.ping == null) {
                 lobby.cercaLobbyByUsername(giocatore.username, (error, results) => {
                     if (error) console.log(error);
 
                     if (!controller.controllaRisultatoQuery(results))
-                        lobby.abbandonaLobby(giocatore.username, null)
+                        lobby.abbandonaLobby(giocatore.username, null, (error, errorText) => {
+                            if (error) {
+                                console.log(errorText);
+                                console.log(error);
+                            }
+                        })
                     else
                         db.pool.query('DELETE FROM public.giocatori WHERE username=$1', [giocatore.username], (error, results) => {
                             if (error) console.log(error);

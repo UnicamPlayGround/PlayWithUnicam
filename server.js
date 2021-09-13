@@ -264,7 +264,13 @@ app.delete('/lobby/admin/espelli', (req, res) => {
 app.delete('/lobby/abbandona', (req, res) => {
     if (verificaJWT(req.headers.token)) {
         try {
-            lobby.abbandonaLobby(jwt.decode(req.headers.token).username, res);
+            lobby.abbandonaLobby(jwt.decode(req.headers.token).username, res, (error, errorText) => {
+                if (error) {
+                    console.log(error);
+                    return res.status(400).send(error);
+                }
+                return res.status(200).send({ 'esito': "1" });
+            });
         } catch (error) {
             return res.status(400).send(error);
         }
