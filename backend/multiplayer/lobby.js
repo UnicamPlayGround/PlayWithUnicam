@@ -11,6 +11,7 @@ function creaCodice() {
 }
 
 /**
+ * //TODO rifare commento
  * Controlla che non siano attive altre Lobby create dallo stesso Admin.
  * In caso positivo la vecchia lobby viene cancellata.
  * 
@@ -18,8 +19,8 @@ function creaCodice() {
  */
 function controllaLobbyAdmin(results) {
     if (!controller.controllaRisultatoQuery(results)) {
-        const tmp = JSON.parse(JSON.stringify(results.rows));
-        exports.cancellaLobby(tmp[0].codice);
+        const lobby = JSON.parse(JSON.stringify(results.rows))[0];
+        exports.abbandonaLobby(lobby.admin_lobby, null);
     }
 }
 
@@ -260,7 +261,7 @@ exports.abbandonaLobby = (username, response) => {
 
                 var giocatori = JSON.parse(JSON.stringify(results.rows));
                 if (giocatori.length > 1) {
-                    this.impostaAdminLobby(giocatori[1].username, codiceLobby, (error, results) => {
+                    this.impostaAdminLobby(giocatori[1].username, codiceLobby, response, (error, results) => {
                         if (error) {
                             console.log(error);
                             if (response) return response.status(400).send("Non è stato possibile impostare l'admin della Lobby!");
@@ -283,11 +284,16 @@ exports.abbandonaLobby = (username, response) => {
  */
 //TODO rimuovere ultima_richiesta
 exports.creaLobby = (adminLobby, idGioco, pubblica, response) => {
-    this.cercaLobbyByAdmin(adminLobby, (err, results) => {
+    this.cercaLobbyByAdmin(adminLobby, (error, results) => {
+        if (error) {
+            console.log(error);
+            return response.status(400).send(messaggi.CREAZIONE_LOBBY_ERROR);
+        }
+
         controllaLobbyAdmin(results);
 
         giocatore.cercaGiocatore(adminLobby, (err, results) => {
-            if (!controller.controllaRisultatoQuery(results)) this.abbandonaLobby(adminLobby);
+            // if (!controller.controllaRisultatoQuery(results)) this.abbandonaLobby(adminLobby);
 
             const codiceLobby = creaCodice();
 
@@ -303,7 +309,7 @@ exports.creaLobby = (adminLobby, idGioco, pubblica, response) => {
                             console.log(error);
                             return response.status(400).send(messaggi.CREAZIONE_LOBBY_ERROR);
                         }
-                        this.impostaAdminLobby(adminLobby, codiceLobby, (error, results) => {
+                        this.impostaAdminLobby(adminLobby, codiceLobby, response, (error, results) => {
                             if (error) {
                                 console.log(error);
                                 return response.status(400).send("Non è stato possibile impostare l'admin della lobby!");
@@ -320,11 +326,15 @@ exports.creaLobby = (adminLobby, idGioco, pubblica, response) => {
  * Imposta un nuovo admin nella lobby con lo stesso codice passato in input
  * @param {String} adminLobby l'username del nuovo admin della lobby
  * @param {*} codiceLobby id della lobby in cui cambiare admin
+ * @param {*} response
  * @param {*} cb callback
  */
-exports.impostaAdminLobby = (adminLobby, codiceLobby, cb) => {
+exports.impostaAdminLobby = (adminLobby, codiceLobby, response, cb) => {
     giocatore.cercaGiocatore(adminLobby, (err, results) => {
-        if (controller.controllaRisultatoQuery(results)) return response.status(400).send("Il giocatore '" + adminLobby + "' non esiste!");
+        if (controller.controllaRisultatoQuery(results)) {
+            if (response) return response.status(400).send("Il giocatore '" + adminLobby + "' non esiste!");
+            else return;
+        }
 
         db.pool.query('UPDATE public.lobby SET admin_lobby = $1 WHERE codice = $2',
             [adminLobby, codiceLobby], (error, results) => {
@@ -358,13 +368,21 @@ exports.partecipaLobby = (username, codiceLobby, response) => {
             const count = tmp2[0].count;
 
             if (count < lobby.max_giocatori) {
-                giocatore.creaGiocatore(username, codiceLobby, response, (error, results) => {
+                this.cercaLobbyByAdmin(username, (error, results) => {
                     if (error) {
                         console.log(error);
-                        return response.status(400).send("Non è stato possibile partecipare alla lobby.");
+                        return response.status(400).send(messaggi.CREAZIONE_LOBBY_ERROR);
                     }
-                    return response.status(200).send({ 'esito': "1" });
-                });
+                    controllaLobbyAdmin(results);
+
+                    giocatore.creaGiocatore(username, codiceLobby, response, (error, results) => {
+                        if (error) {
+                            console.log(error);
+                            return response.status(400).send("Non è stato possibile partecipare alla lobby.");
+                        }
+                        return response.status(200).send({ 'esito': "1" });
+                    });
+                })
             } else {
                 return response.status(409).send('La lobby selezionata è già al completo!');
             }
