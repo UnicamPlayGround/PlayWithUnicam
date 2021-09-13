@@ -25,6 +25,10 @@ app.use(express.static(__dirname + '/www'));
 
 app.use(express.json());
 
+/**
+ * Controlla la correttezza del JWT.
+ * @param {JSON} token JSON Web Token da controllare
+ */
 function verificaJWT(token) {
     try {
         if (token == null || token == '' || token == undefined) return false;
@@ -35,17 +39,14 @@ function verificaJWT(token) {
     }
 }
 
+/**
+ * Controlla che il JWT corrisponda ad un Admin.
+ * @param {JSON} token JWT da controllare
+ */
 function verificaAdmin(token) {
     if (verificaJWT) {
         tipo = (jwt.decode(token)).tipo;
         return (tipo == "ADMIN");
-    } else return false;
-}
-
-function verificaUtente(token) {
-    if (verificaJWT) {
-        tipo = (jwt.decode(token)).tipo;
-        return (tipo == "UTENTE");
     } else return false;
 }
 
@@ -85,19 +86,29 @@ function formatDataLobby(lobbies) {
     })
 }
 
+/**
+ * Controlla se sono presenti Giocatori che risultani inattivi,
+ * in caso positivo vengono eliminati dalla Tabella *"giocatori"*.
+ */
 function controllaGiocatoriInattivi() {
     giocatore.controllaInattivi();
 }
 
+/**
+ * Controlla se sono presenti Ospiti registrati da più di 24 ore,
+ * in caso positivo vengono eliminati dalla Tabella *"ospiti"*.
+ */
 function controllaOspiti() {
     utente.eliminaOspiti();
 }
 
 /**
- * REST - GET
+ * REST ------------------------- GET -------------------------
  */
 
-//TODO commentare
+/**
+ * REST - Ritorna la lista dei Giochi
+ */
 app.get('/games', (req, res) => {
     const token = req.headers.token;
 
@@ -112,7 +123,9 @@ app.get('/games', (req, res) => {
     } else return res.status(401).send(messaggi.ERRORE_JWT);
 })
 
-//TODO commentare
+/**
+ * REST - Ritorna all'Admin della Piattaforma la lista dei Giochi
+ */
 app.get('/games/admin', (req, res) => {
     const token = req.headers.token;
 
@@ -127,7 +140,9 @@ app.get('/games/admin', (req, res) => {
     } else return res.status(401).send(messaggi.ERRORE_JWT);
 })
 
-//TODO commentare
+/**
+ * REST - Ritorna le Informazioni della Partita
+ */
 app.get('/game/status', (req, res) => {
     const token = req.headers.token;
 
@@ -143,6 +158,9 @@ app.get('/game/status', (req, res) => {
     } else return res.status(401).send(messaggi.ERRORE_JWT);
 });
 
+/**
+ * REST - Ritorna il JSON di Configurazione del Gioco
+ */
 app.get('/game/config', (req, res) => {
     if (verificaJWT(req.headers.token)) {
         game.getConfigGioco(jwt.decode(req.headers.token).username, res, (err, results) => {
@@ -156,7 +174,7 @@ app.get('/game/config', (req, res) => {
 });
 
 /**
- * REST - Ritorna la lista degli Utenti
+ * REST - Ritorna all'Admin la lista degli Utenti
  */
 app.get('/admin/utenti', (req, res) => {
     if (verificaAdmin(req.headers.token)) {
@@ -239,6 +257,9 @@ app.get('/lobby/info', (req, res) => {
     } else return res.status(401).send(messaggi.ERRORE_JWT);
 });
 
+/**
+ * REST - Ritorna le Informazioni dei Giocatori all'interno di una Lobby
+ */
 app.get('/lobby/giocatori', (req, res) => {
     if (verificaJWT(req.headers.token)) {
         lobby.getGiocatoriLobby(jwt.decode(req.headers.token).username, res, (err, results) => {
@@ -251,6 +272,13 @@ app.get('/lobby/giocatori', (req, res) => {
     } else return res.status(401).send(messaggi.ERRORE_JWT);
 });
 
+/**
+ * REST ------------------------- DELETE -------------------------
+ */
+
+/**
+ * REST - Come Admin della Lobby, espelle un Giocatore dalla Lobby
+ */
 app.delete('/lobby/admin/espelli', (req, res) => {
     if (verificaJWT(req.headers.token)) {
         try {
@@ -261,6 +289,9 @@ app.delete('/lobby/admin/espelli', (req, res) => {
     } else return res.status(401).send(messaggi.ERRORE_JWT);
 });
 
+/**
+ * REST - Abbandona la Lobby
+ */
 app.delete('/lobby/abbandona', (req, res) => {
     if (verificaJWT(req.headers.token)) {
         try {
@@ -278,8 +309,7 @@ app.delete('/lobby/abbandona', (req, res) => {
 });
 
 /**
- * //TODO riguardare commento
- * REST - Ritorna la lista degli Utenti
+ * REST - Come Admin della Piattaforma, elimina un gruppo di Utenti
  */
 app.delete('/admin/utenti', (req, res) => {
     if (verificaAdmin(req.headers.token)) {
@@ -293,7 +323,11 @@ app.delete('/admin/utenti', (req, res) => {
 });
 
 /**
- * REST - Modifica i dati dell'utente come admin
+ * REST ------------------------- PUT -------------------------
+ */
+
+/**
+ * REST - Modifica i dati dell'Utente come Admin
  */
 app.put('/admin/utenti/:username', (req, res) => {
     if (verificaAdmin(req.body.token)) {
@@ -307,7 +341,7 @@ app.put('/admin/utenti/:username', (req, res) => {
 });
 
 /**
- * REST - Modifica nome e cognome di un utente
+ * REST - Modifica nome e cognome di un Utente
  */
 app.put('/player/profilo', (req, res) => {
     try {
@@ -320,7 +354,7 @@ app.put('/player/profilo', (req, res) => {
 });
 
 /**
- * REST - Modifica username di un utente
+ * REST - Modifica username di un Utente
  */
 app.put('/player/username', (req, res) => {
     try {
@@ -340,7 +374,7 @@ app.put('/player/username', (req, res) => {
 });
 
 /**
- * REST - Modifica i dati della lobby
+ * REST - Modifica i dati della Lobby
  */
 app.put('/lobby', (req, res) => {
     try {
@@ -406,7 +440,9 @@ app.put('/game/fine-turno', (req, res) => {
     } else return res.status(401).send(messaggi.ERRORE_JWT);
 });
 
-//TODO commentare
+/**
+ * REST - Termina la Partita
+ */
 app.put('/partita/termina', (req, res) => {
     if (verificaJWT(req.body.token)) {
         try {
@@ -419,7 +455,7 @@ app.put('/partita/termina', (req, res) => {
 });
 
 /**
- * REST - POST
+ * REST ------------------------- POST -------------------------
  */
 
 /**
@@ -447,7 +483,7 @@ app.post('/login/utente', (req, res) => {
 });
 
 /**
- * REST - Login dell'ospite
+ * REST - Login dell'Ospite
  */
 app.post('/login/ospiti', (req, res) => {
     try {
@@ -479,7 +515,7 @@ app.post('/login/ospiti', (req, res) => {
 })
 
 /**
- * REST - Registrazione dell'utente
+ * REST - Registrazione dell'Utente
  */
 app.post('/register/utente', (req, res) => {
     try {
@@ -513,7 +549,9 @@ app.post('/register/utente', (req, res) => {
     }
 });
 
-//TODO commentare
+/**
+ * REST - Crea una Lobby
+ */
 app.post('/lobby', (req, res) => {
     try {
         if (verificaJWT(req.body.token)) {
@@ -524,7 +562,9 @@ app.post('/lobby', (req, res) => {
     }
 });
 
-//TODO commentare
+/**
+ * REST - Partecipazione ad una Lobby
+ */
 app.post('/lobby/partecipa', (req, res) => {
     try {
         if (verificaJWT(req.body.token)) {
@@ -535,7 +575,9 @@ app.post('/lobby/partecipa', (req, res) => {
     }
 });
 
-//TODO commentare
+/**
+ * REST - Effettua l'operazione di Ping
+ */
 app.post('/lobby/ping', (req, res) => {
     try {
         if (verificaJWT(req.body.token)) {
@@ -553,7 +595,9 @@ app.post('/lobby/ping', (req, res) => {
     }
 });
 
-//TODO commentare
+/**
+ * REST - Crea una Partita
+ */
 app.post('/partita', (req, res) => {
     try {
         if (verificaJWT(req.body.token)) {
@@ -564,6 +608,9 @@ app.post('/partita', (req, res) => {
     }
 });
 
+/**
+ * REST - Crea un Gioco
+ */
 app.post('/game/crea', (req, res) => {
     try {
         if (verificaAdmin(req.body.token)) {
