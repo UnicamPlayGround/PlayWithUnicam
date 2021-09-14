@@ -282,6 +282,7 @@ app.delete('/lobby/admin/espelli', (req, res) => {
         try {
             lobby.eliminaPartecipante(jwt.decode(req.headers.token).username, req.headers.username, res);
         } catch (error) {
+            console.log(error);
             return res.status(400).send(error);
         }
     } else return res.status(401).send(messaggi.ERRORE_JWT);
@@ -301,6 +302,7 @@ app.delete('/lobby/abbandona', (req, res) => {
                 return res.status(200).send({ 'esito': "1" });
             });
         } catch (error) {
+            console.log(error);
             return res.status(400).send(error);
         }
     } else return res.status(401).send(messaggi.ERRORE_JWT);
@@ -347,6 +349,7 @@ app.put('/player/profilo', (req, res) => {
             utente.modificaNomeCognome(jwt.decode(req.body.token).username, req.body.nome, req.body.cognome, res);
         } else return res.status(401).send(messaggi.ERRORE_JWT);
     } catch (error) {
+        console.log(error);
         return res.status(400).send(error);
     }
 });
@@ -367,6 +370,7 @@ app.put('/player/username', (req, res) => {
             });
         } else return res.status(401).send(messaggi.ERRORE_JWT);
     } catch (error) {
+        console.log(error);
         return res.status(400).send(error);
     }
 });
@@ -380,6 +384,7 @@ app.put('/lobby', (req, res) => {
             lobby.modificaLobby(jwt.decode(req.body.token).username, req.body.pubblica, res);
         } else return res.status(401).send(messaggi.ERRORE_JWT);
     } catch (error) {
+        console.log(error);
         return res.status(400).send(error);
     }
 });
@@ -393,6 +398,7 @@ app.put('/modifica/password', (req, res) => {
         try {
             utente.cambiaPassword(req.body.new_password, req.body.old_password, res, jwt.decode(token).username);
         } catch (error) {
+            console.log(error);
             return res.status(400).send(error);
         }
     } else return res.status(401).send(messaggi.ERRORE_JWT);
@@ -407,6 +413,7 @@ app.put('/game/modifica', (req, res) => {
             game.modificaGioco(req.body.id, req.body.nome, req.body.tipo, req.body.minGiocatori,
                 req.body.maxGiocatori, req.body.link, req.body.attivo, req.body.config, req.body.regolamento, res);
         } catch (error) {
+            console.log(error);
             return res.status(400).send(error);
         }
     } else return res.status(401).send(messaggi.ERRORE_JWT);
@@ -420,6 +427,7 @@ app.put('/game/save', (req, res) => {
         try {
             partita.salvaInfoGiocatore(jwt.decode(req.body.token).username, req.body.info_giocatore, res);
         } catch (error) {
+            console.log(error);
             return res.status(400).send(error);
         }
     } else return res.status(401).send(messaggi.ERRORE_JWT);
@@ -433,6 +441,7 @@ app.put('/game/fine-turno', (req, res) => {
         try {
             partita.cambiaGiocatoreCorrente(jwt.decode(req.body.token).username, res);
         } catch (error) {
+            console.log(error);
             return res.status(400).send(error);
         }
     } else return res.status(401).send(messaggi.ERRORE_JWT);
@@ -476,6 +485,7 @@ app.post('/login/utente', (req, res) => {
             sendAccessToken(res, { username: user[0].username, tipo: user[0].tipo });
         })
     } catch (error) {
+        console.log(error);
         return res.status(400).send(error);
     }
 });
@@ -509,7 +519,10 @@ app.post('/login/ospiti', (req, res) => {
                 })
             })
         } else { return res.status(400).send("L'username deve contenere dei caratteri!"); }
-    } catch (error) { return res.status(400).send(error); }
+    } catch (error) {
+        console.log(error);
+        return res.status(400).send(error);
+    }
 })
 
 /**
@@ -543,6 +556,7 @@ app.post('/register/utente', (req, res) => {
             });
         } else { return res.status(400).send("L'username deve contenere dei caratteri!"); }
     } catch (error) {
+        console.log(error);
         return res.status(400).send(error);
     }
 });
@@ -556,6 +570,7 @@ app.post('/lobby', (req, res) => {
             lobby.creaLobby(jwt.decode(req.body.token).username, req.body.idGioco, req.body.pubblica, res);
         } else return res.status(401).send(messaggi.ERRORE_JWT);
     } catch (error) {
+        console.log(error);
         return res.status(400).send(error);
     }
 });
@@ -569,6 +584,7 @@ app.post('/lobby/partecipa', (req, res) => {
             lobby.partecipaLobby(jwt.decode(req.body.token).username, req.body.codice_lobby, res);
         } else return res.status(401).send(messaggi.ERRORE_JWT);
     } catch (error) {
+        console.log(error);
         return res.status(400).send(error);
     }
 });
@@ -602,6 +618,7 @@ app.post('/partita', (req, res) => {
             partita.creaPartita(jwt.decode(req.body.token).username, res);
         } else return res.status(401).send(messaggi.ERRORE_JWT);
     } catch (error) {
+        console.log(error);
         return res.status(400).send(error);
     }
 });

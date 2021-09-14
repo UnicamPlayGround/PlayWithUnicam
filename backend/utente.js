@@ -14,7 +14,10 @@ const messaggi = require('./messaggi');
 exports.cambiaPassword = (newPassword, oldPassword, response, username) => {
     try {
         controller.controllaPassword(newPassword);
-    } catch (error) { return response.status(401).send('La password non è corretta'); }
+    } catch (error) {
+        console.log(error);
+        return response.status(401).send('La password non è corretta');
+    }
 
     this.cercaUtenteByUsername(username, (error, results) => {
         if (error) {
