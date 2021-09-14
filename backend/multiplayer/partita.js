@@ -260,8 +260,6 @@ exports.terminaPartita = (username, response) => {
 
         const partita = JSON.parse(JSON.stringify(results.rows))[0];
 
-        console.log(partita);
-
         db.pool.query('UPDATE public.partite SET terminata = $1 WHERE codice = $2',
             [true, partita.codice], (error, results) => {
                 if (error) {
