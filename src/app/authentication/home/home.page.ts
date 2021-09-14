@@ -1,10 +1,10 @@
+import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creator.service';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { LoadingController } from '@ionic/angular';
 import { LoginService } from 'src/app/services/login-service/login.service';
-
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -15,17 +15,18 @@ export class HomePage implements OnInit {
   credenziali: FormGroup;
 
   constructor(
-    private router: Router,
+    private alertCreator: AlertCreatorService,
+    private errorManager: ErrorManagerService,
     private fb: FormBuilder,
     private loadingController: LoadingController,
     private loginService: LoginService,
-    private errorManager: ErrorManagerService
+    private router: Router
   ) { }
 
 
   ngOnInit() {
     this.credenziali = this.fb.group({
-      username: ['', [Validators.required, Validators.maxLength(6)]],
+      username: ['', [Validators.required, Validators.maxLength(10)]],
     });
   }
 
@@ -40,19 +41,41 @@ export class HomePage implements OnInit {
    * Effettua la Registrazione ed il Login di un Ospite.
    */
   async loginOspiti() {
-    console.log("username : " + this.credenziali.value);
     const loading = await this.loadingController.create();
     await loading.present();
 
-    this.loginService.loginOspiti(this.credenziali.value).subscribe(
-      async (res) => {
-        this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
-        await loading.dismiss();
-      },
-      async (res) => {
-        await loading.dismiss();
-        this.errorManager.stampaErrore(res, 'Login fallito!');
-      }
-    );
+    if (this.controllaDati()) {
+      this.loginService.loginOspiti(this.credenziali.value).subscribe(
+        async (res) => {
+          this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
+          await loading.dismiss();
+        },
+        async (res) => {
+          await loading.dismiss();
+          this.errorManager.stampaErrore(res, 'Login fallito!');
+        }
+      );
+    } else await loading.dismiss();
   }
+
+  /**
+   * Controlla l'username per la registrazione dell'Ospite.
+   * @returns *true* se l'username è valido, *false* altrimenti 
+   */
+  controllaDati() {
+    const usernameToControl = this.credenziali.value.username;
+
+    if (usernameToControl.trim() == "") {
+      this.alertCreator.createInfoAlert("Errore nell'username!", "L'username non può essere vuoto.");
+      return false;
+    }
+
+    if (usernameToControl.length > 10) {
+      this.alertCreator.createInfoAlert("Errore nell'username!", "L'username non può superare 10 caratteri.");
+      return false;
+    }
+
+    return true;
+  }
+
 }
