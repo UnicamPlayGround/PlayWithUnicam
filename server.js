@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const app = express();
 
@@ -9,10 +11,6 @@ const partita = require('./backend/multiplayer/partita');
 const utente = require('./backend/utente');
 const giocatore = require('./backend/multiplayer/giocatore');
 const messaggi = require('./backend/messaggi');
-
-//TODO
-const SECRET_PWD = "secret";
-const SECRET_KEY = "secret_jwt";
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -32,7 +30,7 @@ app.use(express.json());
 function verificaJWT(token) {
     try {
         if (token == null || token == '' || token == undefined) return false;
-        jwt.verify(token, SECRET_KEY);
+        jwt.verify(token, process.env.SECRET_KEY_JWT);
         return true;
     } catch (error) {
         return false;
@@ -70,7 +68,7 @@ function sendDataInJSON(response, results) {
 function sendAccessToken(response, toSend) {
     const expiresIn = 24 * 60 * 60;
 
-    const accessToken = jwt.sign(toSend, SECRET_KEY, { algorithm: 'HS256', expiresIn: expiresIn });
+    const accessToken = jwt.sign(toSend, process.env.SECRET_KEY_JWT, { algorithm: 'HS256', expiresIn: expiresIn });
     return response.status(201).send({ "accessToken": accessToken });
 }
 
@@ -472,7 +470,7 @@ app.post('/login/utente', (req, res) => {
 
             const user = JSON.parse(JSON.stringify(results.rows));
 
-            const toControl = bcrypt.hashSync(req.body.password + SECRET_PWD, user[0].salt);
+            const toControl = bcrypt.hashSync(req.body.password + process.env.SECRET_PWD, user[0].salt);
             if (!(user[0].password == toControl)) return res.status(401).send('Password non valida!');
 
             sendAccessToken(res, { username: user[0].username, tipo: user[0].tipo });

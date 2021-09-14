@@ -3,9 +3,6 @@ const db = require('./database');
 const bcrypt = require('bcrypt');
 const messaggi = require('./messaggi');
 
-//TODO
-const SECRET_PWD = "secret";
-
 /**
  * Modifica la Password di un Utente.
  * @param {string} newPassword Nuova Password
@@ -33,10 +30,10 @@ exports.cambiaPassword = (newPassword, oldPassword, response, username) => {
             return response.status(404).send(messaggi.UTENTE_NON_TROVATO_ERROR);
 
         const data = risultati[0];
-        const hash = bcrypt.hashSync(oldPassword + SECRET_PWD, data.salt);
+        const hash = bcrypt.hashSync(oldPassword + process.env.SECRET_PWD, data.salt);
 
         if (hash == data.password) {
-            const newHash = bcrypt.hashSync(newPassword + SECRET_PWD, data.salt);
+            const newHash = bcrypt.hashSync(newPassword + process.env.SECRET_PWD, data.salt);
 
             db.pool.query('UPDATE public.utenti SET password = $1 WHERE username = $2',
                 [newHash, username], (error, results) => {
@@ -107,7 +104,7 @@ exports.creaUtente = (username, nome, cognome, password, response) => {
     controller.controllaPassword(password);
 
     const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(password + SECRET_PWD, salt);
+    const hash = bcrypt.hashSync(password + process.env.SECRET_PWD, salt);
 
     db.pool.query('INSERT INTO public.utenti (username, nome, cognome, password, salt, tipo) VALUES ($1, $2, $3, $4, $5, $6)',
         [username, nome, cognome, hash, salt, "GIOCATORE"], (error, results) => {
