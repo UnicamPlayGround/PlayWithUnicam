@@ -15,10 +15,10 @@ import { LoginService } from 'src/app/services/login-service/login.service';
 export class LobbyGuestPage implements OnInit {
   lobby = { codice: null, admin_lobby: null, pubblica: false, min_giocatori: 0, max_giocatori: 0, nome: null, link: null, regolamento: null };
   giocatori = [];
-  private timerInfoLobby;
-  private timerGiocatori;
+  // private timerInfoLobby;
+  // private timerGiocatori;
   private timerPing;
-  private timerPartita;
+  // private timerPartita;
   mostraInfoLobby = false;
   mostraInfoGioco = false;
 
@@ -31,10 +31,7 @@ export class LobbyGuestPage implements OnInit {
     private router: Router
   ) {
     this.ping();
-    this.timerInfoLobby = timerService.getTimer(() => { this.loadInfoLobby() }, 5000);
-    this.timerGiocatori = timerService.getTimer(() => { this.loadGiocatori() }, 5000);
     this.timerPing = timerService.getTimer(() => { this.ping() }, 4000);
-    this.timerPartita = timerService.getTimer(() => { this.loadInfoPartita() }, 2000);
 
     window.addEventListener('beforeunload', (event) => {
       //TODO vedere per Firefox
@@ -71,13 +68,13 @@ export class LobbyGuestPage implements OnInit {
         const decodedToken: any = jwt_decode((await this.loginService.getToken()).value);
 
         if (decodedToken.username === this.lobby.admin_lobby) {
-          this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing, this.timerPartita);
+          this.timerService.stopTimers(this.timerPing);
           this.router.navigateByUrl('/lobby-admin', { replaceUrl: true });
           this.alertCreator.createInfoAlert("Sei il nuovo admin", "Il vecchio admin ha abbandonato la partita e sei stato scelto per prendere il suo posto!");
         }
       },
       async (res) => {
-        this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing, this.timerPartita);
+        this.timerService.stopTimers(this.timerPing);
         this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
         this.errorManager.stampaErrore(res, 'Impossibile caricare la lobby!');
       });
@@ -95,7 +92,7 @@ export class LobbyGuestPage implements OnInit {
         console.log(this.giocatori);
       },
       async (res) => {
-        this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing, this.timerPartita);
+        this.timerService.stopTimers(this.timerPing);
         this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
         this.errorManager.stampaErrore(res, 'Impossibile caricare la lobby!');
       });
@@ -111,12 +108,12 @@ export class LobbyGuestPage implements OnInit {
         var partita = res['results'][0];
         if (partita)
           if (!partita.terminata) {
-            this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing, this.timerPartita);
+            this.timerService.stopTimers(this.timerPing);
             this.router.navigateByUrl(this.lobby.link, { replaceUrl: true });
           }
       },
       async (res) => {
-        this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing, this.timerPartita);
+        this.timerService.stopTimers(this.timerPing);
         this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
         this.errorManager.stampaErrore(res, 'Impossibile caricare la lobby!');
       });
@@ -128,12 +125,13 @@ export class LobbyGuestPage implements OnInit {
   async abbandonaLobby() {
     this.alertCreator.createConfirmationAlert('Sei sicuro di voler abbandonare la lobby?',
       async () => {
+        this.timerService.stopTimers(this.timerPing);
         (await this.lobbyManager.abbandonaLobby()).subscribe(
           async (res) => {
-            this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing, this.timerPartita);
             this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
           },
           async (res) => {
+            this.timerPing = this.timerService.getTimer(() => { this.ping() }, 4000);
             this.errorManager.stampaErrore(res, 'Abbandono fallito');
           }
         );
@@ -150,9 +148,10 @@ export class LobbyGuestPage implements OnInit {
       async (res) => {
         this.loadInfoLobby();
         this.loadGiocatori();
+        this.loadInfoPartita();
       },
       async (res) => {
-        this.timerService.stopTimers(this.timerInfoLobby, this.timerGiocatori, this.timerPing, this.timerPartita);
+        this.timerService.stopTimers(this.timerPing);
         this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
         this.errorManager.stampaErrore(res, 'Ping fallito');
       }
