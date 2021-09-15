@@ -19,13 +19,13 @@ const UTENTE_NON_TROVATO_ERROR = "Utente non trovato";
 
 /**
  * Messaggio di errore:
- * * per effettuare l'azione desiderata l'Utente deve partecipare ad una Lobby.
+ * * per effettuare l'azione desiderata l'Utente deve partecipare ad una lobby.
  */
-const PARTECIPAZIONE_LOBBY_ERROR = "Errore: Devi partecipare ad una Lobby!";
+const PARTECIPAZIONE_LOBBY_ERROR = "Errore: devi partecipare ad una lobby!";
 
 /**
  * Messaggio di errore:
- * * la creazione di una Lobby ha determinato un errore.
+ * * la creazione di una lobby ha determinato un errore.
  */
 const CREAZIONE_LOBBY_ERROR = "Non è stato possibile creare la lobby!";
 
