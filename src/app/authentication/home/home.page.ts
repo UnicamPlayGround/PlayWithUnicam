@@ -47,8 +47,18 @@ export class HomePage implements OnInit {
     if (this.controllaDati()) {
       this.loginService.loginOspiti(this.credenziali.value).subscribe(
         async (res) => {
-          this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
           await loading.dismiss();
+
+          switch (res) {
+            case "1":
+              this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
+              break;
+            case "0":
+              this.alertCreator.createInfoAlert('Login fallito', 'Rieffettua il login');
+              break;
+            default:
+              this.alertCreator.createInfoAlert('Login fallito', 'Rieffettua il login');
+          }
         },
         async (res) => {
           await loading.dismiss();

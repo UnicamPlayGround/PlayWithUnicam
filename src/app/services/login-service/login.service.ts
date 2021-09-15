@@ -43,7 +43,7 @@ export class LoginService {
       switchMap(token => {
         const decodedToken: any = jwt_decode(token);
         Storage.set({ key: TOKEN_KEY, value: token });
-        
+
         switch (decodedToken.tipo) {
           case "GIOCATORE": return "1";
           case "ADMIN": return "2";
@@ -59,12 +59,10 @@ export class LoginService {
 
   //TODO
   loginOspiti(credenziali: { username }): Observable<any> {
-    console.log(credenziali.username);
     return this.http.post('/login/ospiti', credenziali).pipe(
       map((data: any) => data.accessToken),
       switchMap(token => {
         Storage.set({ key: TOKEN_KEY, value: token });
-        console.log(token);
         //TODO
         if (token == null)
           return "0";
