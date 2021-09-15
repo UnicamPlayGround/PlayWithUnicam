@@ -215,8 +215,6 @@ exports.getInfoPartita = (username, cb) => {
  * @param {*} response 
  */
 exports.salvaInfoGiocatore = (username, infoGiocatore, response) => {
-
-    //TODO da finire
     this.getInfoPartita(username, (error, results) => {
         if (error) {
             console.log(error);

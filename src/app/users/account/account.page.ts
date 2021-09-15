@@ -40,6 +40,9 @@ export class AccountPage implements OnInit {
 
   }
 
+  /**
+   * Riempe il Form per la modifica dei Dati dell'Account con i dati presi dal Server.
+   */
   riempiForm() {
     this.dati = this.fb.group({
       username: [this.user.username, [Validators.required]],
@@ -48,6 +51,9 @@ export class AccountPage implements OnInit {
     })
   }
 
+  /**
+   * Richiede i dati dell'Account dal Server.
+   */
   async getDatiProfilo() {
     const loading = await this.loadingController.create();
     await loading.present();
@@ -56,8 +62,7 @@ export class AccountPage implements OnInit {
 
     this.http.get('/info/utente', { headers }).subscribe(
       async (res) => {
-        const tmp = await res['results'];
-        this.user = tmp[0];
+        this.user = await res['results'][0];
         this.riempiForm();
         await loading.dismiss();
       },
@@ -67,8 +72,9 @@ export class AccountPage implements OnInit {
       });
   }
 
-
-  //TODO rigenerare il token
+  /**
+   * Salva i nuovi dati dell'Account *(nome, cognome)* sul Server.
+   */
   async aggiornaProfilo() {
     const loading = await this.loadingController.create();
     await loading.present();
@@ -91,9 +97,11 @@ export class AccountPage implements OnInit {
       });
   }
 
-  //TODO
+  /**
+   * Salva il nuovo Username dell'Account sul Server.
+   * @param token JWT dell'Account 
+   */
   async aggiornaUsername(token) {
-
     if (this.user.username === this.dati.value.username) {
       this.alertCreator.createInfoAlert("Profilo aggiornato", "Il profilo è stato aggiornato");
     } else {
@@ -120,6 +128,9 @@ export class AccountPage implements OnInit {
     }
   }
 
+  /**
+   * Salva la nuova Password dell'Account sul Server.
+   */
   async aggiornaPassword() {
     const loading = await this.loadingController.create();
     await loading.present();
@@ -150,7 +161,8 @@ export class AccountPage implements OnInit {
     }
   }
 
-  backButton(){
+  backButton() {
     this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
   }
+
 }

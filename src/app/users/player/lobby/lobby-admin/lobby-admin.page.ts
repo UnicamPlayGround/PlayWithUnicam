@@ -92,7 +92,6 @@ export class LobbyAdminPage implements OnInit {
         this.giocatori = res['results'];
       },
       async (res) => {
-        //TODO rivedere lo stop dei Timer
         this.timerService.stopTimers(this.timerPing);
         this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
         this.errorManager.stampaErrore(res, 'Impossibile caricare la lobby!');

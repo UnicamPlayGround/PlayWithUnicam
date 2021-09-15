@@ -81,10 +81,8 @@ exports.terminaPartita = (codiceLobby, response) => {
 }
 
 /**
- * //TODO rifare il commento
- * Controlla se esistono lobby che hanno come admin l'username passato.
- * 
- * @param {String} adminLobby l'username da controllare
+ * Cerca la lobby che ha come Admin l'username passato.
+ * @param {String} adminLobby l'username dell'Admin
  * @param {*} cb callback
  */
 exports.cercaLobbyByAdmin = (adminLobby, cb) => {
@@ -97,12 +95,10 @@ exports.cercaLobbyByAdmin = (adminLobby, cb) => {
 }
 
 /**
- * //TODO rifare commento
- * Controlla se esiste già una lobby con il codice uguale a quello passato
+ * Cerca la lobby attraverso il suo codice.
  * @param {*} codice codice della lobby da cercare
  * @param {*} cb callback
  */
-//TODO
 exports.cercaLobbyByCodice = (codice, cb) => {
     db.pool.query('SELECT codice, data_creazione, admin_lobby, min_giocatori, max_giocatori, pubblica FROM ' +
         '(public.giocatori INNER JOIN public.lobby ON public.giocatori.codice_lobby = public.lobby.codice) ' +
@@ -113,12 +109,10 @@ exports.cercaLobbyByCodice = (codice, cb) => {
 }
 
 /**
- * //TODO rifare commento
- * Controlla se esiste una lobby in cui è presente l'username passato
- * @param {String} username l'username utilizzato per controllare se esiste una lobby in cui è presente
+ * Cerca una lobby a cui partecipa il giocatore con l'username passato.
+ * @param {String} username l'username utilizzato per cercare la lobby
  * @param {*} cb callback
  */
-//TODO
 exports.cercaLobbyByUsername = (username, cb) => {
     db.pool.query('SELECT codice, data_creazione, admin_lobby, id_gioco, public.giochi.nome, min_giocatori, max_giocatori, pubblica, regolamento, link FROM ' +
         '(public.giocatori INNER JOIN public.lobby ON public.giocatori.codice_lobby = public.lobby.codice) ' +
@@ -178,9 +172,8 @@ exports.getNumeroGiocatoriLobby = (codiceLobby, cb) => {
     });
 }
 
-//TODO
 /**
- * Permette di modificare una lobby impostandola da privata a pubblica o viceversa
+ * Permette di modificare una lobby impostandola da privata a pubblica o viceversa.
  * @param {String} username username dell'admin che intende modificare una lobby
  * @param {Boolean} pubblica attributo per indicare se una lobby è privata o pubblica
  * @param {*} response 
@@ -201,9 +194,8 @@ exports.modificaLobby = (username, pubblica, response) => {
     })
 }
 
-//TODO
 /**
- * Cancella dal Database una lobby
+ * Cancella dal Database una lobby.
  * @param {*} codice codice della lobby da cancellare
  */
 exports.cancellaLobby = (codice) => {
@@ -334,7 +326,6 @@ exports.impostaAdminLobby = (adminLobby, codiceLobby, response, cb) => {
 
         db.pool.query('UPDATE public.lobby SET admin_lobby = $1 WHERE codice = $2',
             [adminLobby, codiceLobby], (error, results) => {
-                //TODO fare controlli
                 cb(error, results);
             })
     })

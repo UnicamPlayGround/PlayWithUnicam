@@ -30,7 +30,10 @@ export class DashboardPage implements OnInit {
   ngOnInit() {
   }
 
-  //TODO commentare
+  /**
+   * Imposta la variabile *"ospite"* a true se il tipo del JWT dell'Account è uguale a "OSPITE",
+   * false se è uguale a "GIOCATORE".
+   */
   async getTipoUtente() {
     const token = (await this.loginService.getToken()).value;
     const decodedToken: any = jwt_decode(token);
@@ -38,8 +41,7 @@ export class DashboardPage implements OnInit {
     else if (decodedToken.tipo === 'GIOCATORE') this.ospite = false;
   }
 
-  //TODO rinominare metodo
-  async openPopover(event) {
+  async openUserPopover(event) {
     const popover = await this.popoverController.create({
       component: UserPopoverComponent,
       event,
@@ -48,7 +50,12 @@ export class DashboardPage implements OnInit {
     return await popover.present();
   }
 
-  //TODO fare commento
+  /**
+   * Apre il popover per:
+   * * creare una lobby,
+   * * ricercare le lobby pubbliche,
+   * * partecipare ad una lobby privata.
+   */
   async openIntroLobby(game) {
     const giocoSelezionato = game;
     const popover = await this.popoverController.create({

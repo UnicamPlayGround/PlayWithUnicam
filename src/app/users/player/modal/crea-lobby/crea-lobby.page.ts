@@ -60,7 +60,6 @@ export class CreaLobbyPage implements OnInit {
       async (res) => {
         await loading.dismiss();
         this.modalController.dismiss();
-        //TODO da fare
         this.errorManager.stampaErrore(res, 'Creazione lobby fallita');
       });
   }

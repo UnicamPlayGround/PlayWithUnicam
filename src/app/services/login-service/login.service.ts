@@ -18,7 +18,9 @@ export class LoginService {
     this.loadToken();
   }
 
-  //TODO
+  /**
+   * Carica il JSON Web Token memorizzato in memoria.
+   */
   async loadToken() {
     const token = await Storage.get({ key: TOKEN_KEY });
     if (token && token.value) {
@@ -29,15 +31,22 @@ export class LoginService {
     }
   }
 
-  //TODO
+  /**
+   * Ritorna il JSON Web Token.
+   * @returns il JWT
+   */
   async getToken() {
     const toReturn = await Storage.get({ key: TOKEN_KEY });
     if (toReturn.value == null) toReturn.value = '';
     return toReturn;
   }
 
-  //TODO
-  login(credenziali: { username, password }): Observable<any> {
+  /**
+   * Effettua l'operazione di Login dell'Utente.
+   * @param credenziali *(username, password)* dell'Utente
+   * @returns 1 se il tipo del JWT in ritorno è *"GIOCATORE"*, 2 se è *"ADMIN"*, 0 altimenti
+   */
+  login(credenziali: { username: string, password: string }): Observable<any> {
     return this.http.post('/login/utente', credenziali).pipe(
       map((data: any) => data.accessToken),
       switchMap(token => {
@@ -56,14 +65,17 @@ export class LoginService {
     )
   }
 
-
-  //TODO
-  loginOspiti(credenziali: { username }): Observable<any> {
+  /**
+   * Effettua l'operazione di Login dell'Ospite.
+   * @param credenziali *username* dell'Ospite
+   * @returns 1 se il login è stato effettuato con successo, 0 altrimenti
+   */
+  loginOspiti(credenziali: { username: string }): Observable<any> {
     return this.http.post('/login/ospiti', credenziali).pipe(
       map((data: any) => data.accessToken),
       switchMap(token => {
         Storage.set({ key: TOKEN_KEY, value: token });
-        //TODO
+
         if (token == null)
           return "0";
         else
@@ -75,13 +87,18 @@ export class LoginService {
     )
   }
 
-  //TODO
+  /**
+   * Effettua l'operazione di logout.
+   */
   async logout() {
     this.tipologiaAccount.next("");
     await Storage.remove({ key: TOKEN_KEY });
   }
 
-  //TODO
+  /**
+   * Salva il nuovo JSON Web Token.
+   * @param token Nuovo JWT
+   */
   async setToken(token) {
     Storage.set({ key: TOKEN_KEY, value: token });
     this.loadToken();

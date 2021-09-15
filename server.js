@@ -143,8 +143,6 @@ app.get('/games/admin', (req, res) => {
  */
 app.get('/game/status', (req, res) => {
     const token = req.headers.token;
-
-    //TODO controllare che il JWT sia di un giocatore
     if (verificaJWT(token)) {
         partita.getInfoPartita(jwt.decode(token).username, (err, results) => {
             if (err) {

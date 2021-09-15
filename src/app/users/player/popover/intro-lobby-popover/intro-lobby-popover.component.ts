@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController, PopoverController } from '@ionic/angular';
 import { CercaPrivataPage } from '../../modal/cerca-privata/cerca-privata.page';
-//TODO forse da importare sul module di dashboard
 import { CreaLobbyPage } from '../../modal/crea-lobby/crea-lobby.page';
 import { CercaPubblicaPage } from '../../modal/cerca-pubblica/cerca-pubblica.page';
 
@@ -24,7 +23,9 @@ export class IntroLobbyPopoverComponent implements OnInit {
     this.popoverController.dismiss();
   }
 
-  //TODO da commentare
+  /**
+   * Apre una modal per creare una lobby.
+   */
   async creaLobby() {
     const modal = await this.modalController.create({
       component: CreaLobbyPage,
@@ -36,6 +37,9 @@ export class IntroLobbyPopoverComponent implements OnInit {
     return await modal.present();
   }
 
+  /**
+   * Apre una modal per partecipare ad una lobby private.
+   */
   async cercaLobbyPrivata() {
     const modal = await this.modalController.create({
       component: CercaPrivataPage
@@ -44,6 +48,9 @@ export class IntroLobbyPopoverComponent implements OnInit {
     return await modal.present();
   }
 
+  /**
+   * Apre una modal per visualizzare le lobby pubbliche.
+   */
   async cercaLobbyPubblica() {
     const modal = await this.modalController.create({
       component: CercaPubblicaPage,
