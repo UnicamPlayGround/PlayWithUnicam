@@ -14,11 +14,23 @@ export class ErrorManagerService {
     private loginService: LoginService
   ) { }
 
-  //TODO commentare
+  /**
+   * Mostra a video un alert contenente un errore generato a seguito del
+   * controllo della response passata in input.
+   * @param res response
+   * @param headerText header dell'alert
+   */
   stampaErrore(res, headerText) {
     if (this.controllaRes(res)) this.stampa(headerText, res.error)
   }
 
+  /**
+   * Controlla la response passata  in input e, in base al suo valore,
+   * stampa l'errore relativo ed effettua le dovute operazioni.
+   * @param res 
+   * @returns true se la res. error non corrisponde a nessuno dei due valori confrontati,
+   * false altrimenti.
+   */
   private controllaRes(res) {
     if (res.error == 'Errore, JWT non valido! Rieffettua il login.') {
       this.stampa('Errore nella sessione', 'Rieffettua il login');
@@ -32,6 +44,11 @@ export class ErrorManagerService {
     } else return true;
   }
 
+  /**
+   * Mostra a video un alert personalizzato in base ai paramentri passati in input.
+   * @param headerText header dell'alert
+   * @param messageText messaggio dell'alert
+   */
   private async stampa(headerText, messageText) {
     this.alertCreator.createInfoAlert(headerText, messageText);
   }
