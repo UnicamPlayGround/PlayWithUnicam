@@ -7,9 +7,8 @@ CREATE TABLE IF NOT EXISTS public.lobby
 (
     codice character varying(20) NOT NULL,
 	pubblica boolean NOT NULL,
-    admin_lobby character varying(30),
+    admin_lobby character varying(10),
     data_creazione date NOT NULL DEFAULT CURRENT_DATE,
-    ultima_richiesta date NOT NULL,
     id_gioco serial NOT NULL,
     partita_iniziata boolean NOT NULL,
     PRIMARY KEY (codice)

@@ -279,7 +279,6 @@ exports.abbandonaLobby = (username, response, cb) => {
  * @param {Boolean} pubblica parametro per indicare se la lobby è privata o pubblica
  * @param {*} response 
  */
-//TODO rimuovere ultima_richiesta
 exports.creaLobby = (adminLobby, idGioco, pubblica, response) => {
     this.cercaLobbyByAdmin(adminLobby, (error, results) => {
         if (error) {
@@ -293,7 +292,7 @@ exports.creaLobby = (adminLobby, idGioco, pubblica, response) => {
             giocatore.cercaGiocatore(adminLobby, (err, results) => {
                 const codiceLobby = creaCodice();
 
-                db.pool.query('INSERT INTO public.lobby (codice, data_creazione, ultima_richiesta, id_gioco, pubblica, partita_iniziata) VALUES ($1, $2, NOW(), $3, $4, $5)',
+                db.pool.query('INSERT INTO public.lobby (codice, data_creazione, id_gioco, pubblica, partita_iniziata) VALUES ($1, $2, $3, $4, $5)',
                     [codiceLobby, getDataOdierna(), idGioco, pubblica, false], (error, results) => {
                         if (error) {
                             console.log(error);
