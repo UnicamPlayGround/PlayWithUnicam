@@ -6,6 +6,7 @@ import { ErrorManagerService } from 'src/app/services/error-manager/error-manage
 import { HttpClient } from '@angular/common/http';
 import { map, switchMap } from 'rxjs/operators';
 import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creator.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-account',
@@ -24,6 +25,7 @@ export class AccountPage implements OnInit {
     private http: HttpClient,
     private fb: FormBuilder,
     private alertCreator: AlertCreatorService,
+    private router: Router
   ) {
     this.getDatiProfilo();
   }
@@ -146,10 +148,9 @@ export class AccountPage implements OnInit {
       this.alertCreator.createInfoAlert("Le password non corrispondono", "La password di conferma non corrisponde alla nuova password");
       await loading.dismiss();
     }
-
-
-
   }
 
-
+  backButton(){
+    this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
+  }
 }
