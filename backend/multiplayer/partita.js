@@ -107,6 +107,35 @@ function getNuovoGiocatore(giocatori, usernameGiocatoreCorrente) {
 }
 
 /**
+ * Controlla che all'interno della lobby ci siano abbastanza giocatori
+ * per poter continuare la partita.
+ * @param {*} username Username del Giocatore che richiede le informazioni della partita
+ * @param {*} cb Callback
+ */
+function controllaMinimoGiocatori(username, cb) {
+    lobby.cercaLobbyByUsername(username, (error, results) => {
+        if (error) {
+            console.log(error);
+            return response.status(500).send(messaggi.SERVER_ERROR);
+        }
+        const lobbyInfo = JSON.parse(JSON.stringify(results.rows))[0];
+
+        lobby.getNumeroGiocatoriLobby(lobbyInfo.codice, (error, results) => {
+            if (error) {
+                console.log(error);
+                return response.status(500).send(messaggi.SERVER_ERROR);
+            }
+            const numeroGiocatori = JSON.parse(JSON.stringify(results.rows))[0];
+
+            if (lobbyInfo.min_giocatori > numeroGiocatori.count)
+                cb(messaggi.MINIMO_GIOCATORI_ERROR);
+            else
+                cb(null);
+        })
+    })
+}
+
+/**
  * Modifica il Giocatore Corrente di una Partita.
  * @param {string} username Username dell'attuale Giocatore Corrente
  * @param {*} response 
@@ -200,12 +229,17 @@ exports.creaPartita = (adminLobby, response) => {
  * @returns le Informazioni della Partita (codice, codice_lobby, giocatore_corrente, terminata, info, id_gioco)
  */
 exports.getInfoPartita = (username, cb) => {
-    return db.pool.query('SELECT partite.codice, partite.codice_lobby, giocatore_corrente, terminata, info, id_gioco FROM' +
-        ' (partite INNER JOIN lobby ON partite.codice_lobby=lobby.codice)' +
-        ' INNER JOIN giocatori ON giocatori.codice_lobby=lobby.codice WHERE giocatori.username=$1',
-        [username], (error, results) => {
-            cb(error, results)
-        })
+    controllaMinimoGiocatori(username, (error) => {
+        if (error)
+            return cb(error, null);
+
+        return db.pool.query('SELECT partite.codice, partite.codice_lobby, giocatore_corrente, terminata, info, id_gioco FROM' +
+            ' (partite INNER JOIN lobby ON partite.codice_lobby=lobby.codice)' +
+            ' INNER JOIN giocatori ON giocatori.codice_lobby=lobby.codice WHERE giocatori.username=$1',
+            [username], (error, results) => {
+                cb(error, results)
+            });
+    });
 }
 
 /**

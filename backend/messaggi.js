@@ -43,6 +43,12 @@ const CREAZIONE_PARTITA_ERROR = "Non è stato possibile creare la partita!";
  */
 const PARTITA_NON_TROVATA_ERROR = "Nessuna partita trovata!";
 
+/**
+ * Messaggio di errore:
+ * * Non ci sono abbastanza giocatori per completare la partita.
+ */
+const MINIMO_GIOCATORI_ERROR = "Non ci sono abbastanza giocatori per completare la partita!";
+
 //--------------------------------- GIOCO ---------------------------------
 
 /**
@@ -59,5 +65,6 @@ module.exports = {
     CREAZIONE_LOBBY_ERROR,
     CREAZIONE_PARTITA_ERROR,
     PARTITA_NON_TROVATA_ERROR,
+    MINIMO_GIOCATORI_ERROR,
     CREAZIONE_GIOCO_ERROR
 }

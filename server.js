@@ -146,6 +146,9 @@ app.get('/game/status', (req, res) => {
     if (verificaJWT(token)) {
         partita.getInfoPartita(jwt.decode(token).username, (err, results) => {
             if (err) {
+                if (err == messaggi.MINIMO_GIOCATORI_ERROR)
+                    return res.status(403).send(messaggi.MINIMO_GIOCATORI_ERROR);
+
                 console.log(err);
                 return res.status(500).send(messaggi.SERVER_ERROR);
             }
