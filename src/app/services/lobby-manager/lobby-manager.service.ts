@@ -81,7 +81,6 @@ export class LobbyManagerService {
    * @returns la response della chiamata
    */
   async abbandonaLobby() {
-    console.log('HAI ABBANDONATO 2');
     const tokenValue = (await this.loginService.getToken()).value;
 
     const headers = { 'token': tokenValue }
