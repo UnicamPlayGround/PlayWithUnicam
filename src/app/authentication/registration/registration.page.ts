@@ -1,10 +1,12 @@
+import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creator.service';
 import { Component, OnInit } from '@angular/core';
+import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoadingController } from '@ionic/angular';
-import { Router } from "@angular/router";
+import { LoginService } from 'src/app/services/login-service/login.service';
 import { RegistrationService } from 'src/app/services/registration-service/registration.service';
-import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
-import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creator.service';
+import { Router } from "@angular/router";
+import jwt_decode from 'jwt-decode';
 
 @Component({
   selector: 'app-registration',
@@ -12,7 +14,9 @@ import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creato
   styleUrls: ['../auth.scss'],
 })
 export class RegistrationPage implements OnInit {
-  credenziali: FormGroup
+  credenziali: FormGroup;
+  ospite = false;
+  usernameOspite = "";
 
   constructor(
     private fb: FormBuilder,
@@ -20,8 +24,11 @@ export class RegistrationPage implements OnInit {
     private router: Router,
     private registrationService: RegistrationService,
     private alertCreator: AlertCreatorService,
+    private loginService: LoginService,
     private errorManager: ErrorManagerService
-  ) { }
+  ) {
+    this.controllaOspite();
+  }
 
   ngOnInit() {
     this.credenziali = this.fb.group({
@@ -32,27 +39,66 @@ export class RegistrationPage implements OnInit {
     })
   }
 
+  //TODO commentare
+  private async controllaOspite() {
+    const token = (await this.loginService.getToken()).value;
+    const decodedToken: any = jwt_decode(token);
+    if (decodedToken.tipo === 'OSPITE') {
+      this.ospite = true;
+      this.usernameOspite = decodedToken.username;
+      console.log("USERNAME CONST: ", this.usernameOspite);
+    }
+  }
+
   /**
    * Effettua la Registrazione dell'Utente.
+   * //TODO aggiornare commento
    */
   async register() {
     const loading = await this.loadingController.create();
     await loading.present();
 
     if (this.controllaDati()) {
-      this.registrationService.register(this.credenziali.value).subscribe(
-        async (res) => {
-          this.router.navigateByUrl('/login', { replaceUrl: true });
-          await loading.dismiss();
-          var message = "Ora puoi effettuare il login!";
-          this.alertCreator.createInfoAlert('Registrazione completata', message);
-        },
-        async (res) => {
-          await loading.dismiss();
-          this.errorManager.stampaErrore(res, 'Registrazione fallita');
-        }
-      );
+      if (this.ospite)
+        this.registrazioneOspiteToUtente(loading);
+      else
+        this.registrazioneUtente(loading);
     } else await loading.dismiss();
+  }
+
+  //TODO commentare
+  private async registrazioneOspiteToUtente(loading) {
+    const token = (await this.loginService.getToken()).value;
+
+    this.registrationService.registerOspiteToUtente(token, this.credenziali.value).subscribe(
+      async (res) => {
+        this.router.navigateByUrl('/login', { replaceUrl: true });
+        await this.loginService.logout();
+        await loading.dismiss();
+        var message = "Ora puoi effettuare il login!";
+        this.alertCreator.createInfoAlert('Registrazione completata', message);
+      },
+      async (res) => {
+        await loading.dismiss();
+        this.errorManager.stampaErrore(res, 'Registrazione fallita');
+      }
+    );
+  }
+
+  //TODO commentare
+  private registrazioneUtente(loading) {
+    this.registrationService.register(this.credenziali.value).subscribe(
+      async (res) => {
+        this.router.navigateByUrl('/login', { replaceUrl: true });
+        await loading.dismiss();
+        var message = "Ora puoi effettuare il login!";
+        this.alertCreator.createInfoAlert('Registrazione completata', message);
+      },
+      async (res) => {
+        await loading.dismiss();
+        this.errorManager.stampaErrore(res, 'Registrazione fallita');
+      }
+    );
   }
 
   /**
@@ -94,6 +140,9 @@ export class RegistrationPage implements OnInit {
    * @returns *true* se l'username è valido, *false* altrimenti 
    */
   controllaUsername() {
+    if (this.ospite)
+      return true;
+
     const errorHeader = "Errore nell'username!";
     if (this.controlString(this.credenziali.value.username, errorHeader, "L'username non può essere vuoto."))
       if (this.controlLengthString(this.credenziali.value.username, 10, errorHeader, "L'username non può superare 10 caratteri."))

@@ -188,6 +188,12 @@ exports.modificaUsername = (oldUsername, newUsername, response, cb) => {
     });
 }
 
+exports.eliminaOspite = (username, cb) => {
+    db.pool.query('DELETE FROM public.ospiti WHERE username=$1', [username], (error, results) => {
+        cb(error, results);
+    });
+}
+
 /**
  * Elimina tutti gli ospiti che si sono registrati più di 24 ore fa.
  * * 86400000 millisecondi corispondono a 24 ore

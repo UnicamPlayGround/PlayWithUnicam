@@ -545,6 +545,7 @@ app.post('/register/utente', (req, res) => {
                             console.log(err);
                             return res.status(500).send(messaggi.SERVER_ERROR);
                         }
+
                         const users = JSON.parse(JSON.stringify(results.rows));
                         if (users.length == 0)
                             utente.creaUtente(req.body.username, req.body.nome, req.body.cognome, req.body.password, res);
@@ -556,6 +557,28 @@ app.post('/register/utente', (req, res) => {
                 });
             });
         } else { return res.status(400).send("L'username deve contenere dei caratteri!"); }
+    } catch (error) {
+        console.log(error);
+        return res.status(400).send(error);
+    }
+});
+
+/**
+ * REST - Registrazione dell'Utente
+ * //TODO
+ */
+app.post('/register/ospite-to-utente', (req, res) => {
+    try {
+        if (verificaJWT(req.body.token)) {
+            const username = jwt.decode(req.body.token).username;
+            utente.eliminaOspite(username, (error, results) => {
+                if (error) {
+                    console.log(error);
+                    return res.status(400).send(error);
+                }
+                utente.creaUtente(username, req.body.nome, req.body.cognome, req.body.password, res);
+            })
+        } else return res.status(401).send(messaggi.ERRORE_JWT);
     } catch (error) {
         console.log(error);
         return res.status(400).send(error);
