@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoadingController } from '@ionic/angular';
 import { LoginService } from 'src/app/services/login-service/login.service';
 import { Router } from '@angular/router';
+import { LoginControllerService } from 'src/app/services/login-controller/login-controller.service';
 
 @Component({
   selector: 'app-home',
@@ -20,6 +21,7 @@ export class HomePage implements OnInit {
     private fb: FormBuilder,
     private loadingController: LoadingController,
     private loginService: LoginService,
+    private loginController: LoginControllerService,
     private router: Router
   ) { }
 
@@ -44,7 +46,7 @@ export class HomePage implements OnInit {
     const loading = await this.loadingController.create();
     await loading.present();
 
-    if (this.controllaDati()) {
+    if (this.loginController.controllaUsername(this.credenziali.value.username)) {
       this.loginService.loginOspiti(this.credenziali.value).subscribe(
         async (res) => {
           await loading.dismiss();
@@ -66,26 +68,6 @@ export class HomePage implements OnInit {
         }
       );
     } else await loading.dismiss();
-  }
-
-  /**
-   * Controlla l'username per la registrazione dell'Ospite.
-   * @returns *true* se l'username è valido, *false* altrimenti 
-   */
-  controllaDati() {
-    const usernameToControl = this.credenziali.value.username;
-
-    if (usernameToControl.trim() == "") {
-      this.alertCreator.createInfoAlert("Errore nell'username!", "L'username non può essere vuoto.");
-      return false;
-    }
-
-    if (usernameToControl.length > 10) {
-      this.alertCreator.createInfoAlert("Errore nell'username!", "L'username non può superare 10 caratteri.");
-      return false;
-    }
-
-    return true;
   }
 
 }

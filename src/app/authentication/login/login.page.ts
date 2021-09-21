@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creator.service';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
+import { LoginControllerService } from 'src/app/services/login-controller/login-controller.service';
 import { LoginService } from 'src/app/services/login-service/login.service';
 
 @Component({
@@ -20,7 +21,8 @@ export class LoginPage implements OnInit {
     private router: Router,
     private loadingController: LoadingController,
     private alertCreator: AlertCreatorService,
-    private errorManager: ErrorManagerService
+    private errorManager: ErrorManagerService,
+    private loginController: LoginControllerService
   ) { }
 
   ngOnInit() {
@@ -41,25 +43,27 @@ export class LoginPage implements OnInit {
     const loading = await this.loadingController.create();
     await loading.present();
 
-    this.loginService.login(this.credenziali.value).subscribe(
-      async (res) => {
-        await loading.dismiss();
+    if (this.loginController.controllaDati(this.credenziali)) {
+      this.loginService.login(this.credenziali.value).subscribe(
+        async (res) => {
+          await loading.dismiss();
 
-        switch (res) {
-          case "1":
-            this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
-            break;
-          case "2":
-            this.router.navigateByUrl('/admin', { replaceUrl: true });
-            break;
-          default:
-            this.alertCreator.createInfoAlert('Login fallito', 'Rieffettua il login');
+          switch (res) {
+            case "1":
+              this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
+              break;
+            case "2":
+              this.router.navigateByUrl('/admin', { replaceUrl: true });
+              break;
+            default:
+              this.alertCreator.createInfoAlert('Login fallito', 'Rieffettua il login');
+          }
+        },
+        async (res) => {
+          await loading.dismiss();
+          this.errorManager.stampaErrore(res, 'Login fallito');
         }
-      },
-      async (res) => {
-        await loading.dismiss();
-        this.errorManager.stampaErrore(res, 'Login fallito');
-      }
-    );
+      );
+    } else await loading.dismiss();
   }
 }
