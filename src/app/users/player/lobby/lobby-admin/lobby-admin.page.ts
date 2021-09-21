@@ -34,12 +34,14 @@ export class LobbyAdminPage implements OnInit {
     this.loadInfoLobby();
     this.loadGiocatori();
     this.ping();
+    console.log(window.location.href);
     this.timerPing = this.timerService.getTimer(() => { this.ping() }, 4000);
 
     window.addEventListener('beforeunload', (event) => {
       //TODO: vedere per Firefox
       event.returnValue = '';
     });
+
   }
 
   ngOnInit() { }
@@ -195,13 +197,17 @@ export class LobbyAdminPage implements OnInit {
    * Crea il link per partecipare alla lobby e lo copia nella ClipBoard.
    */
   generaLink() {
-    var link = "https://proslab.unicam.it/login-by-link?codiceLobby=" + this.lobby.codice;
+    var linkTotale = window.location.href;
+    var linkCurrentURL = this.router.url;
+    var newLink = linkTotale.replace(linkCurrentURL, '/lobby/join');
+
+    var link = newLink+"?codiceLobby="+this.lobby.codice;
     navigator.clipboard.writeText(link).then(
-      ()=>{
+      () => {
         this.alertCreator.createInfoAlert("LINK COPIATO", "Il link è stato copiato, invitalo agli altri!");
       })
       .catch(
-        ()=>{
+        () => {
           this.alertCreator.createInfoAlert("ERRORE", "Non è stato possibile copiare il link!");
         });
   }

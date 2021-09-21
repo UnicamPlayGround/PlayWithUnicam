@@ -64,13 +64,11 @@ export class LoginByLinkPage implements OnInit {
           case "1":
             this.http.post('/lobby/partecipa', toSend).subscribe(
               async (res) => {
-                this.modalController.dismiss(true);
                 this.router.navigateByUrl('/lobby-guest', { replaceUrl: true });
                 await loading.dismiss();
               },
               async (res) => {
                 await loading.dismiss();
-                this.modalController.dismiss(false);
                 this.errorManager.stampaErrore(res, 'Impossibile partecipare alla lobby');
               });
             break;

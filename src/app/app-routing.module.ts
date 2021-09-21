@@ -51,8 +51,9 @@ const routes: Routes = [
     path: 'goose-game',
     loadChildren: () => import('./mgp_games/goose-game/goose-game.module').then(m => m.GooseGamePageModule),
     canLoad: [AuthGiocatoriGuard]
-  },  {
-    path: 'login-by-link',
+  },
+  {
+    path: 'lobby/join',
     loadChildren: () => import('./authentication/login-by-link/login-by-link.module').then( m => m.LoginByLinkPageModule)
   },
   {
