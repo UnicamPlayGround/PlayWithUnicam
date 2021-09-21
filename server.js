@@ -49,6 +49,17 @@ function verificaAdmin(token) {
 }
 
 /**
+ * Controlla che il JWT corrisponda ad un Ospite.
+ * @param {JSON} token JWT da controllare
+ */
+function verificaOspite(token) {
+    if (verificaJWT) {
+        tipo = (jwt.decode(token)).tipo;
+        return (tipo == "OSPITE");
+    } else return false;
+}
+
+/**
  * Invia il risultato di una query in formato JSON.
  * @param {*} response 
  * @param {*} results Risultato della query da inviare
@@ -540,20 +551,13 @@ app.post('/register/utente', (req, res) => {
                 if (!controller.controllaRisultatoQuery(results)) return res.status(404).send("L'username " + req.body.username + " è già in uso!");
 
                 utente.cercaUtenteByUsername(req.body.username, (err, results) => {
-                    try {
-                        if (err) {
-                            console.log(err);
-                            return res.status(500).send(messaggi.SERVER_ERROR);
-                        }
-
-                        const users = JSON.parse(JSON.stringify(results.rows));
-                        if (users.length == 0)
-                            utente.creaUtente(req.body.username, req.body.nome, req.body.cognome, req.body.password, res);
-                        else return res.status(400).send("L'username \'" + users[0].username + "\' è già stato usato!");
-                    } catch (error) {
-                        console.log(error);
-                        return res.status(400).send(error);
+                    if (err) {
+                        console.log(err);
+                        return res.status(500).send(messaggi.SERVER_ERROR);
                     }
+                    if (!controller.controllaRisultatoQuery(results)) return res.status(404).send("L'username " + req.body.username + " è già in uso!");
+
+                    utente.creaUtente(req.body.username, req.body.nome, req.body.cognome, req.body.password, res);
                 });
             });
         } else { return res.status(400).send("L'username deve contenere dei caratteri!"); }
@@ -569,14 +573,30 @@ app.post('/register/utente', (req, res) => {
  */
 app.post('/register/ospite-to-utente', (req, res) => {
     try {
-        if (verificaJWT(req.body.token)) {
-            const username = jwt.decode(req.body.token).username;
-            utente.eliminaOspite(username, (error, results) => {
+        if (verificaOspite(req.body.token)) {
+            utente.eliminaOspite(jwt.decode(req.body.token).username, (error, results) => {
                 if (error) {
                     console.log(error);
                     return res.status(400).send(error);
                 }
-                utente.creaUtente(username, req.body.nome, req.body.cognome, req.body.password, res);
+
+                utente.cercaOspiteByUsername(req.body.username, (err, results) => {
+                    if (err) {
+                        console.log(err);
+                        return res.status(500).send(messaggi.SERVER_ERROR);
+                    }
+                    if (!controller.controllaRisultatoQuery(results)) return res.status(404).send("L'username " + req.body.username + " è già in uso!");
+
+                    utente.cercaUtenteByUsername(req.body.username, (err, results) => {
+                        if (err) {
+                            console.log(err);
+                            return res.status(500).send(messaggi.SERVER_ERROR);
+                        }
+                        if (!controller.controllaRisultatoQuery(results)) return res.status(404).send("L'username " + req.body.username + " è già in uso!");
+
+                        utente.creaUtente(req.body.username, req.body.nome, req.body.cognome, req.body.password, res);
+                    });
+                });
             })
         } else return res.status(401).send(messaggi.ERRORE_JWT);
     } catch (error) {
