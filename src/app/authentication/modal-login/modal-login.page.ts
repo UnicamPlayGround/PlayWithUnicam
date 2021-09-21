@@ -85,7 +85,7 @@ export class ModalLoginPage implements OnInit {
           this.errorManager.stampaErrore(res, 'Login fallito');
         }
       );
-    }
+    } else await loading.dismiss();
   }
 
   /**
