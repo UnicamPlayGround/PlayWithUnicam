@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login-service/login.service';
 import jwt_decode from 'jwt-decode';
 
+
 @Component({
   selector: 'app-lobby-admin',
   templateUrl: './lobby-admin.page.html',
@@ -190,4 +191,18 @@ export class LobbyAdminPage implements OnInit {
       });
   }
 
+  /**
+   * Crea il link per partecipare alla lobby e lo copia nella ClipBoard.
+   */
+  generaLink() {
+    var link = "https://proslab.unicam.it/login-by-link?codiceLobby=" + this.lobby.codice;
+    navigator.clipboard.writeText(link).then(
+      ()=>{
+        this.alertCreator.createInfoAlert("LINK COPIATO", "Il link è stato copiato, invitalo agli altri!");
+      })
+      .catch(
+        ()=>{
+          this.alertCreator.createInfoAlert("ERRORE", "Non è stato possibile copiare il link!");
+        });
+  }
 }

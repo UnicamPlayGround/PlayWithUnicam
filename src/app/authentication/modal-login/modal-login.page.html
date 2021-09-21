@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form (ngSubmit)="login()" [formGroup]="credenziali">
+
+    <ion-card class="auth-card">
+      <br>
+      <br>
+      <ion-card-header>
+        <ion-card-title><strong>Login</strong></ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-list lines="full">
+          <ion-item>
+            <ion-label position="floating">Username</ion-label>
+            <ion-input type="string" name="username" formControlName="username" required placeholder="Inserisci il tuo username"></ion-input>
+          </ion-item>
+
+          <ion-item lines="full">
+            <ion-label position="floating">Password</ion-label>
+            <ion-input type="password" name="password" formControlName="password" required placeholder="Inserisci la tua password"></ion-input>
+          </ion-item>
+          <br>
+
+          <ion-button type="submit" color="primary" shape="round" expand="block">ACCEDI</ion-button>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </form>
+</ion-content>
