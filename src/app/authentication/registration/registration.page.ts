@@ -1,7 +1,7 @@
 import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creator.service';
 import { Component, OnInit } from '@angular/core';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { LoadingController } from '@ionic/angular';
 import { LoginService } from 'src/app/services/login-service/login.service';
 import { RegistrationService } from 'src/app/services/registration-service/registration.service';
@@ -31,23 +31,36 @@ export class RegistrationPage implements OnInit {
   }
 
   ngOnInit() {
+    this.riempiForm();
+  }
+
+  //TODO commentare
+  private riempiForm() {
     this.credenziali = this.fb.group({
       nome: ['', [Validators.required]],
       cognome: ['', [Validators.required]],
-      username: ['', [Validators.required]],
+      username: new FormControl({ value: this.usernameOspite, disabled: false }, Validators.required),
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16)]],
-    })
+    });
+
+    //TODO
+    // if (this.ospite) {
+    //   console.log("STO QUI");
+    //   this.credenziali.get('username').disable();
+    // }
   }
 
   //TODO commentare
   private async controllaOspite() {
     const token = (await this.loginService.getToken()).value;
-    const decodedToken: any = jwt_decode(token);
-    if (decodedToken.tipo === 'OSPITE') {
-      this.ospite = true;
-      this.usernameOspite = decodedToken.username;
-      console.log("USERNAME CONST: ", this.usernameOspite);
+    if (token) {
+      const decodedToken: any = jwt_decode(token);
+      if (decodedToken.tipo === 'OSPITE') {
+        this.ospite = true;
+        this.usernameOspite = decodedToken.username;
+      }
     }
+    this.riempiForm();
   }
 
   /**
