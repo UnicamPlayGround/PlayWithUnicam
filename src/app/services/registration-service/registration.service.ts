@@ -23,11 +23,12 @@ export class RegistrationService {
   }
 
   //TODO commentare
-  registerOspiteToUtente(token, credenziali: { nome: string, cognome: string, password: string }): Observable<any> {
+  registerOspiteToUtente(token, credenziali: { nome: string, cognome: string, username: string, password: string }): Observable<any> {
     const toSend = {
       "token": token,
       "nome": credenziali.nome,
       "cognome": credenziali.cognome,
+      "username": credenziali.username,
       "password": credenziali.password
     }
 

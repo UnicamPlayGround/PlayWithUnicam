@@ -37,17 +37,11 @@ export class RegistrationPage implements OnInit {
   //TODO commentare
   private riempiForm() {
     this.credenziali = this.fb.group({
-      nome: ['', [Validators.required]],
-      cognome: ['', [Validators.required]],
-      username: new FormControl({ value: this.usernameOspite, disabled: false }, Validators.required),
+      nome: ['', Validators.required],
+      cognome: ['', Validators.required],
+      username: [this.usernameOspite, [Validators.required, Validators.maxLength(10)]],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16)]],
     });
-
-    //TODO
-    // if (this.ospite) {
-    //   console.log("STO QUI");
-    //   this.credenziali.get('username').disable();
-    // }
   }
 
   //TODO commentare
@@ -153,9 +147,6 @@ export class RegistrationPage implements OnInit {
    * @returns *true* se l'username è valido, *false* altrimenti 
    */
   controllaUsername() {
-    if (this.ospite)
-      return true;
-
     const errorHeader = "Errore nell'username!";
     if (this.controlString(this.credenziali.value.username, errorHeader, "L'username non può essere vuoto."))
       if (this.controlLengthString(this.credenziali.value.username, 10, errorHeader, "L'username non può superare 10 caratteri."))
