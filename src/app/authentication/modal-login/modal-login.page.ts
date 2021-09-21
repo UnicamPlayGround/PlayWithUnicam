@@ -39,6 +39,9 @@ export class ModalLoginPage implements OnInit {
     this.getCodiceLobby();
   }
 
+  /**
+   * Effettua il login per partecipare alla lobby relativa al link di condivisione
+   */
   async login(){
     const loading = await this.loadingController.create();
     await loading.present();
@@ -82,6 +85,9 @@ export class ModalLoginPage implements OnInit {
     );
   }
 
+  /**
+   * Prende il codice della lobby dal link di condivisione
+   */
   private getCodiceLobby(){
     this.activatedRoute.queryParams.subscribe(params =>{
       this.codiceLobby = params['codiceLobby'];
