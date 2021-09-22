@@ -24,6 +24,11 @@ export class UserPopoverComponent implements OnInit {
 
   ngOnInit() { }
 
+  /**
+   * Controlla il tipo dell'utente.
+   * Se l'utente autenticato è un ospite, la variabile "ospite" viene settata a true,
+   * altrimenti viene settata a false.
+   */
   async getTipoUtente() {
     const token = (await this.loginService.getToken()).value;
     const decodedToken: any = jwt_decode(token);
@@ -31,11 +36,17 @@ export class UserPopoverComponent implements OnInit {
     else if (decodedToken.tipo === 'GIOCATORE') this.ospite = false;
   }
 
+  /**
+   * Chiude il popover e inoltra alla pagina "account" per modificare i dati del profilo
+   */
   openProfile() {
     this.popoverController.dismiss();
     this.router.navigateByUrl('/account', { replaceUrl: true });
   }
 
+  /**
+   * Apre una modal chiedendo la conferma per effettuare il logout dal profilo.
+   */
   logout() {
     var message = "Sei sicuro di voler effettuare il logout?";
     this.alertCreator.createConfirmationAlert(message, () => {
@@ -45,6 +56,9 @@ export class UserPopoverComponent implements OnInit {
     });
   }
 
+  /**
+   * Chiude il popover e inoltra alla pagina per effettuare la registrazione
+   */
   openRegistration() {
     this.popoverController.dismiss();
     this.router.navigateByUrl('/registration', { replaceUrl: true });

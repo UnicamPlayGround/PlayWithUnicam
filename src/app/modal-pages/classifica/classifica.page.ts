@@ -18,6 +18,9 @@ export class ClassificaPage implements OnInit {
     this.classifica = this.navParams.get('classifica');
   }
 
+  /**
+   * Chiude la modal della classifica.
+   */
   closeModal() {
     this.modalController.dismiss();
   }
