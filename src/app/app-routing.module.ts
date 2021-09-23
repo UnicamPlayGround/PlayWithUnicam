@@ -54,13 +54,16 @@ const routes: Routes = [
   },
   {
     path: 'lobby/join',
-    loadChildren: () => import('./authentication/login-by-link/login-by-link.module').then( m => m.LoginByLinkPageModule)
+    loadChildren: () => import('./authentication/login-by-link/login-by-link.module').then(m => m.LoginByLinkPageModule)
   },
   {
     path: 'modal-login',
-    loadChildren: () => import('./authentication/modal-login/modal-login.module').then( m => m.ModalLoginPageModule)
+    loadChildren: () => import('./authentication/modal-login/modal-login.module').then(m => m.ModalLoginPageModule)
+  },
+  {
+    path: 'editor',
+    loadChildren: () => import('./mgp_games/goose-game/editor/editor.module').then(m => m.EditorPageModule),
   }
-
 ];
 
 @NgModule({
