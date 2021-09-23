@@ -155,7 +155,7 @@ app.get('/games/admin', (req, res) => {
 app.get('/game/status', (req, res) => {
     const token = req.headers.token;
     if (verificaJWT(token)) {
-        partita.getInfoPartita(jwt.decode(token).username, (err, results) => {
+        partita.getInfoPartita(jwt.decode(token).username, (err, data) => {
             if (err) {
                 if (err == messaggi.MINIMO_GIOCATORI_ERROR)
                     return res.status(403).send(messaggi.MINIMO_GIOCATORI_ERROR);
@@ -163,7 +163,10 @@ app.get('/game/status', (req, res) => {
                 console.log(err);
                 return res.status(500).send(messaggi.SERVER_ERROR);
             }
-            sendDataInJSON(res, results);
+            // sendDataInJSON(res, results);
+
+            const toReturn = { 'results': data };
+            res.status(200).send(toReturn);
         });
     } else return res.status(401).send(messaggi.ERRORE_JWT);
 });

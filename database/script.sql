@@ -56,6 +56,7 @@ CREATE TABLE IF NOT EXISTS public.giocatori
     ruolo character varying(20),
 	ping timestamp with time zone,
     data_ingresso timestamp with time zone NOT NULL,
+    info json,
     PRIMARY KEY (username)
 );
 

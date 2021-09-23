@@ -20,34 +20,23 @@ function creaCodice() {
  * @param {*} response 
  */
 function salvaInformazioni(username, partita, infoGiocatore, response) {
-    if (partita.info == null)
-        partita.info = { giocatori: [] };
-
-    var index = 0;
-
-    for (let i = 0; i < partita.info.giocatori.length; i++) {
-        if (partita.info.giocatori[i].username == username) {
-            index = i;
-            break;
-        }
-        index++;
-    }
 
     const toSave = {
         "username": username,
         "info_giocatore": infoGiocatore
     }
 
-    partita.info.giocatori[index] = toSave;
-
-    db.pool.query('UPDATE public.partite SET info = $1 WHERE codice = $2',
-        [partita.info, partita.codice], (error, results) => {
+    db.pool.query('UPDATE public.giocatori SET info = $1 WHERE username = $2',
+        [toSave, username], (error, results) => {
             if (error) {
                 console.log(error);
                 return response.status(400).send("Non è stato possibile caricare le informazioni del giocatore!");
             }
+
             return response.status(200).send({ 'esito': "1" });
         })
+
+
 }
 
 /**
@@ -141,14 +130,13 @@ function controllaMinimoGiocatori(username, cb) {
  * @param {*} response 
  */
 exports.cambiaGiocatoreCorrente = (username, response) => {
-    exports.getInfoPartita(username, (error, results) => {
+    exports.getInfoPartita(username, (error, partitaInfo) => {
         if (error) {
             console.log(error);
             return response.status(500).send(messaggi.SERVER_ERROR);
         }
 
-        const partita = JSON.parse(JSON.stringify(results.rows))[0];
-        if (partita.giocatore_corrente != username)
+        if (partitaInfo.giocatore_corrente != username)
             return response.status(401).send('Devi aspettare il tuo turno!');
 
         lobby.getGiocatoriLobby(username, response, (error, results) => {
@@ -161,7 +149,7 @@ exports.cambiaGiocatoreCorrente = (username, response) => {
             var nuovoGiocatore = getNuovoGiocatore(giocatori, username);
 
             db.pool.query('UPDATE public.partite SET giocatore_corrente = $1 WHERE codice_lobby = $2',
-                [nuovoGiocatore.username, partita.codice_lobby], (error, results) => {
+                [nuovoGiocatore.username, partitaInfo.codice_lobby], (error, results) => {
                     if (error) {
                         console.log(error);
                         return response.status(400).send("Non è stato possibile aggiornare il giocatore corrente!");
@@ -222,6 +210,14 @@ exports.creaPartita = (adminLobby, response) => {
     })
 }
 
+//TODO commentare
+exports.getInfoGiocatori = (codiceLobby, cb) => {
+    return db.pool.query('SELECT info FROM public.giocatori WHERE codice_lobby=$1',
+        [codiceLobby], (error, results) => {
+            cb(error, results);
+        });
+}
+
 /**
  * Ritorna le Informazioni della Partita.
  * @param {string} username Username del Giocatore collegato alla Partita
@@ -230,14 +226,31 @@ exports.creaPartita = (adminLobby, response) => {
  */
 exports.getInfoPartita = (username, cb) => {
     controllaMinimoGiocatori(username, (error) => {
-        if (error)
-            return cb(error, null);
+        if (error) return cb(error, null);
 
-        return db.pool.query('SELECT partite.codice, partite.codice_lobby, giocatore_corrente, terminata, info, id_gioco FROM' +
+        return db.pool.query('SELECT partite.codice, partite.codice_lobby, giocatore_corrente, terminata, id_gioco FROM' +
             ' (partite INNER JOIN lobby ON partite.codice_lobby=lobby.codice)' +
             ' INNER JOIN giocatori ON giocatori.codice_lobby=lobby.codice WHERE giocatori.username=$1',
             [username], (error, results) => {
-                cb(error, results)
+                var partitaInfo = JSON.parse(JSON.stringify(results.rows))[0];
+                if (partitaInfo) {
+                    this.getInfoGiocatori(partitaInfo.codice_lobby, (error2, results) => {
+                        const infoGiocatori = JSON.parse(JSON.stringify(results.rows));
+                        var toSave = [];
+
+                        infoGiocatori.forEach(element => {
+                            if (element.info)
+                                toSave.push(element.info);
+                        });
+
+                        if (toSave.length > 0)
+                            partitaInfo.info = { "giocatori": toSave };
+                        else
+                            partitaInfo.info = null;
+
+                        cb(error, partitaInfo);
+                    });
+                }
             });
     });
 }
@@ -249,17 +262,15 @@ exports.getInfoPartita = (username, cb) => {
  * @param {*} response 
  */
 exports.salvaInfoGiocatore = (username, infoGiocatore, response) => {
-    this.getInfoPartita(username, (error, results) => {
+    this.getInfoPartita(username, (error, partitaInfo) => {
         if (error) {
             console.log(error);
             return response.status(500).send(messaggi.SERVER_ERROR);
         }
-        if (controller.controllaRisultatoQuery(results)) return response.status(404).send(messaggi.PARTITA_NON_TROVATA_ERROR);
+        if (partitaInfo == null || partitaInfo == undefined)
+            return response.status(404).send(messaggi.PARTITA_NON_TROVATA_ERROR);
 
-        var tmp = JSON.parse(JSON.stringify(results.rows));
-        const partita = tmp[0];
-
-        game.getInfoGioco(partita.id_gioco, (error, results) => {
+        game.getInfoGioco(partitaInfo.id_gioco, (error, results) => {
             if (error) {
                 console.log(error);
                 return response.status(500).send(messaggi.SERVER_ERROR);
@@ -268,10 +279,10 @@ exports.salvaInfoGiocatore = (username, infoGiocatore, response) => {
             tmp = JSON.parse(JSON.stringify(results.rows));
             const gioco = tmp[0];
 
-            if (gioco.tipo == "TURNI" && partita.giocatore_corrente != username)
+            if (gioco.tipo == "TURNI" && partitaInfo.giocatore_corrente != username)
                 return response.status(401).send('Devi aspettare il tuo turno!');
             else
-                salvaInformazioni(username, partita, infoGiocatore, response);
+                salvaInformazioni(username, partitaInfo, infoGiocatore, response);
         })
     })
 }
@@ -282,24 +293,22 @@ exports.salvaInfoGiocatore = (username, infoGiocatore, response) => {
  * @param {*} response 
  */
 exports.terminaPartita = (username, response) => {
-    this.getInfoPartita(username, (error, results) => {
+    this.getInfoPartita(username, (error, partitaInfo) => {
         if (error) {
             console.log(error);
             return response.status(500).send(messaggi.SERVER_ERROR);
         }
-        if (controller.controllaRisultatoQuery(results))
+        if (partitaInfo == null || partitaInfo == undefined)
             return response.status(404).send(messaggi.PARTITA_NON_TROVATA_ERROR);
 
-        const partita = JSON.parse(JSON.stringify(results.rows))[0];
-
         db.pool.query('UPDATE public.partite SET terminata = $1 WHERE codice = $2',
-            [true, partita.codice], (error, results) => {
+            [true, partitaInfo.codice], (error, results) => {
                 if (error) {
                     console.log(error);
                     return response.status(500).send(messaggi.SERVER_ERROR);
                 }
 
-                lobby.terminaPartita(partita.codice_lobby, response);
+                lobby.terminaPartita(partitaInfo.codice_lobby, response);
             });
     })
 }

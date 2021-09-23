@@ -105,7 +105,7 @@ export class LobbyGuestPage implements OnInit {
   private async loadInfoPartita() {
     (await this.lobbyManager.loadInfoPartita()).subscribe(
       async (res) => {
-        var partita = res['results'][0];
+        var partita = res['results'];
         if (partita)
           if (!partita.terminata) {
             this.timerService.stopTimers(this.timerPing);
