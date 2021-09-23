@@ -50,6 +50,12 @@ export class DadiPage implements OnInit {
     die.classList.toggle("even-roll");
   }
 
+  /**
+   * Restituisce un numero casuale tra 'min' e 'max'.
+   * @param min numero minimo 
+   * @param max numero massimo
+   * @returns un numero casuale tra 'min' e 'max'
+   */
   getRandomNumber(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);

@@ -9,6 +9,7 @@ import { LoginControllerService } from 'src/app/services/login-controller/login-
 import { LoginService } from 'src/app/services/login-service/login.service';
 import { ModalLoginPage } from '../../authentication/modal-login/modal-login.page';
 import { Router } from '@angular/router';
+import jwt_decode from 'jwt-decode';
 
 @Component({
   selector: 'app-login-by-link',
@@ -31,8 +32,9 @@ export class LoginByLinkPage implements OnInit {
     private errorManager: ErrorManagerService,
     private activatedRoute: ActivatedRoute,
     private loginController: LoginControllerService,
-  ) { }
-
+  ) {
+    this.controllaJWT();
+  }
 
   ngOnInit() {
     this.credenziali = this.fb.group({
@@ -40,6 +42,25 @@ export class LoginByLinkPage implements OnInit {
       password: ['', [Validators.required, Validators.minLength(8)]],
     })
     this.getCodiceLobby();
+  }
+
+  /**
+   * Controlla se è presente un JWT valido in memoria, in caso positivo inizia l'operazione per partecipare
+   * alla lobby.
+   */
+  private async controllaJWT() {
+    const tokenValue = (await this.loginService.getToken()).value;
+    if (tokenValue) {
+      const decodedToken: any = jwt_decode(tokenValue);
+
+      if (decodedToken.tipo == "GIOCATORE" || decodedToken.tipo == "OSPITE") {
+        const toSend = {
+          'token': tokenValue,
+          'codice_lobby': this.codiceLobby
+        }
+        this.partecipaLobby(toSend);
+      }
+    }
   }
 
   /**
@@ -62,18 +83,7 @@ export class LoginByLinkPage implements OnInit {
 
           switch (res) {
             case "1":
-              this.http.post('/lobby/partecipa', toSend).subscribe(
-                async (res) => {
-                  this.router.navigateByUrl('/lobby-guest', { replaceUrl: true });
-                  await loading.dismiss();
-                },
-                async (res) => {
-                  await loading.dismiss();
-                  this.errorManager.stampaErrore(res, 'Impossibile partecipare alla lobby');
-                });
-              break;
-            case "0":
-              this.alertCreator.createInfoAlert('Login fallito', 'Rieffettua il login');
+              this.partecipaLobby(toSend);
               break;
             default:
               this.alertCreator.createInfoAlert('Login fallito', 'Rieffettua il login');
@@ -85,6 +95,20 @@ export class LoginByLinkPage implements OnInit {
         }
       );
     } else await loading.dismiss();
+  }
+
+  /**
+   * Partecipa alla lobby.
+   * @param toSend Dati da mandare al Server per partecipare alla lobby
+   */
+  private partecipaLobby(toSend: { token: string, codice_lobby: number }) {
+    this.http.post('/lobby/partecipa', toSend).subscribe(
+      async (res) => {
+        this.router.navigateByUrl('/lobby-guest', { replaceUrl: true });
+      },
+      async (res) => {
+        this.errorManager.stampaErrore(res, 'Impossibile partecipare alla lobby');
+      });
   }
 
   /**

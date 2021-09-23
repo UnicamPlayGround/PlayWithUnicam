@@ -204,7 +204,7 @@ export class LobbyAdminPage implements OnInit {
     var link = newLink+"?codiceLobby="+this.lobby.codice;
     navigator.clipboard.writeText(link).then(
       () => {
-        this.alertCreator.createInfoAlert("LINK COPIATO", "Il link è stato copiato, invitalo agli altri!");
+        this.alertCreator.createInfoAlert("LINK COPIATO", "Il link è stato copiato correttamente, invialo agli altri giocatori!");
       })
       .catch(
         () => {
