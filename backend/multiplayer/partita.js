@@ -232,9 +232,19 @@ exports.getInfoPartita = (username, cb) => {
             ' (partite INNER JOIN lobby ON partite.codice_lobby=lobby.codice)' +
             ' INNER JOIN giocatori ON giocatori.codice_lobby=lobby.codice WHERE giocatori.username=$1',
             [username], (error, results) => {
+                if (error) {
+                    console.log(error);
+                    return cb(error, null);
+                }
                 var partitaInfo = JSON.parse(JSON.stringify(results.rows))[0];
+
                 if (partitaInfo) {
-                    this.getInfoGiocatori(partitaInfo.codice_lobby, (error2, results) => {
+                    this.getInfoGiocatori(partitaInfo.codice_lobby, (error, results) => {
+                        if (error) {
+                            console.log(error);
+                            return cb(error, null);
+                        }
+
                         const infoGiocatori = JSON.parse(JSON.stringify(results.rows));
                         var toSave = [];
 
@@ -250,7 +260,8 @@ exports.getInfoPartita = (username, cb) => {
 
                         cb(error, partitaInfo);
                     });
-                }
+                } else
+                    cb(error, partitaInfo);
             });
     });
 }
