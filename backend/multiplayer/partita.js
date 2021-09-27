@@ -15,63 +15,56 @@ function creaCodice() {
 /**
  * Salva le Informazioni del Giocatore nel DB.
  * @param {string} username Username del Giocatore
- * @param {*} partita Informazioni della Partita salvate nel DB
  * @param {*} infoGiocatore Informazioni del Giocatore 
- * @param {*} response 
  */
-function salvaInformazioni(username, partita, infoGiocatore, response) {
+function salvaInformazioni(username, infoGiocatore) {
+    return new Promise((resolve, reject) => {
+        const toSave = {
+            "username": username,
+            "info_giocatore": infoGiocatore
+        }
 
-    const toSave = {
-        "username": username,
-        "info_giocatore": infoGiocatore
-    }
-
-    db.pool.query('UPDATE public.giocatori SET info = $1 WHERE username = $2',
-        [toSave, username], (error, results) => {
-            if (error) {
-                console.log(error);
-                return response.status(400).send("Non è stato possibile caricare le informazioni del giocatore!");
-            }
-
-            return response.status(200).send({ 'esito': "1" });
-        })
-
-
+        db.pool.query('UPDATE public.giocatori SET info = $1 WHERE username = $2',
+            [toSave, username], (error, results) => {
+                if (error) {
+                    console.log(error);
+                    return reject("Non è stato possibile caricare le informazioni del giocatore!");
+                }
+                return resolve();
+            })
+    })
 }
 
 /**
  * Controlla che i vincoli dei Giocatori Minimi e Massimi siano rispettati prima di creare una Partita.
  * @param {*} adminLobby Admin della Lobby
- * @param {*} cb Callback
  */
-function controllaNumeroGiocatori(adminLobby, cb) {
-    lobby.cercaLobbyByAdmin(adminLobby, (error, results) => {
-        if (error) {
-            console.log(error);
-            return cb(error, messaggi.CREAZIONE_PARTITA_ERROR, null);
-        }
+function controllaNumeroGiocatori(adminLobby) {
+    var lobbyInfo;
+    return new Promise((resolve, reject) => {
+        lobby.cercaLobbyByAdmin(adminLobby)
+            .then(results => {
+                if (controller.controllaRisultatoQuery(results))
+                    return reject("Devi essere l'admin della lobby per creare una partita!");
 
-        if (controller.controllaRisultatoQuery(results))
-            return cb(true, "Devi essere l'admin della lobby per creare una partita!", null);
+                lobbyInfo = JSON.parse(JSON.stringify(results.rows))[0];
+                return lobby.getNumeroGiocatoriLobby(lobbyInfo.codice);
+            })
+            .then(results => {
+                const numeroGiocatori = JSON.parse(JSON.stringify(results.rows))[0];
 
-        const lobbyInfo = JSON.parse(JSON.stringify(results.rows))[0];
+                if (lobbyInfo.min_giocatori > numeroGiocatori.count)
+                    return reject("Non ci sono abbastanza giocatori per iniziare!");
 
-        lobby.getNumeroGiocatoriLobby(lobbyInfo.codice, (error, results) => {
-            if (error) {
+                if (lobbyInfo.max_giocatori < numeroGiocatori.count)
+                    return reject("Ci sono troppi giocatori per iniziare!");
+
+                return resolve(lobbyInfo);
+            })
+            .catch(error => {
                 console.log(error);
-                return cb(error, messaggi.CREAZIONE_PARTITA_ERROR, null);
-            }
-
-            const numeroGiocatori = JSON.parse(JSON.stringify(results.rows))[0];
-
-            if (lobbyInfo.min_giocatori > numeroGiocatori.count)
-                return cb(true, "Non ci sono abbastanza giocatori per iniziare!", null);
-
-            if (lobbyInfo.max_giocatori < numeroGiocatori.count)
-                return cb(true, "Ci sono troppi giocatori per iniziare!", null);
-
-            return cb(null, null, lobbyInfo);
-        })
+                return reject(messaggi.CREAZIONE_PARTITA_ERROR);
+            })
     })
 }
 
@@ -99,227 +92,249 @@ function getNuovoGiocatore(giocatori, usernameGiocatoreCorrente) {
  * Controlla che all'interno della lobby ci siano abbastanza giocatori
  * per poter continuare la partita.
  * @param {*} username Username del Giocatore che richiede le informazioni della partita
- * @param {*} cb Callback
  */
-function controllaMinimoGiocatori(username, cb) {
-    lobby.cercaLobbyByUsername(username, (error, results) => {
-        if (error) {
-            console.log(error);
-            return response.status(500).send(messaggi.SERVER_ERROR);
-        }
-        const lobbyInfo = JSON.parse(JSON.stringify(results.rows))[0];
+function controllaMinimoGiocatori(username) {
+    var lobbyInfo;
+    return new Promise((resolve, reject) => {
+        lobby.cercaLobbyByUsername(username)
+            .then(results => {
+                lobbyInfo = JSON.parse(JSON.stringify(results.rows))[0];
+                return lobby.getNumeroGiocatoriLobby(lobbyInfo.codice);
+            })
+            .then(results => {
+                const numeroGiocatori = JSON.parse(JSON.stringify(results.rows))[0];
 
-        lobby.getNumeroGiocatoriLobby(lobbyInfo.codice, (error, results) => {
-            if (error) {
+                if (lobbyInfo.min_giocatori > numeroGiocatori.count)
+                    return reject(messaggi.MINIMO_GIOCATORI_ERROR);
+                else
+                    return resolve();
+            })
+            .catch(error => {
                 console.log(error);
-                return response.status(500).send(messaggi.SERVER_ERROR);
-            }
-            const numeroGiocatori = JSON.parse(JSON.stringify(results.rows))[0];
+                return reject(messaggi.SERVER_ERROR);
+            })
+    })
+}
 
-            if (lobbyInfo.min_giocatori > numeroGiocatori.count)
-                cb(messaggi.MINIMO_GIOCATORI_ERROR);
-            else
-                cb(null);
-        })
+//TODO commentare
+function creaPartitaQuery(codiceLobby, adminLobby, results) {
+    return new Promise((resolve, reject) => {
+        if (controller.controllaRisultatoQuery(results)) {
+            db.pool.query('INSERT INTO public.partite (codice, codice_lobby, giocatore_corrente, terminata) VALUES ($1, $2, $3, $4)',
+                [creaCodice(), codiceLobby, adminLobby, false], (error, results) => {
+                    if (error) {
+                        console.log(error);
+                        return reject(messaggi.CREAZIONE_PARTITA_ERROR);
+                    }
+                    return resolve();
+                });
+        } else {
+            db.pool.query('UPDATE public.partite SET codice = $1, giocatore_corrente = $2, info = $3, terminata = $4 WHERE codice_lobby = $5',
+                [creaCodice(), adminLobby, null, false, codiceLobby], (error, results) => {
+                    if (error) {
+                        console.log(error);
+                        return reject(messaggi.CREAZIONE_PARTITA_ERROR);
+                    }
+                    return resolve();
+                });
+        }
     })
 }
 
 /**
  * Modifica il Giocatore Corrente di una Partita.
  * @param {string} username Username dell'attuale Giocatore Corrente
- * @param {*} response 
  */
-exports.cambiaGiocatoreCorrente = (username, response) => {
-    exports.getInfoPartita(username, (error, partitaInfo) => {
-        if (error) {
-            console.log(error);
-            return response.status(500).send(messaggi.SERVER_ERROR);
-        }
+exports.cambiaGiocatoreCorrente = (username) => {
+    return new Promise((resolve, reject) => {
+        var partitaInfo;
+        exports.getInfoPartita(username)
+            .then(data => {
+                partitaInfo = data;
+                if (partitaInfo.giocatore_corrente != username)
+                    return reject('Devi aspettare il tuo turno!');
 
-        if (partitaInfo.giocatore_corrente != username)
-            return response.status(401).send('Devi aspettare il tuo turno!');
+                return lobby.getGiocatoriLobby(username);
+            })
+            .then(results => {
+                const giocatori = JSON.parse(JSON.stringify(results.rows));
+                var nuovoGiocatore = getNuovoGiocatore(giocatori, username);
 
-        lobby.getGiocatoriLobby(username, response, (error, results) => {
-            if (error) {
+                db.pool.query('UPDATE public.partite SET giocatore_corrente = $1 WHERE codice_lobby = $2',
+                    [nuovoGiocatore.username, partitaInfo.codice_lobby], (error, results) => {
+                        if (error) {
+                            console.log(error);
+                            return reject("Non è stato possibile aggiornare il giocatore corrente!");
+                        }
+                        return resolve();
+                    })
+            })
+            .catch(error => {
                 console.log(error);
-                return response.status(500).send(messaggi.SERVER_ERROR);
-            }
-
-            const giocatori = JSON.parse(JSON.stringify(results.rows));
-            var nuovoGiocatore = getNuovoGiocatore(giocatori, username);
-
-            db.pool.query('UPDATE public.partite SET giocatore_corrente = $1 WHERE codice_lobby = $2',
-                [nuovoGiocatore.username, partitaInfo.codice_lobby], (error, results) => {
-                    if (error) {
-                        console.log(error);
-                        return response.status(400).send("Non è stato possibile aggiornare il giocatore corrente!");
-                    }
-                    return response.status(200).send({ 'esito': "1" });
-                })
-        })
+                return reject(messaggi.SERVER_ERROR);
+            });
     })
 }
 
 /**
  * Ricerca una Partita tramite il Codice della Lobby.
  * @param {*} codiceLobby 
- * @param {*} cb Callback
  */
-exports.cercaPartitaByCodiceLobby = (codiceLobby, cb) => {
-    db.pool.query('SELECT * FROM public.partite WHERE codice_lobby=$1',
-        [codiceLobby], (error, results) => {
-            cb(error, results);
-        })
+exports.cercaPartitaByCodiceLobby = (codiceLobby) => {
+    return new Promise((resolve, reject) => {
+        db.pool.query('SELECT * FROM public.partite WHERE codice_lobby=$1',
+            [codiceLobby], (error, results) => {
+                if (error)
+                    return reject(error);
+                else
+                    return resolve(results);
+            });
+    })
 }
 
 /**
  * Crea una nuova Partita, controllando che i vincoli sui Giocatori minimi e massimi siano rispettati.
  * @param {string} adminLobby Admin della Lobby, che vuole creare la Partita
- * @param {*} response 
  */
-exports.creaPartita = (adminLobby, response) => {
-    controllaNumeroGiocatori(adminLobby, (error, errorText, lobbyInfo) => {
-        if (error) return response.status(400).send(errorText);
-
-        this.cercaPartitaByCodiceLobby(lobbyInfo.codice, (error, results) => {
-            if (error) {
+exports.creaPartita = (adminLobby) => {
+    return new Promise((resolve, reject) => {
+        var lobbyInfo;
+        controllaNumeroGiocatori(adminLobby)
+            .then(data => {
+                lobbyInfo = data;
+                return this.cercaPartitaByCodiceLobby(lobbyInfo.codice);
+            })
+            .then(results => { return creaPartitaQuery(lobbyInfo.codice, adminLobby, results); })
+            .then(_ => lobby.iniziaPartita(lobbyInfo.codice))
+            .then(_ => { resolve(); })
+            .catch(error => {
                 console.log(error);
-                return response.status(400).send(messaggi.CREAZIONE_PARTITA_ERROR);
-            }
-
-            if (controller.controllaRisultatoQuery(results)) {
-                db.pool.query('INSERT INTO public.partite (codice, codice_lobby, giocatore_corrente, terminata) VALUES ($1, $2, $3, $4)',
-                    [creaCodice(), lobbyInfo.codice, adminLobby, false], (error, results) => {
-                        if (error) {
-                            console.log(error);
-                            return response.status(400).send(messaggi.CREAZIONE_PARTITA_ERROR);
-                        }
-                        lobby.iniziaPartita(lobbyInfo.codice, response);
-                    });
-            } else {
-                db.pool.query('UPDATE public.partite SET codice = $1, giocatore_corrente = $2, info = $3, terminata = $4 WHERE codice_lobby = $5',
-                    [creaCodice(), adminLobby, null, false, lobbyInfo.codice], (error, results) => {
-                        if (error) {
-                            console.log(error);
-                            return response.status(400).send(messaggi.CREAZIONE_PARTITA_ERROR);
-                        }
-                        lobby.iniziaPartita(lobbyInfo.codice, response);
-                    });
-            }
-        })
+                return reject(messaggi.CREAZIONE_PARTITA_ERROR);
+            });
     })
 }
 
 //TODO commentare
-exports.getInfoGiocatori = (codiceLobby, cb) => {
-    return db.pool.query('SELECT info FROM public.giocatori WHERE codice_lobby=$1',
-        [codiceLobby], (error, results) => {
-            cb(error, results);
-        });
+exports.getInfoGiocatori = (codiceLobby) => {
+    return new Promise((resolve, reject) => {
+        db.pool.query('SELECT info FROM public.giocatori WHERE codice_lobby=$1',
+            [codiceLobby], (error, results) => {
+                if (error)
+                    return reject(error);
+                else
+                    return resolve(results);
+            });
+    })
+
 }
 
 /**
  * Ritorna le Informazioni della Partita.
  * @param {string} username Username del Giocatore collegato alla Partita
- * @param {*} cb Callback
  * @returns le Informazioni della Partita (codice, codice_lobby, giocatore_corrente, terminata, info, id_gioco)
  */
-exports.getInfoPartita = (username, cb) => {
-    controllaMinimoGiocatori(username, (error) => {
-        if (error) return cb(error, null);
-
-        return db.pool.query('SELECT partite.codice, partite.codice_lobby, giocatore_corrente, terminata, id_gioco FROM' +
-            ' (partite INNER JOIN lobby ON partite.codice_lobby=lobby.codice)' +
-            ' INNER JOIN giocatori ON giocatori.codice_lobby=lobby.codice WHERE giocatori.username=$1',
-            [username], (error, results) => {
-                if (error) {
-                    console.log(error);
-                    return cb(error, null);
-                }
-                var partitaInfo = JSON.parse(JSON.stringify(results.rows))[0];
-
-                if (partitaInfo) {
-                    this.getInfoGiocatori(partitaInfo.codice_lobby, (error, results) => {
+exports.getInfoPartita = (username) => {
+    return new Promise((resolve, reject) => {
+        controllaMinimoGiocatori(username)
+            .then(_ => {
+                return db.pool.query('SELECT partite.codice, partite.codice_lobby, giocatore_corrente, terminata, id_gioco FROM' +
+                    ' (partite INNER JOIN lobby ON partite.codice_lobby=lobby.codice)' +
+                    ' INNER JOIN giocatori ON giocatori.codice_lobby=lobby.codice WHERE giocatori.username=$1',
+                    [username], (error, results) => {
                         if (error) {
                             console.log(error);
-                            return cb(error, null);
+                            return reject(error);
                         }
+                        var partitaInfo = JSON.parse(JSON.stringify(results.rows))[0];
 
-                        const infoGiocatori = JSON.parse(JSON.stringify(results.rows));
-                        var toSave = [];
+                        if (partitaInfo) {
+                            this.getInfoGiocatori(partitaInfo.codice_lobby)
+                                .then(results => {
+                                    const infoGiocatori = JSON.parse(JSON.stringify(results.rows));
+                                    var toSave = [];
 
-                        infoGiocatori.forEach(element => {
-                            if (element.info)
-                                toSave.push(element.info);
-                        });
+                                    infoGiocatori.forEach(element => {
+                                        if (element.info)
+                                            toSave.push(element.info);
+                                    });
 
-                        if (toSave.length > 0)
-                            partitaInfo.info = { "giocatori": toSave };
-                        else
-                            partitaInfo.info = null;
+                                    if (toSave.length > 0)
+                                        partitaInfo.info = { "giocatori": toSave };
+                                    else
+                                        partitaInfo.info = null;
 
-                        cb(error, partitaInfo);
+                                    return resolve(partitaInfo);
+                                })
+                                .catch(error => {
+                                    console.log(error);
+                                    return reject(error);
+                                });
+                        } else return resolve(partitaInfo);
                     });
-                } else
-                    cb(error, partitaInfo);
+            })
+            .catch(error => {
+                console.log(error);
+                return reject(error);
             });
-    });
+    })
 }
 
 /**
  * Salva nel Database in formato JSON le Informazioni aggiornate relative ad un Giocatore.
  * @param {string} username Username del Giocatore
  * @param {*} infoGiocatore Informazioni della partita dal punto di vista del Giocatore
- * @param {*} response 
  */
-exports.salvaInfoGiocatore = (username, infoGiocatore, response) => {
-    this.getInfoPartita(username, (error, partitaInfo) => {
-        if (error) {
-            console.log(error);
-            return response.status(500).send(messaggi.SERVER_ERROR);
-        }
-        if (partitaInfo == null || partitaInfo == undefined)
-            return response.status(404).send(messaggi.PARTITA_NON_TROVATA_ERROR);
+exports.salvaInfoGiocatore = (username, infoGiocatore) => {
+    return new Promise((resolve, reject) => {
+        var partitaInfo;
+        this.getInfoPartita(username)
+            .then(data => {
+                partitaInfo = data;
+                if (partitaInfo == null || partitaInfo == undefined)
+                    return reject(messaggi.PARTITA_NON_TROVATA_ERROR);
+                return game.getInfoGioco(partitaInfo.id_gioco);
+            })
+            .then(results => {
+                const gioco = JSON.parse(JSON.stringify(results.rows))[0];
 
-        game.getInfoGioco(partitaInfo.id_gioco, (error, results) => {
-            if (error) {
+                if (gioco.tipo == "TURNI" && partitaInfo.giocatore_corrente != username)
+                    return reject('Devi aspettare il tuo turno!');
+                else
+                    return salvaInformazioni(username, infoGiocatore);
+            })
+            .then(_ => resolve())
+            .catch(error => {
                 console.log(error);
-                return response.status(500).send(messaggi.SERVER_ERROR);
-            }
-
-            tmp = JSON.parse(JSON.stringify(results.rows));
-            const gioco = tmp[0];
-
-            if (gioco.tipo == "TURNI" && partitaInfo.giocatore_corrente != username)
-                return response.status(401).send('Devi aspettare il tuo turno!');
-            else
-                salvaInformazioni(username, partitaInfo, infoGiocatore, response);
-        })
+                return reject(messaggi.SERVER_ERROR);
+            });
     })
 }
 
 /**
  * Termina la Partita, impostando il valore *"terminata"* della Partita a *true*.
  * @param {*} username Username del Giocatore che ha terminato per primo la Partita
- * @param {*} response 
  */
-exports.terminaPartita = (username, response) => {
-    this.getInfoPartita(username, (error, partitaInfo) => {
-        if (error) {
-            console.log(error);
-            return response.status(500).send(messaggi.SERVER_ERROR);
-        }
-        if (partitaInfo == null || partitaInfo == undefined)
-            return response.status(404).send(messaggi.PARTITA_NON_TROVATA_ERROR);
+exports.terminaPartita = (username) => {
+    return new Promise((resolve, reject) => {
+        this.getInfoPartita(username)
+            .then(partitaInfo => {
+                if (partitaInfo == null || partitaInfo == undefined)
+                    return reject(messaggi.PARTITA_NON_TROVATA_ERROR);
 
-        db.pool.query('UPDATE public.partite SET terminata = $1 WHERE codice = $2',
-            [true, partitaInfo.codice], (error, results) => {
-                if (error) {
-                    console.log(error);
-                    return response.status(500).send(messaggi.SERVER_ERROR);
-                }
+                db.pool.query('UPDATE public.partite SET terminata = $1 WHERE codice = $2',
+                    [true, partitaInfo.codice], (error, results) => {
+                        if (error) {
+                            console.log(error);
+                            return reject(messaggi.SERVER_ERROR);
+                        }
 
-                lobby.terminaPartita(partitaInfo.codice_lobby, response);
+                        return lobby.terminaPartita(partitaInfo.codice_lobby);
+                    });
+            })
+            .then(_ => { resolve() })
+            .catch(error => {
+                console.log(error);
+                return reject(messaggi.SERVER_ERROR);
             });
     })
 }

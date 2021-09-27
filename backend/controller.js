@@ -9,59 +9,34 @@ exports.controllaRisultatoQuery = (results) => {
 }
 
 /** 
- * Controlla che il parametro passato sia diverso da null.
- * @param {*} toControl Dato da controllare
- * @param {String} errorText Errore da stampare
+ * Controlla che la variabile passata sia diversa da null.
+ * @param {*} toControl Variabile da controllare
+ * @returns true se la variabile è uguale a null, false altrimenti
  */
-exports.controllaNotNull = function (toControl, errorText) {
-    if (toControl == null) throw errorText;
+exports.controllaNotNull = function (toControl) {
+    return (toControl == null);
 }
 
 /**
  * Controlla che la password sia compresa tra 8 e 16 caratteri.
  * @param {String} password password da controllare
+ * @returns true se la password non è valida, false altrimenti 
  */
 exports.controllaPassword = function (password) {
-    if (password.trim() == "" || password.length < 8 || password.length > 16)
-        throw "La password deve essere compresa tra 8 e 16 caratteri.";
+    return (password.trim() == "" || password.length < 8 || password.length > 16);
 }
 
 /**
- * Controlla che il parametro passato sia diverso da null o dalla stringa vuota.
+ * Controlla che la stringa passata sia diversa da null o dalla stringa vuota.
  * @param {String} toControl Dato da controllare
- * @param {String} errorText Errore da stampare
+ * @returns true se la stringa non è valida, false altrimenti
  */
-exports.controllaString = function (toControl, errorText) {
-    if (toControl == null || toControl.trim() == "") throw errorText;
+exports.controllaString = function (toControl) {
+    return (toControl == null || toControl.trim() == "");
 }
 
 /**
- * Controlla il nome, cognome e username di un Account
- * @param {String} newNome il nuovo nome dell'account
- * @param {String} newCognome il nuovo cognome dell'account
- * @param {String} newUsername il nuovo username dell'account
- */
-exports.controllaDatiAccount = function (newNome, newCognome, newUsername) {
-    this.controllaString(newUsername, "Il nuovo username non è valido");
-    this.controllaString(newNome, "Il nuovo nome non è valido");
-    this.controllaString(newCognome, "Il nuovo cognome non è valido");
-}
-
-/**
- * Controlla i dati di un account compreso il tipo
- * @param {String} newNome  il nuovo nome dell'account
- * @param {String} newCognome  il nuovo cognome dell'account
- * @param {String} newUsername  il nuovo username nome dell'account
- * @param {String} newTipo  il nuovo tipo dell'account
- */
-exports.controllaDatiAccountAsAdmin = function (newNome, newCognome, newUsername, newTipo) {
-    this.controllaDatiAccount(newNome, newCognome, newUsername);
-    //TODO: controlla bene
-    this.controllaString(newTipo, "Il nuovo tipo non è valido");
-}
-
-/**
- * Controlla i dati di un gioco
+ * Controlla i dati di un gioco.
  * @param {String} nome 
  * @param {String} tipo 
  * @param {*} minGiocatori 
@@ -71,15 +46,27 @@ exports.controllaDatiAccountAsAdmin = function (newNome, newCognome, newUsername
  * @param {String} regolamento 
  */
 exports.controllaDatiGioco = function (nome, tipo, minGiocatori, maxGiocatori, link, attivo, regolamento) {
-    this.controllaString(nome, "Il nome del gioco non è valido");
-    this.controllaString(link, "Il link del gioco non è valido");
-    if (regolamento) this.controllaString(regolamento, "Il regolamento del gioco non è valido");
+    return new Promise((resolve, reject) => {
+        if (exports.controllaString(nome))
+            return reject("Il nome del gioco non è valido");
 
-    if (Number.isInteger(minGiocatori) && Number.isInteger(maxGiocatori)) {
-        if (minGiocatori < 1 || maxGiocatori < 1) throw "Il numero minimo o massimo dei giocatori non può essere minore di uno!";
-        else if (minGiocatori > maxGiocatori) throw "Il numero minimo dei giocatori non può essere maggiore del numero massimo!";
-    } else throw "Il numero minimo o massimo dei giocatori deve essere un intero!";
+        if (exports.controllaString(link))
+            return reject("Il link del gioco non è valido");
 
-    if (tipo != 'TURNI' && tipo != 'NORMALE') throw "Il tipo di gioco non è valido!";
-    if (typeof attivo != "boolean") throw "Il parametro attivo non è valido!";
+        if (regolamento)
+            if (exports.controllaString(regolamento))
+                return reject("Il regolamento del gioco non è valido");
+
+        if (Number.isInteger(minGiocatori) && Number.isInteger(maxGiocatori)) {
+            if (minGiocatori < 1 || maxGiocatori < 1)
+                return reject("Il numero minimo o massimo dei giocatori non può essere minore di uno!");
+            else if (minGiocatori > maxGiocatori)
+                return reject("Il numero minimo dei giocatori non può essere maggiore del numero massimo!");
+        } else return reject("Il numero minimo o massimo dei giocatori deve essere un intero!");
+
+        if (tipo != 'TURNI' && tipo != 'NORMALE') return reject("Il tipo di gioco non è valido!");
+        if (typeof attivo != "boolean") return reject("Il parametro attivo non è valido!");
+
+        return resolve();
+    })
 }

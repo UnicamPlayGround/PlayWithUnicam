@@ -6,34 +6,39 @@ const messaggi = require('./messaggi');
 /**
  * Ritorna la lista degli Utenti che hanno tipo diverso da "ADMIN".
  * @param {*} username L'username del admin che fa la richiesta
- * @param {*} cb Callback
  * @returns il risultato della query
  */
-exports.getUtenti = (username, cb) => {
-    return db.pool.query('select username, nome, cognome, tipo from public.utenti where username <> $1',
-        [username], (error, results) => {
-            cb(error, results)
-        });
+exports.getUtenti = (username) => {
+    return new Promise((resolve, reject) => {
+        db.pool.query('select username, nome, cognome, tipo from public.utenti where username <> $1',
+            [username], (error, results) => {
+                if (error)
+                    return reject(error);
+                else
+                    return resolve(results);
+            });
+    })
 }
 
 /**
  * Elimina un gruppo di Utenti.
  * @param {*} utenti Utenti da eliminare
- * @param {*} response 
  */
-exports.eliminaUtenti = (utenti, response) => {
-    const usersToDelete = utenti.split(",");
+exports.eliminaUtenti = (utenti) => {
+    return new Promise((resolve, reject) => {
+        const usersToDelete = utenti.split(",");
 
-    usersToDelete.forEach(username => {
-        db.pool.query('delete from public.utenti where username = $1',
-            [String(username)], (error, results) => {
-                if (error) {
-                    console.log(error);
-                    return response.status(400).send('Errore nella query');
-                }
-            });
-    });
-    return response.status(200).send({ 'esito': "1" });
+        usersToDelete.forEach(username => {
+            db.pool.query('delete from public.utenti where username = $1',
+                [String(username)], (error, results) => {
+                    if (error) {
+                        console.log(error);
+                        return reject('Errore nell\'eliminazione dell\'utente: ' + username);
+                    }
+                });
+        });
+        return resolve();
+    })
 }
 
 /**
@@ -42,23 +47,30 @@ exports.eliminaUtenti = (utenti, response) => {
  * @param {string} newUsername Nuovo Username
  * @param {string} nome Nuovo Nome da impostare
  * @param {string} cognome Nuovo Cognome da impostare
- * @param {*} response 
  */
-exports.modificaUtente = (username, newUsername, nome, cognome, response) => {
-    controller.controllaString(username, "L'username non è valido");
-    controller.controllaDatiAccount(newUsername, nome, cognome);
+exports.modificaUtente = (username, newUsername, nome, cognome) => {
+    return new Promise((resolve, reject) => {
+        if (controller.controllaString(username))
+            return reject("L'username non è valido");
+        if (controller.controllaString(newUsername))
+            return reject("Il nuovo username non è valido");
+        if (controller.controllaString(newNome))
+            return reject("Il nuovo nome non è valido");
+        if (controller.controllaString(newCognome))
+            return reject("Il nuovo cognome non è valido");
 
-    if (username === newUsername)
-        utente.modificaNomeCognome(username, nome, cognome, response);
-    else {
-        utente.modificaUsername(username, newUsername, response, (error, results) => {
-            if (error) {
-                console.log(error);
-                return response.status(500).send(messaggi.SERVER_ERROR);
-            }
-            utente.modificaNomeCognome(newUsername, nome, cognome, response);
-        })
-    }
+        if (username === newUsername)
+            utente.modificaNomeCognome(username, nome, cognome).then(_ => resolve());
+        else {
+            utente.modificaUsername(username, newUsername)
+                .then(_ => { return utente.modificaNomeCognome(newUsername, nome, cognome) })
+                .then(_ => resolve())
+                .catch(error => {
+                    console.log(error);
+                    return reject(messaggi.SERVER_ERROR);
+                });
+        }
+    })
 }
 
 //TODO: fare metodo e REST che modifica il tipo
