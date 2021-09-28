@@ -9,11 +9,19 @@ const ERRORE_JWT = "Errore, JWT non valido! Rieffettua il login.";
  */
 const SERVER_ERROR = "Server Error!";
 
+//--------------------------------- UTENTE ---------------------------------
+
 /**
  * Messaggio di errore:
  * * l'Utente non è stato trovato.
  */
 const UTENTE_NON_TROVATO_ERROR = "Utente non trovato";
+
+/**
+ * Messaggio di errore:
+ * * la password non è valida per effettuare il login.
+ */
+const PASSWORD_NON_VALIDA_ERROR = "Password non valida!";
 
 //--------------------------------- LOBBY ---------------------------------
 
@@ -61,6 +69,7 @@ module.exports = {
     ERRORE_JWT,
     SERVER_ERROR,
     UTENTE_NON_TROVATO_ERROR,
+    PASSWORD_NON_VALIDA_ERROR,
     PARTECIPAZIONE_LOBBY_ERROR,
     CREAZIONE_LOBBY_ERROR,
     CREAZIONE_PARTITA_ERROR,
