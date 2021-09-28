@@ -61,7 +61,7 @@ const routes: Routes = [
     loadChildren: () => import('./authentication/modal-login/modal-login.module').then(m => m.ModalLoginPageModule)
   },
   {
-    path: 'goose_game/editor',
+    path: 'editor-goose-game',
     loadChildren: () => import('./mgp_games/goose-game/editor/editor.module').then(m => m.EditorPageModule),
   }
 ];
