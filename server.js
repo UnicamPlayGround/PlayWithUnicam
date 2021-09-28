@@ -11,6 +11,7 @@ const partita = require('./backend/multiplayer/partita');
 const utente = require('./backend/utente');
 const giocatore = require('./backend/multiplayer/giocatore');
 const messaggi = require('./backend/messaggi');
+const errroManager = require('./backend/error-manager');
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -84,6 +85,14 @@ function sendAccessToken(response, toSend) {
 }
 
 /**
+ * Invia al Client l'esito positivo dell'operazione effettuata.
+ * @param {*} response 
+ */
+function sendEsitoPositivo(response) {
+    response.status(200).send({ 'esito': "1" });
+}
+
+/**
  * Imposta il formato della Data delle Lobby.
  * @param {*} lobbies 
  */
@@ -126,9 +135,9 @@ app.get('/games', (req, res) => {
             .then(results => sendDataInJSON(res, results))
             .catch(err => {
                 console.log(err);
-                return res.status(500).send(messaggi.SERVER_ERROR);
+                return errroManager.handleError(err, res);
             });
-    } else return res.status(401).send(messaggi.ERRORE_JWT);
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 })
 
 /**
@@ -142,9 +151,9 @@ app.get('/games/admin', (req, res) => {
             .then(results => sendDataInJSON(res, results))
             .catch(err => {
                 console.log(err);
-                return res.status(500).send(messaggi.SERVER_ERROR);
+                return errroManager.handleError(err, res);
             });
-    } else return res.status(401).send(messaggi.ERRORE_JWT);
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 })
 
 /**
@@ -159,13 +168,10 @@ app.get('/game/status', (req, res) => {
                 res.status(200).send(toReturn);
             })
             .catch(err => {
-                if (err == messaggi.MINIMO_GIOCATORI_ERROR)
-                    return res.status(403).send(messaggi.MINIMO_GIOCATORI_ERROR);
-
                 console.log(err);
-                return res.status(500).send(messaggi.SERVER_ERROR);
+                return errroManager.handleError(err, res);
             });
-    } else return res.status(401).send(messaggi.ERRORE_JWT);
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -177,9 +183,9 @@ app.get('/game/config', (req, res) => {
             .then(results => sendDataInJSON(res, results))
             .catch(err => {
                 console.log(err);
-                return res.status(500).send(messaggi.SERVER_ERROR);
+                return errroManager.handleError(err, res);
             });
-    } else return res.status(401).send(messaggi.ERRORE_JWT);
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -191,9 +197,9 @@ app.get('/admin/utenti', (req, res) => {
             .then(results => sendDataInJSON(res, results))
             .catch(err => {
                 console.log(err);
-                return res.status(500).send(messaggi.SERVER_ERROR);
+                return errroManager.handleError(err, res);
             });
-    } else return res.status(401).send(messaggi.ERRORE_JWT);
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -211,9 +217,9 @@ app.get('/lobby/pubbliche', (req, res) => {
             })
             .catch(err => {
                 console.log(err);
-                return res.status(500).send(messaggi.SERVER_ERROR);
+                return errroManager.handleError(err, res);
             })
-    } else return res.status(401).send(messaggi.ERRORE_JWT);
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -225,9 +231,9 @@ app.get('/lobby/giocatori/:codiceLobby', (req, res) => {
             .then(results => sendDataInJSON(res, results))
             .catch(err => {
                 console.log(err);
-                return res.status(500).send(messaggi.SERVER_ERROR);
+                return errroManager.handleError(err, res);
             })
-    } else return res.status(401).send(messaggi.ERRORE_JWT);
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -240,9 +246,9 @@ app.get('/info/utente', (req, res) => {
             .then(results => sendDataInJSON(res, results))
             .catch(err => {
                 console.log(err);
-                return res.status(500).send(messaggi.SERVER_ERROR);
+                return errroManager.handleError(err, res);
             });
-    } else return res.status(401).send(messaggi.ERRORE_JWT);
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -253,15 +259,15 @@ app.get('/lobby/info', (req, res) => {
         lobby.cercaLobbyByUsername(jwt.decode(req.headers.token).username)
             .then(results => {
                 if (controller.controllaRisultatoQuery(results))
-                    return res.status(400).send(messaggi.PARTECIPAZIONE_LOBBY_ERROR);
+                    return errroManager.handleError(messaggi.PARTECIPAZIONE_LOBBY_ERROR, res);
 
                 sendDataInJSON(res, results);
             })
             .catch(err => {
                 console.log(err);
-                return res.status(500).send(messaggi.SERVER_ERROR);
+                return errroManager.handleError(err, res);
             })
-    } else return res.status(401).send(messaggi.ERRORE_JWT);
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -273,9 +279,9 @@ app.get('/lobby/giocatori', (req, res) => {
             .then(results => sendDataInJSON(res, results))
             .catch(err => {
                 console.log(err);
-                return res.status(500).send(messaggi.SERVER_ERROR);
+                return errroManager.handleError(err, res);
             })
-    } else return res.status(401).send(messaggi.ERRORE_JWT);
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -288,12 +294,12 @@ app.get('/lobby/giocatori', (req, res) => {
 app.delete('/lobby/admin/espelli', (req, res) => {
     if (verificaJWT(req.headers.token)) {
         lobby.eliminaPartecipante(jwt.decode(req.headers.token).username, req.headers.username)
-            .then(_ => { return res.status(200).send({ 'esito': "1" }); })
+            .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);
-                return res.status(400).send(err);
+                return errroManager.handleError(err, res);
             });
-    } else return res.status(401).send(messaggi.ERRORE_JWT);
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -302,12 +308,12 @@ app.delete('/lobby/admin/espelli', (req, res) => {
 app.delete('/lobby/abbandona', (req, res) => {
     if (verificaJWT(req.headers.token)) {
         lobby.abbandonaLobby(jwt.decode(req.headers.token).username, res)
-            .then(_ => { return res.status(200).send({ 'esito': "1" }); })
+            .then(_ => sendEsitoPositivo(res))
             .catch(error => {
                 console.log(error);
-                return res.status(400).send(error);
+                return errroManager.handleError(err, res);
             });
-    } else return res.status(401).send(messaggi.ERRORE_JWT);
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -316,12 +322,12 @@ app.delete('/lobby/abbandona', (req, res) => {
 app.delete('/admin/utenti', (req, res) => {
     if (verificaAdmin(req.headers.token)) {
         admin.eliminaUtenti(req.headers.users_to_delete)
-            .then(_ => res.status(200).send({ 'esito': "1" }))
+            .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);
-                return res.status(400).send(err);
+                return errroManager.handleError(err, res);
             });
-    } else return res.status(401).send(messaggi.ERRORE_JWT);
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -334,12 +340,12 @@ app.delete('/admin/utenti', (req, res) => {
 app.put('/admin/utenti/:username', (req, res) => {
     if (verificaAdmin(req.body.token)) {
         admin.modificaUtente(req.params.username, req.body.new_username, req.body.new_nome, req.body.new_cognome)
-            .then(_ => res.status(200).send({ 'esito': "1" }))
+            .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);
-                return res.status(400).send(err);
+                return errroManager.handleError(err, res);
             });;
-    } else return res.status(401).send(messaggi.ERRORE_JWT);
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -348,32 +354,27 @@ app.put('/admin/utenti/:username', (req, res) => {
 app.put('/player/profilo', (req, res) => {
     if (verificaJWT(req.body.token)) {
         utente.modificaNomeCognome(jwt.decode(req.body.token).username, req.body.nome, req.body.cognome)
-            .then(_ => res.status(200).send({ 'esito': "1" }))
+            .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);
-                res.status(500).send(messaggi.SERVER_ERROR);
+                return errroManager.handleError(err, res);
             });
-    } else return res.status(401).send(messaggi.ERRORE_JWT);
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
  * REST - Modifica username di un Utente
  */
 app.put('/player/username', (req, res) => {
-    try {
-        if (verificaJWT(req.body.token)) {
-            const decodedToken = jwt.decode(req.body.token);
-            utente.modificaUsername(decodedToken.username, req.body.new_username)
-                .then(_ => sendAccessToken(res, { username: req.body.new_username, tipo: decodedToken.tipo }))
-                .catch(err => {
-                    console.log(err);
-                    return res.status(400).send('Errore dati query');
-                });
-        } else return res.status(401).send(messaggi.ERRORE_JWT);
-    } catch (error) {
-        console.log(error);
-        return res.status(400).send(error);
-    }
+    if (verificaJWT(req.body.token)) {
+        const decodedToken = jwt.decode(req.body.token);
+        utente.modificaUsername(decodedToken.username, req.body.new_username)
+            .then(_ => sendAccessToken(res, { username: req.body.new_username, tipo: decodedToken.tipo }))
+            .catch(err => {
+                console.log(err);
+                return errroManager.handleError(err, res);
+            });
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -382,12 +383,12 @@ app.put('/player/username', (req, res) => {
 app.put('/lobby', (req, res) => {
     if (verificaJWT(req.body.token)) {
         lobby.modificaLobby(jwt.decode(req.body.token).username, req.body.pubblica)
-            .then(_ => res.status(200).send({ 'esito': "1" }))
+            .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);
-                return res.status(400).send(err);
+                return errroManager.handleError(err, res);
             });
-    } else return res.status(401).send(messaggi.ERRORE_JWT);
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -397,12 +398,12 @@ app.put('/modifica/password', (req, res) => {
     const token = req.body.token;
     if (verificaJWT(token)) {
         utente.cambiaPassword(req.body.new_password, req.body.old_password, jwt.decode(token).username)
-            .then(_ => res.status(200).send({ 'esito': "1" }))
+            .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);
-                return res.status(400).send(err);
+                return errroManager.handleError(err, res);
             });
-    } else return res.status(401).send(messaggi.ERRORE_JWT);
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -410,19 +411,14 @@ app.put('/modifica/password', (req, res) => {
  */
 app.put('/game/modifica', (req, res) => {
     if (verificaAdmin(req.body.token)) {
-        try {
-            game.modificaGioco(req.body.id, req.body.nome, req.body.tipo, req.body.minGiocatori,
-                req.body.maxGiocatori, req.body.link, req.body.attivo, req.body.config, req.body.regolamento)
-                .then(_ => { return res.status(200).send({ 'esito': "1" }); })
-                .catch(error => {
-                    console.log(error);
-                    return res.status(400).send(error);
-                });
-        } catch (error) {
-            console.log(error);
-            return res.status(400).send(error);
-        }
-    } else return res.status(401).send(messaggi.ERRORE_JWT);
+        game.modificaGioco(req.body.id, req.body.nome, req.body.tipo, req.body.minGiocatori,
+            req.body.maxGiocatori, req.body.link, req.body.attivo, req.body.config, req.body.regolamento)
+            .then(_ => sendEsitoPositivo(res))
+            .catch(error => {
+                console.log(error);
+                return errroManager.handleError(err, res);
+            });
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -431,12 +427,12 @@ app.put('/game/modifica', (req, res) => {
 app.put('/game/save', (req, res) => {
     if (verificaJWT(req.body.token)) {
         partita.salvaInfoGiocatore(jwt.decode(req.body.token).username, req.body.info_giocatore)
-            .then(_ => { return res.status(200).send({ 'esito': "1" }); })
+            .then(_ => sendEsitoPositivo(res))
             .catch(error => {
                 console.log(error);
-                return res.status(400).send(error);
+                return errroManager.handleError(err, res);
             });
-    } else return res.status(401).send(messaggi.ERRORE_JWT);
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -445,12 +441,12 @@ app.put('/game/save', (req, res) => {
 app.put('/game/fine-turno', (req, res) => {
     if (verificaJWT(req.body.token)) {
         partita.cambiaGiocatoreCorrente(jwt.decode(req.body.token).username)
-            .then(_ => { return res.status(200).send({ 'esito': "1" }); })
+            .then(_ => sendEsitoPositivo(res))
             .catch(error => {
                 console.log(error);
-                return res.status(400).send(error);
+                return errroManager.handleError(err, res);
             });
-    } else return res.status(401).send(messaggi.ERRORE_JWT);
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -459,12 +455,12 @@ app.put('/game/fine-turno', (req, res) => {
 app.put('/partita/termina', (req, res) => {
     if (verificaJWT(req.body.token)) {
         partita.terminaPartita(jwt.decode(req.body.token).username)
-            .then(_ => { return res.status(200).send({ 'esito': "1" }); })
+            .then(_ => sendEsitoPositivo(res))
             .catch(error => {
                 console.log(error);
-                return res.status(400).send(error);
+                return errroManager.handleError(err, res);
             });
-    } else return res.status(401).send(messaggi.ERRORE_JWT);
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -477,18 +473,20 @@ app.put('/partita/termina', (req, res) => {
 app.post('/login/utente', (req, res) => {
     utente.cercaUtenteByUsername(req.body.username)
         .then(results => {
-            if (controller.controllaRisultatoQuery(results)) return res.status(404).send(messaggi.UTENTE_NON_TROVATO_ERROR);
+            if (controller.controllaRisultatoQuery(results))
+                return errroManager.handleError(messaggi.UTENTE_NON_TROVATO_ERROR, res);
 
             const user = JSON.parse(JSON.stringify(results.rows));
 
             const toControl = bcrypt.hashSync(req.body.password + process.env.SECRET_PWD, user[0].salt);
-            if (!(user[0].password == toControl)) return res.status(401).send('Password non valida!');
+            if (!(user[0].password == toControl))
+                return errroManager.handleError('Password non valida!', res);
 
             sendAccessToken(res, { username: user[0].username, tipo: user[0].tipo });
         })
         .catch(err => {
             console.log(err);
-            return res.status(500).send(messaggi.SERVER_ERROR);
+            return errroManager.handleError(err, res);
         })
 });
 
@@ -499,19 +497,21 @@ app.post('/login/ospiti', (req, res) => {
     if (req.body.username.trim() != "") {
         utente.cercaUtenteByUsername(req.body.username)
             .then(results => {
-                if (!controller.controllaRisultatoQuery(results)) return res.status(404).send("L'username " + req.body.username + " è già in uso!");
+                if (!controller.controllaRisultatoQuery(results))
+                    return errroManager.handleError("L'username " + req.body.username + " è già in uso!", res);
                 return utente.cercaOspiteByUsername(req.body.username);
             })
             .then(results => {
-                if (!controller.controllaRisultatoQuery(results)) return res.status(404).send("L'username " + req.body.username + " è già in uso!");
+                if (!controller.controllaRisultatoQuery(results))
+                    return errroManager.handleError("L'username " + req.body.username + " è già in uso!", res);
                 return utente.creaOspite(req.body.username);
             })
             .then(_ => sendAccessToken(res, { username: req.body.username, tipo: "OSPITE" }))
             .catch(err => {
                 console.log(err);
-                return res.status(500).send(messaggi.SERVER_ERROR);
+                return errroManager.handleError(err, res);
             })
-    } else { return res.status(400).send("L'username deve contenere dei caratteri!"); }
+    } else return errroManager.handleError("L'username deve contenere dei caratteri!", res);
 })
 
 /**
@@ -522,22 +522,22 @@ app.post('/register/utente', (req, res) => {
         utente.cercaOspiteByUsername(req.body.username)
             .then(results => {
                 if (!controller.controllaRisultatoQuery(results))
-                    return res.status(404).send("L'username " + req.body.username + " è già in uso!");
+                    return errroManager.handleError("L'username " + req.body.username + " è già in uso!", res);
 
                 return utente.cercaUtenteByUsername(req.body.username);
             })
             .then(results => {
                 if (!controller.controllaRisultatoQuery(results))
-                    return res.status(404).send("L'username " + req.body.username + " è già in uso!");
+                    return errroManager.handleError("L'username " + req.body.username + " è già in uso!", res);
 
                 return utente.creaUtente(req.body.username, req.body.nome, req.body.cognome, req.body.password);
             })
-            .then(_ => { return res.status(200).send({ 'esito': "1" }); })
+            .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);
-                return res.status(500).send(messaggi.SERVER_ERROR);
+                return errroManager.handleError(err, res);
             });
-    } else { return res.status(400).send("L'username deve contenere dei caratteri!"); }
+    } else return errroManager.handleError("L'username deve contenere dei caratteri!", res);
 });
 
 /**
@@ -550,41 +550,36 @@ app.post('/register/ospite-to-utente', (req, res) => {
             .then(_ => { return utente.cercaOspiteByUsername(req.body.username); })
             .then(results => {
                 if (!controller.controllaRisultatoQuery(results))
-                    return res.status(404).send("L'username " + req.body.username + " è già in uso!");
+                    return errroManager.handleError("L'username " + req.body.username + " è già in uso!", res);
 
                 return utente.cercaUtenteByUsername(req.body.username);
             })
             .then(results => {
                 if (!controller.controllaRisultatoQuery(results))
-                    return res.status(404).send("L'username " + req.body.username + " è già in uso!");
+                    return errroManager.handleError("L'username " + req.body.username + " è già in uso!", res);
 
                 return utente.creaUtente(req.body.username, req.body.nome, req.body.cognome, req.body.password, res);
             })
-            .then(_ => { return res.status(200).send({ 'esito': "1" }); })
+            .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);
-                return res.status(500).send(messaggi.SERVER_ERROR);
+                return errroManager.handleError(err, res);
             })
-    } else return res.status(401).send(messaggi.ERRORE_JWT);
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
  * REST - Crea una Lobby
  */
 app.post('/lobby', (req, res) => {
-    try {
-        if (verificaJWT(req.body.token)) {
-            lobby.creaLobby(jwt.decode(req.body.token).username, req.body.idGioco, req.body.pubblica)
-                .then(_ => { return res.status(200).send({ 'esito': "1" }); })
-                .catch(err => {
-                    console.log(err);
-                    return res.status(500).send(err);
-                });
-        } else return res.status(401).send(messaggi.ERRORE_JWT);
-    } catch (error) {
-        console.log(error);
-        return res.status(400).send(error);
-    }
+    if (verificaJWT(req.body.token)) {
+        lobby.creaLobby(jwt.decode(req.body.token).username, req.body.idGioco, req.body.pubblica)
+            .then(_ => sendEsitoPositivo(res))
+            .catch(err => {
+                console.log(err);
+                return errroManager.handleError(err, res);
+            });
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -593,31 +588,26 @@ app.post('/lobby', (req, res) => {
 app.post('/lobby/partecipa', (req, res) => {
     if (verificaJWT(req.body.token)) {
         lobby.partecipaLobby(jwt.decode(req.body.token).username, req.body.codice_lobby)
-            .then(_ => { return res.status(200).send({ 'esito': "1" }); })
+            .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);
-                return res.status(500).send(err);
+                return errroManager.handleError(err, res);
             });
-    } else return res.status(401).send(messaggi.ERRORE_JWT);
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
  * REST - Effettua l'operazione di Ping
  */
 app.post('/lobby/ping', (req, res) => {
-    try {
-        if (verificaJWT(req.body.token)) {
-            giocatore.ping(jwt.decode(req.body.token).username)
-                .then(_ => { return res.status(200).send({ 'esito': "1" }); })
-                .catch(err => {
-                    console.log(err);
-                    return res.status(500).send(err);
-                });
-        } else return res.status(401).send(messaggi.ERRORE_JWT);
-    } catch (error) {
-        console.log(error);
-        return res.status(400).send(error);
-    }
+    if (verificaJWT(req.body.token)) {
+        giocatore.ping(jwt.decode(req.body.token).username)
+            .then(_ => sendEsitoPositivo(res))
+            .catch(err => {
+                console.log(err);
+                return errroManager.handleError(err, res);
+            });
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -626,12 +616,12 @@ app.post('/lobby/ping', (req, res) => {
 app.post('/partita', (req, res) => {
     if (verificaJWT(req.body.token)) {
         partita.creaPartita(jwt.decode(req.body.token).username, res)
-            .then(_ => { return res.status(200).send({ 'esito': "1" }); })
+            .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);
-                return res.status(500).send(messaggi.SERVER_ERROR);
+                return errroManager.handleError(err, res);
             });
-    } else return res.status(401).send(messaggi.ERRORE_JWT);
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -640,12 +630,12 @@ app.post('/partita', (req, res) => {
 app.post('/game/crea', (req, res) => {
     if (verificaAdmin(req.body.token)) {
         game.creaGioco(req.body.nome, req.body.tipo, req.body.minGiocatori, req.body.maxGiocatori, req.body.link, req.body.attivo, req.body.config, req.body.regolamento)
-            .then(_ => { return res.status(200).send({ 'esito': "1" }); })
+            .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);
-                return res.status(400).send(err);
+                return errroManager.handleError(err, res);
             });
-    } else return res.status(401).send(messaggi.ERRORE_JWT);
+    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 app.get('/*', function (req, res) {
