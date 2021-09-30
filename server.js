@@ -541,8 +541,7 @@ app.post('/register/utente', (req, res) => {
 });
 
 /**
- * REST - Registrazione dell'Utente
- * //TODO
+ * REST - Conversione di un account di tipo "Ospite" ad uno di tipo "Utente"
  */
 app.post('/register/ospite-to-utente', (req, res) => {
     if (verificaOspite(req.body.token)) {

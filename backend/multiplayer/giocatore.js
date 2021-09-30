@@ -133,6 +133,22 @@ exports.eliminaGiocatore = (username) => {
 }
 
 /**
+ * Ritorna l'insieme delle informazioni di una partita salvate in ogni giocatore della lobby.
+ * @param {*} codiceLobby Codice della Lobby
+ */
+exports.getInfoGiocatori = (codiceLobby) => {
+    return new Promise((resolve, reject) => {
+        db.pool.query('SELECT info FROM public.giocatori WHERE codice_lobby=$1',
+            [codiceLobby], (error, results) => {
+                if (error)
+                    return reject(error);
+                else
+                    return resolve(results);
+            });
+    })
+}
+
+/**
  * Esegue l'operazione di Ping per permettere al Server di capire quali Giocatori risultino inattivi.
  * @param {string} username Username del Giocatore che sta effettuando il Ping
  */

@@ -2,6 +2,7 @@ const db = require('../database');
 const controller = require('../controller');
 const game = require('./game');
 const lobby = require('./lobby');
+const giocatore = require('./giocatore');
 const messaggi = require('../messaggi');
 
 //TODO refactor con creaCodice di Lobby
@@ -214,20 +215,6 @@ exports.creaPartita = (adminLobby) => {
     })
 }
 
-//TODO commentare
-exports.getInfoGiocatori = (codiceLobby) => {
-    return new Promise((resolve, reject) => {
-        db.pool.query('SELECT info FROM public.giocatori WHERE codice_lobby=$1',
-            [codiceLobby], (error, results) => {
-                if (error)
-                    return reject(error);
-                else
-                    return resolve(results);
-            });
-    })
-
-}
-
 /**
  * Ritorna le Informazioni della Partita.
  * @param {string} username Username del Giocatore collegato alla Partita
@@ -248,7 +235,7 @@ exports.getInfoPartita = (username) => {
                         var partitaInfo = JSON.parse(JSON.stringify(results.rows))[0];
 
                         if (partitaInfo) {
-                            this.getInfoGiocatori(partitaInfo.codice_lobby)
+                            giocatore.getInfoGiocatori(partitaInfo.codice_lobby)
                                 .then(results => {
                                     const infoGiocatori = JSON.parse(JSON.stringify(results.rows));
                                     var toSave = [];

@@ -16,7 +16,6 @@ function creaCodice() {
  * 
  * @param {*} results Risultato della query del metodo "cercaLobbyByAdmin" 
  */
-//TODO rifare commento
 function controllaLobbyAdmin(results) {
     return new Promise((resolve, reject) => {
         if (!controller.controllaRisultatoQuery(results)) {
@@ -48,7 +47,12 @@ function eliminaGiocatore(username) {
     return giocatore.eliminaGiocatore(username);
 }
 
-//TODO commentare
+/**
+ * Esegue la query per creare una lobby.
+ * @param {*} codiceLobby Codice della lobby da creare
+ * @param {*} idGioco ID del Gioco
+ * @param {*} pubblica true se la lobby deve essere pubblica, false se deve essere privata
+ */
 function creaLobbyQuery(codiceLobby, idGioco, pubblica) {
     return new Promise((resolve, reject) => {
         db.pool.query('INSERT INTO public.lobby (codice, data_creazione, id_gioco, pubblica, partita_iniziata) VALUES ($1, $2, $3, $4, $5)',
@@ -265,7 +269,6 @@ exports.eliminaPartecipante = (admin, username) => {
  * Se l'utente era l'admin della lobby, il ruolo di admin verrà passato ad un altro partecipante.
  * @param {String} username username dell'utente che deve abbandonare la lobby
  */
-//TODO rifare commento
 exports.abbandonaLobby = (username) => {
     return new Promise((resolve, reject) => {
         this.cercaLobbyByAdmin(username)

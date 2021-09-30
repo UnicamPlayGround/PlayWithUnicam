@@ -227,7 +227,10 @@ exports.modificaUsername = (oldUsername, newUsername) => {
     })
 }
 
-//TODO da commentare
+/**
+ * Elimina l'account di un ospite.
+ * @param {*} username Username dell'ospite da eliminare
+ */
 exports.eliminaOspite = (username) => {
     return new Promise((resolve, reject) => {
         db.pool.query('DELETE FROM public.ospiti WHERE username=$1', [username], (error, results) => {
