@@ -15,10 +15,7 @@ import { LoginService } from 'src/app/services/login-service/login.service';
 export class LobbyGuestPage implements OnInit {
   lobby = { codice: null, admin_lobby: null, pubblica: false, min_giocatori: 0, max_giocatori: 0, nome: null, link: null, regolamento: null };
   giocatori = [];
-  // private timerInfoLobby;
-  // private timerGiocatori;
   private timerPing;
-  // private timerPartita;
   mostraInfoLobby = false;
   mostraInfoGioco = false;
 
@@ -31,7 +28,7 @@ export class LobbyGuestPage implements OnInit {
     private router: Router
   ) {
     this.ping();
-    this.timerPing = timerService.getTimer(() => { this.ping() }, 4000);
+    this.timerPing = timerService.getTimer(() => { this.ping() }, 2000);
 
     window.addEventListener('beforeunload', (event) => {
       //TODO vedere per Firefox

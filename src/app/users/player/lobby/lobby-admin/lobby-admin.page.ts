@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login-service/login.service';
 import jwt_decode from 'jwt-decode';
 
-
 @Component({
   selector: 'app-lobby-admin',
   templateUrl: './lobby-admin.page.html',
@@ -35,7 +34,7 @@ export class LobbyAdminPage implements OnInit {
     this.loadGiocatori();
     this.ping();
     console.log(window.location.href);
-    this.timerPing = this.timerService.getTimer(() => { this.ping() }, 4000);
+    this.timerPing = this.timerService.getTimer(() => { this.ping() }, 2000);
 
     window.addEventListener('beforeunload', (event) => {
       //TODO: vedere per Firefox
@@ -201,7 +200,7 @@ export class LobbyAdminPage implements OnInit {
     var linkCurrentURL = this.router.url;
     var newLink = linkTotale.replace(linkCurrentURL, '/lobby/join');
 
-    var link = newLink+"?codiceLobby="+this.lobby.codice;
+    var link = newLink + "?codiceLobby=" + this.lobby.codice;
     navigator.clipboard.writeText(link).then(
       () => {
         this.alertCreator.createInfoAlert("LINK COPIATO", "Il link è stato copiato correttamente, invialo agli altri giocatori!");
