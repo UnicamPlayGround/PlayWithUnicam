@@ -19,8 +19,8 @@ export class LobbyAdminPage implements OnInit {
   mostraInfoLobby = false;
   mostraInfoGioco = false;
 
-  private impossibileCopiareLink = false;
-  private link;
+  impossibileCopiareLink = false;
+  link;
 
   private timerPing;
 
@@ -204,7 +204,7 @@ export class LobbyAdminPage implements OnInit {
     var newLink = linkTotale.replace(linkCurrentURL, '/lobby/join');
     
     this.link = newLink + "?codiceLobby=" + this.lobby.codice;
-    if (this.link) {
+    if (navigator.clipboard) {
       navigator.clipboard.writeText(this.link).then(
         () => {
           this.alertCreator.createInfoAlert("LINK COPIATO", "Il link è stato copiato correttamente, invialo agli altri giocatori!");
@@ -214,6 +214,5 @@ export class LobbyAdminPage implements OnInit {
             this.alertCreator.createInfoAlert("ERRORE", "Non è stato possibile copiare il link!");
           });
     } else this.impossibileCopiareLink = true;
-    
   }
 }
