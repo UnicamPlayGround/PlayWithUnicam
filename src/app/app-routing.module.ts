@@ -63,7 +63,11 @@ const routes: Routes = [
   {
     path: 'editor-goose-game',
     loadChildren: () => import('./mgp_games/goose-game/editor/editor.module').then(m => m.EditorPageModule),
-  }
+  },
+  {
+    path: 'crosswords/editor',
+    loadChildren: () => import('./mgp_games/crosswords-puzzle/editor/editor.module').then( m => m.EditorPageModule)
+  },
 ];
 
 @NgModule({

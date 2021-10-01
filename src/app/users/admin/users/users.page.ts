@@ -199,7 +199,6 @@ export class UsersPage implements OnInit {
 
     modal.onDidDismiss().then((data) => {
       const modUser = data['data'];
-      console.log('mod_user', modUser);
 
       if (modUser)
         this.users[index] = modUser;
