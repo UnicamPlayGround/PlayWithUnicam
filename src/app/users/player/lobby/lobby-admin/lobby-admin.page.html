@@ -66,6 +66,7 @@
               </p>
               <br>
               <ion-button shape="round" expand="block" (click)="generaLink()">Condividi link</ion-button>
+              <p *ngIf="impossibileCopiareLink">{{link}}</p>
               <br>
               <ion-button shape="round" (click)="modificaLobby()" expand="block">Salva modifiche</ion-button>
             </ion-card-content>
@@ -112,6 +113,7 @@
               </p>
               <br>
               <ion-button shape="round" expand="block" (click)="generaLink()">Condividi link</ion-button>
+              <p *ngIf="impossibileCopiareLink">{{link}}</p>
               <br>
               <ion-button shape="round" (click)="modificaLobby()" expand="block">Salva modifiche</ion-button>
             </ion-card-content>

@@ -19,6 +19,9 @@ export class LobbyAdminPage implements OnInit {
   mostraInfoLobby = false;
   mostraInfoGioco = false;
 
+  private impossibileCopiareLink = false;
+  private link;
+
   private timerPing;
 
   constructor(
@@ -33,8 +36,8 @@ export class LobbyAdminPage implements OnInit {
     this.loadInfoLobby();
     this.loadGiocatori();
     this.ping();
-    console.log(window.location.href);
-    this.timerPing = this.timerService.getTimer(() => { this.ping() }, 2000);
+
+    this.timerPing = this.timerService.getTimer(() => { this.ping() }, 4000);
 
     window.addEventListener('beforeunload', (event) => {
       //TODO: vedere per Firefox
@@ -199,15 +202,18 @@ export class LobbyAdminPage implements OnInit {
     var linkTotale = window.location.href;
     var linkCurrentURL = this.router.url;
     var newLink = linkTotale.replace(linkCurrentURL, '/lobby/join');
-
-    var link = newLink + "?codiceLobby=" + this.lobby.codice;
-    navigator.clipboard.writeText(link).then(
-      () => {
-        this.alertCreator.createInfoAlert("LINK COPIATO", "Il link è stato copiato correttamente, invialo agli altri giocatori!");
-      })
-      .catch(
+    
+    this.link = newLink + "?codiceLobby=" + this.lobby.codice;
+    if (this.link) {
+      navigator.clipboard.writeText(this.link).then(
         () => {
-          this.alertCreator.createInfoAlert("ERRORE", "Non è stato possibile copiare il link!");
-        });
+          this.alertCreator.createInfoAlert("LINK COPIATO", "Il link è stato copiato correttamente, invialo agli altri giocatori!");
+        })
+        .catch(
+          () => {
+            this.alertCreator.createInfoAlert("ERRORE", "Non è stato possibile copiare il link!");
+          });
+    } else this.impossibileCopiareLink = true;
+    
   }
 }
