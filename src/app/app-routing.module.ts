@@ -61,13 +61,10 @@ const routes: Routes = [
     loadChildren: () => import('./authentication/modal-login/modal-login.module').then(m => m.ModalLoginPageModule)
   },
   {
-    path: 'editor-goose-game',
-    loadChildren: () => import('./mgp_games/goose-game/editor/editor.module').then(m => m.EditorPageModule),
-  },
-  {
     path: 'crosswords/editor',
-    loadChildren: () => import('./mgp_games/crosswords-puzzle/editor/editor.module').then( m => m.EditorPageModule)
-  },
+    loadChildren: () => import('./mgp_games/crosswords-puzzle/editor/editor.module').then(m => m.EditorPageModule)
+  }
+
 ];
 
 @NgModule({
