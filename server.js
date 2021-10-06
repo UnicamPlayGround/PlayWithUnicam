@@ -259,7 +259,7 @@ app.get('/lobby/info', (req, res) => {
         lobby.cercaLobbyByUsername(jwt.decode(req.headers.token).username)
             .then(results => {
                 if (controller.controllaRisultatoQuery(results))
-                    return errroManager.handleError(messaggi.PARTECIPAZIONE_LOBBY_ERROR, res);
+                    throw (messaggi.PARTECIPAZIONE_LOBBY_ERROR);
 
                 sendDataInJSON(res, results);
             })
@@ -474,13 +474,13 @@ app.post('/login/utente', (req, res) => {
     utente.cercaUtenteByUsername(req.body.username)
         .then(results => {
             if (controller.controllaRisultatoQuery(results))
-                return errroManager.handleError(messaggi.UTENTE_NON_TROVATO_ERROR, res);
+                throw (messaggi.UTENTE_NON_TROVATO_ERROR);
 
             const user = JSON.parse(JSON.stringify(results.rows));
 
             const toControl = bcrypt.hashSync(req.body.password + process.env.SECRET_PWD, user[0].salt);
             if (!(user[0].password == toControl))
-                return errroManager.handleError('Password non valida!', res);
+                throw ('Password non valida!');
 
             sendAccessToken(res, { username: user[0].username, tipo: user[0].tipo });
         })
@@ -498,12 +498,12 @@ app.post('/login/ospiti', (req, res) => {
         utente.cercaUtenteByUsername(req.body.username)
             .then(results => {
                 if (!controller.controllaRisultatoQuery(results))
-                    return errroManager.handleError("L'username " + req.body.username + " è già in uso!", res);
+                    throw ("L'username " + req.body.username + " è già in uso!");
                 return utente.cercaOspiteByUsername(req.body.username);
             })
             .then(results => {
                 if (!controller.controllaRisultatoQuery(results))
-                    return errroManager.handleError("L'username " + req.body.username + " è già in uso!", res);
+                    throw ("L'username " + req.body.username + " è già in uso!");
                 return utente.creaOspite(req.body.username);
             })
             .then(_ => sendAccessToken(res, { username: req.body.username, tipo: "OSPITE" }))
@@ -522,13 +522,13 @@ app.post('/register/utente', (req, res) => {
         utente.cercaOspiteByUsername(req.body.username)
             .then(results => {
                 if (!controller.controllaRisultatoQuery(results))
-                    return errroManager.handleError("L'username " + req.body.username + " è già in uso!", res);
+                    throw ("L'username " + req.body.username + " è già in uso!");
 
                 return utente.cercaUtenteByUsername(req.body.username);
             })
             .then(results => {
                 if (!controller.controllaRisultatoQuery(results))
-                    return errroManager.handleError("L'username " + req.body.username + " è già in uso!", res);
+                    throw ("L'username " + req.body.username + " è già in uso!");
 
                 return utente.creaUtente(req.body.username, req.body.nome, req.body.cognome, req.body.password);
             })
@@ -549,13 +549,13 @@ app.post('/register/ospite-to-utente', (req, res) => {
             .then(_ => { return utente.cercaOspiteByUsername(req.body.username); })
             .then(results => {
                 if (!controller.controllaRisultatoQuery(results))
-                    return errroManager.handleError("L'username " + req.body.username + " è già in uso!", res);
+                    throw ("L'username " + req.body.username + " è già in uso!");
 
                 return utente.cercaUtenteByUsername(req.body.username);
             })
             .then(results => {
                 if (!controller.controllaRisultatoQuery(results))
-                    return errroManager.handleError("L'username " + req.body.username + " è già in uso!", res);
+                    throw ("L'username " + req.body.username + " è già in uso!");
 
                 return utente.creaUtente(req.body.username, req.body.nome, req.body.cognome, req.body.password, res);
             })
