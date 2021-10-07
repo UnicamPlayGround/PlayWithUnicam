@@ -17,8 +17,6 @@ export class GamesPage implements OnInit {
   games = [];
   data: FormGroup;
   attivo = true;
-  mostraConfig = false;
-  config: string = "";
   mostraRegolamento = false;
   regolamento: string = "";
 
@@ -34,8 +32,6 @@ export class GamesPage implements OnInit {
     this.loadGames();
   }
 
-  //TODO finire commenti
-
   ngOnInit() {
     this.data = this.fb.group({
       nome: ['', Validators.required],
@@ -50,10 +46,16 @@ export class GamesPage implements OnInit {
     this.segment = ev.detail.value;
   }
 
+  /**
+   * Pulisce il form di creazione gioco quando l'utente cambia segment nella pagina.
+   */
   clearForm() {
     this.data.reset();
   }
 
+  /**
+   * Effettua la chiamata REST per ottenere la lista dei giochi della piattaforma.
+   */
   async loadGames() {
     const tokenValue = (await this.loginService.getToken()).value;
     const headers = { 'token': tokenValue };
@@ -67,13 +69,18 @@ export class GamesPage implements OnInit {
       });
   }
 
+  /**
+   * Apre una pagina modale per editare il gioco selezionato dall'utente.
+   * @param game Il gioco che si vuole modificare.
+   * @returns La modal per l'editing.
+   */
   async editGame(game) {
     const modal = await this.modalController.create({
       component: EditGamePage,
       componentProps: {
         game: game
       },
-      cssClass: 'edit-game'
+      cssClass: 'fullscreen'
     });
 
     modal.onDidDismiss().then((data) => {
@@ -86,6 +93,10 @@ export class GamesPage implements OnInit {
     return await modal.present();
   }
 
+  /**
+   * Dopo aver controllato i campi effettua la chiamata REST per creare il nuovo
+   * gioco secondo i dati inseriti dall'utente.
+   */
   async creaGioco() {
     if (this.controllaCampi()) {
       const loading = await this.loadingController.create();
@@ -97,9 +108,6 @@ export class GamesPage implements OnInit {
 
       if (this.mostraRegolamento) toSend.regolamento = this.regolamento;
       else toSend.regolamento = null;
-
-      if (this.mostraConfig) toSend.config = JSON.parse(this.config);
-      else toSend.config = null;
 
       toSend.token = tokenValue;
 
@@ -119,6 +127,10 @@ export class GamesPage implements OnInit {
     }
   }
 
+  /**
+   * Controlla che i valori inseriti dall'utente negli input siano corretti.
+   * @returns true se i dati passati non contengono errori, false altrimenti.
+   */
   controllaCampi() {
     if (this.data.value.minGiocatori < 1 || this.data.value.maxGiocatori < 1) {
       this.alertCreator.createInfoAlert('Errore nei dati', 'Il numero dei giocatori non può essere negativo!');
@@ -127,18 +139,6 @@ export class GamesPage implements OnInit {
     if (this.data.value.minGiocatori > this.data.value.maxGiocatori) {
       this.alertCreator.createInfoAlert('Errore nei dati', 'Il numero minimo dei giocatori non può essere maggiore del numero massimo!');
       return false;
-    }
-    if (this.mostraConfig) {
-      if (!this.config) {
-        this.alertCreator.createInfoAlert('Errore nei dati', 'Scrivi qualcosa nel JSON di configurazione!');
-        return false;
-      }
-      try {
-        const tmp = JSON.parse(this.config);
-      } catch (error) {
-        this.alertCreator.createInfoAlert('Errore nei dati', 'Il JSON di configurazione contiene errori nella sintassi!');
-        return false;
-      }
     }
     return true;
   }

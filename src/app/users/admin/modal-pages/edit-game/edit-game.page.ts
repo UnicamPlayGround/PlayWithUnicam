@@ -5,6 +5,8 @@ import { LoadingController, ModalController, NavParams } from '@ionic/angular';
 import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creator.service';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LoginService } from 'src/app/services/login-service/login.service';
+import { EditorItem } from '../../components/editor-container/editor-item';
+import { GameEditorService } from '../../services/game-editor/game-editor.service';
 
 @Component({
   selector: 'app-edit-game',
@@ -13,12 +15,10 @@ import { LoginService } from 'src/app/services/login-service/login.service';
 })
 export class EditGamePage implements OnInit {
   segment: string = "info";
-  games = [];
-  mostraConfig = false;
   data: FormGroup;
   attivo = true;
-  config: string = "";
   regolamento: string = "";
+  editorItem: EditorItem;
 
   @Input() game: any;
 
@@ -30,11 +30,13 @@ export class EditGamePage implements OnInit {
     private loadingController: LoadingController,
     private fb: FormBuilder,
     private alertCreator: AlertCreatorService,
-    private navParams: NavParams) {
+    private navParams: NavParams,
+    private gameEditorService: GameEditorService) {
   }
 
   ngOnInit() {
     this.game = this.navParams.get('game');
+    this.editorItem = this.gameEditorService.getProperEditor(this.game.config);
 
     this.data = this.fb.group({
       nome: [this.game.nome],
@@ -45,8 +47,11 @@ export class EditGamePage implements OnInit {
       attivo: [this.game.attivo]
     });
 
-    this.config = JSON.stringify(this.game.config);
     this.regolamento = this.game.regolamento;
+  }
+
+  updateConfig(newConfig: Object) {
+    this.game.config = newConfig;
   }
 
   /**
@@ -67,7 +72,7 @@ export class EditGamePage implements OnInit {
       toSend.id = this.game.id;
 
       toSend.regolamento = this.regolamento;
-      toSend.config = JSON.parse(this.config);
+      toSend.config = this.game.config;
       toSend.token = tokenValue;
 
       this.http.put('/game/modifica', toSend).subscribe(
@@ -91,16 +96,6 @@ export class EditGamePage implements OnInit {
     }
     if (this.data.value.minGiocatori > this.data.value.maxGiocatori) {
       this.alertCreator.createInfoAlert('Errore nei dati', 'Il numero minimo dei giocatori non può essere maggiore del numero massimo!');
-      return false;
-    }
-    if (!this.config) {
-      this.alertCreator.createInfoAlert('Errore nei dati', 'Scrivi qualcosa nel JSON di configurazione!');
-      return false;
-    }
-    try {
-      const tmp = JSON.parse(this.config);
-    } catch (error) {
-      this.alertCreator.createInfoAlert('Errore nei dati', 'Il JSON di configurazione contiene errori nella sintassi!');
       return false;
     }
     return true;
