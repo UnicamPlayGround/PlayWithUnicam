@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS public.giochi
     min_giocatori numeric NOT NULL,
     link text NOT NULL,
     attivo boolean NOT NULL,
-	config json,
+	config json NOT NULL,
 	regolamento text,
     PRIMARY KEY (id)
 );

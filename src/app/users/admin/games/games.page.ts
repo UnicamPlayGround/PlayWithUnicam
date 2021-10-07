@@ -104,6 +104,8 @@ export class GamesPage implements OnInit {
 
       const tokenValue = (await this.loginService.getToken()).value;
       var toSend = this.data.value;
+      toSend.config = { game: toSend.link };
+      toSend.link = "/" + toSend.link;
       toSend.attivo = this.attivo;
 
       if (this.mostraRegolamento) toSend.regolamento = this.regolamento;
