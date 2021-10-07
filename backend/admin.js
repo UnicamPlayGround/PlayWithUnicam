@@ -47,7 +47,6 @@ exports.eliminaUtenti = (utenti) => {
  */
 exports.deleteGame = (id) => {
     return new Promise((resolve, reject) => {
-
         db.pool.query('delete from public.giochi where id = $1',
             [id], (error, results) => {
                 if (error) {

@@ -63,19 +63,17 @@ export class EditGamePage implements OnInit {
 
   async deleteGame() {
     this.alertCreator.createConfirmationAlert("Sei sicuro di voler eliminare questo gioco?", async () => {
-      this.delete(this.game.id);
+      this.delete();
     });
   }
 
-  async delete(idGioco) {
+  //TODO commentare
+  async delete() {
     const loading = await this.loadingController.create();
     await loading.present();
     const tokenValue = (await this.loginService.getToken()).value;
 
-    console.log("this.game.id: ", this.game.id);
-
-    const headers = { 'token': tokenValue, 'game': idGioco, 'nome': (await this.game.nome) };
-    console.log("headers: ", headers);
+    const headers = { 'token': tokenValue, 'game': String(this.game.id) };
 
     this.http.delete('/admin/game', { headers }).subscribe(
       async (res) => {

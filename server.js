@@ -334,9 +334,7 @@ app.delete('/admin/utenti', (req, res) => {
  * REST - Come Admin della Piattaforma, elimina un gioco.
  */
 app.delete('/admin/game', (req, res) => {
-    console.log("req.headers:", req.headers);
     if (verificaAdmin(req.headers.token)) {
-        console.log("id gioco:", req.headers.game);
         admin.deleteGame(req.headers.game)
             .then(_ => sendEsitoPositivo(res))
             .catch(err => {
