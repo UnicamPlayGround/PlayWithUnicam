@@ -76,6 +76,11 @@ exports.modificaUtente = (username, newUsername, nome, cognome) => {
         if (controller.controllaString(newCognome))
             return reject("Il nuovo cognome non è valido");
 
+        username = controller.xssSanitize(username);
+        newUsername = controller.xssSanitize(newUsername);
+        nome = controller.xssSanitize(nome);
+        cognome = controller.xssSanitize(cognome);
+
         if (username === newUsername)
             utente.modificaNomeCognome(username, nome, cognome).then(_ => resolve());
         else {

@@ -15,6 +15,11 @@ const messaggi = require('../messaggi');
  * @param {string} regolamento Regolamento del Gioco
  */
 exports.creaGioco = (nome, tipo, minGiocatori, maxGiocatori, link, attivo, config, regolamento) => {
+    nome = controller.xssSanitize(nome);
+    tipo = controller.xssSanitize(tipo);
+    link = controller.xssSanitize(link);
+    regolamento = controller.xssSanitize(regolamento);
+
     return new Promise((resolve, reject) => {
         controller.controllaDatiGioco(nome, tipo, minGiocatori, maxGiocatori, link, attivo, regolamento)
             .then(_ => {
@@ -123,6 +128,11 @@ exports.getListaGiochiAsAdmin = () => {
  * @param {string} regolamento Regolamento del Gioco
  */
 exports.modificaGioco = (id, nome, tipo, minGiocatori, maxGiocatori, link, attivo, config, regolamento) => {
+    nome = controller.xssSanitize(nome);
+    tipo = controller.xssSanitize(tipo);
+    link = controller.xssSanitize(link);
+    regolamento = controller.xssSanitize(regolamento);
+
     return new Promise((resolve, reject) => {
         controller.controllaDatiGioco(nome, tipo, minGiocatori, maxGiocatori, link, attivo, regolamento)
             .then(_ => {

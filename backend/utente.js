@@ -90,8 +90,10 @@ exports.cercaUtenteByUsername = (username) => {
 exports.creaOspite = (username) => {
     return new Promise((resolve, reject) => {
         var data = new Date();
-        if (controller.controllaNotNull(username))
+        if (controller.controllaString(username))
             return reject("L'username non deve essere vuoto!");
+
+        username = controller.xssSanitize(username);
 
         db.pool.query('INSERT INTO public.ospiti (username, data_creazione) VALUES ($1, $2)',
             [username, data], (error, results) => {
@@ -121,6 +123,10 @@ exports.creaUtente = (username, nome, cognome, password) => {
                 return reject("Il campo 'cognome' non deve essere vuoto!");
             if (controller.controllaPassword(password))
                 return reject("La password deve essere compresa tra 8 e 16 caratteri.");
+
+            username = controller.xssSanitize(username);
+            nome = controller.xssSanitize(nome);
+            cognome = controller.xssSanitize(cognome);
 
             const salt = bcrypt.genSaltSync(10);
             const hash = bcrypt.hashSync(password + process.env.SECRET_PWD, salt);
@@ -170,6 +176,9 @@ exports.modificaNomeCognome = (username, nome, cognome) => {
         if (controller.controllaString(cognome))
             return reject("Il campo 'cognome' non è valido!");
 
+        nome = controller.xssSanitize(nome);
+        cognome = controller.xssSanitize(cognome);
+
         this.cercaUtenteByUsername(username)
             .then(results => {
                 if (controller.controllaRisultatoQuery(results))
@@ -200,6 +209,8 @@ exports.modificaUsername = (oldUsername, newUsername) => {
     return new Promise((resolve, reject) => {
         if (controller.controllaString(newUsername))
             return reject("Il nuovo username non è valido!");
+
+        newUsername = controller.xssSanitize(newUsername);
 
         this.cercaUtenteByUsername(oldUsername)
             .then(results => {
