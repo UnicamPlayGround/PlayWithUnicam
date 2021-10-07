@@ -61,6 +61,35 @@ export class EditGamePage implements OnInit {
     this.modalController.dismiss();
   }
 
+  async deleteGame() {
+    this.alertCreator.createConfirmationAlert("Sei sicuro di voler eliminare questo gioco?", async () => {
+      this.delete(this.game.id);
+    });
+  }
+
+  async delete(idGioco) {
+    const loading = await this.loadingController.create();
+    await loading.present();
+    const tokenValue = (await this.loginService.getToken()).value;
+
+    console.log("this.game.id: ", this.game.id);
+
+    const headers = { 'token': tokenValue, 'game': idGioco, 'nome': (await this.game.nome) };
+    console.log("headers: ", headers);
+
+    this.http.delete('/admin/game', { headers }).subscribe(
+      async (res) => {
+        this.modalController.dismiss(true);
+        loading.dismiss();
+        this.alertCreator.createInfoAlert("Eliminazione completata", "Il gioco '" + this.game.nome + "' è stato eliminato con successo!");
+      },
+      async (res) => {
+        this.modalController.dismiss(true);
+        await loading.dismiss();
+        this.errorManager.stampaErrore(res, 'Eliminazione fallita');
+      });
+  }
+
   //TODO commentare
   async salvaModifiche() {
     if (this.controllaCampi()) {
@@ -79,7 +108,7 @@ export class EditGamePage implements OnInit {
         async (res) => {
           this.modalController.dismiss(true);
           loading.dismiss();
-          this.alertCreator.createInfoAlert("Modifica completata", "Il gioco è stato modificato con successo!")
+          this.alertCreator.createInfoAlert("Modifica completata", "Il gioco è stato modificato con successo!");
         },
         async (res) => {
           this.modalController.dismiss();

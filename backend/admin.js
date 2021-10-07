@@ -42,6 +42,24 @@ exports.eliminaUtenti = (utenti) => {
 }
 
 /**
+ * Elimina un gioco.
+ * @param {*} id L'id del gioco da eliminare.
+ */
+exports.deleteGame = (id) => {
+    return new Promise((resolve, reject) => {
+
+        db.pool.query('delete from public.giochi where id = $1',
+            [id], (error, results) => {
+                if (error) {
+                    console.log(error);
+                    return reject("Errore nell'eliminazione del gioco: " + id);
+                } else
+                    return resolve();
+            });
+    })
+}
+
+/**
  * Modifica le Informazioni di un Utente.
  * @param {string} username Username dell'Utente da modificare
  * @param {string} newUsername Nuovo Username

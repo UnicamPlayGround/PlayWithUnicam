@@ -11,7 +11,7 @@ const partita = require('./backend/multiplayer/partita');
 const utente = require('./backend/utente');
 const giocatore = require('./backend/multiplayer/giocatore');
 const messaggi = require('./backend/messaggi');
-const errroManager = require('./backend/error-manager');
+const erroManager = require('./backend/error-manager');
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -135,9 +135,9 @@ app.get('/games', (req, res) => {
             .then(results => sendDataInJSON(res, results))
             .catch(err => {
                 console.log(err);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             });
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 })
 
 /**
@@ -151,9 +151,9 @@ app.get('/games/admin', (req, res) => {
             .then(results => sendDataInJSON(res, results))
             .catch(err => {
                 console.log(err);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             });
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 })
 
 /**
@@ -169,9 +169,9 @@ app.get('/game/status', (req, res) => {
             })
             .catch(err => {
                 console.log(err);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             });
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -183,9 +183,9 @@ app.get('/game/config', (req, res) => {
             .then(results => sendDataInJSON(res, results))
             .catch(err => {
                 console.log(err);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             });
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -197,9 +197,9 @@ app.get('/admin/utenti', (req, res) => {
             .then(results => sendDataInJSON(res, results))
             .catch(err => {
                 console.log(err);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             });
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -217,9 +217,9 @@ app.get('/lobby/pubbliche', (req, res) => {
             })
             .catch(err => {
                 console.log(err);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             })
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -231,9 +231,9 @@ app.get('/lobby/giocatori/:codiceLobby', (req, res) => {
             .then(results => sendDataInJSON(res, results))
             .catch(err => {
                 console.log(err);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             })
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -246,9 +246,9 @@ app.get('/info/utente', (req, res) => {
             .then(results => sendDataInJSON(res, results))
             .catch(err => {
                 console.log(err);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             });
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -265,9 +265,9 @@ app.get('/lobby/info', (req, res) => {
             })
             .catch(err => {
                 console.log(err);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             })
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -279,9 +279,9 @@ app.get('/lobby/giocatori', (req, res) => {
             .then(results => sendDataInJSON(res, results))
             .catch(err => {
                 console.log(err);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             })
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -297,9 +297,9 @@ app.delete('/lobby/admin/espelli', (req, res) => {
             .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             });
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -311,9 +311,9 @@ app.delete('/lobby/abbandona', (req, res) => {
             .then(_ => sendEsitoPositivo(res))
             .catch(error => {
                 console.log(error);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             });
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -325,9 +325,25 @@ app.delete('/admin/utenti', (req, res) => {
             .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             });
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+});
+
+/**
+ * REST - Come Admin della Piattaforma, elimina un gioco.
+ */
+app.delete('/admin/game', (req, res) => {
+    console.log("req.headers:", req.headers);
+    if (verificaAdmin(req.headers.token)) {
+        console.log("id gioco:", req.headers.game);
+        admin.deleteGame(req.headers.game)
+            .then(_ => sendEsitoPositivo(res))
+            .catch(err => {
+                console.log(err);
+                return erroManager.handleError(err, res);
+            });
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -343,9 +359,9 @@ app.put('/admin/utenti/:username', (req, res) => {
             .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             });;
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -357,9 +373,9 @@ app.put('/player/profilo', (req, res) => {
             .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             });
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -372,9 +388,9 @@ app.put('/player/username', (req, res) => {
             .then(_ => sendAccessToken(res, { username: req.body.new_username, tipo: decodedToken.tipo }))
             .catch(err => {
                 console.log(err);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             });
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -386,9 +402,9 @@ app.put('/lobby', (req, res) => {
             .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             });
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -401,9 +417,9 @@ app.put('/modifica/password', (req, res) => {
             .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             });
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -416,9 +432,9 @@ app.put('/game/modifica', (req, res) => {
             .then(_ => sendEsitoPositivo(res))
             .catch(error => {
                 console.log(error);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             });
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -430,9 +446,9 @@ app.put('/game/save', (req, res) => {
             .then(_ => sendEsitoPositivo(res))
             .catch(error => {
                 console.log(error);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             });
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -444,9 +460,9 @@ app.put('/game/fine-turno', (req, res) => {
             .then(_ => sendEsitoPositivo(res))
             .catch(error => {
                 console.log(error);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             });
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -458,9 +474,9 @@ app.put('/partita/termina', (req, res) => {
             .then(_ => sendEsitoPositivo(res))
             .catch(error => {
                 console.log(error);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             });
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -486,7 +502,7 @@ app.post('/login/utente', (req, res) => {
         })
         .catch(err => {
             console.log(err);
-            return errroManager.handleError(err, res);
+            return erroManager.handleError(err, res);
         })
 });
 
@@ -509,9 +525,9 @@ app.post('/login/ospiti', (req, res) => {
             .then(_ => sendAccessToken(res, { username: req.body.username, tipo: "OSPITE" }))
             .catch(err => {
                 console.log(err);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             })
-    } else return errroManager.handleError("L'username deve contenere dei caratteri!", res);
+    } else return erroManager.handleError("L'username deve contenere dei caratteri!", res);
 })
 
 /**
@@ -535,9 +551,9 @@ app.post('/register/utente', (req, res) => {
             .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             });
-    } else return errroManager.handleError("L'username deve contenere dei caratteri!", res);
+    } else return erroManager.handleError("L'username deve contenere dei caratteri!", res);
 });
 
 /**
@@ -562,9 +578,9 @@ app.post('/register/ospite-to-utente', (req, res) => {
             .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             })
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -576,9 +592,9 @@ app.post('/lobby', (req, res) => {
             .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             });
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -590,9 +606,9 @@ app.post('/lobby/partecipa', (req, res) => {
             .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             });
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -604,9 +620,9 @@ app.post('/lobby/ping', (req, res) => {
             .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             });
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -618,9 +634,9 @@ app.post('/partita', (req, res) => {
             .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             });
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 /**
@@ -632,9 +648,9 @@ app.post('/game/crea', (req, res) => {
             .then(_ => sendEsitoPositivo(res))
             .catch(err => {
                 console.log(err);
-                return errroManager.handleError(err, res);
+                return erroManager.handleError(err, res);
             });
-    } else return errroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
 });
 
 app.get('/*', function (req, res) {
