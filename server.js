@@ -309,8 +309,8 @@ app.delete('/lobby/abbandona', (req, res) => {
     if (verificaJWT(req.headers.token)) {
         lobby.abbandonaLobby(jwt.decode(req.headers.token).username, res)
             .then(_ => sendEsitoPositivo(res))
-            .catch(error => {
-                console.log(error);
+            .catch(err => {
+                console.log(err);
                 return erroManager.handleError(err, res);
             });
     } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
@@ -428,8 +428,8 @@ app.put('/game/modifica', (req, res) => {
         game.modificaGioco(req.body.id, req.body.nome, req.body.tipo, req.body.minGiocatori,
             req.body.maxGiocatori, req.body.link, req.body.attivo, req.body.config, req.body.regolamento)
             .then(_ => sendEsitoPositivo(res))
-            .catch(error => {
-                console.log(error);
+            .catch(err => {
+                console.log(err);
                 return erroManager.handleError(err, res);
             });
     } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
@@ -442,8 +442,8 @@ app.put('/game/save', (req, res) => {
     if (verificaJWT(req.body.token)) {
         partita.salvaInfoGiocatore(jwt.decode(req.body.token).username, req.body.info_giocatore)
             .then(_ => sendEsitoPositivo(res))
-            .catch(error => {
-                console.log(error);
+            .catch(err => {
+                console.log(err);
                 return erroManager.handleError(err, res);
             });
     } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
@@ -456,8 +456,8 @@ app.put('/game/fine-turno', (req, res) => {
     if (verificaJWT(req.body.token)) {
         partita.cambiaGiocatoreCorrente(jwt.decode(req.body.token).username)
             .then(_ => sendEsitoPositivo(res))
-            .catch(error => {
-                console.log(error);
+            .catch(err => {
+                console.log(err);
                 return erroManager.handleError(err, res);
             });
     } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
@@ -470,8 +470,8 @@ app.put('/partita/termina', (req, res) => {
     if (verificaJWT(req.body.token)) {
         partita.terminaPartita(jwt.decode(req.body.token).username)
             .then(_ => sendEsitoPositivo(res))
-            .catch(error => {
-                console.log(error);
+            .catch(err => {
+                console.log(err);
                 return erroManager.handleError(err, res);
             });
     } else return erroManager.handleError(messaggi.ERRORE_JWT, res);

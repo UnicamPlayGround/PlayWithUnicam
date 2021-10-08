@@ -90,8 +90,6 @@ export class LobbyAdminPage implements OnInit {
    * Carica i Partecipanti alla Lobby.
    */
   private async loadGiocatori() {
-    console.log("sto caricando i giocatori...");
-
     (await this.lobbyManager.getPartecipanti()).subscribe(
       async (res) => {
         this.giocatori = res['results'];
@@ -167,7 +165,6 @@ export class LobbyAdminPage implements OnInit {
    * che è ancora presente all'interno della Lobby.
    */
   private async ping() {
-    console.log("ping...");
     (await this.lobbyManager.ping()).subscribe(
       async (res) => {
         this.loadGiocatori();
@@ -175,7 +172,6 @@ export class LobbyAdminPage implements OnInit {
       async (res) => {
         this.timerService.stopTimers(this.timerPing);
         this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
-        console.log("RES: ", res);
         this.errorManager.stampaErrore(res, 'Ping fallito');
       }
     );

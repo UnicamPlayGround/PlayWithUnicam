@@ -8,7 +8,6 @@ import { DashboardPageRoutingModule } from './dashboard-routing.module';
 
 import { DashboardPage } from './dashboard.page';
 
-//import { UserPopoverComponent } from 'src/app/components/user-popover/user-popover.component';
 import { IntroLobbyComponentModule } from '../popover/intro-lobby-popover/intro-lobby-popover.module';
 import { UserPopoverComponentModule } from 'src/app/components/user-popover/user-popover.module';
 
@@ -22,7 +21,6 @@ import { UserPopoverComponentModule } from 'src/app/components/user-popover/user
     IntroLobbyComponentModule,
     UserPopoverComponentModule
   ],
-  //entryComponents: [UserPopoverComponent],
   declarations: [DashboardPage]
 })
 export class DashboardPageModule { }

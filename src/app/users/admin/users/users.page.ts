@@ -164,7 +164,6 @@ export class UsersPage implements OnInit {
   async deleteUsers() {
     const tokenValue = (await this.loginService.getToken()).value;
     var headers = { 'token': tokenValue, 'users_to_delete': this.getUsernamesToDelete() };
-    console.log('headers.users_to_delete: ', headers.users_to_delete);
 
     this.http.delete('/admin/utenti', { headers }).subscribe(
       async (res) => {

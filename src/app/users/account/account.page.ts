@@ -113,7 +113,6 @@ export class AccountPage implements OnInit {
       this.http.put('/player/username', toSend).pipe(
         map((data: any) => data.accessToken),
         switchMap(token => {
-          console.log("nuovo token: " + token);
           this.logService.setToken(token);
           return '1';
         })).subscribe(
