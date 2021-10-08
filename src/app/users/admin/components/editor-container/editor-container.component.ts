@@ -1,5 +1,6 @@
-import { Component, ComponentFactoryResolver, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, EventEmitter, Input, OnInit, Output, Type, ViewChild } from '@angular/core';
 import { GameEditorComponent } from 'src/app/components/game-editor/game-editor.component';
+import { NoEditorWarningComponent } from '../no-editor-warning/no-editor-warning.component';
 import { EditorItem } from './editor-item';
 import { EditorDirective } from './editor.directive';
 
@@ -25,7 +26,8 @@ export class EditorContainerComponent implements OnInit {
   constructor(private componentFactoryResolver: ComponentFactoryResolver) { }
 
   ngOnInit() {
-    this.loadComponent();
+    if (this.editorItem) this.loadGameEditor();
+    else this.loadComponent(NoEditorWarningComponent);
   }
 
   /**
@@ -41,13 +43,23 @@ export class EditorContainerComponent implements OnInit {
    * Risolve il component contenuto in "editorItem" e lo istanzia dinamicamente all'interno
    * del template editorHost.
    */
-  loadComponent() {
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.editorItem.editor);
+  loadGameEditor() {
+    const componentRef = this.loadComponent(this.editorItem.editor);
+    componentRef.instance.config = this.editorItem.config;
+    componentRef.instance.updateConfigEvent.subscribe(newConfig => this.updateConfig(newConfig));
+  }
+
+  /**
+   * Risolve il component passato in input e lo istanzia dinamicamente all'interno
+   * del template editorHost.
+   * @param component Il component da istanziare dinamicamente.
+   * @returns Il riferimento al component creato.
+   */
+  loadComponent(component: Type<any>) {
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);
     const viewContainerRef = this.editorHost.viewContainerRef;
     viewContainerRef.clear();
 
-    const componentRef = viewContainerRef.createComponent<GameEditorComponent>(componentFactory);
-    componentRef.instance.config = this.editorItem.config;
-    componentRef.instance.updateConfigEvent.subscribe(newConfig => this.updateConfig(newConfig));
+    return viewContainerRef.createComponent<GameEditorComponent>(componentFactory);
   }
 }

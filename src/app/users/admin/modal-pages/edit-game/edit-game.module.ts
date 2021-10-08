@@ -8,6 +8,7 @@ import { EditorContainerComponent } from '../../components/editor-container/edit
 import { EditorDirective } from '../../components/editor-container/editor.directive';
 import { GooseGameEditorComponent } from 'src/app/mgp_games/goose-game/components/goose-game-editor/goose-game-editor.component';
 import { GameEditorService } from '../../services/game-editor/game-editor.service';
+import { NoEditorWarningComponent } from '../../components/no-editor-warning/no-editor-warning.component';
 
 @NgModule({
   imports: [
@@ -18,8 +19,17 @@ import { GameEditorService } from '../../services/game-editor/game-editor.servic
     EditGamePageRoutingModule
   ],
   providers: [GameEditorService],
-  declarations: [EditGamePage, EditorContainerComponent, EditorDirective, GooseGameEditorComponent],
+  declarations: [
+    EditGamePage,
+    EditorContainerComponent,
+    EditorDirective,
+    NoEditorWarningComponent,
+    GooseGameEditorComponent
+  ],
   // La lista dei componenti da istanziare dinamicamente.
-  entryComponents: [GooseGameEditorComponent]
+  entryComponents: [
+    NoEditorWarningComponent,
+    GooseGameEditorComponent
+  ]
 })
 export class EditGamePageModule { }
