@@ -1,5 +1,3 @@
-const xss = require("xss");
-
 /**
  * Controlla che la Query abbia ritornato almeno un riga.
  * @param {*} results Risultato della query da controllare
@@ -78,6 +76,7 @@ exports.controllaDatiGioco = function (nome, tipo, minGiocatori, maxGiocatori, l
  * @param {string} toControl Stringa da controllare
  * @returns la stringa "igenizzata"
  */
+//TODO da rifare senza modulo
 exports.xssSanitize = function (toControl) {
-    return xss(toControl);
+    return toControl;
 }
