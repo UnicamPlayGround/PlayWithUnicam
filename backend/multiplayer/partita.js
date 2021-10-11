@@ -132,8 +132,8 @@ function creaPartitaQuery(codiceLobby, adminLobby, results) {
                     return resolve();
                 });
         } else {
-            db.pool.query('UPDATE public.partite SET codice = $1, giocatore_corrente = $2, info = $3, terminata = $4 WHERE codice_lobby = $5',
-                [creaCodice(), adminLobby, null, false, codiceLobby], (error, results) => {
+            db.pool.query('UPDATE public.partite SET codice = $1, giocatore_corrente = $2, terminata = $3 WHERE codice_lobby = $4',
+                [creaCodice(), adminLobby, false, codiceLobby], (error, results) => {
                     if (error) {
                         console.log(error);
                         return reject(messaggi.CREAZIONE_PARTITA_ERROR);
