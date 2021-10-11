@@ -99,6 +99,8 @@ function controllaMinimoGiocatori(username) {
     return new Promise((resolve, reject) => {
         lobby.cercaLobbyByUsername(username)
             .then(results => {
+                if (controller.controllaRisultatoQuery(results))
+                    throw (messaggi.PARTECIPAZIONE_LOBBY_ERROR);
                 lobbyInfo = JSON.parse(JSON.stringify(results.rows))[0];
                 return lobby.getNumeroGiocatoriLobby(lobbyInfo.codice);
             })
@@ -106,13 +108,13 @@ function controllaMinimoGiocatori(username) {
                 const numeroGiocatori = JSON.parse(JSON.stringify(results.rows))[0];
 
                 if (lobbyInfo.min_giocatori > numeroGiocatori.count)
-                    return reject(messaggi.MINIMO_GIOCATORI_ERROR);
+                    throw (messaggi.MINIMO_GIOCATORI_ERROR);
                 else
                     return resolve();
             })
             .catch(error => {
                 console.log(error);
-                return reject(messaggi.SERVER_ERROR);
+                return reject(error);
             })
     })
 }
