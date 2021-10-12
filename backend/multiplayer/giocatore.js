@@ -28,26 +28,28 @@ exports.controllaInattivi = () => {
     db.pool.query('SELECT * FROM public.giocatori', (error, results) => {
         if (error) console.log(error);
 
-        const giocatori = JSON.parse(JSON.stringify(results.rows));
+        if (results) {
+            const giocatori = JSON.parse(JSON.stringify(results.rows));
 
-        giocatori.forEach(giocatore => {
-            var dif = Date.now() - Date.parse(giocatore.ping);
+            giocatori.forEach(giocatore => {
+                var dif = Date.now() - Date.parse(giocatore.ping);
 
-            //15 secondi
-            if (dif > 15000 || giocatore.ping == null) {
-                lobby.cercaLobbyByUsername(giocatore.username)
-                    .then(results => {
-                        if (!controller.controllaRisultatoQuery(results))
-                            lobby.abbandonaLobby(giocatore.username, null)
-                                .catch(error => { console.log(error); })
-                        else
-                            db.pool.query('DELETE FROM public.giocatori WHERE username=$1', [giocatore.username], (error, results) => {
-                                if (error) console.log(error);
-                            });
-                    })
-                    .catch(error => { console.log(error); })
-            }
-        });
+                //15 secondi
+                if (dif > 15000 || giocatore.ping == null) {
+                    lobby.cercaLobbyByUsername(giocatore.username)
+                        .then(results => {
+                            if (!controller.controllaRisultatoQuery(results))
+                                lobby.abbandonaLobby(giocatore.username, null)
+                                    .catch(error => { console.log(error); })
+                            else
+                                db.pool.query('DELETE FROM public.giocatori WHERE username=$1', [giocatore.username], (error, results) => {
+                                    if (error) console.log(error);
+                                });
+                        })
+                        .catch(error => { console.log(error); })
+                }
+            });
+        }
     });
 }
 
