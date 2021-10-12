@@ -226,7 +226,7 @@ exports.getInfoPartita = (username) => {
     return new Promise((resolve, reject) => {
         controllaMinimoGiocatori(username)
             .then(_ => {
-                return db.pool.query('SELECT partite.codice, partite.codice_lobby, giocatore_corrente, terminata, id_gioco FROM' +
+                db.pool.query('SELECT partite.codice, partite.codice_lobby, giocatore_corrente, terminata, id_gioco FROM' +
                     ' (partite INNER JOIN lobby ON partite.codice_lobby=lobby.codice)' +
                     ' INNER JOIN giocatori ON giocatori.codice_lobby=lobby.codice WHERE giocatori.username=$1',
                     [username], (error, results) => {

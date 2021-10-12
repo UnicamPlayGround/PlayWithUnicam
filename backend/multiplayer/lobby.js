@@ -333,10 +333,7 @@ exports.creaLobby = (adminLobby, idGioco, pubblica) => {
             .then(_ => { return resolve(); })
             .catch(error => {
                 console.log(error);
-                if (error === messaggi.CREAZIONE_LOBBY_ERROR)
-                    return reject(messaggi.CREAZIONE_LOBBY_ERROR);
-                else
-                    return reject(error);
+                return reject(error);
             })
     })
 }
@@ -399,10 +396,7 @@ exports.partecipaLobby = (username, codiceLobby) => {
             })
             .catch(error => {
                 console.log(error);
-                if (error === messaggi.PARTECIPAZIONE_LOBBY_ERROR)
-                    return reject(messaggi.PARTECIPAZIONE_LOBBY_ERROR);
-                else
-                    return reject(error);
+                return reject(error);
             })
     })
 }
