@@ -25,6 +25,9 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+ion-button{
+    --box-shadow:none;
+}
 
 .contact-popover .popover-content{ 
     border-radius:0px!important;
@@ -34,11 +37,11 @@
 }
 
 .menu-active-item{
-    border-left: 8px solid var(--ion-color-primary);
-    --ion-text-color: var(--ion-color-primary);
+    border-left: 8px solid var(--ion-color-unicamblue);
+    --ion-text-color: var(--ion-color-unicamblue);
 
     ion-icon{
-        --ion-text-color-rgb: var(--ion-color-primary);
+        --ion-text-color-rgb: var(--ion-color-unicamblue);
     }
 }
 
@@ -109,4 +112,37 @@ ion-modal.crea-parola {
         --height: 100%;
         --border-radius: 0;
     }
+}
+
+.ion-color-unicamblue {
+    --ion-color-base: var(--ion-color-unicamblue) !important;
+    --ion-color-base-rgb: var(--ion-color-unicamblue-rgb) !important;
+    --ion-color-contrast: var(--ion-color-unicamblue-contrast) !important;
+    --ion-color-contrast-rgb: var(--ion-color-unicamblue-contrast-rgb) !important;
+    --ion-color-shade: var(--ion-color-unicamblue-shade) !important;
+    --ion-color-tint: var(--ion-color-unicamblue-tint) !important;
+}
+
+.ion-color-unicamgrey {
+    --ion-color-base: var(--ion-color-unicamgrey) !important;
+    --ion-color-base-rgb: var(--ion-color-unicamgrey-rgb) !important;
+    --ion-color-contrast: var(--ion-color-unicamgrey-contrast) !important;
+    --ion-color-contrast-rgb: var(--ion-color-unicamgrey-contrast-rgb) !important;
+    --ion-color-shade: var(--ion-color-unicamgrey-shade) !important;
+    --ion-color-tint: var(--ion-color-unicamgrey-tint) !important;
+}
+
+.ion-color-unicamred {
+    --ion-color-base: var(--ion-color-unicamred) !important;
+    --ion-color-base-rgb: var(--ion-color-unicamred-rgb) !important;
+    --ion-color-contrast: var(--ion-color-unicamred-contrast) !important;
+    --ion-color-contrast-rgb: var(--ion-color-unicamred-contrast-rgb) !important;
+    --ion-color-shade: var(--ion-color-unicamred-shade) !important;
+    --ion-color-tint: var(--ion-color-unicamred-tint) !important;
+}
+
+.page-header {
+    --background:var(--ion-color-unicamblue) !important;
+    color:#fff;
+    line-height:80px;
 }

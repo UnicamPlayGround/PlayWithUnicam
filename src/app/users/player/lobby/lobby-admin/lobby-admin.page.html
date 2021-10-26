@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar color="unicamblue">
     <ion-title>Lobby di gioco</ion-title>
 
     <ion-button slot="end" (click)="abbandonaLobby()" fill="clear" color="light" shape="round" class="ion-hide-md-down">
@@ -65,10 +65,12 @@
                 Se attivo, permette a tutti i giocatori online di trovare la lobby e di parteciparvi.
               </p>
               <br>
-              <ion-button shape="round" expand="block" (click)="generaLink()">Condividi link</ion-button>
+              <ion-button color="unicamblue" shape="round" expand="block" (click)="generaLink()">Condividi link
+              </ion-button>
               <p *ngIf="impossibileCopiareLink">{{link}}</p>
               <br>
-              <ion-button shape="round" (click)="modificaLobby()" expand="block">Salva modifiche</ion-button>
+              <ion-button color="unicamblue" shape="round" (click)="modificaLobby()" expand="block">Salva modifiche
+              </ion-button>
             </ion-card-content>
           </ion-list>
         </ion-card>
@@ -112,10 +114,12 @@
                 Se attivo, permette a tutti i giocatori online di trovare la lobby e di parteciparvi.
               </p>
               <br>
-              <ion-button shape="round" expand="block" (click)="generaLink()">Condividi link</ion-button>
+              <ion-button color="unicamblue" shape="round" expand="block" (click)="generaLink()">Condividi link
+              </ion-button>
               <p *ngIf="impossibileCopiareLink">{{link}}</p>
               <br>
-              <ion-button shape="round" (click)="modificaLobby()" expand="block">Salva modifiche</ion-button>
+              <ion-button color="unicamblue" shape="round" (click)="modificaLobby()" expand="block">Salva modifiche
+              </ion-button>
             </ion-card-content>
           </ion-list>
         </ion-card>
@@ -172,7 +176,8 @@
           </ion-list>
         </ion-card>
 
-        <ion-button expand="block" shape="round" (click)="iniziaPartita()" class="start-button-row">INIZIA PARTITA!
+        <ion-button color="unicamred" expand="block" shape="round" (click)="iniziaPartita()" class="start-button-row">
+          INIZIA PARTITA!
         </ion-button>
       </ion-col>
 
@@ -225,7 +230,7 @@
 </ion-content>
 
 <ion-footer class="start-button-footer">
-  <ion-toolbar color="primary">
+  <ion-toolbar color="unicamred">
     <ion-button fill="clear" color="light" expand="full" (click)="iniziaPartita()">INIZIA PARTITA!</ion-button>
   </ion-toolbar>
 </ion-footer>

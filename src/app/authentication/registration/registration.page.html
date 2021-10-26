@@ -1,12 +1,16 @@
-<ion-header>
-  <ion-toolbar color="primary">
+<ion-header no-border>
+  <ion-toolbar color="unicamblue">
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
+
+    <div id="logo">
+      <h2>PLAY WITH UNICAM</h2>
+    </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" color="unicamblue" style="--offset-top:0px; position:absolute; padding:10px;">
   <form (ngSubmit)="register()" [formGroup]="credenziali">
 
     <ion-card class="auth-card">
@@ -43,7 +47,7 @@
           </ion-item>
 
           <br>
-          <ion-button type="submit" color="primary" shape="round" expand="block">Registrati</ion-button>
+          <ion-button type="submit" color="unicamred" shape="round" expand="block">Registrati</ion-button>
         </ion-list>
       </ion-card-content>
     </ion-card>

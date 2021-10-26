@@ -14,7 +14,7 @@ import jwt_decode from 'jwt-decode';
 @Component({
   selector: 'app-login-by-link',
   templateUrl: './login-by-link.page.html',
-  styleUrls: ['../auth.scss'],
+  styleUrls: ['./login-by-link.page.scss'],
 })
 
 export class LoginByLinkPage implements OnInit {

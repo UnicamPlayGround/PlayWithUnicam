@@ -1,8 +1,16 @@
+#lista-title{
+    font-family: Century Gothic, Courier New, appearance;
+    font-size:35px;
+    text-align: center;
+    padding:30px;
+    transition: 0.8s ease;
+}
+
 .header-row {
     height: 50px;
     align-content: center;
-    background-color: rgb(49, 114, 167);
-    color:white;
+    color:var(ion-color-unicamgrey);
+    font-weight: bold;
 }
 
 .data-row {
@@ -10,19 +18,21 @@
     align-items: center;
 }
 
-.info-row{
-    height: 50%;
+#no-lobby-message{
+    text-align: center;
 }
 
 .table{
+    margin-top: 50px;
     padding: 10px;
 }
 
 .lobby-card{
-    border: 1px solid rgb(49, 114, 167) !important;
+    border-radius: 20px;
+    border: 1px solid var(--ion-color-unicamblue) !important;
 
     ion-card-header{
-        background-color: rgb(49, 114, 167);
+        background-color: var(--ion-color-unicamblue);
         color:white;
         text-align: center;
         p{
@@ -37,5 +47,26 @@
         ion-label{
             text-align: center;
         }
+    }
+}
+
+@media screen and(max-width:560px){
+    #lista-title{
+        font-size: 28px;
+    }
+}
+
+@media screen and(max-width:430px){
+    #lista-title{
+        font-size: 22px;
+    }
+}
+
+@media screen and(max-width:360px){
+    #lista-title{
+        font-size: 20px;
+    }
+    #no-lobby-message{
+        font-size: 16px;
     }
 }

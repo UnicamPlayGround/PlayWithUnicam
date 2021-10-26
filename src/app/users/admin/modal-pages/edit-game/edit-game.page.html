@@ -1,9 +1,9 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar color="unicamblue">
     <ion-title>Modifica gioco</ion-title>
 
     <ion-button fill="clear" slot="start" (click)="closeModal()">
-      <ion-icon slot="icon-only" name="close-outline" style="color:white"></ion-icon>
+      <ion-icon slot="icon-only" name="close-outline" color="light"></ion-icon>
     </ion-button>
   </ion-toolbar>
 
@@ -27,7 +27,7 @@
   <div *ngIf="segment === 'info'" class="modal">
 
     <ion-toolbar>
-      <ion-button slot="end" (click)="deleteGame()" color="danger" shape="round">
+      <ion-button slot="end" (click)="deleteGame()" color="unicamred" shape="round">
         <ion-icon slot="icon-only" name="trash-outline" class="ion-hide-md-up"></ion-icon>
         <ion-icon slot="start" name="trash-outline" class="ion-hide-md-down"></ion-icon>
         <ion-label class="ion-hide-md-down">Elimina gioco</ion-label>

@@ -6,21 +6,21 @@
   }
 
   .users-card{
-    background-color: #409e99;
+    background-color: var(--ion-color-unicamgrey);
   }
 
   .users-card:hover {
-    transition: 0.3s ease;
-    background-color: #275d5b;
+    transition: 0.4s ease;
+    background-color: #2e3f4b;
   }
 
   .games-card{
-    background-color: #b16078;
+    background-color: var(--ion-color-unicamred);
   }
 
   .games-card:hover {
-    transition: 0.3s ease;
-    background-color: #744251;
+    transition: 0.4s ease;
+    background-color: #791414;
   }
 
   ion-card {

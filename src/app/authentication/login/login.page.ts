@@ -10,7 +10,7 @@ import { LoginService } from 'src/app/services/login-service/login.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
-  styleUrls: ['../auth.scss'],
+  styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
   credenziali: FormGroup;

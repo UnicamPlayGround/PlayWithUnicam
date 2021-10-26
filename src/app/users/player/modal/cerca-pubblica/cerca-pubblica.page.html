@@ -1,28 +1,20 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Cerca lobby pubbliche</ion-title>
-
-    <ion-button fill="clear" color="light" slot="start" (click)="closeModal()">
+<ion-content [fullscreen]="true">
+  <ion-toolbar>
+    <ion-button fill="clear" color="unicamblue" slot="start" (click)="closeModal()">
       <ion-icon slot="icon-only" name="close-outline"></ion-icon>
     </ion-button>
-  </ion-toolbar>
 
-  <ion-toolbar>
-    <ion-title><strong>Lista delle lobby attive</strong></ion-title>
-
-    <ion-button slot="end" (click)="loadLobby()" expand="block" fill="clear" shape="round">
+    <ion-button slot="end" (click)="loadLobby()" expand="block" fill="clear" color="unicamblue" shape="round">
       <ion-label class="ion-hide-md-down">Aggiorna</ion-label>
       <ion-icon slot="end" name="refresh-outline"></ion-icon>
     </ion-button>
   </ion-toolbar>
 
-</ion-header>
-
-<ion-content>
   <div class="modal">
+    <ion-title id="lista-title">Lista delle lobby attive</ion-title>
 
     <div class="table; ion-hide-xl-down">
-      <ion-row class="header-row">
+      <ion-row class="header-row" color="unicamblue">
         <ion-col size="3">GIOCO</ion-col>
         <ion-col size="2">ADMIN</ion-col>
         <ion-col size="2">Data creazione</ion-col>
@@ -45,7 +37,7 @@
         <ion-col size="2">{{lobby.partecipanti}} / {{lobby.max_giocatori}}</ion-col>
 
         <ion-col size="3">
-          <ion-button (click)="partecipa(lobby)" expand="block" shape="round">
+          <ion-button (click)="partecipa(lobby)" color="unicamred" expand="block" shape="round">
             <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
             Partecipa
           </ion-button>
@@ -54,7 +46,7 @@
     </div>
 
     <ion-item *ngIf="lobbies.length == 0">
-      <ion-label style="text-align: center;">Non è stata trovata alcuna lobby attiva!</ion-label>
+      <ion-label id="no-lobby-message" text-wrap>Non è stata trovata alcuna lobby attiva!</ion-label>
     </ion-item>
 
     <div class="ion-hide-xl-up">
@@ -83,7 +75,7 @@
           </ion-item>
         </div>
 
-        <ion-button (click)="partecipa(lobby)" expand="block" fill="clear">
+        <ion-button (click)="partecipa(lobby)" expand="block" fill="clear" color="unicamred">
           <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
           Partecipa
         </ion-button>

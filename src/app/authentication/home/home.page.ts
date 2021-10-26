@@ -10,10 +10,11 @@ import { LoginControllerService } from 'src/app/services/login-controller/login-
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
-  styleUrls: ['../auth.scss'],
+  styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
   credenziali: FormGroup;
+  collapsedToolbar = false;
 
   constructor(
     private alertCreator: AlertCreatorService,
@@ -31,6 +32,34 @@ export class HomePage implements OnInit {
       username: ['', [Validators.required, Validators.maxLength(10)]],
     });
   }
+
+  /**
+   * Ritorna l'elemento <ion-content> della pagina Home.
+   * @returns L'ion-content della pagina.
+   */
+  getContent() {
+    return document.querySelector('ion-content');
+  }
+
+  async scrollFunction(event) {
+    const scrollElement = await this.getContent().getScrollElement();
+
+    const scrollHeight = scrollElement.scrollHeight - scrollElement.clientHeight;
+
+    const currentScrollDepth = event.detail.scrollTop;
+
+    if (currentScrollDepth < 100) {
+      document.getElementById("navbar").style.height = "350px";
+      document.getElementById("logo").classList.remove("collapsed-logo");
+      this.collapsedToolbar = false;
+    }
+    else {
+      document.getElementById("navbar").style.height = "56px";
+      document.getElementById("navbar").style.lineHeight = "56px";
+      document.getElementById("logo").classList.add("collapsed-logo");
+      this.collapsedToolbar = true;
+    }
+  };
 
   /**
    * Apre la pagina del Login.

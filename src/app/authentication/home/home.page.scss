@@ -1,0 +1,210 @@
+ion-content{
+    padding:30px;
+}
+
+#logo{
+  display:flex;
+  transition: 0.6s;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-family: Ink Free, Courier New, appearance;
+  font-size:25px;
+  text-align: center;
+  h2{
+    transition: 0.6s;
+    margin-top: 20px;
+    float:left;
+  }
+}
+
+.collapsed-logo{
+  -webkit-transform:scale(0.8);
+  -moz-transform:scale(0.8);
+  -ms-transform:scale(0.8);
+  transform:scale(0.8);
+  h2{
+    margin-top: 10px !important;
+  }
+}
+
+.auth-button{
+  width: 144px;
+}
+
+.home-img{
+    max-width:600px;
+    max-height:600px;
+    width: auto;
+    height: auto;
+    right:30px;
+}
+
+.description{
+    padding-left: 250px;
+    padding-right: 250px;
+    text-align: center;
+    h2{
+        font-family: 'DM Sans', sans-serif;
+        font-size:28px;
+        font-weight: bold;
+    }
+}
+
+#guest-card{
+  max-width:350px;
+  #collapsed-form{display: none;}
+}
+
+#guest-card-container{
+  transition: 0.6s;
+  padding:50px;
+}
+
+#navbar {
+    color:#fff;
+    line-height:80px;  
+    overflow: hidden;
+    --background: linear-gradient(90deg, var(--ion-color-unicamblue) 35%, rgba(31,110,143,1) 100%);
+    transition: 0.6s; /* Adds a transition effect when the padding is decreased */
+    position: fixed; /* Sticky/fixed navbar */
+    max-height:350px;
+    height:350px;
+    width: 100%;
+    top: 0; /* At the top */
+    z-index: 99;
+  }
+  
+  @media screen and (max-width: 580px) {
+    #navbar a {
+      float: none;
+      display: block;
+      text-align: left;
+    }
+    #navbar-right {
+      float: none;
+    }
+  }
+
+  #titles-div{
+    padding:50px;
+    transition: 0.6s;
+
+    h1{
+        transition: 0.6s;
+        font-family: 'DM Sans', sans-serif;
+        font-size:48px;
+        font-weight: bold;
+        margin-top:10px;
+    }
+  }
+
+  @media screen and (max-width: 938px) {
+    .description{
+        padding-left:30px;
+        padding-right:30px;
+    }
+  }
+
+  @media screen and (max-width: 730px) {
+    .description{
+        padding-left:10px;
+        padding-right:10px;
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    .description{
+        padding-left:0px;
+        padding-right:0px;
+    }
+  }
+
+  @media screen and (max-width: 1288px) {
+    .description{
+      padding-left:100px;
+      padding-right:100px;
+    }
+  }
+
+
+  @media screen and (max-width: 1040px) {
+    #guest-card-container{
+      padding-left:0px;
+      padding-right:0px;
+    }
+  }
+
+  @media screen and (max-width: 954px) {
+    #titles-div{
+      padding-right:0px;
+      h1{
+        margin-top:0px;
+        font-size: 38px;
+      }
+    }
+  }
+
+  @media screen and (max-width: 882px) {
+    .description{
+      padding-left:50px;
+      padding-right:50px;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    #logo{
+      -webkit-transform:scale(0.8);
+      -moz-transform:scale(0.8);
+      -ms-transform:scale(0.8);
+      transform:scale(0.8);
+    }
+    #titles-div{
+      padding: 10px 40px 0px 40px;
+    }
+    #guest-card-container{
+      padding: 0px 0px 0px 0px;
+    }
+    #guest-card{
+      max-width:none;
+      --background:none !important;
+      box-shadow: none;
+      ion-card-content{
+        padding:0px 0px 0px 0px;
+      }
+      #large-form{display: none;}
+      #collapsed-form{display: block;}
+    }
+  }
+
+  @media screen and (max-width: 574px) {
+    .description{
+      padding-left:10px;
+      padding-right:10px;
+    }
+  }
+
+  @media screen and (max-width: 470px) {
+    #titles-div{
+      padding: 10px 30px 0px 30px;
+      h1{font-size: 30px;}
+    }
+  }
+
+  @media screen and (max-width: 372px){
+    #titles-div{
+      h1{font-size: 24px;}
+    }
+    #auth-buttons-container{
+      margin:0px !important;
+      -webkit-transform:scale(0.8);
+      -moz-transform:scale(0.8);
+      -ms-transform:scale(0.8);
+      transform:scale(0.8);
+    }
+    #guest-card{
+      ion-card-content{
+        ion-input{font-size: 14px !important;}
+      }
+    }
+  }

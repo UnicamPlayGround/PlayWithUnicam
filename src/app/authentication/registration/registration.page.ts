@@ -12,7 +12,7 @@ import jwt_decode from 'jwt-decode';
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.page.html',
-  styleUrls: ['../auth.scss'],
+  styleUrls: ['./registration.page.scss'],
 })
 export class RegistrationPage implements OnInit {
   credenziali: FormGroup;

@@ -1,6 +1,11 @@
 <ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Dashboard</ion-title>
+  <ion-toolbar class="page-header">
+
+    <ion-title style="font-family: Ink Free, Courier New, appearance; font-size:25px; text-align: center;">
+      PLAY WITH UNICAM
+      <img src="../../../../assets/unicam-logo.png" class="ion-hide-md-down"
+        style="max-height: 65px; max-width: 65px; position:absolute; margin-left:15px; margin-top:8px;">
+    </ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="openUserPopover($event)">
@@ -19,34 +24,37 @@
     </ion-item>
   </ion-card>
 
-  <ion-searchbar placeholder="Cerca giochi"></ion-searchbar>
+  <ion-card-header>
+    <ion-card-title id="catalogo-title">Catalogo dei giochi</ion-card-title>
+  </ion-card-header>
 
-  <ion-item lines="full" *ngIf="this.games.length == 0">
-    <ion-label style="text-align: center; color:grey">Non è stato trovato alcun gioco!</ion-label>
+  <ion-item lines="none" *ngIf="this.games.length == 0">
+    <ion-label style="text-align: center; color:grey">Non è stato trovato alcun gioco! :(</ion-label>
   </ion-item>
 
-  <div class="row">
-    <a *ngFor="let game of games" class="column" tappable (click)="openIntroLobby(game)">
-      <div class="container">
-        <img src="../../../../assets/images/generic-game.jpg" class="image" />
-        <div class="overlay">
-          <div class="text">GIOCA ORA!</div>
-        </div>
-        <div class="info">
-          <ion-label>
-            <h1><strong>{{game.nome}}</strong></h1>
-            <h2>
-              <ion-icon name="people-outline"></ion-icon>
-              Giocatori {{game.min_giocatori}} - {{game.max_giocatori}}
-            </h2>
-          </ion-label>
-        </div>
-      </div>
-    </a>
-  </div>
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col size-sm="12" size-md="6" size-lg="4" size="12" *ngFor="let game of games">
 
-  <!-- <ion-infinite-scroll threshold="5%" (ionInfinite)="loadMore($event)">
-    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more games...">
-    </ion-infinite-scroll-content>
-  </ion-infinite-scroll> -->
+        <ion-card button="true" class="game" (click)="openIntroLobby(game)">
+          <img class="game-img" src="../../../../assets/images/generic-game-400x300.jpg" />
+          <div class="overlay-text">GIOCA ORA!</div>
+
+          <ion-card-header class="game-header">
+            <ion-card-title> {{game.nome}}</ion-card-title>
+            <ion-card-subtitle>Giocatori {{game.min_giocatori}} - {{game.max_giocatori}}</ion-card-subtitle>
+          </ion-card-header>
+        </ion-card>
+
+
+        <ion-card button="true" class="game-small" (click)="openIntroLobby(game)">
+          <ion-card-header class="game-header-small">
+            <ion-card-title>{{game.nome}}</ion-card-title>
+            <ion-card-subtitle>Giocatori {{game.min_giocatori}} - {{game.max_giocatori}}</ion-card-subtitle>
+          </ion-card-header>
+        </ion-card>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

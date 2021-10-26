@@ -1,14 +1,9 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Unisciti ad una lobby privata</ion-title>
-
-    <ion-button fill="clear" color="light" slot="start" (click)="closeModal()">
+<ion-content [fullscreen]="true">
+  <ion-toolbar>
+    <ion-button fill="clear" color="unicamblue" slot="start" (click)="closeModal()">
       <ion-icon slot="icon-only" name="close-outline"></ion-icon>
     </ion-button>
   </ion-toolbar>
-</ion-header>
-
-<ion-content>
 
   <ion-list lines="none" class="modal">
     <form (ngSubmit)="partecipa()" [formGroup]="codiceForm">
@@ -23,7 +18,7 @@
 
       <br><br>
 
-      <ion-button type="submit" expand="block" shape="round">Partecipa</ion-button>
+      <ion-button type="submit" expand="block" color="unicamred" shape="round">Partecipa</ion-button>
     </form>
   </ion-list>
 </ion-content>

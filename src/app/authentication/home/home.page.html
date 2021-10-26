@@ -1,30 +1,95 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Home</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-app>
+  <ion-header>
+    <ion-toolbar id="navbar">
 
-<ion-content [fullscreen]="true">
-  <ion-card class="auth-card">
-    <ion-card-header>
-      <ion-card-title><strong>Benvenuto!</strong></ion-card-title>
-      <h3><strong>Scegli un nickname per iniziare:</strong></h3>
-    </ion-card-header>
 
-    <ion-card-content>
-      <form (ngSubmit)="loginOspiti()" [formGroup]="credenziali">
-        <ion-input style="font-size:25px" type="nickname" name="username" formControlName="username"
-          placeholder="Inserisci un nickname" required>
-        </ion-input>
-        <ion-button expand="block" shape="round" type="submit">GIOCA ORA!</ion-button>
-      </form>
-      <br>
-      <h2>Oppure</h2>
-      <br>
-      <ion-button expand="block" shape="round" color="danger" routerLink="/login">ACCEDI</ion-button>
-      <br>
-      <h2>Non sei ancora registrato? <a routerLink="/registration">Registrati ora!</a></h2>
-    </ion-card-content>
-  </ion-card>
+      <div id="logo">
+        <h2>PLAY WITH UNICAM</h2>
+      </div>
 
-</ion-content>
+      <ion-row>
+        <ion-col size-sm="12" size-md="7" size-lg="7" size="12" style="padding:0px 0px 0px 0px;">
+          <div id="titles-div">
+            <h1 style="margin-bottom: 0px;">
+              Impara divertendoti
+            </h1>
+            <h1>
+              Gioca con chi vuoi
+            </h1>
+            <ion-row id="auth-buttons-container" style="padding:0px;">
+              <ion-button id="login-button" routerLink="/login" expand="block" color="light" shape="round"
+                fill="outline" class="auth-button">
+                Accedi
+              </ion-button>
+
+              <ion-button id="register-button" routerLink="/registration" expand="block" shape="round"
+                style="--background: var(--ion-color-unicamred); --color: var(--ion-color-light); margin-left:8px;"
+                class="auth-button">
+                Registrati
+              </ion-button>
+            </ion-row>
+          </div>
+        </ion-col>
+
+        <ion-col size-sm="12" size-md="5" size-lg="5" size="12" style="padding:0px 0px 0px 0px;">
+          <div id="guest-card-container">
+            <ion-card id="guest-card">
+              <ion-card-content>
+                <form id="large-form" (ngSubmit)="loginOspiti()" [formGroup]="credenziali">
+                  <ion-label text-wrap style="font-size: 18px; font-weight: bold;">Scegli un nickname per iniziare
+                  </ion-label>
+                  <ion-input type="nickname" name="username" formControlName="username"
+                    placeholder="Inserisci un nickname" required style="font-size: 18px;">
+                  </ion-input>
+                  <ion-button color="unicamred" expand="block" shape="round" type="submit">GIOCA ORA!</ion-button>
+                </form>
+
+                <form id="collapsed-form" (ngSubmit)="loginOspiti()" [formGroup]="credenziali">
+
+                  <ion-item lines="none" style="--background:none; color:var(--ion-color-light);">
+                    <ion-label style="text-align: center;">Oppure</ion-label>
+                  </ion-item>
+                  <ion-item lines="full" style="--background:none; color:var(--ion-color-light);">
+                    <ion-input type="nickname" name="username" formControlName="username"
+                      placeholder="Scegli un nickname" required style="font-size: 18px;">
+                    </ion-input>
+                    <ion-button slot="end" fill="clear" color="light" expand="block" shape="round" type="submit">
+                      <ion-label text-wrap>GIOCA ORA!</ion-label>
+                    </ion-button>
+                  </ion-item>
+                </form>
+              </ion-card-content>
+            </ion-card>
+          </div>
+        </ion-col>
+      </ion-row>
+
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content [scrollEvents]="true" (ionScroll)="scrollFunction($event)">
+
+    <div style="margin-top:380px;padding:15px 15px;font-size:20px">
+
+      <div class="description">
+        <h2>Uno strumento didattico alternativo</h2>
+        <p>L'idea alla base del progetto è quella di creare uno strumento didattico alternativo capace di coniugare
+          l'aspetto videoludico e l'apprendimento, basandosi sull'utilizzo dei cosiddetti serious games, ovvero
+          giochi che non hanno come scopo principale l'intrattenimento, ma che sono progettati soprattutto a fini
+          educativi.</p>
+      </div>
+
+      <img src="../../../assets/images/la_piattaforma.png" alt="" class="home-img">
+
+      <div class="description" style="margin-top: 50px;">
+        <h2>Connettiti con chiunque</h2>
+        <p>Crea una “stanza di gioco” per giocare assieme ai tuoi amici o partecipa ad una già esistente per disputare
+          una partita assieme ad altri utenti della piattaforma.
+          Scelto il gioco, non ti resta che divertirti ed imparare!</p>
+      </div>
+
+    </div>
+
+    <app-home-footer></app-home-footer>
+  </ion-content>
+</ion-app>

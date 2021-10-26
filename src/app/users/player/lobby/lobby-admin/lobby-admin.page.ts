@@ -203,11 +203,11 @@ export class LobbyAdminPage implements OnInit {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(this.link).then(
         () => {
-          this.alertCreator.createInfoAlert("LINK COPIATO", "Il link è stato copiato correttamente, invialo agli altri giocatori!");
+          this.alertCreator.createInfoAlert("Link copiato", "Il link è stato copiato correttamente, invialo agli altri giocatori!");
         })
         .catch(
           () => {
-            this.alertCreator.createInfoAlert("ERRORE", "Non è stato possibile copiare il link!");
+            this.alertCreator.createInfoAlert("Errore", "Non è stato possibile copiare il link!");
           });
     } else this.impossibileCopiareLink = true;
   }

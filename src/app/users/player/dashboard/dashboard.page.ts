@@ -39,6 +39,7 @@ export class DashboardPage implements OnInit {
     const decodedToken: any = jwt_decode(token);
     if (decodedToken.tipo === 'OSPITE') this.ospite = true;
     else if (decodedToken.tipo === 'GIOCATORE') this.ospite = false;
+    // console.log(this.ospite);
   }
 
   async openUserPopover(event) {
