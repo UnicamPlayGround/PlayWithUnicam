@@ -66,6 +66,19 @@ function creaLobbyQuery(codiceLobby, idGioco, pubblica) {
     })
 }
 
+//TODO commentare
+exports.resetLobby = () => {
+    return new Promise((resolve, reject) => {
+        db.pool.query('DELETE FROM public.lobby', (error, results) => {
+            if (error) {
+                console.log(error);
+                return reject(error);
+            }
+            return resolve();
+        });
+    })
+}
+
 /**
  * Imposta il parametro *partita_iniziata* della Lobby a **true**.
  * @param {*} codiceLobby Codice della Lobby

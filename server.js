@@ -18,6 +18,7 @@ const bcrypt = require('bcrypt');
 
 const timerGiocatoriInattivi = setInterval(() => { controllaGiocatoriInattivi(); }, 5000);
 const timerOspiti = setInterval(() => { controllaOspiti(); }, 3600000); //3600000 millis corrispondono ad un'ora
+resetLobby();
 
 //Run the app by serving the static files in the dist directory
 app.use(express.static(__dirname + '/www'));
@@ -118,6 +119,11 @@ function controllaGiocatoriInattivi() {
  */
 function controllaOspiti() {
     utente.eliminaOspiti();
+}
+
+//TODO commentare
+function resetLobby() {
+    lobby.resetLobby();
 }
 
 /**
