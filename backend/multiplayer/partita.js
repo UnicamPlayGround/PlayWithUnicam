@@ -209,6 +209,7 @@ exports.creaPartita = (adminLobby) => {
             })
             .then(results => { return creaPartitaQuery(lobbyInfo.codice, adminLobby, results); })
             .then(_ => lobby.iniziaPartita(lobbyInfo.codice))
+            .then(_ => giocatore.resetInfoPartita(lobbyInfo.codice))
             .then(_ => { resolve(); })
             .catch(error => {
                 console.log(error);
@@ -316,11 +317,14 @@ exports.terminaPartita = (username) => {
                             console.log(error);
                             return reject(messaggi.SERVER_ERROR);
                         }
-
-                        return lobby.terminaPartita(partitaInfo.codice_lobby);
+                        return lobby.terminaPartita(partitaInfo.codice_lobby)
+                            .then(_ => { return resolve() })
+                            .catch(error => {
+                                console.log(error);
+                                return reject(messaggi.SERVER_ERROR);
+                            });
                     });
             })
-            .then(_ => { resolve() })
             .catch(error => {
                 console.log(error);
                 return reject(messaggi.SERVER_ERROR);

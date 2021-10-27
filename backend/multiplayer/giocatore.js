@@ -174,3 +174,16 @@ exports.ping = (username) => {
             })
     })
 }
+
+//TODO commentare
+exports.resetInfoPartita = (codiceLobby) => {
+    return new Promise((resolve, reject) => {
+        db.pool.query('UPDATE public.giocatori SET info = $1 WHERE codice_lobby = $2',
+            [null, codiceLobby], (error, results) => {
+                if (error)
+                    return reject(error);
+                else
+                    return resolve(results);
+            });
+    })
+}
