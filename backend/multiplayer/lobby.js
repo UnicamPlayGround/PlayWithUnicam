@@ -30,6 +30,7 @@ function controllaLobbyAdmin(results) {
     })
 }
 
+//TODO: rimuovi metodo
 /**
  * Ritorna la Data Odierna.
  * @returns la Data di oggi in formato gg/mm/yyyy
@@ -55,8 +56,8 @@ function eliminaGiocatore(username) {
  */
 function creaLobbyQuery(codiceLobby, idGioco, pubblica) {
     return new Promise((resolve, reject) => {
-        db.pool.query('INSERT INTO public.lobby (codice, data_creazione, id_gioco, pubblica, partita_iniziata) VALUES ($1, $2, $3, $4, $5)',
-            [codiceLobby, getDataOdierna(), idGioco, pubblica, false], (error, results) => {
+        db.pool.query('INSERT INTO public.lobby (codice, data_creazione, id_gioco, pubblica, partita_iniziata) VALUES ($1, NOW(), $2, $3, $4)',
+            [codiceLobby, idGioco, pubblica, false], (error, results) => {
                 if (error) {
                     console.log(error);
                     return reject(messaggi.CREAZIONE_LOBBY_ERROR);
