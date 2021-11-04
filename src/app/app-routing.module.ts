@@ -63,7 +63,11 @@ const routes: Routes = [
   {
     path: 'crosswords/editor',
     loadChildren: () => import('./mgp_games/crosswords-puzzle/editor/editor.module').then(m => m.EditorPageModule)
+  },  {
+    path: 'memory-game',
+    loadChildren: () => import('./mgp_games/memory-game/memory-game.module').then( m => m.MemoryGamePageModule)
   }
+
 
 ];
 
