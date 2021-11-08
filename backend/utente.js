@@ -13,13 +13,14 @@ const messaggi = require('./messaggi');
 exports.cambiaPassword = (newPassword, oldPassword, username) => {
     return new Promise((resolve, reject) => {
         if (controller.controllaPassword(newPassword))
-            return reject("La nuova password deve essere compresa tra 8 e 16 caratteri.");
+            return reject(new Error("La nuova password deve essere compresa tra 8 e 16 caratteri."));
 
         this.cercaUtenteByUsername(username)
             .then(results => {
                 if (controller.controllaRisultatoQuery(results))
-                    return reject(messaggi.UTENTE_NON_TROVATO_ERROR);
+                    throw new Error(messaggi.UTENTE_NON_TROVATO_ERROR);
 
+                //TODO eliminare risultati
                 const risultati = JSON.parse(JSON.stringify(results.rows));
 
                 const data = risultati[0];
@@ -30,18 +31,14 @@ exports.cambiaPassword = (newPassword, oldPassword, username) => {
 
                     db.pool.query('UPDATE public.utenti SET password = $1 WHERE username = $2',
                         [newHash, username], (error, results) => {
-                            if (error) {
-                                console.log(error);
-                                return reject("Errore nella modifica dei dati.");
-                            }
-                            return resolve();
+                            if (error)
+                                return reject(error);
+                            else
+                                return resolve();
                         });
-                } else return reject('La vecchia password non è corretta');
+                } else throw new Error('La vecchia password non è corretta');
             })
-            .catch(error => {
-                console.log(error);
-                return reject(messaggi.SERVER_ERROR);
-            });
+            .catch(error => { return reject(error); });
     })
 }
 
@@ -52,8 +49,8 @@ exports.cambiaPassword = (newPassword, oldPassword, username) => {
  */
 exports.cercaOspiteByUsername = (username) => {
     return new Promise((resolve, reject) => {
-        if (controller.controllaNotNull(username))
-            return reject("L'username non deve essere vuoto!")
+        if (controller.controllaString(username))
+            return reject(new Error("L'username non deve essere vuoto!"));
 
         db.pool.query('SELECT * FROM public.ospiti WHERE username = $1', [username], (error, results) => {
             if (error)
@@ -71,8 +68,8 @@ exports.cercaOspiteByUsername = (username) => {
  */
 exports.cercaUtenteByUsername = (username) => {
     return new Promise((resolve, reject) => {
-        if (controller.controllaNotNull(username))
-            return reject("L'username non deve essere vuoto!");
+        if (controller.controllaString(username))
+            return reject(new Error("L'username non deve essere vuoto!"));
 
         db.pool.query('SELECT * FROM public.utenti WHERE username = $1', [username], (error, results) => {
             if (error)
@@ -91,7 +88,7 @@ exports.creaOspite = (username) => {
     return new Promise((resolve, reject) => {
         var data = new Date();
         if (controller.controllaString(username))
-            return reject("L'username non deve essere vuoto!");
+            return reject(new Error("L'username non deve essere vuoto!"));
 
         username = controller.xssSanitize(username);
 
@@ -114,42 +111,36 @@ exports.creaOspite = (username) => {
  */
 exports.creaUtente = (username, nome, cognome, password) => {
     return new Promise((resolve, reject) => {
-        try {
-            if (controller.controllaString(username))
-                return reject("Il campo 'username' non deve essere vuoto!");
-            if (controller.controllaString(nome))
-                return reject("Il campo 'nome' non deve essere vuoto!");
-            if (controller.controllaString(cognome))
-                return reject("Il campo 'cognome' non deve essere vuoto!");
-            if (controller.controllaPassword(password))
-                return reject("La password deve essere compresa tra 8 e 16 caratteri.");
+        if (controller.controllaString(username))
+            return reject(new Error("Il campo 'username' non deve essere vuoto!"));
+        if (controller.controllaString(nome))
+            return reject(new Error("Il campo 'nome' non deve essere vuoto!"));
+        if (controller.controllaString(cognome))
+            return reject(new Error("Il campo 'cognome' non deve essere vuoto!"));
+        if (controller.controllaPassword(password))
+            return reject(new Error("La password deve essere compresa tra 8 e 16 caratteri."));
 
-            username = controller.xssSanitize(username);
-            nome = controller.xssSanitize(nome);
-            cognome = controller.xssSanitize(cognome);
+        username = controller.xssSanitize(username);
+        nome = controller.xssSanitize(nome);
+        cognome = controller.xssSanitize(cognome);
 
-            const salt = bcrypt.genSaltSync(10);
-            const hash = bcrypt.hashSync(password + process.env.SECRET_PWD, salt);
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(password + process.env.SECRET_PWD, salt);
 
-            db.pool.query('INSERT INTO public.utenti (username, nome, cognome, password, salt, tipo) VALUES ($1, $2, $3, $4, $5, $6)',
-                [username, nome, cognome, hash, salt, "GIOCATORE"], (error, results) => {
-                    if (error) {
-                        console.log(error);
-                        return reject("Non è stato possibile creare l'utente");
-                    }
+        db.pool.query('INSERT INTO public.utenti (username, nome, cognome, password, salt, tipo) VALUES ($1, $2, $3, $4, $5, $6)',
+            [username, nome, cognome, hash, salt, "GIOCATORE"], (error, results) => {
+                if (error)
+                    return reject(error);
+                else
                     return resolve();
-                })
-        } catch (error) {
-            console.log(error);
-            return reject(error);
-        }
+            })
     })
 }
 
 /**
  * Ritorna l'Username, il Nome ed il Cognome di un Utente.
  * @param {string} username Username dell'Utente
- * @returns Le informazioni dell'Utente
+ * @returns Le informazioni dell'Utente (username, nome e cognome)
  */
 exports.getUserInfo = (username) => {
     return new Promise((resolve, reject) => {
@@ -172,9 +163,9 @@ exports.getUserInfo = (username) => {
 exports.modificaNomeCognome = (username, nome, cognome) => {
     return new Promise((resolve, reject) => {
         if (controller.controllaString(nome))
-            return reject("Il campo 'nome' non è valido!");
+            return reject(new Error("Il campo 'nome' non è valido!"));
         if (controller.controllaString(cognome))
-            return reject("Il campo 'cognome' non è valido!");
+            return reject(new Error("Il campo 'cognome' non è valido!"));
 
         nome = controller.xssSanitize(nome);
         cognome = controller.xssSanitize(cognome);
@@ -182,21 +173,17 @@ exports.modificaNomeCognome = (username, nome, cognome) => {
         this.cercaUtenteByUsername(username)
             .then(results => {
                 if (controller.controllaRisultatoQuery(results))
-                    return reject(messaggi.UTENTE_NON_TROVATO_ERROR);
+                    throw new Error(messaggi.UTENTE_NON_TROVATO_ERROR);
 
                 db.pool.query('UPDATE public.utenti SET nome = $1, cognome = $2 WHERE username = $3',
                     [nome, cognome, username], (error, results) => {
-                        if (error) {
-                            console.log(error);
-                            return reject('Errore dati query');
-                        }
-                        return resolve();
+                        if (error)
+                            return reject(error);
+                        else
+                            return resolve();
                     })
             })
-            .catch(error => {
-                console.log(error);
-                return reject(messaggi.SERVER_ERROR);
-            });
+            .catch(error => { return reject(error); });
     })
 }
 
@@ -208,20 +195,19 @@ exports.modificaNomeCognome = (username, nome, cognome) => {
 exports.modificaUsername = (oldUsername, newUsername) => {
     return new Promise((resolve, reject) => {
         if (controller.controllaString(newUsername))
-            return reject("Il nuovo username non è valido!");
+            return reject(new Error("Il nuovo username non è valido!"));
 
         newUsername = controller.xssSanitize(newUsername);
 
         this.cercaUtenteByUsername(oldUsername)
             .then(results => {
                 if (controller.controllaRisultatoQuery(results))
-                    return reject(messaggi.UTENTE_NON_TROVATO_ERROR);
-
+                    throw new Error(messaggi.UTENTE_NON_TROVATO_ERROR);
                 return this.cercaUtenteByUsername(newUsername);
             })
             .then(results => {
                 if (!controller.controllaRisultatoQuery(results))
-                    return reject("Il nuovo username è già utilizzato!");
+                    throw new Error("Il nuovo username è già utilizzato!");
 
                 db.pool.query('UPDATE public.utenti SET username = $1 WHERE username = $2',
                     [newUsername, oldUsername], (error, results) => {
@@ -231,10 +217,7 @@ exports.modificaUsername = (oldUsername, newUsername) => {
                             return resolve(results);
                     });
             })
-            .catch(error => {
-                console.log(error);
-                reject(messaggi.SERVER_ERROR);
-            });
+            .catch(error => { return reject(error); });
     })
 }
 
@@ -258,20 +241,26 @@ exports.eliminaOspite = (username) => {
  * * 86400000 millisecondi corispondono a 24 ore
  */
 exports.eliminaOspiti = () => {
-    var data = new Date();
+    return new Promise((resolve, reject) => {
+        db.pool.query('SELECT * FROM public.ospiti', (error, results) => {
+            if (error) {
+                console.log(error);
+                return;
+            }
 
-    db.pool.query('SELECT * FROM public.ospiti', (error, results) => {
-        if (error) {
-            console.log(error);
-            return;
-        }
+            const ospiti = JSON.parse(JSON.stringify(results.rows));
+            var promises = [];
 
-        const ospiti = JSON.parse(JSON.stringify(results.rows));
+            ospiti.forEach(ospite => {
+                var dataOspite = new Date(ospite.data_creazione);
+                if ((new Date().getTime() - dataOspite.getTime()) > 86400000)
+                    promises.push(this.eliminaOspite(ospite.username));
+            });
 
-        ospiti.forEach(ospite => {
-            var dataOspite = new Date(ospite.data_creazione);
-            if ((data.getTime() - dataOspite.getTime()) > 86400000)
-                this.eliminaOspite(ospite.username).catch(error => console.log(error));
-        });
+            return Promise.all(promises)
+                .then(_ => resolve())
+                .catch(error => reject(error));
+        })
     })
+
 }

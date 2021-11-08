@@ -18,6 +18,7 @@ const bcrypt = require('bcrypt');
 
 const timerGiocatoriInattivi = setInterval(() => { controllaGiocatoriInattivi(); }, 5000);
 const timerOspiti = setInterval(() => { controllaOspiti(); }, 3600000); //3600000 millis corrispondono ad un'ora
+controllaOspiti();
 resetLobby();
 
 //Run the app by serving the static files in the dist directory

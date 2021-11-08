@@ -8,7 +8,7 @@
     "start": "node server.js",
     "build": "ng build --aot --configuration production",
     "postinstall": "ng build --aot --configuration production",
-    "test": "ng test",
+    "test": "mocha --slow 400",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },

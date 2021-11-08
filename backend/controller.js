@@ -6,8 +6,10 @@ const xss = require("xss");
  * @returns true se la query non ha ritornato nulla, false altrimenti
  */
 exports.controllaRisultatoQuery = (results) => {
-    const toControl = JSON.parse(JSON.stringify(results.rows));
-    return (toControl.length == 0);
+    if (results) {
+        const toControl = JSON.parse(JSON.stringify(results.rows));
+        return (toControl.length == 0);
+    } else return true;
 }
 
 /** 
