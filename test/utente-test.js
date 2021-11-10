@@ -41,7 +41,7 @@ describe('Utente.js', function () {
 
     describe('#creaUtente()', function () {
         it('should throw an error because the username field is empty', async function () {
-            await assert.rejects(utente.creaUtente("", "Alberto", "Rossi", "password"), { message: "Il campo 'username' non deve essere vuoto!" });
+            await assert.rejects(utente.creaUtente("", "Alberto", "Rossi", "password"), { message: messaggi.USERNAME_VUOTO_ERROR });
         });
 
         it('should throw an error because the name field is empty', async function () {
@@ -88,7 +88,7 @@ describe('Utente.js', function () {
 
     describe('#creaOspite()', function () {
         it('should throw an error because the username field is empty', async function () {
-            await assert.rejects(utente.creaOspite(""), { message: "L'username non deve essere vuoto!" });
+            await assert.rejects(utente.creaOspite(""), { message: messaggi.USERNAME_VUOTO_ERROR });
         });
 
         it('should create a guest and save it to the database', function () {
@@ -129,7 +129,7 @@ describe('Utente.js', function () {
 
     describe('#cercaOspiteByUsername()', function () {
         it('should throw an error because the username field is empty', async function () {
-            await assert.rejects(utente.cercaOspiteByUsername(""), { message: "L'username non deve essere vuoto!" });
+            await assert.rejects(utente.cercaOspiteByUsername(""), { message: messaggi.USERNAME_VUOTO_ERROR });
         });
 
         it('should return the guest information saved to the database', function () {
@@ -147,7 +147,7 @@ describe('Utente.js', function () {
 
     describe('#cercaUtenteByUsername()', function () {
         it('should throw an error because the username field is empty', async function () {
-            await assert.rejects(utente.cercaUtenteByUsername(""), { message: "L'username non deve essere vuoto!" });
+            await assert.rejects(utente.cercaUtenteByUsername(""), { message: messaggi.USERNAME_VUOTO_ERROR });
         });
 
         it('should return the user information saved to the database', function () {

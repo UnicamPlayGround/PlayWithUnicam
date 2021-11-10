@@ -27,14 +27,24 @@ exports.creaGioco = (nome, tipo, minGiocatori, maxGiocatori, link, attivo, confi
                     [nome, tipo, maxGiocatori, minGiocatori, link, attivo, config, regolamento], (error, results) => {
                         if (error) {
                             console.log(error);
-                            return reject(messaggi.CREAZIONE_GIOCO_ERROR);
+                            return reject(new Error(messaggi.CREAZIONE_GIOCO_ERROR));
                         }
                         return resolve();
                     })
             })
-            .catch(error => {
-                console.log(error);
-                return reject(error);
+            .catch(error => { return reject(error); });
+    })
+}
+
+//TODO commentare
+exports.deleteGame = (id) => {
+    return new Promise((resolve, reject) => {
+        db.pool.query('DELETE FROM public.giochi WHERE id = $1',
+            [id], (error, results) => {
+                if (error) {
+                    console.log(error);
+                    return reject(new Error("Errore nell'eliminazione del gioco: " + id));
+                } else resolve();
             });
     })
 }

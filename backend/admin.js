@@ -52,6 +52,7 @@ exports.eliminaUtenti = (utenti) => {
  * @param {*} id L'id del gioco da eliminare.
  */
 exports.deleteGame = (id) => {
+    //TODO refactor con game
     return new Promise((resolve, reject) => {
         db.pool.query('delete from public.giochi where id = $1',
             [id], (error, results) => {

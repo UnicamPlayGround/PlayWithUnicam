@@ -50,7 +50,7 @@ exports.cambiaPassword = (newPassword, oldPassword, username) => {
 exports.cercaOspiteByUsername = (username) => {
     return new Promise((resolve, reject) => {
         if (controller.controllaString(username))
-            return reject(new Error("L'username non deve essere vuoto!"));
+            return reject(new Error(messaggi.USERNAME_VUOTO_ERROR));
 
         db.pool.query('SELECT * FROM public.ospiti WHERE username = $1', [username], (error, results) => {
             if (error)
@@ -69,7 +69,7 @@ exports.cercaOspiteByUsername = (username) => {
 exports.cercaUtenteByUsername = (username) => {
     return new Promise((resolve, reject) => {
         if (controller.controllaString(username))
-            return reject(new Error("L'username non deve essere vuoto!"));
+            return reject(new Error(messaggi.USERNAME_VUOTO_ERROR));
 
         db.pool.query('SELECT * FROM public.utenti WHERE username = $1', [username], (error, results) => {
             if (error)
@@ -88,7 +88,7 @@ exports.creaOspite = (username) => {
     return new Promise((resolve, reject) => {
         var data = new Date();
         if (controller.controllaString(username))
-            return reject(new Error("L'username non deve essere vuoto!"));
+            return reject(new Error(messaggi.USERNAME_VUOTO_ERROR));
 
         username = controller.xssSanitize(username);
 
@@ -112,7 +112,7 @@ exports.creaOspite = (username) => {
 exports.creaUtente = (username, nome, cognome, password) => {
     return new Promise((resolve, reject) => {
         if (controller.controllaString(username))
-            return reject(new Error("Il campo 'username' non deve essere vuoto!"));
+            return reject(new Error(messaggi.USERNAME_VUOTO_ERROR));
         if (controller.controllaString(nome))
             return reject(new Error("Il campo 'nome' non deve essere vuoto!"));
         if (controller.controllaString(cognome))

@@ -23,6 +23,12 @@ const UTENTE_NON_TROVATO_ERROR = "Utente non trovato";
  */
 const PASSWORD_NON_VALIDA_ERROR = "Password non valida!";
 
+/**
+ * Messaggio di errore:
+ * * l'username per la creazione/ricerca di un Utente/Ospite non deve essere vuoto.
+ */
+const USERNAME_VUOTO_ERROR = "L'username non deve essere vuoto!";
+
 //--------------------------------- LOBBY ---------------------------------
 
 /**
@@ -70,6 +76,7 @@ module.exports = {
     SERVER_ERROR,
     UTENTE_NON_TROVATO_ERROR,
     PASSWORD_NON_VALIDA_ERROR,
+    USERNAME_VUOTO_ERROR,
     PARTECIPAZIONE_LOBBY_ERROR,
     CREAZIONE_LOBBY_ERROR,
     CREAZIONE_PARTITA_ERROR,
