@@ -71,6 +71,12 @@ const MINIMO_GIOCATORI_ERROR = "Non ci sono abbastanza giocatori per completare 
  */
 const CREAZIONE_GIOCO_ERROR = "Non è stato possibile creare il gioco!";
 
+/**
+ * Messaggio di errore:
+ * * il Gioco non è stato trovato.
+ */
+const GIOCO_NON_TROVATO_ERROR = "Gioco non trovato!";
+
 module.exports = {
     ERRORE_JWT,
     SERVER_ERROR,
@@ -82,5 +88,6 @@ module.exports = {
     CREAZIONE_PARTITA_ERROR,
     PARTITA_NON_TROVATA_ERROR,
     MINIMO_GIOCATORI_ERROR,
-    CREAZIONE_GIOCO_ERROR
+    CREAZIONE_GIOCO_ERROR,
+    GIOCO_NON_TROVATO_ERROR
 }
