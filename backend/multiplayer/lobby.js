@@ -1,6 +1,8 @@
 const controller = require('../controller');
 const db = require('../database');
 const giocatore = require('./giocatore');
+const game = require('./game');
+const utente = require('../utente');
 const messaggi = require('../messaggi');
 
 function creaCodice() {
@@ -116,19 +118,33 @@ exports.terminaPartita = (codiceLobby) => {
 
 /**
  * Cerca la lobby che ha come Admin l'username passato.
+ * Controlla che l'username passato sia collegato ad un Utente o ad un Ospite.
  * @param {String} adminLobby l'username dell'Admin
  */
 exports.cercaLobbyByAdmin = (adminLobby) => {
     return new Promise((resolve, reject) => {
-        db.pool.query('SELECT codice, data_creazione, admin_lobby, id_gioco, min_giocatori, max_giocatori, pubblica FROM ' +
-            '(public.giocatori INNER JOIN public.lobby ON public.giocatori.codice_lobby = public.lobby.codice) ' +
-            'INNER JOIN public.giochi ON public.lobby.id_gioco = public.giochi.id WHERE admin_lobby = $1',
-            [adminLobby], (error, results) => {
-                if (error)
-                    return reject(error);
-                else
-                    return resolve(results);
-            });
+
+        var utenteNonTrovato = false;
+        utente.cercaUtenteByUsername(adminLobby)
+            .then(results => {
+                if (controller.controllaRisultatoQuery(results)) utenteNonTrovato = true;
+                return utente.cercaOspiteByUsername(adminLobby);
+            })
+            .then(results => {
+                if (utenteNonTrovato && controller.controllaRisultatoQuery(results))
+                    throw new Error("L'Utente '" + adminLobby + "' non esiste!");
+
+                db.pool.query('SELECT codice, data_creazione, admin_lobby, id_gioco, min_giocatori, max_giocatori, pubblica FROM ' +
+                    '(public.giocatori INNER JOIN public.lobby ON public.giocatori.codice_lobby = public.lobby.codice) ' +
+                    'INNER JOIN public.giochi ON public.lobby.id_gioco = public.giochi.id WHERE admin_lobby = $1',
+                    [adminLobby], (error, results) => {
+                        if (error)
+                            return reject(error);
+                        else
+                            return resolve(results);
+                    });
+            })
+            .catch(error => { return reject(error); });
     })
 }
 
@@ -194,7 +210,7 @@ exports.getGiocatoriLobby = (username) => {
         this.cercaLobbyByUsername(username)
             .then(results => {
                 if (controller.controllaRisultatoQuery(results))
-                    return reject(messaggi.PARTECIPAZIONE_LOBBY_ERROR);
+                    throw new Error(messaggi.PARTECIPAZIONE_LOBBY_ERROR);
 
                 const tmp = JSON.parse(JSON.stringify(results.rows));
                 db.pool.query('SELECT * FROM public.giocatori WHERE codice_lobby = $1 ORDER BY data_ingresso ASC', [tmp[0].codice], (error, results) => {
@@ -204,10 +220,7 @@ exports.getGiocatoriLobby = (username) => {
                         return resolve(results);
                 });
             })
-            .catch(error => {
-                console.log(error);
-                return reject("Non è stato possibile trovare la lobby");
-            })
+            .catch(error => { return reject(error); });
     })
 }
 
@@ -342,14 +355,16 @@ exports.creaLobby = (adminLobby, idGioco, pubblica) => {
 
         this.cercaLobbyByAdmin(adminLobby)
             .then(results => { return controllaLobbyAdmin(results); })
+            .then(_ => { return game.getInfoGioco(idGioco); })
+            .then(results => {
+                if (controller.controllaRisultatoQuery(results))
+                    throw new Error(messaggi.GIOCO_NON_TROVATO_ERROR);
+            })
             .then(_ => { return creaLobbyQuery(codiceLobby, idGioco, pubblica); })
             .then(_ => { return giocatore.creaGiocatore(adminLobby, codiceLobby); })
             .then(_ => { return this.impostaAdminLobby(adminLobby, codiceLobby); })
             .then(_ => { return resolve(); })
-            .catch(error => {
-                console.log(error);
-                return reject(error);
-            })
+            .catch(error => { return reject(error); });
     })
 }
 
@@ -388,7 +403,7 @@ exports.partecipaLobby = (username, codiceLobby) => {
         this.cercaLobbyByCodice(codiceLobby)
             .then(results => {
                 if (controller.controllaRisultatoQuery(results))
-                    return reject("Non è stata trovata alcuna lobby corrispondente al codice inserito!");
+                    throw new Error("Non è stata trovata alcuna lobby corrispondente al codice inserito!");
 
                 lobby = JSON.parse(JSON.stringify(results.rows))[0];
                 return this.getNumeroGiocatoriLobby(codiceLobby);
@@ -407,11 +422,8 @@ exports.partecipaLobby = (username, codiceLobby) => {
                             return reject(error);
                         });
                 } else
-                    return reject('La lobby selezionata è già al completo!');
+                    throw new Error('La lobby selezionata è già al completo!');
             })
-            .catch(error => {
-                console.log(error);
-                return reject(error);
-            })
+            .catch(error => { return reject(error); });
     })
 }
