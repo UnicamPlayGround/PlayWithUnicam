@@ -116,6 +116,16 @@ describe('Giocatore.js', function () {
      */
 
     /**
+     * Terminati i test elimina il gocatore temporaneo.
+     */
+    after(function () {
+        return lobby.abbandonaLobby("guest_test")
+    });
+    after(function () {
+        return eliminaGioco();
+    });
+
+    /**
      * Terminati i test elimina l'utente temporaneo.
      */
     after(function () {
@@ -128,16 +138,6 @@ describe('Giocatore.js', function () {
 
     after(function () {
         return utente.eliminaOspite("guest3-t");
-    });
-
-    /**
-     * Terminati i test elimina il gocatore temporaneo.
-     */
-    after(function () {
-        return lobby.abbandonaLobby("guest_test")
-    });
-    after(function () {
-        return eliminaGioco();
     });
 
     /**

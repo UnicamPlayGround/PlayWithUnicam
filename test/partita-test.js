@@ -95,6 +95,17 @@ describe('Partita.js', function () {
      */
 
     /**
+     * Terminati i test elimina il gocatore temporaneo.
+     */
+    after(function () {
+        return lobby.abbandonaLobby("guest-t")
+    });
+
+    after(function () {
+        return lobby.abbandonaLobby("guest2-t")
+    });
+
+    /**
      * Terminati i test elimina l'utente temporaneo.
      */
     after(function () {
@@ -105,12 +116,6 @@ describe('Partita.js', function () {
         return utente.eliminaOspite("guest2-t");
     });
 
-    /**
-     * Terminati i test elimina il gocatore temporaneo.
-     */
-    after(function () {
-        return lobby.abbandonaLobby("guest-t")
-    });
     after(function () {
         return eliminaGioco();
     });
@@ -191,7 +196,7 @@ describe('Partita.js', function () {
             })
         })
     });
-    
+
 
     describe('#getInfoPartita()', function () {
         it('should return all the info of each player of the match ', function () {
@@ -235,5 +240,5 @@ describe('Partita.js', function () {
             })
         })
     });
-    
+
 });
