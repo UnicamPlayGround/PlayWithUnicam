@@ -1,130 +1,72 @@
 require('dotenv').config();
 var assert = require('assert');
 
-const { it } = require('mocha');
-const giocatore = require('../backend/multiplayer/giocatore');
 const lobby = require('../backend/multiplayer/lobby');
 const utente = require('../backend/utente');
 const game = require('../backend/multiplayer/game');
 const db = require('../backend/database');
 const partita = require('../backend/multiplayer/partita');
-const { rejects } = require('assert');
-const { info } = require('console');
 
-function eliminaGioco() {
-    return new Promise((resolve, reject) => {
-        db.pool.query('DELETE FROM public.giochi WHERE nome = $1;', ["game_test"], (error, results) => {
-            if (error) return reject(error);
-            else return resolve();
-        })
-    })
-}
+var idGiocoTest;
+var codiceLobby;
+var codicePartita;
 
 describe('Partita.js', function () {
-
     /**
      * --------------------------------- METODI BEFORE ---------------------------------
      */
 
-    /**
-    * Crea un ospite
-    */
     before(function () {
-        return utente.creaOspite("guest-t");
+        const promises = [];
+        promises.push(utente.creaOspite("guest-t"));
+        promises.push(utente.creaOspite("guest2-t"));
+        promises.push(game.creaGioco("game_test", "NORMALE", 1, 3, "gameTest", false, {}, ""));
+        return Promise.all(promises);
     });
 
-    /**
-    * Crea un ospite
-    */
-    before(function () {
-        return utente.creaOspite("guest2-t");
-    });
-
-    /**
-     * Crea un gioco
-     */
-    before(function () {
-        return game.creaGioco("game_test", "NORMALE", 1, 3, "gameTest", false, {}, "");
-    });
-
-    var idGiocoTest;
     /**
      * Prende l'id del gioco creato
      */
     before(function (done) {
         db.pool.query('SELECT id FROM public.giochi WHERE nome = $1', ["game_test"], (error, results) => {
-            if (error) {
+            if (error)
                 return done(error);
-            } else {
+            else {
                 idGiocoTest = results.rows[0].id;
                 return done();
             }
         });
     });
 
-    /**
-     * Crea una lobby
-     */
-    before(function () {
-        return lobby.creaLobby("guest-t", idGiocoTest, false);
-    });
-
-    /**
-     * Prende il codice della lobby creata
-     */
     before(function (done) {
-        db.pool.query('SELECT codice FROM public.lobby WHERE admin_lobby = $1', ["guest-t"], (error, results) => {
-            if (error) {
-                return done(error);
-            } else {
-                codiceLobby = results.rows[0].codice;
-                return done();
-            }
-        });
-    });
-
-    /**
-    * Aggiunge l'ospite nella lobby
-    */
-    before(function () {
-        return lobby.partecipaLobby("guest2-t", codiceLobby);
-    })
-
-    /**
-     * --------------------------------- METODI AFTER ---------------------------------
-     */
-
-    /**
-     * Terminati i test elimina il gocatore temporaneo.
-     */
-    after(function () {
-        return lobby.abbandonaLobby("guest-t")
+        lobby.creaLobby("guest-t", idGiocoTest, false)
+            .then(_ => { return lobby.cercaLobbyByAdmin("guest-t"); })
+            .then(results => { codiceLobby = results.rows[0].codice; })
+            .then(_ => { return lobby.partecipaLobby("guest2-t", codiceLobby); })
+            .then(_ => { return done(); })
+            .catch(error => { return done(error); });
     });
 
     after(function () {
-        return lobby.abbandonaLobby("guest2-t")
-    });
-
-    /**
-     * Terminati i test elimina l'utente temporaneo.
-     */
-    after(function () {
-        return utente.eliminaOspite("guest-t");
-    });
-
-    after(function () {
-        return utente.eliminaOspite("guest2-t");
+        return new Promise((resolve, reject) => {
+            lobby.abbandonaLobby("guest-t")
+                .then(_ => { return lobby.abbandonaLobby("guest2-t") })
+                .then(_ => { return resolve(); })
+                .catch(error => { return reject(error); });
+        })
     });
 
     after(function () {
-        return eliminaGioco();
+        const promises = [];
+        promises.push(game.deleteGame(idGiocoTest));
+        promises.push(utente.eliminaOspite("guest-t"));
+        promises.push(utente.eliminaOspite("guest2-t"));
+        return Promise.all(promises);
     });
 
     /**
      * --------------------------------- METODI TEST ---------------------------------
      */
-
-    var codicePartita;
     describe('#creaPartita()', function () {
         it('should create a new match', function () {
             return new Promise((resolve, reject) => {
