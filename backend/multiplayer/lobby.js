@@ -24,22 +24,9 @@ function controllaLobbyAdmin(results) {
             const lobby = JSON.parse(JSON.stringify(results.rows))[0];
             exports.abbandonaLobby(lobby.admin_lobby, null)
                 .then(_ => resolve())
-                .catch(error => {
-                    console.log(error);
-                    return reject(error);
-                });
+                .catch(error => { return reject(error); });
         } else resolve();
     })
-}
-
-//TODO: rimuovi metodo
-/**
- * Ritorna la Data Odierna.
- * @returns la Data di oggi in formato gg/mm/yyyy
- */
-function getDataOdierna() {
-    var tmp = new Date();
-    return (tmp.getDate() + '/' + (tmp.getMonth() + 1) + '/' + tmp.getFullYear());
 }
 
 /**
@@ -73,11 +60,10 @@ function creaLobbyQuery(codiceLobby, idGioco, pubblica) {
 exports.resetLobby = () => {
     return new Promise((resolve, reject) => {
         db.pool.query('DELETE FROM public.lobby', (error, results) => {
-            if (error) {
-                console.log(error);
+            if (error)
                 return reject(error);
-            }
-            return resolve();
+            else
+                return resolve();
         });
     })
 }
@@ -92,7 +78,7 @@ exports.iniziaPartita = (codiceLobby) => {
             [true, codiceLobby], (error, results) => {
                 if (error) {
                     console.log(error);
-                    return reject(messaggi.CREAZIONE_PARTITA_ERROR);
+                    return reject(new Error(messaggi.CREAZIONE_PARTITA_ERROR));
                 }
                 return resolve();
             });
@@ -109,7 +95,7 @@ exports.terminaPartita = (codiceLobby) => {
             [false, codiceLobby], (error, results) => {
                 if (error) {
                     console.log(error);
-                    return reject("Non è stato possibile terminare la partita!");
+                    return reject(new Error("Non è stato possibile terminare la partita!"));
                 }
                 return resolve();
             });
@@ -123,7 +109,6 @@ exports.terminaPartita = (codiceLobby) => {
  */
 exports.cercaLobbyByAdmin = (adminLobby) => {
     return new Promise((resolve, reject) => {
-
         var utenteNonTrovato = false;
         utente.cercaUtenteByUsername(adminLobby)
             .then(results => {
@@ -249,23 +234,19 @@ exports.modificaLobby = (username, pubblica) => {
         this.cercaLobbyByAdmin(username)
             .then(results => {
                 if (controller.controllaRisultatoQuery(results))
-                    return reject("Solo l'admin può modificare la lobby");
+                    throw new Error("Solo l'admin può modificare la lobby");
 
                 const tmp = JSON.parse(JSON.stringify(results.rows));
 
                 db.pool.query('UPDATE public.lobby SET pubblica = $1 WHERE codice = $2',
                     [pubblica, tmp[0].codice], (error, results) => {
-                        if (error) {
-                            console.log(error);
-                            return reject("Non è stato possibile modificare la lobby");
-                        }
-                        return resolve();
+                        if (error)
+                            return reject(error);
+                        else
+                            return resolve();
                     })
             })
-            .catch(error => {
-                console.log(error);
-                return reject("Non è stato possibile modificare la lobby");
-            })
+            .catch(error => { return reject(error); });
     })
 }
 
@@ -279,16 +260,13 @@ exports.eliminaPartecipante = (admin, username) => {
         this.cercaLobbyByAdmin(admin)
             .then(results => {
                 if (controller.controllaRisultatoQuery(results))
-                    return reject("Solo l'admin può eliminare i partecipanti della lobby");
+                    throw new Error("Solo l'admin può eliminare i partecipanti della lobby");
 
                 const lobby = JSON.parse(JSON.stringify(results.rows))[0];
                 return giocatore.espelliGiocatore(username, lobby.codice);
             })
             .then(_ => { return resolve(); })
-            .catch(error => {
-                console.log(error);
-                return reject("Non è stato possibile eliminare il giocatore dalla lobby");
-            })
+            .catch(error => { return reject(error); });
     })
 }
 
@@ -318,28 +296,16 @@ exports.abbandonaLobby = (username) => {
                                 this.impostaAdminLobby(giocatori[1].username, codiceLobby)
                                     .then(_ => { return eliminaGiocatore(username); })
                                     .then(_ => resolve())
-                                    .catch(error => {
-                                        console.log(error);
-                                        return reject("Non è stato possibile impostare l'admin della Lobby!");
-                                    })
+                                    .catch(error => { return reject(error); });
                             } else
                                 return eliminaGiocatore(username)
                                     .then(_ => resolve())
-                                    .catch(error => {
-                                        console.log(error);
-                                        return reject(messaggi.SERVER_ERROR);
-                                    });
+                                    .catch(error => { return reject(error); });
                         })
-                        .catch(error => {
-                            console.log(error);
-                            return reject(messaggi.SERVER_ERROR);
-                        });
+                        .catch(error => { return reject(error); });
                 }
             })
-            .catch(error => {
-                console.log(error);
-                return reject("Non è stato possibile abbandonare la lobby");
-            })
+            .catch(error => { return reject(error); });
     })
 }
 
@@ -378,7 +344,7 @@ exports.impostaAdminLobby = (adminLobby, codiceLobby) => {
         giocatore.cercaGiocatore(adminLobby)
             .then(results => {
                 if (controller.controllaRisultatoQuery(results))
-                    return reject("Il giocatore '" + adminLobby + "' non esiste!");
+                    throw new Error("Il giocatore '" + adminLobby + "' non esiste!");
 
                 db.pool.query('UPDATE public.lobby SET admin_lobby = $1 WHERE codice = $2',
                     [adminLobby, codiceLobby], (error, results) => {

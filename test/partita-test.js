@@ -74,10 +74,12 @@ describe('Partita.js', function () {
                     .then(_ => { return partita.cercaPartitaByCodiceLobby(codiceLobby) })
                     .then(results => {
                         assert.strictEqual(results.rows.length, 1);
-                        return resolve()
+                        return partita.getInfoPartita("guest-t");
                     })
-                    .then(_ => { return partita.getInfoPartita("guest-t"); })
-                    .then(results => { codicePartita = results.codice; })
+                    .then(results => {
+                        codicePartita = results.codice;
+                        return resolve();
+                    })
                     .catch(error => { return reject(error) })
             })
         })
@@ -101,15 +103,12 @@ describe('Partita.js', function () {
             return new Promise((resolve, reject) => {
                 partita.getInfoPartita("guest-t")
                     .then(results => {
-                        const giocatore_corrente = results.giocatore_corrente;
-                        assert.strictEqual(giocatore_corrente, "guest-t")
-                        return resolve();
+                        assert.strictEqual(results.giocatore_corrente, "guest-t");
+                        return partita.cambiaGiocatoreCorrente("guest-t");
                     })
-                    .then(_ => { return partita.cambiaGiocatoreCorrente("guest-t") })
-                    .then(_ => { return partita.getInfoPartita("guest-t") })
+                    .then(_ => { return partita.getInfoPartita("guest-t"); })
                     .then(results => {
-                        const giocatore_corrente = results.rows[0].giocatore_corrente;
-                        assert.strictEqual(giocatore_corrente, "guest2-t");
+                        assert.strictEqual(results.giocatore_corrente, "guest2-t");
                         return resolve();
                     })
                     .catch(error => { return reject(error) })
@@ -173,11 +172,13 @@ describe('Partita.js', function () {
             return new Promise((resolve, reject) => {
                 partita.cercaPartitaByCodiceLobby(codiceLobby)
                     .then(results => {
-                        assert.strictEqual(results.rows.length, 1)
+                        assert.strictEqual(results.rows.length, 1);
+                        return partita.terminaPartita("guest-t");
+                    })
+                    .then(_ => {
+                        assert.rejects(partita.cercaPartitaByCodiceLobby(codiceLobby));
                         return resolve();
                     })
-                    .then(_ => { return partita.terminaPartita("guest-t") })
-                    .then(_ => { assert.rejects(partita.cercaPartitaByCodiceLobby(codiceLobby)); })
                     .catch(error => { return reject(error) })
             })
         })

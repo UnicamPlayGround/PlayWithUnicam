@@ -15,6 +15,8 @@ describe('Lobby.js', function () {
         const promises = [];
         promises.push(utente.creaOspite("guest-t"));
         promises.push(utente.creaOspite("guest-t2"));
+        promises.push(utente.creaOspite("guest-t3"));
+        promises.push(utente.creaOspite("guest-t4"));
         promises.push(game.creaGioco("Gioco Test Turni", "TURNI", 1, 4, "link", true, {}, "regolamento"));
         return Promise.all(promises);
     });
@@ -27,10 +29,20 @@ describe('Lobby.js', function () {
         });
     });
 
+    before(function () {
+        return lobby.creaLobby("guest-t3", idGiocoTurni, false);
+    });
+
+    after(function () {
+        return lobby.abbandonaLobby("guest-t3");
+    });
+
     after(function () {
         const promises = [];
         promises.push(utente.eliminaOspite("guest-t"));
         promises.push(utente.eliminaOspite("guest-t2"));
+        promises.push(utente.eliminaOspite("guest-t3"));
+        promises.push(utente.eliminaOspite("guest-t4"));
         promises.push(game.deleteGame(idGiocoTurni));
         return Promise.all(promises);
     });
@@ -137,6 +149,47 @@ describe('Lobby.js', function () {
         });
     });
 
+    describe('#getLobbyPubbliche()', function () {
+        it('should return all public lobbies except the one in which the username passed is admin', function () {
+            return new Promise((resolve, reject) => {
+                lobby.getLobbyPubbliche("guest-t3")
+                    .then(results => {
+                        for (let i = 0; i < results.rows.length; i++)
+                            assert.notStrictEqual(results.rows[i].admin_lobby, "guest-t3")
+                        return resolve();
+                    })
+                    .catch(error => { return reject(error); });
+            })
+        });
+
+        it('should return all public lobbies', function () {
+            return new Promise((resolve, reject) => {
+                lobby.getLobbyPubbliche("guest-t2")
+                    .then(results => {
+                        var toControl;
+                        for (let i = 0; i < results.rows.length; i++) {
+                            assert.notStrictEqual(results.rows[i].admin_lobby, "guest-t3")
+                            if (results.rows[i].admin_lobby == "guest-t")
+                                toControl = results.rows[i];
+                        }
+
+                        const expected = {
+                            admin_lobby: "guest-t",
+                            codice: codiceLobby,
+                            id_gioco: idGiocoTurni,
+                            min_giocatori: "1",
+                            max_giocatori: "4",
+                            data_creazione: toControl.data_creazione,
+                            nome: "Gioco Test Turni"
+                        }
+                        assert.deepStrictEqual(toControl, expected);
+                        return resolve();
+                    })
+                    .catch(error => { return reject(error); });
+            })
+        });
+    });
+
     describe('#partecipaLobby()', function () {
         it('should throw an error because the lobby id does not exist in the database', async function () {
             await assert.rejects(lobby.partecipaLobby("guest-t2", 000001), { message: "Non è stata trovata alcuna lobby corrispondente al codice inserito!" });
@@ -192,6 +245,47 @@ describe('Lobby.js', function () {
         });
     });
 
+    describe('#modificaLobby()', function () {
+        it('should throw an error because only the lobby admin can change the value', async function () {
+            await assert.rejects(lobby.modificaLobby("guest-t2", { message: "Solo l'admin può modificare la lobby" }));
+        });
+
+        it('should change a lobby from private to public or vice versa', function () {
+            return new Promise((resolve, reject) => {
+                lobby.modificaLobby("guest-t", false)
+                    .then(_ => { return lobby.cercaLobbyByAdmin("guest-t"); })
+                    .then(results => {
+                        assert.strictEqual(results.rows[0].pubblica, false);
+                        return resolve();
+                    })
+                    .catch(error => { return reject(error); });
+            })
+        });
+    });
+
+    describe('#eliminaPartecipante()', function () {
+        it('', async function () {
+            await assert.rejects(lobby.eliminaPartecipante("guest-t2", "guest-t4"), { message: "Solo l'admin può eliminare i partecipanti della lobby" });
+        });
+
+        it('', function () {
+            return new Promise((resolve, reject) => {
+                lobby.partecipaLobby("guest-t4", codiceLobby)
+                    .then(_ => { return lobby.getNumeroGiocatoriLobby(codiceLobby); })
+                    .then(results => {
+                        assert.strictEqual(Number(results.rows[0].count), 3);
+                        return lobby.eliminaPartecipante("guest-t", "guest-t4");
+                    })
+                    .then(_ => { return lobby.getNumeroGiocatoriLobby(codiceLobby); })
+                    .then(results => {
+                        assert.strictEqual(Number(results.rows[0].count), 2);
+                        return resolve();
+                    })
+                    .catch(error => { return reject(error); });
+            })
+        });
+    });
+
     describe('#abbandonaLobby()', function () {
         it('should allow a player to leave a lobby and change the admin (in case there are more players and who wants to leave is the admin of the lobby)', function () {
             return new Promise((resolve, reject) => {
@@ -208,7 +302,7 @@ describe('Lobby.js', function () {
                     .then(results => {
                         const expected = {
                             codice: codiceLobby,
-                            pubblica: true,
+                            pubblica: false,
                             admin_lobby: "guest-t2",
                             data_creazione: results.rows[0].data_creazione,
                             min_giocatori: "1",

@@ -119,17 +119,20 @@ describe('Giocatore.js', function () {
         it('should do the ping operation about the player', function () {
             return new Promise((resolve, reject) => {
                 db.pool.query('SELECT ping FROM public.giocatori WHERE username=$1', ["guest_test"], (error, results) => {
-
-                    if (error) throw new Error(error);
+                    if (error) return reject(error);
 
                     ping = results.rows[0];
                     const expected = { ping: null }
                     assert.strictEqual(results.rows.length, 1);
                     assert.deepStrictEqual(results.rows[0], expected);
 
-                    giocatore.ping("guest_test");
-                    assert.notDeepStrictEqual(null, ping)
-                    return resolve();
+                    giocatore.ping("guest_test")
+                        .then(_ => {
+                            assert.notDeepStrictEqual(null, ping)
+                            return resolve();
+                        })
+                        .catch(error => { return reject(error) });
+
                 })
                 //TODO: manca return reject/throw error?????
             })
