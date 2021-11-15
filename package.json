@@ -8,7 +8,7 @@
     "start": "node server.js",
     "build": "ng build --aot --configuration production",
     "postinstall": "ng build --aot --configuration production",
-    "test": "mocha --slow 400",
+    "test": "nyc --reporter=text --reporter=html mocha --slow 400",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
@@ -34,6 +34,7 @@
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^3.1.2",
     "mocha": "^9.1.3",
+    "nyc": "^15.1.0",
     "pg": "^8.7.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",
