@@ -14,7 +14,7 @@ import { LoginControllerService } from 'src/app/services/login-controller/login-
 })
 export class HomePage implements OnInit {
   credenziali: FormGroup;
-  collapsedToolbar = false;
+  // collapsedToolbar = false;
 
   constructor(
     private alertCreator: AlertCreatorService,
@@ -42,23 +42,23 @@ export class HomePage implements OnInit {
   }
 
   async scrollFunction(event) {
-    const scrollElement = await this.getContent().getScrollElement();
+    // const scrollElement = await this.getContent().getScrollElement();
 
-    const scrollHeight = scrollElement.scrollHeight - scrollElement.clientHeight;
+    // const scrollHeight = scrollElement.scrollHeight - scrollElement.clientHeight;
 
-    const currentScrollDepth = event.detail.scrollTop;
+    // const currentScrollDepth = event.detail.scrollTop;
 
-    if (currentScrollDepth < 100) {
-      document.getElementById("navbar").style.height = "350px";
-      document.getElementById("logo").classList.remove("collapsed-logo");
-      this.collapsedToolbar = false;
-    }
-    else {
-      document.getElementById("navbar").style.height = "56px";
-      document.getElementById("navbar").style.lineHeight = "56px";
-      document.getElementById("logo").classList.add("collapsed-logo");
-      this.collapsedToolbar = true;
-    }
+    // if (currentScrollDepth < 100) {
+    //   document.getElementById("navbar").style.height = "350px";
+    //   document.getElementById("logo").classList.remove("collapsed-logo");
+    //   this.collapsedToolbar = false;
+    // }
+    // else {
+    //   document.getElementById("navbar").style.height = "56px";
+    //   document.getElementById("navbar").style.lineHeight = "56px";
+    //   document.getElementById("logo").classList.add("collapsed-logo");
+    //   this.collapsedToolbar = true;
+    // }
   };
 
   /**

@@ -10,16 +10,18 @@
 
   <ion-toolbar>
     <ion-row>
-      <ion-button (click)="toggleBulkEdit()" expand="full" shape="round" color="unicamblue" [class.button-disabled]="users.length == 0">Seleziona</ion-button>
+      <ion-button (click)="toggleBulkEdit()" expand="full" shape="round" color="unicamblue"
+        [class.button-disabled]="users.length == 0">Seleziona</ion-button>
       <ion-button (click)="bulkDelete()" expand="full" shape="round" color="unicamred" *ngIf="bulkEdit">
         Elimina
         <ion-icon slot="end" name="trash"></ion-icon>
       </ion-button>
     </ion-row>
 
-    <ion-item class="ion-hide-lg-down">
+    <ion-item lines="none" class="ion-hide-lg-down">
       <ion-icon slot="start" name="information-circle-outline"></ion-icon>
-      <ion-label text-wrap>Fai click sull'icona della matita di una determinata riga per modificarne il contenuto</ion-label>
+      <ion-label text-wrap>Fai click sull'icona della matita di una determinata riga per modificarne il contenuto
+      </ion-label>
     </ion-item>
   </ion-toolbar>
 </ion-header>

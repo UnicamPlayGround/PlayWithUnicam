@@ -1,8 +1,35 @@
+ion-toolbar{
+  --background: transparent;
+  --border-color: transparent;
+  --border-style: none;
+
+  ion-buttons{
+    transition: opacity 1s ease-out;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+  }
+}
+
+.toolbar-show-buttons{
+  ion-buttons{
+    opacity: 1;
+    height: auto;
+  }
+}
+
 ion-content{
-    padding:30px;
+  --offset-top: 0px;
+  position: absolute;
+}
+
+#blue-grid{
+  background: linear-gradient(90deg, var(--ion-color-unicamblue) 35%, rgba(31,110,143,1) 100%);
+  //padding: 30px;
 }
 
 #logo{
+  color: var(--ion-color-light);
   display:flex;
   transition: 0.6s;
   flex-direction: row;
@@ -87,9 +114,10 @@ ion-content{
   }
 
   #titles-div{
-    padding:50px;
+    //padding:50px;
+    padding-top:50px;
     transition: 0.6s;
-
+    color: var(--ion-color-light);
     h1{
         transition: 0.6s;
         font-family: 'DM Sans', sans-serif;

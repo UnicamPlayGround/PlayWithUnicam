@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
 import { HomePageRoutingModule } from './home-routing.module';
 import { HomeFooterComponent } from 'src/app/components/home-footer/home-footer.component';
+import { SharedDirectivesModule } from 'src/app/directives/shared-directives.module';
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import { HomeFooterComponent } from 'src/app/components/home-footer/home-footer.
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    HomePageRoutingModule
+    HomePageRoutingModule,
+    SharedDirectivesModule
   ],
   declarations: [HomePage, HomeFooterComponent]
 })

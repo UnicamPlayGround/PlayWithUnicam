@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GooseGameEditorComponent } from 'src/app/mgp_games/goose-game/components/goose-game-editor/goose-game-editor.component';
+import { MemoryGameEditorComponent } from 'src/app/mgp_games/memory-game/components/memory-game-editor/memory-game-editor.component';
 import { EditorItem } from '../../components/editor-container/editor-item';
 
 @Injectable()
@@ -15,6 +16,8 @@ export class GameEditorService {
     switch (config.game) {
       case "goose-game":
         return new EditorItem(GooseGameEditorComponent, config);
+      case "memory-game":
+        return new EditorItem(MemoryGameEditorComponent, config);
       default:
         return null;
     }
