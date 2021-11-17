@@ -7,8 +7,7 @@ const utente = require('../backend/utente');
 const game = require('../backend/multiplayer/game');
 const messaggi = require('../backend/messaggi');
 
-var idGiocoTurni;
-var codiceLobby;
+var idGiocoTurni, codiceLobby, idGiocoMax;
 
 describe('Lobby.js', function () {
     before(function () {
@@ -17,7 +16,10 @@ describe('Lobby.js', function () {
         promises.push(utente.creaOspite("guest-t2"));
         promises.push(utente.creaOspite("guest-t3"));
         promises.push(utente.creaOspite("guest-t4"));
+        promises.push(utente.creaOspite("guest-t5"));
+        promises.push(utente.creaOspite("guest-t6"));
         promises.push(game.creaGioco("Gioco Test Turni", "TURNI", 1, 4, "link", true, {}, "regolamento"));
+        promises.push(game.creaGioco("Gioco Test MAX", "TURNI", 1, 1, "link", true, {}, "regolamento"));
         return Promise.all(promises);
     });
 
@@ -25,6 +27,14 @@ describe('Lobby.js', function () {
         db.pool.query('SELECT * FROM public.giochi WHERE nome=$1', ["Gioco Test Turni"], (error, results) => {
             if (error) return done(error);
             idGiocoTurni = results.rows[0].id;
+            return done();
+        });
+    });
+
+    before(function (done) {
+        db.pool.query('SELECT * FROM public.giochi WHERE nome=$1', ["Gioco Test MAX"], (error, results) => {
+            if (error) return done(error);
+            idGiocoMax = results.rows[0].id;
             return done();
         });
     });
@@ -43,6 +53,8 @@ describe('Lobby.js', function () {
         promises.push(utente.eliminaOspite("guest-t2"));
         promises.push(utente.eliminaOspite("guest-t3"));
         promises.push(utente.eliminaOspite("guest-t4"));
+        promises.push(utente.eliminaOspite("guest-t5"));
+        promises.push(utente.eliminaOspite("guest-t6"));
         promises.push(game.deleteGame(idGiocoTurni));
         return Promise.all(promises);
     });
@@ -195,7 +207,18 @@ describe('Lobby.js', function () {
             await assert.rejects(lobby.partecipaLobby("guest-t2", 000001), { message: "Non è stata trovata alcuna lobby corrispondente al codice inserito!" });
         });
 
-        //TODO creare test "La lobby selezionata è già al completo!"
+        it('should throw an error if the lobby is already full', function () {
+            return new Promise((resolve, reject) => {
+                lobby.creaLobby("guest-t5", idGiocoMax, true)
+                    .then(_ => { return lobby.cercaLobbyByAdmin("guest-t5") })
+                    .then(results => { return lobby.partecipaLobby("guest-t6", results.rows[0].codice); })
+                    .then(_ => { return reject(); })
+                    .catch(error => {
+                        assert.strictEqual(error.message, 'La lobby selezionata è già al completo!');
+                        return resolve();
+                    })
+            })
+        });
 
         it('should allow a player to join a lobby', function () {
             return new Promise((resolve, reject) => {
@@ -208,10 +231,29 @@ describe('Lobby.js', function () {
                     .catch(error => { return reject(error); });
             })
         });
+
+        it('should allow a player to join a lobby and guarantee that, if he was the admin of another lobby, either the admin role is given to another participant or the lobby is deleted if it has no participants', function () {
+            return new Promise((resolve, reject) => {
+                lobby.cercaLobbyByAdmin("guest-t3")
+                    .then(results => {
+                        assert.strictEqual(results.rows.length, 1);
+                        return lobby.partecipaLobby("guest-t3", codiceLobby);
+                    })
+                    .then(_ => { return lobby.cercaLobbyByAdmin("guest-t3"); })
+                    .then(results => {
+                        assert.strictEqual(results.rows.length, 0);
+                        return lobby.abbandonaLobby("guest-t3");
+                    })
+                    .then(_ => { return resolve(); })
+                    .catch(error => { return reject(error); });
+            })
+        });
     });
 
     describe('#getGiocatoriLobby()', function () {
-        //TODO creare test "messaggi.PARTECIPAZIONE_LOBBY_ERROR"
+        it('should throw an error if the player is not part of a lobby', async function () {
+            await assert.rejects(lobby.getGiocatoriLobby("guest-t4"), { message: messaggi.PARTECIPAZIONE_LOBBY_ERROR });
+        });
 
         it('should return the information of the players of a lobby', function () {
             return new Promise((resolve, reject) => {
@@ -263,12 +305,18 @@ describe('Lobby.js', function () {
         });
     });
 
+    describe('#impostaAdminLobby()', function () {
+        it('should throw an error because the username of the new admin does not exist in the database', async function () {
+            await assert.rejects(lobby.impostaAdminLobby("guest-t500", codiceLobby), { message: "Il giocatore 'guest-t500' non esiste!" })
+        });
+    });
+
     describe('#eliminaPartecipante()', function () {
-        it('', async function () {
+        it('should throw an error because only the admin can expel a player from a lobby', async function () {
             await assert.rejects(lobby.eliminaPartecipante("guest-t2", "guest-t4"), { message: "Solo l'admin può eliminare i partecipanti della lobby" });
         });
 
-        it('', function () {
+        it('should expel a player from a lobby', function () {
             return new Promise((resolve, reject) => {
                 lobby.partecipaLobby("guest-t4", codiceLobby)
                     .then(_ => { return lobby.getNumeroGiocatoriLobby(codiceLobby); })

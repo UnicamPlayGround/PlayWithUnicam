@@ -282,10 +282,7 @@ exports.abbandonaLobby = (username) => {
                 if (controller.controllaRisultatoQuery(results)) {
                     return eliminaGiocatore(username)
                         .then(_ => resolve())
-                        .catch(error => {
-                            console.log(error);
-                            return reject(messaggi.SERVER_ERROR);
-                        });
+                        .catch(error => { throw (error); });
                 } else {
                     const tmp = JSON.parse(JSON.stringify(results.rows));
                     const codiceLobby = tmp[0].codice;
@@ -296,13 +293,13 @@ exports.abbandonaLobby = (username) => {
                                 this.impostaAdminLobby(giocatori[1].username, codiceLobby)
                                     .then(_ => { return eliminaGiocatore(username); })
                                     .then(_ => resolve())
-                                    .catch(error => { return reject(error); });
+                                    .catch(error => { throw (error); });
                             } else
                                 return eliminaGiocatore(username)
                                     .then(_ => resolve())
-                                    .catch(error => { return reject(error); });
+                                    .catch(error => { throw (error); });
                         })
-                        .catch(error => { return reject(error); });
+                        .catch(error => { throw (error); });
                 }
             })
             .catch(error => { return reject(error); });
@@ -354,6 +351,7 @@ exports.impostaAdminLobby = (adminLobby, codiceLobby) => {
                             return resolve(results);
                     })
             })
+            .catch(error => { return reject(error); });
     });
 }
 
@@ -383,10 +381,7 @@ exports.partecipaLobby = (username, codiceLobby) => {
                         .then(results => { return controllaLobbyAdmin(results); })
                         .then(_ => { return giocatore.creaGiocatore(username, codiceLobby); })
                         .then(_ => { return resolve(); })
-                        .catch(error => {
-                            console.log(error);
-                            return reject(error);
-                        });
+                        .catch(error => { return reject(error); });
                 } else
                     throw new Error('La lobby selezionata è già al completo!');
             })
