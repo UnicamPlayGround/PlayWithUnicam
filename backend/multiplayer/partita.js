@@ -28,8 +28,7 @@ function salvaInformazioni(username, infoGiocatore) {
         db.pool.query('UPDATE public.giocatori SET info = $1 WHERE username = $2',
             [toSave, username], (error, results) => {
                 if (error) {
-                    console.log(error);
-                    return reject("Non è stato possibile caricare le informazioni del giocatore!");
+                    return reject(error)
                 }
                 return resolve();
             })
@@ -46,7 +45,7 @@ function controllaNumeroGiocatori(adminLobby) {
         lobby.cercaLobbyByAdmin(adminLobby)
             .then(results => {
                 if (controller.controllaRisultatoQuery(results))
-                    return reject("Devi essere l'admin della lobby per creare una partita!");
+                    throw new Error("Devi essere l'admin della lobby per creare una partita!");
 
                 lobbyInfo = JSON.parse(JSON.stringify(results.rows))[0];
                 return lobby.getNumeroGiocatoriLobby(lobbyInfo.codice);
@@ -55,17 +54,11 @@ function controllaNumeroGiocatori(adminLobby) {
                 const numeroGiocatori = JSON.parse(JSON.stringify(results.rows))[0];
 
                 if (lobbyInfo.min_giocatori > numeroGiocatori.count)
-                    return reject("Non ci sono abbastanza giocatori per iniziare!");
-
-                if (lobbyInfo.max_giocatori < numeroGiocatori.count)
-                    return reject("Ci sono troppi giocatori per iniziare!");
+                    throw new Error("Non ci sono abbastanza giocatori per iniziare!");
 
                 return resolve(lobbyInfo);
             })
-            .catch(error => {
-                console.log(error);
-                return reject(messaggi.CREAZIONE_PARTITA_ERROR);
-            })
+            .catch(error => { return reject(error) })
     })
 }
 
@@ -100,7 +93,7 @@ function controllaMinimoGiocatori(username) {
         lobby.cercaLobbyByUsername(username)
             .then(results => {
                 if (controller.controllaRisultatoQuery(results))
-                    throw (messaggi.PARTECIPAZIONE_LOBBY_ERROR);
+                    throw new Error(messaggi.PARTECIPAZIONE_LOBBY_ERROR);
                 lobbyInfo = JSON.parse(JSON.stringify(results.rows))[0];
                 return lobby.getNumeroGiocatoriLobby(lobbyInfo.codice);
             })
@@ -108,14 +101,11 @@ function controllaMinimoGiocatori(username) {
                 const numeroGiocatori = JSON.parse(JSON.stringify(results.rows))[0];
 
                 if (lobbyInfo.min_giocatori > numeroGiocatori.count)
-                    throw (messaggi.MINIMO_GIOCATORI_ERROR);
+                    throw new Error(messaggi.MINIMO_GIOCATORI_ERROR);
                 else
                     return resolve();
             })
-            .catch(error => {
-                console.log(error);
-                return reject(error);
-            })
+            .catch(error => { return reject(error); })
     })
 }
 
@@ -151,11 +141,11 @@ function creaPartitaQuery(codiceLobby, adminLobby, results) {
 exports.cambiaGiocatoreCorrente = (username) => {
     return new Promise((resolve, reject) => {
         var partitaInfo;
-        exports.getInfoPartita(username)
+        this.getInfoPartita(username)
             .then(data => {
                 partitaInfo = data;
                 if (partitaInfo.giocatore_corrente != username)
-                    return reject('Devi aspettare il tuo turno!');
+                    throw new Error('Devi aspettare il tuo turno!');
 
                 return lobby.getGiocatoriLobby(username);
             })
@@ -165,17 +155,11 @@ exports.cambiaGiocatoreCorrente = (username) => {
 
                 db.pool.query('UPDATE public.partite SET giocatore_corrente = $1 WHERE codice_lobby = $2',
                     [nuovoGiocatore.username, partitaInfo.codice_lobby], (error, results) => {
-                        if (error) {
-                            console.log(error);
-                            return reject("Non è stato possibile aggiornare il giocatore corrente!");
-                        }
+                        if (error) { throw (error); }
                         return resolve();
                     })
             })
-            .catch(error => {
-                console.log(error);
-                return reject(messaggi.SERVER_ERROR);
-            });
+            .catch(error => { return reject(error); });
     })
 }
 
@@ -211,10 +195,7 @@ exports.creaPartita = (adminLobby) => {
             .then(_ => lobby.iniziaPartita(lobbyInfo.codice))
             .then(_ => giocatore.resetInfoPartita(lobbyInfo.codice))
             .then(_ => { resolve(); })
-            .catch(error => {
-                console.log(error);
-                return reject(messaggi.CREAZIONE_PARTITA_ERROR);
-            });
+            .catch(error => { return reject(error); });
     })
 }
 
@@ -262,10 +243,7 @@ exports.getInfoPartita = (username) => {
                         } else return resolve(partitaInfo);
                     });
             })
-            .catch(error => {
-                console.log(error);
-                return reject(error);
-            });
+            .catch(error => { return reject(error); });
     })
 }
 
@@ -281,22 +259,18 @@ exports.salvaInfoGiocatore = (username, infoGiocatore) => {
             .then(data => {
                 partitaInfo = data;
                 if (partitaInfo == null || partitaInfo == undefined)
-                    return reject(messaggi.PARTITA_NON_TROVATA_ERROR);
+                    throw new Error(messaggi.PARTITA_NON_TROVATA_ERROR);
                 return game.getInfoGioco(partitaInfo.id_gioco);
             })
             .then(results => {
                 const gioco = JSON.parse(JSON.stringify(results.rows))[0];
-
                 if (gioco.tipo == "TURNI" && partitaInfo.giocatore_corrente != username)
-                    return reject('Devi aspettare il tuo turno!');
+                    throw new Error('Devi aspettare il tuo turno!');
                 else
                     return salvaInformazioni(username, infoGiocatore);
             })
             .then(_ => resolve())
-            .catch(error => {
-                console.log(error);
-                return reject(messaggi.SERVER_ERROR);
-            });
+            .catch(error => { return reject(error); });
     })
 }
 
