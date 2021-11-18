@@ -20,7 +20,8 @@ describe('Giocatore.js', function () {
         promises.push(utente.creaOspite("guest_test"));
         promises.push(utente.creaOspite("guest2-t"));
         promises.push(utente.creaOspite("guest3-t"));
-        promises.push(game.creaGioco("game_test", "NORMALE", 1, 3, "gameTest", false, {}, ""));
+        // promises.push(utente.creaOspite("guest4-t"));
+        promises.push(game.creaGioco("game_test", "NORMALE", 1, 5, "gameTest", false, {}, ""));
         return Promise.all(promises);
     });
 
@@ -44,6 +45,7 @@ describe('Giocatore.js', function () {
             .then(results => { codiceLobby = results.rows[0].codice; })
             .then(_ => { return lobby.partecipaLobby("guest2-t", codiceLobby); })
             .then(_ => { return lobby.partecipaLobby("guest3-t", codiceLobby); })
+            // .then(_ => { return lobby.partecipaLobby("guest4-t", codiceLobby); })
             .then(_ => { return partita.creaPartita("guest_test"); })
             .then(_ => { return done(); })
             .catch(error => { return done(error); });
@@ -54,6 +56,7 @@ describe('Giocatore.js', function () {
             lobby.abbandonaLobby("guest_test")
                 .then(_ => { return lobby.abbandonaLobby("guest2-t") })
                 .then(_ => { return lobby.abbandonaLobby("guest3-t") })
+                // .then(_ => { return lobby.abbandonaLobby("guest4-t") })
                 .then(_ => { return resolve(); })
                 .catch(error => { return reject(error); });
         })
@@ -65,6 +68,7 @@ describe('Giocatore.js', function () {
         promises.push(utente.eliminaOspite("guest_test"));
         promises.push(utente.eliminaOspite("guest2-t"));
         promises.push(utente.eliminaOspite("guest3-t"));
+        // promises.push(utente.eliminaOspite("guest4-t"));
         return Promise.all(promises);
     });
 
@@ -188,6 +192,17 @@ describe('Giocatore.js', function () {
             })
         })
     });
+
+    // describe('#controllaInattivi', function () {
+    //     it('should delete the inactive players ', function () {
+    //         return new Promise((resolve, reject) => {
+    //             giocatore.controllaInattivi()
+    //                 .then(_ => { return giocatore.cercaGiocatore("guest4-t") })
+    //                 .then(results => { assert.strictEqual(results.rows.length, 0); return resolve() })
+    //                 .catch(error => { return reject(error) });
+    //         })
+    //     });
+    // });
 
 
 })

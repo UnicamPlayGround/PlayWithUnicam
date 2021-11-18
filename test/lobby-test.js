@@ -6,6 +6,7 @@ const lobby = require('../backend/multiplayer/lobby');
 const utente = require('../backend/utente');
 const game = require('../backend/multiplayer/game');
 const messaggi = require('../backend/messaggi');
+const giocatore = require('../backend/multiplayer/giocatore');
 
 var idGiocoTurni, codiceLobby, idGiocoMax;
 
@@ -55,7 +56,9 @@ describe('Lobby.js', function () {
         promises.push(utente.eliminaOspite("guest-t4"));
         promises.push(utente.eliminaOspite("guest-t5"));
         promises.push(utente.eliminaOspite("guest-t6"));
+        promises.push(giocatore.eliminaGiocatore("guest-t5"))
         promises.push(game.deleteGame(idGiocoTurni));
+        promises.push(game.deleteGame(idGiocoMax));
         return Promise.all(promises);
     });
 

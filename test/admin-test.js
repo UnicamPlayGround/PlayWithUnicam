@@ -107,7 +107,18 @@ describe('Admin.js', function () {
     });
 
     describe('#modificaUtente()', function () {
-        //TODO test senza modificare l'username
+        it('should throw an error because the username is not valid', async function () {
+            await assert.rejects(admin.modificaUtente("", "user-t2", "Luigi", "Bianchi"), { message: "L'username non è valido" })
+        });
+        it('should throw an error because the new username is not valid', async function () {
+            await assert.rejects(admin.modificaUtente("user-t", "", "Luigi", "Bianchi"), { message: "Il nuovo username non è valido" })
+        });
+        it('should throw an error because the new name is not valid', async function () {
+            await assert.rejects(admin.modificaUtente("user-t", "user-t2", "", "Bianchi"), { message: "Il nuovo nome non è valido" })
+        });
+        it('should throw an error because the new surname is not valid', async function () {
+            await assert.rejects(admin.modificaUtente("user-t", "user-t2", "Luigi", ""), { message: "Il nuovo cognome non è valido" })
+        });
         it('should change the account information (username, first name and last name) in the database', function () {
             return new Promise((resolve, reject) => {
                 admin.modificaUtente("user-t", "user-t2", "Luigi", "Bianchi")
