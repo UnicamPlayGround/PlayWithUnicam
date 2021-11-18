@@ -52,24 +52,24 @@ exports.controllaString = function (toControl) {
 exports.controllaDatiGioco = function (nome, tipo, minGiocatori, maxGiocatori, link, attivo, regolamento) {
     return new Promise((resolve, reject) => {
         if (exports.controllaString(nome))
-            return reject("Il nome del gioco non è valido");
+            throw new Error("Il nome del gioco non è valido");
 
         if (exports.controllaString(link))
-            return reject("Il link del gioco non è valido");
+            throw new Error("Il link del gioco non è valido");
 
         if (regolamento)
             if (exports.controllaString(regolamento))
-                return reject("Il regolamento del gioco non è valido");
+                throw new Error("Il regolamento del gioco non è valido");
 
         if (Number.isInteger(minGiocatori) && Number.isInteger(maxGiocatori)) {
             if (minGiocatori < 1 || maxGiocatori < 1)
-                return reject("Il numero minimo o massimo dei giocatori non può essere minore di uno!");
+                throw new Error("Il numero minimo o massimo dei giocatori non può essere minore di uno!");
             else if (minGiocatori > maxGiocatori)
-                return reject("Il numero minimo dei giocatori non può essere maggiore del numero massimo!");
-        } else return reject("Il numero minimo o massimo dei giocatori deve essere un intero!");
+                throw new Error("Il numero minimo dei giocatori non può essere maggiore del numero massimo!");
+        } else throw new Error("Il numero minimo o massimo dei giocatori deve essere un intero!");
 
-        if (tipo != 'TURNI' && tipo != 'NORMALE') return reject("Il tipo di gioco non è valido!");
-        if (typeof attivo != "boolean") return reject("Il parametro attivo non è valido!");
+        if (tipo != 'TURNI' && tipo != 'NORMALE')throw new Error("Il tipo di gioco non è valido!");
+        if (typeof attivo != "boolean") throw new Error("Il parametro attivo non è valido!");
 
         return resolve();
     })

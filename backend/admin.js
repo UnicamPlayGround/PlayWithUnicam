@@ -75,13 +75,13 @@ exports.deleteGame = (id) => {
 exports.modificaUtente = (username, newUsername, nome, cognome) => {
     return new Promise((resolve, reject) => {
         if (controller.controllaString(username))
-            return reject("L'username non è valido");
+            throw new Error("L'username non è valido");
         if (controller.controllaString(newUsername))
-            return reject("Il nuovo username non è valido");
+            throw new Error("Il nuovo username non è valido");
         if (controller.controllaString(nome))
-            return reject("Il nuovo nome non è valido");
+            throw new Error("Il nuovo nome non è valido");
         if (controller.controllaString(cognome))
-            return reject("Il nuovo cognome non è valido");
+            throw new Error("Il nuovo cognome non è valido");
 
         username = controller.xssSanitize(username);
         newUsername = controller.xssSanitize(newUsername);
