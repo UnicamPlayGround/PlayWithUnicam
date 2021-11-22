@@ -42,19 +42,19 @@ describe('Controller.js', function () {
             var regolamento = " ";
             await assert.rejects(controller.controllaDatiGioco("nome", "TURNI", 1, 5, "\link", false, regolamento), { message: "Il regolamento del gioco non è valido" })
         });
-        it('should throw an error because the minimum\maximum number of players can\'t be less then 1', async function () {
+        it('should throw an error because the minimum/maximum number of players can\'t be less then 1', async function () {
             await assert.rejects(controller.controllaDatiGioco("nome", "TURNI", 0, 5, "\link", false, "regolamento"), { message: "Il numero minimo o massimo dei giocatori non può essere minore di uno!" })
         });
         it('should throw an error because the minimum number of players can\'t be less then the maximum one', async function () {
             await assert.rejects(controller.controllaDatiGioco("nome", "TURNI", 2, 1, "\link", false, "regolamento"), { message: "Il numero minimo dei giocatori non può essere maggiore del numero massimo!" })
         });
-        it('should throw an error because the minimum\maximum number of players must be an integer', async function () {
+        it('should throw an error because the minimum/maximum number of players must be an integer', async function () {
             await assert.rejects(controller.controllaDatiGioco("nome", "TURNI", 2.3, 5, "\link", false, "regolamento"), { message: "Il numero minimo o massimo dei giocatori deve essere un intero!" })
         });
-        it('should throw an error because the minimum\maximum number of players must be an integer', async function () {
+        it('should throw an error because the minimum/maximum number of players must be an integer', async function () {
             await assert.rejects(controller.controllaDatiGioco("nome", "TIPO", 1, 5, "\link", false, "regolamento"), { message: "Il tipo di gioco non è valido!" })
         });
-        it('should throw an error because the minimum\maximum number of players must be an integer', async function () {
+        it('should throw an error because the minimum/maximum number of players must be an integer', async function () {
             await assert.rejects(controller.controllaDatiGioco("nome", "TURNI", 1, 5, "\link", "stringa-test", "regolamento"), { message: "Il parametro attivo non è valido!" })
         });
     });
