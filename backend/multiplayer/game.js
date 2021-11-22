@@ -58,7 +58,7 @@ exports.getConfigGioco = (username) => {
         lobby.cercaLobbyByUsername(username)
             .then(results => {
                 if (controller.controllaRisultatoQuery(results))
-                    return reject(messaggi.PARTECIPAZIONE_LOBBY_ERROR);
+                    throw new Error(messaggi.PARTECIPAZIONE_LOBBY_ERROR);
 
                 const lobby = JSON.parse(JSON.stringify(results.rows))[0];
 
@@ -69,10 +69,7 @@ exports.getConfigGioco = (username) => {
                         return resolve(results);
                 });
             })
-            .catch(error => {
-                console.log(error);
-                return reject("Non è stato possibile trovare la lobby");
-            })
+            .catch(error => { return reject(error); });
     })
 }
 
@@ -155,9 +152,6 @@ exports.modificaGioco = (id, nome, tipo, minGiocatori, maxGiocatori, link, attiv
                         return resolve();
                     })
             })
-            .catch(error => {
-                console.log(error);
-                return reject(error);
-            });
+            .catch(error => { return reject(error); });
     })
 }
