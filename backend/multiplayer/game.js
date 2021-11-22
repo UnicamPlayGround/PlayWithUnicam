@@ -147,7 +147,7 @@ exports.modificaGioco = (id, nome, tipo, minGiocatori, maxGiocatori, link, attiv
                     [nome, tipo, maxGiocatori, minGiocatori, link, attivo, config, regolamento, id], (error, results) => {
                         if (error) {
                             console.log(error);
-                            return reject(messaggi.CREAZIONE_GIOCO_ERROR);
+                            return reject(new Error(messaggi.CREAZIONE_GIOCO_ERROR));
                         }
                         return resolve();
                     })

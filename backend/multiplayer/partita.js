@@ -117,7 +117,7 @@ function creaPartitaQuery(codiceLobby, adminLobby, results) {
                 [creaCodice(), codiceLobby, adminLobby, false], (error, results) => {
                     if (error) {
                         console.log(error);
-                        return reject(messaggi.CREAZIONE_PARTITA_ERROR);
+                        return reject(new Error(messaggi.CREAZIONE_PARTITA_ERROR));
                     }
                     return resolve();
                 });
@@ -126,7 +126,7 @@ function creaPartitaQuery(codiceLobby, adminLobby, results) {
                 [creaCodice(), adminLobby, false, codiceLobby], (error, results) => {
                     if (error) {
                         console.log(error);
-                        return reject(messaggi.CREAZIONE_PARTITA_ERROR);
+                        return reject(new Error(messaggi.CREAZIONE_PARTITA_ERROR));
                     }
                     return resolve();
                 });
@@ -283,25 +283,22 @@ exports.terminaPartita = (username) => {
         this.getInfoPartita(username)
             .then(partitaInfo => {
                 if (partitaInfo == null || partitaInfo == undefined)
-                    return reject(messaggi.PARTITA_NON_TROVATA_ERROR);
+                    return reject(new Error(messaggi.PARTITA_NON_TROVATA_ERROR));
 
                 db.pool.query('UPDATE public.partite SET terminata = $1 WHERE codice = $2',
                     [true, partitaInfo.codice], (error, results) => {
                         if (error) {
                             console.log(error);
-                            return reject(messaggi.SERVER_ERROR);
+                            return reject(new Error(messaggi.SERVER_ERROR));
                         }
                         return lobby.terminaPartita(partitaInfo.codice_lobby)
                             .then(_ => { return resolve() })
                             .catch(error => {
                                 console.log(error);
-                                return reject(messaggi.SERVER_ERROR);
+                                return reject(new Error(messaggi.SERVER_ERROR));
                             });
                     });
             })
-            .catch(error => {
-                console.log(error);
-                return reject(messaggi.SERVER_ERROR);
-            });
+            .catch(error => { return reject(error); });
     })
 }

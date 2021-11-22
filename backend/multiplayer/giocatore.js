@@ -70,7 +70,7 @@ exports.creaGiocatore = (username, codiceLobby) => {
             })
             .then(results => {
                 if (utenteNonTrovato && controller.controllaRisultatoQuery(results))
-                    return reject("L'Utente '" + username + "' non esiste!");
+                    return reject(new Error("L'Utente '" + username + "' non esiste!"));
                 return this.cercaGiocatore(username);
             })
             .then(results => {
@@ -94,7 +94,7 @@ exports.creaGiocatore = (username, codiceLobby) => {
             })
             .catch(error => {
                 console.log(error);
-                return reject("Non è stato possibile creare il giocatore!");
+                return reject(new Error("Non è stato possibile creare il giocatore!"));
             })
     })
 }
@@ -159,7 +159,7 @@ exports.ping = (username) => {
         lobby.cercaLobbyByUsername(username)
             .then(results => {
                 if (controller.controllaRisultatoQuery(results))
-                    return reject(messaggi.PARTECIPAZIONE_LOBBY_ERROR);
+                    return reject(new Error(messaggi.PARTECIPAZIONE_LOBBY_ERROR));
 
                 db.pool.query('UPDATE public.giocatori SET ping = NOW() WHERE username = $1', [username], (error, results) => {
                     if (error)
@@ -170,7 +170,7 @@ exports.ping = (username) => {
             })
             .catch(error => {
                 console.log(error);
-                return reject("Non è stato possibile trovare la lobby");
+                return reject(new Error("Non è stato possibile trovare la lobby"));
             })
     })
 }

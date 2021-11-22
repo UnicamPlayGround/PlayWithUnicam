@@ -13,7 +13,7 @@ function deleteUserQuery(username) {
             [username], (error, results) => {
                 if (error) {
                     console.log(error);
-                    return reject('Errore nell\'eliminazione dell\'utente: ' + username);
+                    return reject(new Error('Errore nell\'eliminazione dell\'utente: ' + username));
                 } else resolve();
             });
     })
@@ -58,7 +58,7 @@ exports.deleteGame = (id) => {
             [id], (error, results) => {
                 if (error) {
                     console.log(error);
-                    return reject("Errore nell'eliminazione del gioco: " + id);
+                    return reject(new Error("Errore nell'eliminazione del gioco: " + id));
                 } else
                     return resolve();
             });
@@ -89,15 +89,14 @@ exports.modificaUtente = (username, newUsername, nome, cognome) => {
         cognome = controller.xssSanitize(cognome);
 
         if (username === newUsername)
-            utente.modificaNomeCognome(username, nome, cognome).then(_ => resolve());
+            utente.modificaNomeCognome(username, nome, cognome)
+                .then(_ => resolve())
+                .catch(error => { return reject(error); });
         else {
             utente.modificaUsername(username, newUsername)
                 .then(_ => { return utente.modificaNomeCognome(newUsername, nome, cognome) })
                 .then(_ => resolve())
-                .catch(error => {
-                    console.log(error);
-                    return reject(messaggi.SERVER_ERROR);
-                });
+                .catch(error => { return reject(error); });
         }
     })
 }

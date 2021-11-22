@@ -49,7 +49,7 @@ function creaLobbyQuery(codiceLobby, idGioco, pubblica) {
             [codiceLobby, idGioco, pubblica, false], (error, results) => {
                 if (error) {
                     console.log(error);
-                    return reject(messaggi.CREAZIONE_LOBBY_ERROR);
+                    return reject(new Error(messaggi.CREAZIONE_LOBBY_ERROR));
                 } else
                     return resolve();
             })
