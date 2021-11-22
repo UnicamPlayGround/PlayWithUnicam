@@ -2,80 +2,53 @@ require('dotenv').config();
 var assert = require('assert');
 
 const admin = require('../backend/admin');
+const utente = require('../backend/utente');
 const db = require('../backend/database');
 const game = require('../backend/multiplayer/game');
 
-function eliminaUtentiTest() {
-    const queryText = 'DELETE FROM public.utenti WHERE username = $1;';
+function eliminaUtenteTest(username) {
     return new Promise((resolve, reject) => {
-        db.pool.query(queryText, ["admin-t"], (error, results) => {
-            if (error) return reject(error);
-
-            db.pool.query(queryText,
-                ["user-t"], (error, results) => {
-                    if (error) return reject(error);
-
-                    db.pool.query(queryText,
-                        ["user-t10"], (error, results) => {
-                            if (error) return reject(error);
-                            else return resolve();
-                        })
-                })
-        })
+        db.pool.query('DELETE FROM public.utenti WHERE username = $1;',
+            [username], (error, results) => {
+                if (error) return reject(error);
+                else return resolve();
+            })
     })
 }
 
-function eliminaAdminTest() {
+function creaAdminTest() {
     return new Promise((resolve, reject) => {
-        db.pool.query('DELETE FROM public.utenti WHERE username = $1;', ["admin-t"], (error, results) => {
-            if (error) return reject(error);
-            else return resolve();
-        })
+        db.pool.query('INSERT INTO public.utenti (username, nome, cognome, password, salt, tipo) VALUES ($1, $2, $3, $4, $5, $6)',
+            ["admin-t", "admin", "admin", "hash", "salt", "ADMIN"], (error, results) => {
+                if (error) return reject(error);
+                else return resolve();
+            })
     })
 }
 
 describe('Admin.js', function () {
-    /**
-     * Elimina gli utenti temporanei.
-     */
     before(function () {
-        return eliminaUtentiTest();
+        const promises = [];
+        promises.push(eliminaUtenteTest("admin-t"));
+        promises.push(eliminaUtenteTest("user-t"));
+        promises.push(eliminaUtenteTest("user-t10"));
+        return Promise.all(promises);
     });
 
     /**
      * Inserisce i dati degli utenti per i test.
      */
-    before(function (done) {
-        const queryText = 'INSERT INTO public.utenti (username, nome, cognome, password, salt, tipo) VALUES ($1, $2, $3, $4, $5, $6)';
-        db.pool.query(queryText,
-            ["admin-t", "admin", "admin", "hash", "salt", "ADMIN"], (error, results) => {
-                if (error) done(error);
-
-                db.pool.query(queryText,
-                    ["user-t", "Mario", "Rossi", "hash", "salt", "GIOCATORE"], (error, results) => {
-                        if (error) done(error);
-
-                        db.pool.query(queryText,
-                            ["user-t10", "Test10", "Test10", "hash", "salt", "GIOCATORE"], (error, results) => {
-                                if (error) done(error);
-                                else done();
-                            })
-                    })
-            })
-    });
-
-    /**
-     * Inserisce i dati del Gioco di prova per i test.
-     */
     before(function () {
-        return game.creaGioco("Gioco Test", "TURNI", 2, 2, "test", true, {}, "test regolamento")
+        const promises = [];
+        promises.push(creaAdminTest());
+        promises.push(utente.creaUtente("user-t", "Mario", "Rossi", "password"));
+        promises.push(utente.creaUtente("user-t10", "Test10", "Test10", "password"));
+        promises.push(game.creaGioco("Gioco Test", "TURNI", 2, 2, "test", true, {}, "test regolamento"));
+        return Promise.all(promises);
     });
 
-    /**
-     * Terminati i test elimina gli utenti temporanei.
-     */
     after(function () {
-        return eliminaAdminTest();
+        return eliminaUtenteTest("admin-t");
     })
 
     describe('#getUtente()', function () {
