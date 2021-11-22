@@ -47,11 +47,11 @@ function controllaNumeroGiocatori(adminLobby) {
                 if (controller.controllaRisultatoQuery(results))
                     throw new Error("Devi essere l'admin della lobby per creare una partita!");
 
-                lobbyInfo = JSON.parse(JSON.stringify(results.rows))[0];
+                lobbyInfo = results.rows[0];
                 return lobby.getNumeroGiocatoriLobby(lobbyInfo.codice);
             })
             .then(results => {
-                const numeroGiocatori = JSON.parse(JSON.stringify(results.rows))[0];
+                const numeroGiocatori = results.rows[0];
 
                 if (lobbyInfo.min_giocatori > numeroGiocatori.count)
                     throw new Error("Non ci sono abbastanza giocatori per iniziare!");
@@ -94,11 +94,11 @@ function controllaMinimoGiocatori(username) {
             .then(results => {
                 if (controller.controllaRisultatoQuery(results))
                     throw new Error(messaggi.PARTECIPAZIONE_LOBBY_ERROR);
-                lobbyInfo = JSON.parse(JSON.stringify(results.rows))[0];
+                lobbyInfo = results.rows[0];
                 return lobby.getNumeroGiocatoriLobby(lobbyInfo.codice);
             })
             .then(results => {
-                const numeroGiocatori = JSON.parse(JSON.stringify(results.rows))[0];
+                const numeroGiocatori = results.rows[0];
 
                 if (lobbyInfo.min_giocatori > numeroGiocatori.count)
                     throw new Error(messaggi.MINIMO_GIOCATORI_ERROR);
@@ -150,7 +150,7 @@ exports.cambiaGiocatoreCorrente = (username) => {
                 return lobby.getGiocatoriLobby(username);
             })
             .then(results => {
-                const giocatori = JSON.parse(JSON.stringify(results.rows));
+                const giocatori = results.rows;
                 var nuovoGiocatore = getNuovoGiocatore(giocatori, username);
 
                 db.pool.query('UPDATE public.partite SET giocatore_corrente = $1 WHERE codice_lobby = $2',
@@ -216,12 +216,12 @@ exports.getInfoPartita = (username) => {
                             console.log(error);
                             return reject(error);
                         }
-                        var partitaInfo = JSON.parse(JSON.stringify(results.rows))[0];
+                        var partitaInfo = results.rows[0];
 
                         if (partitaInfo) {
                             giocatore.getInfoGiocatori(partitaInfo.codice_lobby)
                                 .then(results => {
-                                    const infoGiocatori = JSON.parse(JSON.stringify(results.rows));
+                                    const infoGiocatori = results.rows;
                                     var toSave = [];
 
                                     infoGiocatori.forEach(element => {
@@ -263,8 +263,7 @@ exports.salvaInfoGiocatore = (username, infoGiocatore) => {
                 return game.getInfoGioco(partitaInfo.id_gioco);
             })
             .then(results => {
-                const gioco = JSON.parse(JSON.stringify(results.rows))[0];
-                if (gioco.tipo == "TURNI" && partitaInfo.giocatore_corrente != username)
+                if (results.rows[0].tipo == "TURNI" && partitaInfo.giocatore_corrente != username)
                     throw new Error('Devi aspettare il tuo turno!');
                 else
                     return salvaInformazioni(username, infoGiocatore);

@@ -21,8 +21,7 @@ function creaCodice() {
 function controllaLobbyAdmin(results) {
     return new Promise((resolve, reject) => {
         if (!controller.controllaRisultatoQuery(results)) {
-            const lobby = JSON.parse(JSON.stringify(results.rows))[0];
-            exports.abbandonaLobby(lobby.admin_lobby, null)
+            exports.abbandonaLobby(results.rows[0].admin_lobby, null)
                 .then(_ => resolve())
                 .catch(error => { return reject(error); });
         } else resolve();
@@ -197,8 +196,7 @@ exports.getGiocatoriLobby = (username) => {
                 if (controller.controllaRisultatoQuery(results))
                     throw new Error(messaggi.PARTECIPAZIONE_LOBBY_ERROR);
 
-                const tmp = JSON.parse(JSON.stringify(results.rows));
-                db.pool.query('SELECT * FROM public.giocatori WHERE codice_lobby = $1 ORDER BY data_ingresso ASC', [tmp[0].codice], (error, results) => {
+                db.pool.query('SELECT * FROM public.giocatori WHERE codice_lobby = $1 ORDER BY data_ingresso ASC', [results.rows[0].codice], (error, results) => {
                     if (error)
                         return reject(error);
                     else
@@ -236,10 +234,8 @@ exports.modificaLobby = (username, pubblica) => {
                 if (controller.controllaRisultatoQuery(results))
                     throw new Error("Solo l'admin può modificare la lobby");
 
-                const tmp = JSON.parse(JSON.stringify(results.rows));
-
                 db.pool.query('UPDATE public.lobby SET pubblica = $1 WHERE codice = $2',
-                    [pubblica, tmp[0].codice], (error, results) => {
+                    [pubblica, results.rows[0].codice], (error, results) => {
                         if (error)
                             return reject(error);
                         else
@@ -262,8 +258,7 @@ exports.eliminaPartecipante = (admin, username) => {
                 if (controller.controllaRisultatoQuery(results))
                     throw new Error("Solo l'admin può eliminare i partecipanti della lobby");
 
-                const lobby = JSON.parse(JSON.stringify(results.rows))[0];
-                return giocatore.espelliGiocatore(username, lobby.codice);
+                return giocatore.espelliGiocatore(username, results.rows[0].codice);
             })
             .then(_ => { return resolve(); })
             .catch(error => { return reject(error); });
@@ -284,11 +279,10 @@ exports.abbandonaLobby = (username) => {
                         .then(_ => resolve())
                         .catch(error => { throw (error); });
                 } else {
-                    const tmp = JSON.parse(JSON.stringify(results.rows));
-                    const codiceLobby = tmp[0].codice;
+                    const codiceLobby = results.rows[0].codice;
                     this.getGiocatoriLobby(username)
                         .then(results => {
-                            var giocatori = JSON.parse(JSON.stringify(results.rows));
+                            var giocatori = results.rows;
                             if (giocatori.length > 1) {
                                 this.impostaAdminLobby(giocatori[1].username, codiceLobby)
                                     .then(_ => { return eliminaGiocatore(username); })
@@ -369,12 +363,11 @@ exports.partecipaLobby = (username, codiceLobby) => {
                 if (controller.controllaRisultatoQuery(results))
                     throw new Error("Non è stata trovata alcuna lobby corrispondente al codice inserito!");
 
-                lobby = JSON.parse(JSON.stringify(results.rows))[0];
+                lobby = results.rows[0];
                 return this.getNumeroGiocatoriLobby(codiceLobby);
             })
             .then(results => {
-                const tmp = JSON.parse(JSON.stringify(results.rows));
-                const count = tmp[0].count;
+                const count = results.rows[0].count;
 
                 if (count < lobby.max_giocatori) {
                     this.cercaLobbyByAdmin(username)

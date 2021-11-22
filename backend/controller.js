@@ -7,8 +7,7 @@ const xss = require("xss");
  */
 exports.controllaRisultatoQuery = (results) => {
     if (results) {
-        const toControl = JSON.parse(JSON.stringify(results.rows));
-        return (toControl.length == 0);
+        return (results.rows.length == 0);
     } else return true;
 }
 
@@ -68,7 +67,7 @@ exports.controllaDatiGioco = function (nome, tipo, minGiocatori, maxGiocatori, l
                 throw new Error("Il numero minimo dei giocatori non può essere maggiore del numero massimo!");
         } else throw new Error("Il numero minimo o massimo dei giocatori deve essere un intero!");
 
-        if (tipo != 'TURNI' && tipo != 'NORMALE')throw new Error("Il tipo di gioco non è valido!");
+        if (tipo != 'TURNI' && tipo != 'NORMALE') throw new Error("Il tipo di gioco non è valido!");
         if (typeof attivo != "boolean") throw new Error("Il parametro attivo non è valido!");
 
         return resolve();

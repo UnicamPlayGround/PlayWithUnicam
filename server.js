@@ -144,7 +144,7 @@ app.get('/games', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             });
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 })
 
 /**
@@ -160,7 +160,7 @@ app.get('/games/admin', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             });
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 })
 
 /**
@@ -178,7 +178,7 @@ app.get('/game/status', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             });
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -192,7 +192,7 @@ app.get('/game/config', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             });
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -206,7 +206,7 @@ app.get('/admin/utenti', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             });
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -226,7 +226,7 @@ app.get('/lobby/pubbliche', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             })
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -240,7 +240,7 @@ app.get('/lobby/giocatori/:codiceLobby', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             })
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -255,7 +255,7 @@ app.get('/info/utente', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             });
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -266,7 +266,7 @@ app.get('/lobby/info', (req, res) => {
         lobby.cercaLobbyByUsername(jwt.decode(req.headers.token).username)
             .then(results => {
                 if (controller.controllaRisultatoQuery(results))
-                    throw (messaggi.PARTECIPAZIONE_LOBBY_ERROR);
+                    throw new Error(messaggi.PARTECIPAZIONE_LOBBY_ERROR);
 
                 sendDataInJSON(res, results);
             })
@@ -274,7 +274,7 @@ app.get('/lobby/info', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             })
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -288,7 +288,7 @@ app.get('/lobby/giocatori', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             })
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -306,7 +306,7 @@ app.delete('/lobby/admin/espelli', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             });
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -320,7 +320,7 @@ app.delete('/lobby/abbandona', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             });
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -334,7 +334,7 @@ app.delete('/admin/utenti', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             });
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -348,7 +348,7 @@ app.delete('/admin/game', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             });
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -366,7 +366,7 @@ app.put('/admin/utenti/:username', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             });;
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -380,7 +380,7 @@ app.put('/player/profilo', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             });
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -395,7 +395,7 @@ app.put('/player/username', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             });
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -409,7 +409,7 @@ app.put('/lobby', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             });
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -424,7 +424,7 @@ app.put('/modifica/password', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             });
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -439,7 +439,7 @@ app.put('/game/modifica', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             });
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -453,7 +453,7 @@ app.put('/game/save', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             });
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -467,7 +467,7 @@ app.put('/game/fine-turno', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             });
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -481,7 +481,7 @@ app.put('/partita/termina', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             });
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -495,13 +495,13 @@ app.post('/login/utente', (req, res) => {
     utente.cercaUtenteByUsername(req.body.username)
         .then(results => {
             if (controller.controllaRisultatoQuery(results))
-                throw (messaggi.UTENTE_NON_TROVATO_ERROR);
+                throw new Error(messaggi.UTENTE_NON_TROVATO_ERROR);
 
             const user = JSON.parse(JSON.stringify(results.rows));
 
             const toControl = bcrypt.hashSync(req.body.password + process.env.SECRET_PWD, user[0].salt);
             if (!(user[0].password == toControl))
-                throw ('Password non valida!');
+                throw new Error('Password non valida!');
 
             sendAccessToken(res, { username: user[0].username, tipo: user[0].tipo });
         })
@@ -519,12 +519,12 @@ app.post('/login/ospiti', (req, res) => {
         utente.cercaUtenteByUsername(req.body.username)
             .then(results => {
                 if (!controller.controllaRisultatoQuery(results))
-                    throw ("L'username " + req.body.username + " è già in uso!");
+                    throw new Error("L'username " + req.body.username + " è già in uso!");
                 return utente.cercaOspiteByUsername(req.body.username);
             })
             .then(results => {
                 if (!controller.controllaRisultatoQuery(results))
-                    throw ("L'username " + req.body.username + " è già in uso!");
+                    throw new Error("L'username " + req.body.username + " è già in uso!");
                 return utente.creaOspite(req.body.username);
             })
             .then(_ => sendAccessToken(res, { username: req.body.username, tipo: "OSPITE" }))
@@ -543,13 +543,13 @@ app.post('/register/utente', (req, res) => {
         utente.cercaOspiteByUsername(req.body.username)
             .then(results => {
                 if (!controller.controllaRisultatoQuery(results))
-                    throw ("L'username " + req.body.username + " è già in uso!");
+                    throw new Error("L'username " + req.body.username + " è già in uso!");
 
                 return utente.cercaUtenteByUsername(req.body.username);
             })
             .then(results => {
                 if (!controller.controllaRisultatoQuery(results))
-                    throw ("L'username " + req.body.username + " è già in uso!");
+                    throw new Error("L'username " + req.body.username + " è già in uso!");
 
                 return utente.creaUtente(req.body.username, req.body.nome, req.body.cognome, req.body.password);
             })
@@ -570,13 +570,13 @@ app.post('/register/ospite-to-utente', (req, res) => {
             .then(_ => { return utente.cercaOspiteByUsername(req.body.username); })
             .then(results => {
                 if (!controller.controllaRisultatoQuery(results))
-                    throw ("L'username " + req.body.username + " è già in uso!");
+                    throw new Error("L'username " + req.body.username + " è già in uso!");
 
                 return utente.cercaUtenteByUsername(req.body.username);
             })
             .then(results => {
                 if (!controller.controllaRisultatoQuery(results))
-                    throw ("L'username " + req.body.username + " è già in uso!");
+                    throw new Error("L'username " + req.body.username + " è già in uso!");
 
                 return utente.creaUtente(req.body.username, req.body.nome, req.body.cognome, req.body.password, res);
             })
@@ -585,7 +585,7 @@ app.post('/register/ospite-to-utente', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             })
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -599,7 +599,7 @@ app.post('/lobby', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             });
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -613,7 +613,7 @@ app.post('/lobby/partecipa', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             });
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -627,7 +627,7 @@ app.post('/lobby/ping', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             });
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -641,7 +641,7 @@ app.post('/partita', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             });
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 /**
@@ -655,7 +655,7 @@ app.post('/game/crea', (req, res) => {
                 console.log(err);
                 return erroManager.handleError(err, res);
             });
-    } else return erroManager.handleError(messaggi.ERRORE_JWT, res);
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
 });
 
 app.get('/*', function (req, res) {

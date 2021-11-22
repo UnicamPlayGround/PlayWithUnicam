@@ -60,9 +60,7 @@ exports.getConfigGioco = (username) => {
                 if (controller.controllaRisultatoQuery(results))
                     throw new Error(messaggi.PARTECIPAZIONE_LOBBY_ERROR);
 
-                const lobby = JSON.parse(JSON.stringify(results.rows))[0];
-
-                db.pool.query('select config from public.giochi where id=$1', [lobby.id_gioco], (error, results) => {
+                db.pool.query('select config from public.giochi where id=$1', [results.rows[0].id_gioco], (error, results) => {
                     if (error)
                         return reject(error);
                     else

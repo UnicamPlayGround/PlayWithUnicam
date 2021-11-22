@@ -20,10 +20,7 @@ exports.cambiaPassword = (newPassword, oldPassword, username) => {
                 if (controller.controllaRisultatoQuery(results))
                     throw new Error(messaggi.UTENTE_NON_TROVATO_ERROR);
 
-                //TODO eliminare risultati
-                const risultati = JSON.parse(JSON.stringify(results.rows));
-
-                const data = risultati[0];
+                const data = results.rows[0];
                 const hash = bcrypt.hashSync(oldPassword + process.env.SECRET_PWD, data.salt);
 
                 if (hash == data.password) {
@@ -248,10 +245,8 @@ exports.eliminaOspiti = () => {
                 return;
             }
 
-            const ospiti = JSON.parse(JSON.stringify(results.rows));
             var promises = [];
-
-            ospiti.forEach(ospite => {
+            results.rows.forEach(ospite => {
                 var dataOspite = new Date(ospite.data_creazione);
                 if ((new Date().getTime() - dataOspite.getTime()) > 86400000)
                     promises.push(this.eliminaOspite(ospite.username));
