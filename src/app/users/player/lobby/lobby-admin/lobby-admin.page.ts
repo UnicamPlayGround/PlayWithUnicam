@@ -33,20 +33,19 @@ export class LobbyAdminPage implements OnInit {
     private loginService: LoginService,
     private router: Router
   ) {
+    window.addEventListener('beforeunload', (event) => {
+      //TODO: vedere per Firefox
+      event.returnValue = '';
+    });
+  }
+
+  ngOnInit() {
     this.loadInfoLobby();
     this.loadGiocatori();
     this.ping();
 
     this.timerPing = this.timerService.getTimer(() => { this.ping() }, 4000);
-
-    window.addEventListener('beforeunload', (event) => {
-      //TODO: vedere per Firefox
-      event.returnValue = '';
-    });
-
   }
-
-  ngOnInit() { }
 
   /**
    * Cambia il valore di 'mostraInfoLobby' che determina l'espansione della relativa card
@@ -198,7 +197,7 @@ export class LobbyAdminPage implements OnInit {
     var linkTotale = window.location.href;
     var linkCurrentURL = this.router.url;
     var newLink = linkTotale.replace(linkCurrentURL, '/lobby/join');
-    
+
     this.link = newLink + "?codiceLobby=" + this.lobby.codice;
     if (navigator.clipboard) {
       navigator.clipboard.writeText(this.link).then(

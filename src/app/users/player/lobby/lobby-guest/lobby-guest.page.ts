@@ -27,9 +27,6 @@ export class LobbyGuestPage implements OnInit {
     private loginService: LoginService,
     private router: Router
   ) {
-    this.ping();
-    this.timerPing = timerService.getTimer(() => { this.ping() }, 2000);
-
     window.addEventListener('beforeunload', (event) => {
       //TODO vedere per Firefox
       event.returnValue = '';
@@ -37,6 +34,8 @@ export class LobbyGuestPage implements OnInit {
   }
 
   ngOnInit() {
+    this.ping();
+    this.timerPing = this.timerService.getTimer(() => { this.ping() }, 2000);
   }
 
   /**
