@@ -91,8 +91,19 @@ export class LoginService {
    * Effettua l'operazione di logout.
    */
   async logout() {
-    this.tipologiaAccount.next("");
-    await Storage.remove({ key: TOKEN_KEY });
+    const tokenValue = (await this.getToken()).value;
+    const headers = { 'token': tokenValue };
+
+    this.http.delete('/logout/ospite', { headers }).subscribe(
+      async (res) => {
+        this.tipologiaAccount.next("");
+        await Storage.remove({ key: TOKEN_KEY });
+      },
+      async (res) => {
+        this.tipologiaAccount.next("");
+        await Storage.remove({ key: TOKEN_KEY });
+        console.log("Logout fallito!");
+      });
   }
 
   /**

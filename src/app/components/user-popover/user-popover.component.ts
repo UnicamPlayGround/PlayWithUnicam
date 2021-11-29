@@ -49,8 +49,8 @@ export class UserPopoverComponent implements OnInit {
    */
   logout() {
     var message = "Sei sicuro di voler effettuare il logout?";
-    this.alertCreator.createConfirmationAlert(message, () => {
-      this.loginService.logout();
+    this.alertCreator.createConfirmationAlert(message, async () => {
+      await this.loginService.logout();
       this.popoverController.dismiss();
       this.router.navigateByUrl('/', { replaceUrl: true });
     });

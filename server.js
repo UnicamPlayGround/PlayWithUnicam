@@ -352,6 +352,20 @@ app.delete('/admin/game', (req, res) => {
 });
 
 /**
+ * REST - Cancella l'Account Ospite che vuole effettuare il logout.
+ */
+app.delete('/logout/ospite', (req, res) => {
+    if (verificaOspite(req.headers.token)) {
+        utente.eliminaOspite(jwt.decode(req.headers.token).username)
+            .then(_ => sendEsitoPositivo(res))
+            .catch(err => {
+                console.log(err);
+                return erroManager.handleError(err, res);
+            });
+    } else return erroManager.handleError(new Error(messaggi.ERRORE_JWT), res);
+});
+
+/**
  * REST ------------------------- PUT -------------------------
  */
 
