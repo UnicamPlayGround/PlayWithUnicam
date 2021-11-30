@@ -1,8 +1,29 @@
+.wrapper{
+  margin:auto;
+  max-width: 1300px;
+  overflow:hidden;
+}
+
+ion-toolbar{
+  --background: var(--ion-color-unicamblue);
+  --color: var(--ion-color-light);
+
+  #logo-toolbar{
+    -webkit-transform:scale(0.9);
+    -moz-transform:scale(0.9);
+    -ms-transform:scale(0.9);
+    transform:scale(0.9);
+  }
+}
+
 #catalogo-title{
-  font-family: Century Gothic, Courier New, appearance;
+  // font-family: Century Gothic, Courier New, appearance;
   font-size:35px;
   text-align: center;
   padding-top:30px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--ion-color-medium);
+  font-weight: bold;
 }
 
 .game{

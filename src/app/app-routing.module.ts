@@ -30,7 +30,7 @@ const routes: Routes = [
   {
     path: 'admin',
     loadChildren: () => import('./users/admin/menu/menu.module').then(m => m.MenuPageModule),
-    canLoad: [AuthAdminGuard]
+    //canLoad: [AuthAdminGuard]
   },
   {
     path: 'lobby-admin',
@@ -72,7 +72,6 @@ const routes: Routes = [
     path: 'memory',
     loadChildren: () => import('./mgp_games/memory-game/components/menu/menu.module').then( m => m.MemoryMenuPageModule)
   }
-
 ];
 
 @NgModule({

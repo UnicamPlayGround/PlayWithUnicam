@@ -13,8 +13,7 @@ import { LoginControllerService } from 'src/app/services/login-controller/login-
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
-  credenziali: FormGroup;
-  // collapsedToolbar = false;
+  credentials: FormGroup;
 
   constructor(
     private alertCreator: AlertCreatorService,
@@ -28,55 +27,20 @@ export class HomePage implements OnInit {
 
 
   ngOnInit() {
-    this.credenziali = this.fb.group({
+    this.credentials = this.fb.group({
       username: ['', [Validators.required, Validators.maxLength(10)]],
     });
   }
-
-  /**
-   * Ritorna l'elemento <ion-content> della pagina Home.
-   * @returns L'ion-content della pagina.
-   */
-  getContent() {
-    return document.querySelector('ion-content');
-  }
-
-  async scrollFunction(event) {
-    // const scrollElement = await this.getContent().getScrollElement();
-
-    // const scrollHeight = scrollElement.scrollHeight - scrollElement.clientHeight;
-
-    // const currentScrollDepth = event.detail.scrollTop;
-
-    // if (currentScrollDepth < 100) {
-    //   document.getElementById("navbar").style.height = "350px";
-    //   document.getElementById("logo").classList.remove("collapsed-logo");
-    //   this.collapsedToolbar = false;
-    // }
-    // else {
-    //   document.getElementById("navbar").style.height = "56px";
-    //   document.getElementById("navbar").style.lineHeight = "56px";
-    //   document.getElementById("logo").classList.add("collapsed-logo");
-    //   this.collapsedToolbar = true;
-    // }
-  };
-
-  /**
-   * Apre la pagina del Login.
-   */
-  openLogin() {
-    this.router.navigateByUrl('/login', { replaceUrl: true });
-  }
-
+  
   /**
    * Effettua la Registrazione ed il Login di un Ospite.
    */
-  async loginOspiti() {
+  async guestLogin() {
     const loading = await this.loadingController.create();
     await loading.present();
 
-    if (this.loginController.controllaUsername(this.credenziali.value.username)) {
-      this.loginService.loginOspiti(this.credenziali.value).subscribe(
+    if (this.loginController.controllaUsername(this.credentials.value.username)) {
+      this.loginService.loginOspiti(this.credentials.value).subscribe(
         async (res) => {
           await loading.dismiss();
 

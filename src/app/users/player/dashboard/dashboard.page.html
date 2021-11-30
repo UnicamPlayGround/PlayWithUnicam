@@ -1,4 +1,4 @@
-<ion-header>
+<!-- <ion-header>
   <ion-toolbar class="page-header">
 
     <ion-title style="font-family: Ink Free, Courier New, appearance; font-size:25px; text-align: center;">
@@ -12,6 +12,21 @@
         <ion-icon name="person-outline" style="font-size:25px;"></ion-icon>
       </ion-button>
     </ion-buttons>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <div class="wrapper">
+      <img id="logo-toolbar" src="../../../../assets/logo-small.png" alt=""
+        style="vertical-align:middle; float:left; line-height: 56px">
+
+      <ion-buttons style="vertical-align:middle; float:right; line-height: 56px">
+        <ion-button (click)="openUserPopover($event)">
+          <ion-icon slot="icon-only" name="person-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </div>
   </ion-toolbar>
 </ion-header>
 

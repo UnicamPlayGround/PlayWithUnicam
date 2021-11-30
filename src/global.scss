@@ -146,3 +146,11 @@ ion-modal.crea-parola {
     color:#fff;
     line-height:80px;
 }
+
+ion-split-pane{
+    --side-max-width: 250px;
+}
+
+ion-icon{
+    pointer-events: none;
+}
