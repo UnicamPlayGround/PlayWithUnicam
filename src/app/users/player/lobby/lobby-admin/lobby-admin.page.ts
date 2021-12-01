@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LoadingController } from '@ionic/angular';
 import { LobbyManagerService } from 'src/app/services/lobby-manager/lobby-manager.service';
-import { TimerServiceService } from 'src/app/services/timer-service/timer-service.service';
+import { TimerController } from 'src/app/services/timer-controller/timer-controller.service';
 import { Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login-service/login.service';
 import jwt_decode from 'jwt-decode';
@@ -29,7 +29,7 @@ export class LobbyAdminPage implements OnInit {
     private errorManager: ErrorManagerService,
     private loadingController: LoadingController,
     private lobbyManager: LobbyManagerService,
-    private timerService: TimerServiceService,
+    private timerController: TimerController,
     private loginService: LoginService,
     private router: Router
   ) {
@@ -44,7 +44,7 @@ export class LobbyAdminPage implements OnInit {
     this.loadGiocatori();
     this.ping();
 
-    this.timerPing = this.timerService.getTimer(() => { this.ping() }, 4000);
+    this.timerPing = this.timerController.getTimer(() => { this.ping() }, 4000);
   }
 
   /**
@@ -74,12 +74,12 @@ export class LobbyAdminPage implements OnInit {
         this.lobby = res['results'][0];
 
         if (this.lobby.admin_lobby != decodedToken.username) {
-          this.timerService.stopTimers(this.timerPing);
+          this.timerController.stopTimers(this.timerPing);
           this.router.navigateByUrl('/lobby-guest', { replaceUrl: true });
         }
       },
       async (res) => {
-        this.timerService.stopTimers(this.timerPing);
+        this.timerController.stopTimers(this.timerPing);
         this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
         this.errorManager.stampaErrore(res, 'Impossibile caricare la lobby!');
       });
@@ -94,7 +94,7 @@ export class LobbyAdminPage implements OnInit {
         this.giocatori = res['results'];
       },
       async (res) => {
-        this.timerService.stopTimers(this.timerPing);
+        this.timerController.stopTimers(this.timerPing);
         this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
         this.errorManager.stampaErrore(res, 'Impossibile caricare la lobby!');
       });
@@ -146,13 +146,13 @@ export class LobbyAdminPage implements OnInit {
   async abbandonaLobby() {
     this.alertCreator.createConfirmationAlert('Sei sicuro di voler abbandonare la lobby?',
       async () => {
-        this.timerService.stopTimers(this.timerPing);
+        this.timerController.stopTimers(this.timerPing);
         (await this.lobbyManager.abbandonaLobby()).subscribe(
           async (res) => {
             this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
           },
           async (res) => {
-            this.timerPing = this.timerService.getTimer(() => { this.ping() }, 4000);
+            this.timerPing = this.timerController.getTimer(() => { this.ping() }, 4000);
             this.errorManager.stampaErrore(res, 'Abbandono fallito');
           }
         );
@@ -169,7 +169,7 @@ export class LobbyAdminPage implements OnInit {
         this.loadGiocatori();
       },
       async (res) => {
-        this.timerService.stopTimers(this.timerPing);
+        this.timerController.stopTimers(this.timerPing);
         this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
         this.errorManager.stampaErrore(res, 'Ping fallito');
       }
@@ -182,7 +182,7 @@ export class LobbyAdminPage implements OnInit {
   async iniziaPartita() {
     (await this.lobbyManager.iniziaPartita()).subscribe(
       async (res) => {
-        this.timerService.stopTimers(this.timerPing);
+        this.timerController.stopTimers(this.timerPing);
         this.router.navigateByUrl(this.lobby.link, { replaceUrl: true });
       },
       async (res) => {

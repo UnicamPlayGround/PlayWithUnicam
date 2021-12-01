@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creator.service';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LobbyManagerService } from 'src/app/services/lobby-manager/lobby-manager.service';
-import { TimerServiceService } from 'src/app/services/timer-service/timer-service.service';
+import { TimerController } from 'src/app/services/timer-controller/timer-controller.service';
 import jwt_decode from 'jwt-decode';
 import { LoginService } from 'src/app/services/login-service/login.service';
 
@@ -21,7 +21,7 @@ export class LobbyGuestPage implements OnInit {
 
   constructor(
     private errorManager: ErrorManagerService,
-    private timerService: TimerServiceService,
+    private timerController: TimerController,
     private lobbyManager: LobbyManagerService,
     private alertCreator: AlertCreatorService,
     private loginService: LoginService,
@@ -35,7 +35,7 @@ export class LobbyGuestPage implements OnInit {
 
   ngOnInit() {
     this.ping();
-    this.timerPing = this.timerService.getTimer(() => { this.ping() }, 2000);
+    this.timerPing = this.timerController.getTimer(() => { this.ping() }, 2000);
   }
 
   /**
@@ -64,13 +64,13 @@ export class LobbyGuestPage implements OnInit {
         const decodedToken: any = jwt_decode((await this.loginService.getToken()).value);
 
         if (decodedToken.username === this.lobby.admin_lobby) {
-          this.timerService.stopTimers(this.timerPing);
+          this.timerController.stopTimers(this.timerPing);
           this.router.navigateByUrl('/lobby-admin', { replaceUrl: true });
           this.alertCreator.createInfoAlert("Sei il nuovo admin", "Il vecchio admin ha abbandonato la partita e sei stato scelto per prendere il suo posto!");
         }
       },
       async (res) => {
-        this.timerService.stopTimers(this.timerPing);
+        this.timerController.stopTimers(this.timerPing);
         this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
         this.errorManager.stampaErrore(res, 'Impossibile caricare la lobby!');
       });
@@ -85,7 +85,7 @@ export class LobbyGuestPage implements OnInit {
         this.giocatori = res['results'];
       },
       async (res) => {
-        this.timerService.stopTimers(this.timerPing);
+        this.timerController.stopTimers(this.timerPing);
         this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
         this.errorManager.stampaErrore(res, 'Impossibile caricare la lobby!');
       });
@@ -101,12 +101,12 @@ export class LobbyGuestPage implements OnInit {
         var partita = res['results'];
         if (partita)
           if (!partita.terminata) {
-            this.timerService.stopTimers(this.timerPing);
+            this.timerController.stopTimers(this.timerPing);
             this.router.navigateByUrl(this.lobby.link, { replaceUrl: true });
           }
       },
       async (res) => {
-        this.timerService.stopTimers(this.timerPing);
+        this.timerController.stopTimers(this.timerPing);
         this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
         this.errorManager.stampaErrore(res, 'Impossibile caricare la lobby!');
       });
@@ -118,13 +118,13 @@ export class LobbyGuestPage implements OnInit {
   async abbandonaLobby() {
     this.alertCreator.createConfirmationAlert('Sei sicuro di voler abbandonare la lobby?',
       async () => {
-        this.timerService.stopTimers(this.timerPing);
+        this.timerController.stopTimers(this.timerPing);
         (await this.lobbyManager.abbandonaLobby()).subscribe(
           async (res) => {
             this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
           },
           async (res) => {
-            this.timerPing = this.timerService.getTimer(() => { this.ping() }, 4000);
+            this.timerPing = this.timerController.getTimer(() => { this.ping() }, 4000);
             this.errorManager.stampaErrore(res, 'Abbandono fallito');
           }
         );
@@ -143,7 +143,7 @@ export class LobbyGuestPage implements OnInit {
         this.loadInfoPartita();
       },
       async (res) => {
-        this.timerService.stopTimers(this.timerPing);
+        this.timerController.stopTimers(this.timerPing);
         this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
         this.errorManager.stampaErrore(res, 'Ping fallito');
       }
