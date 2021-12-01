@@ -6,9 +6,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./cookie-alert.component.scss'],
 })
 export class CookieAlertComponent implements OnInit {
-
+  cookieAccepted = false;
+  
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
+  closeCookieAlert() {
+    this.cookieAccepted = true;
+  }
 }
