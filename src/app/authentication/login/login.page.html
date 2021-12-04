@@ -1,47 +1,49 @@
-<ion-header no-border>
+<ion-header class="ion-no-border">
   <ion-toolbar color="unicamblue">
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-
-    <div id="logo">
-      <h2>PLAY WITH UNICAM</h2>
+    <div class="wrapper">
+      <img class="logo-toolbar" src="../../../assets/logo-small.png" alt="">
     </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" color="unicamblue" style="--offset-top:0px; position:absolute; padding:10px;">
-  <form (ngSubmit)="login()" [formGroup]="credenziali">
+<ion-content color="unicamblue">
+  <form (ngSubmit)="login()" [formGroup]="credentials">
+    <div class="container">
+      <ion-card>
+        <ion-card-header style="text-align: center; padding-top: 30px;">
+          <ion-card-subtitle class="subtitle">Ciao!</ion-card-subtitle>
+          <ion-card-title class="title">Effettua il login</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="input-row">
+            <div class="icon-div">
+              <ion-icon name="person"></ion-icon>
+            </div>
+            <div class="input-div">
+              <ion-input type="string" name="username" formControlName="username" required
+                placeholder="Inserisci username"></ion-input>
+            </div>
+          </div>
+          <div class="input-row">
+            <div class="icon-div">
+              <ion-icon name="key"></ion-icon>
+            </div>
+            <div class="input-div">
+              <ion-input type="password" name="password" formControlName="password" required
+                placeholder="Inserisci password"></ion-input>
+            </div>
+          </div>
 
-    <ion-card class="auth-card">
-      <br>
-      <br>
-      <ion-card-header>
-        <ion-card-title><strong>Login</strong></ion-card-title>
-      </ion-card-header>
+          <ion-button class="login-button" type="submit" color="unicamred" expand="block">ACCEDI</ion-button>
 
-      <ion-card-content>
-        <ion-list lines="full">
-          <ion-item>
-            <ion-label position="floating">Username</ion-label>
-            <ion-input type="string" name="username" formControlName="username" required
-              placeholder="Inserisci il tuo username"></ion-input>
-          </ion-item>
-
-          <ion-item lines="full">
-            <ion-label position="floating">Password</ion-label>
-            <ion-input type="password" name="password" formControlName="password" required
-              placeholder="Inserisci la tua password"></ion-input>
-          </ion-item>
-          <br>
-
-          <ion-button type="submit" color="unicamred" shape="round" expand="block">ACCEDI</ion-button>
-
-          <!-- <br>
-          <a [routerLink]="['/forgot-password']">Password dimenticata?</a>
-          <br> -->
-        </ion-list>
-      </ion-card-content>
-    </ion-card>
+          <div style="margin-top: 20px; text-align: center; margin-bottom: 15px;">
+            Non hai un account? <a routerLink="/registration" style="text-decoration: none;">Registrati!</a>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
   </form>
 </ion-content>

@@ -13,7 +13,7 @@ import { LoginService } from 'src/app/services/login-service/login.service';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  credenziali: FormGroup;
+  credentials: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -26,7 +26,7 @@ export class LoginPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.credenziali = this.fb.group({
+    this.credentials = this.fb.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(8)]],
     });
@@ -43,8 +43,8 @@ export class LoginPage implements OnInit {
     const loading = await this.loadingController.create();
     await loading.present();
 
-    if (this.loginController.controllaDati(this.credenziali)) {
-      this.loginService.login(this.credenziali.value).subscribe(
+    if (this.loginController.controllaDati(this.credentials)) {
+      this.loginService.login(this.credentials.value).subscribe(
         async (res) => {
           await loading.dismiss();
 
