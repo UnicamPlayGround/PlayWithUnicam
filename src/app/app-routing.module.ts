@@ -57,10 +57,6 @@ const routes: Routes = [
     loadChildren: () => import('./authentication/login-by-link/login-by-link.module').then(m => m.LoginByLinkPageModule)
   },
   {
-    path: 'modal-login',
-    loadChildren: () => import('./authentication/modal-login/modal-login.module').then(m => m.ModalLoginPageModule)
-  },
-  {
     path: 'crosswords/editor',
     loadChildren: () => import('./mgp_games/crosswords-puzzle/editor/editor.module').then(m => m.EditorPageModule)
   },

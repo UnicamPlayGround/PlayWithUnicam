@@ -7,7 +7,6 @@ import { HttpClient } from '@angular/common/http';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { LoginControllerService } from 'src/app/services/login-controller/login-controller.service';
 import { LoginService } from 'src/app/services/login-service/login.service';
-import { ModalLoginPage } from '../../authentication/modal-login/modal-login.page';
 import { Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
 
@@ -18,14 +17,14 @@ import jwt_decode from 'jwt-decode';
 })
 
 export class LoginByLinkPage implements OnInit {
-  credenziali: FormGroup;
+  guestCredentials: FormGroup;
+  credentials: FormGroup;
   codiceLobby: number;
 
   constructor(
     private fb: FormBuilder,
     private loginService: LoginService,
     private http: HttpClient,
-    private modalController: ModalController,
     private router: Router,
     private loadingController: LoadingController,
     private alertCreator: AlertCreatorService,
@@ -37,7 +36,10 @@ export class LoginByLinkPage implements OnInit {
   }
 
   ngOnInit() {
-    this.credenziali = this.fb.group({
+    this.guestCredentials = this.fb.group({
+      username: ['', [Validators.required]],
+    });
+    this.credentials = this.fb.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(8)]],
     })
@@ -70,8 +72,8 @@ export class LoginByLinkPage implements OnInit {
     const loading = await this.loadingController.create();
     await loading.present();
 
-    if (this.loginController.controllaUsername(this.credenziali.value.username)) {
-      this.loginService.loginOspiti(this.credenziali.value).subscribe(
+    if (this.loginController.controllaUsername(this.guestCredentials.value.username)) {
+      this.loginService.loginOspiti(this.guestCredentials.value).subscribe(
         async (res) => {
           const tokenValue = (await this.loginService.getToken()).value;
           await loading.dismiss();
@@ -92,6 +94,51 @@ export class LoginByLinkPage implements OnInit {
         async (res) => {
           await loading.dismiss();
           this.errorManager.stampaErrore(res, 'Login fallito!');
+        }
+      );
+    } else await loading.dismiss();
+  }
+
+  /**
+ * Effettua il login per partecipare alla lobby relativa al link di condivisione
+ */
+  async login() {
+    const loading = await this.loadingController.create();
+    await loading.present();
+
+    if (this.loginController.controllaDati(this.credentials)) {
+      this.loginService.login(this.credentials.value).subscribe(
+        async (res) => {
+          const tokenValue = (await this.loginService.getToken()).value;
+          await loading.dismiss();
+
+          const toSend = {
+            'token': tokenValue,
+            'codice_lobby': this.codiceLobby
+          }
+
+          switch (res) {
+            case "1":
+              this.http.post('/lobby/partecipa', toSend).subscribe(
+                async (res) => {
+                  this.router.navigateByUrl('/lobby-guest', { replaceUrl: true });
+                  await loading.dismiss();
+                },
+                async (res) => {
+                  await loading.dismiss();
+                  this.errorManager.stampaErrore(res, 'Impossibile partecipare alla lobby');
+                });
+              break;
+            case "2":
+              this.router.navigateByUrl('/admin', { replaceUrl: true });
+              break;
+            default:
+              this.alertCreator.createInfoAlert('Login fallito', 'Rieffettua il login');
+          }
+        },
+        async (res) => {
+          await loading.dismiss();
+          this.errorManager.stampaErrore(res, 'Login fallito');
         }
       );
     } else await loading.dismiss();
@@ -119,21 +166,9 @@ export class LoginByLinkPage implements OnInit {
       this.codiceLobby = params['codiceLobby'];
       if (this.codiceLobby == null) {
         this.router.navigateByUrl("/home", { replaceUrl: true });
-        this.alertCreator.createInfoAlert("ERRORE", "Il link non è associato a nessuna lobby!")
+        this.alertCreator.createInfoAlert("Errore", "Il link non è associato a nessuna lobby!")
       }
     })
   }
 
-  /**
-   * Apre la modal per l'autenticazione prima di entrare nella lobby a cui si intende partecipare tramite link
-   * @returns apre la modal
-   */
-  async accedi() {
-    const modal = await this.modalController.create({
-      component: ModalLoginPage,
-      cssClass: 'fullscreen'
-    });
-
-    return await modal.present();
-  }
 }
