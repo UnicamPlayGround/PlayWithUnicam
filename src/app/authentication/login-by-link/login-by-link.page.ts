@@ -166,7 +166,7 @@ export class LoginByLinkPage implements OnInit {
       this.codiceLobby = params['codiceLobby'];
       if (this.codiceLobby == null) {
         this.router.navigateByUrl("/home", { replaceUrl: true });
-        this.alertCreator.createInfoAlert("Errore", "Il link non è associato a nessuna lobby!")
+        // this.alertCreator.createInfoAlert("Errore", "Il link non è associato a nessuna lobby!")
       }
     })
   }

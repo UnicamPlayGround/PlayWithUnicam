@@ -1,75 +1,93 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-button fill="clear" color="light" slot="start" (click)="backButton()">
-      <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
-    </ion-button>
+<ion-header class="ion-no-border">
+  <ion-toolbar color="unicamblue">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <div class="wrapper">
+      <img class="logo-toolbar" src="../../../assets/logo-small.png" alt="">
+    </div>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <form (ngSubmit)="aggiornaProfilo()" [formGroup]="dati">
-    <ion-card class="auth-card">
-      <ion-card-header>
-        <ion-card-title><strong>Dati profilo</strong></ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-list lines="full">
-          <ion-item>
-            <ion-label position="floating">Username</ion-label>
-            <ion-input type="name" name="username" formControlName="username" required></ion-input>
-          </ion-item>
+  <div class="container">
+    <ion-card-header style="text-align: center; padding-top: 30px;">
+      <ion-icon name="person-circle" style="font-size: 80px; color: var(--ion-color-unicamblue);"></ion-icon>
+      <p class="subtitle">Profilo di</p>
+      <h2 class="title">{{user.username}}</h2>
+    </ion-card-header>
+  </div>
 
-          <ion-item>
-            <ion-label position="floating">Nome</ion-label>
-            <ion-input type="family-name" name="nome" formControlName="nome" required></ion-input>
-          </ion-item>
 
-          <ion-item>
-            <ion-label position="floating">Cognome</ion-label>
-            <ion-input type="name" name="cognome" formControlName="cognome" required></ion-input>
-          </ion-item>
-        </ion-list>
-        <br>
-        <br>
-        <ion-button type="submit" color="primary" expand="block" shape="round">SALVA MODIFICHE</ion-button>
-      </ion-card-content>
-    </ion-card>
-  </form>
+  <div class="super-container">
+    <div class="form">
+      <form (ngSubmit)="aggiornaProfilo()" [formGroup]="dati">
+        <ion-card-content>
+          <div style="color: #737373;">Il tuo username</div>
+          <div class="input-row">
+            <div class="icon-div">
+              <ion-icon name="person"></ion-icon>
+            </div>
+            <div class="input-div">
+              <ion-input type="username" name="username" formControlName="username" required
+                placeholder="Inserisci username"></ion-input>
+            </div>
+          </div>
 
-  <br>
-  <br>
+          <div style="margin-top: 20px; color: #737373;">Il tuo nome</div>
+          <div class="input-row">
+            <div class="input-div">
+              <ion-input type="name" name="nome" formControlName="nome" required placeholder="Inserisci il tuo nome">
+              </ion-input>
+            </div>
+          </div>
+          <div style="margin-top: 20px; color: #737373;">Il tuo cognome</div>
+          <div class="input-row">
+            <div class="input-div">
+              <ion-input type="family-name" name="cognome" formControlName="cognome" required
+                placeholder="Inserisci il tuo cognome"></ion-input>
+            </div>
+          </div>
 
-  <form (ngSubmit)="aggiornaPassword()" [formGroup]="passwords">
-    <ion-card class="auth-card">
-      <ion-card-header>
-        <ion-card-title><strong>Cambia password</strong></ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-list lines="full">
-          <ion-item>
-            <ion-label position="floating">Password precedente</ion-label>
-            <ion-input type="password" name="oldPassword" formControlName="oldPassword" required
-              placeholder="Inserisci il nuovo username"></ion-input>
-          </ion-item>
+          <ion-button class="login-button" type="submit" color="unicamgrey" expand="block">SALVA MODIFICHE</ion-button>
+        </ion-card-content>
+      </form>
+    </div>
 
-          <ion-item>
-            <ion-label position="floating">Nuova password</ion-label>
-            <ion-input type="password" name="newPassword" formControlName="newPassword" required
-              placeholder="Inserisci il tuo nome"></ion-input>
-          </ion-item>
+    <div class="form">
+      <form (ngSubmit)="aggiornaPassword()" [formGroup]="passwords">
+        <ion-card-content>
+          <div style="color: #737373;">Cambia password</div>
+          <div class="input-row">
+            <div class="icon-div">
+              <ion-icon name="key"></ion-icon>
+            </div>
+            <div class="input-div">
+              <ion-input type="password" name="oldPassword" formControlName="oldPassword" required
+                placeholder="Inserisci la vecchia password">
+              </ion-input>
+            </div>
+          </div>
 
-          <ion-item>
-            <ion-label position="floating">Conferma nuova password</ion-label>
-            <ion-input type="password" name="passwordConfirmed" formControlName="passwordConfirmed" required
-              placeholder="Inserisci il tuo nome"></ion-input>
-          </ion-item>
-        </ion-list>
-        <br>
-        <br>
-        <ion-button type="submit" color="primary" expand="block" shape="round">SALVA NUOVA PASSWORD</ion-button>
+          <div class="input-row">
+            <div class="input-div">
+              <ion-input type="password" name="newPassword" formControlName="newPassword" required
+                placeholder="Inserisci la nuova password"></ion-input>
+            </div>
+          </div>
 
-      </ion-card-content>
-    </ion-card>
-  </form>
+          <div class="input-row">
+            <div class="input-div">
+              <ion-input type="password" name="passwordConfirmed" formControlName="passwordConfirmed" required
+                placeholder="Conferma la password"></ion-input>
+            </div>
+          </div>
+
+          <ion-button class="login-button" type="submit" color="unicamred" expand="block">CAMBIA PASSWORD</ion-button>
+        </ion-card-content>
+      </form>
+    </div>
+  </div>
+
 
 </ion-content>

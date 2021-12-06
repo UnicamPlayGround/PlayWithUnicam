@@ -41,7 +41,7 @@ export class UserPopoverComponent implements OnInit {
    */
   openProfile() {
     this.popoverController.dismiss();
-    this.router.navigateByUrl('/account', { replaceUrl: true });
+    this.router.navigateByUrl('/account');
   }
 
   /**
@@ -61,6 +61,6 @@ export class UserPopoverComponent implements OnInit {
    */
   openRegistration() {
     this.popoverController.dismiss();
-    this.router.navigateByUrl('/registration', { replaceUrl: true });
+    this.router.navigateByUrl('/registration');
   }
 }

@@ -37,7 +37,6 @@ export class AccountPage implements OnInit {
       passwordConfirmed: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16)],],
     });
     this.riempiForm();
-
   }
 
   /**
@@ -158,10 +157,6 @@ export class AccountPage implements OnInit {
       this.alertCreator.createInfoAlert("Le password non corrispondono", "La password di conferma non corrisponde alla nuova password");
       await loading.dismiss();
     }
-  }
-
-  backButton() {
-    this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
   }
 
 }
