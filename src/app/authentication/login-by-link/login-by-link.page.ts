@@ -43,7 +43,6 @@ export class LoginByLinkPage implements OnInit {
       username: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(8)]],
     })
-    this.getCodiceLobby();
   }
 
   /**
@@ -52,7 +51,8 @@ export class LoginByLinkPage implements OnInit {
    */
   private async controllaJWT() {
     const tokenValue = (await this.loginService.getToken()).value;
-    if (tokenValue) {
+    this.getCodiceLobby();
+    if (tokenValue && this.codiceLobby) {
       const decodedToken: any = jwt_decode(tokenValue);
 
       if (decodedToken.tipo == "GIOCATORE" || decodedToken.tipo == "OSPITE") {
@@ -155,6 +155,7 @@ export class LoginByLinkPage implements OnInit {
       },
       async (res) => {
         this.errorManager.stampaErrore(res, 'Impossibile partecipare alla lobby');
+        this.router.navigateByUrl('/home', { replaceUrl: true });
       });
   }
 
@@ -166,7 +167,7 @@ export class LoginByLinkPage implements OnInit {
       this.codiceLobby = params['codiceLobby'];
       if (this.codiceLobby == null) {
         this.router.navigateByUrl("/home", { replaceUrl: true });
-        // this.alertCreator.createInfoAlert("Errore", "Il link non è associato a nessuna lobby!")
+        this.alertCreator.createInfoAlert("Errore", "Il link non è associato a nessuna lobby!")
       }
     })
   }
