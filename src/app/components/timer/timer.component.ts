@@ -36,7 +36,8 @@ export class TimerComponent implements OnInit {
       this.timer.timerTime--;
       this.currentTime += this.progressBarIncrease;
       var bar = document.getElementById("progress-bar");
-      bar.setAttribute("value", this.currentTime.toString());
+      if (bar)
+        bar.setAttribute("value", this.currentTime.toString());
 
       if (this.timer.enabled) {
         if (this.timer.timerTime != 0)
