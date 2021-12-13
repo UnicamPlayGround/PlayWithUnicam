@@ -6,10 +6,6 @@
     <ion-title>Modifica gioco</ion-title>
 
     <ion-buttons slot="end">
-      <!-- <ion-button (click)="print()">
-        <ion-icon slot="start" name="trash"></ion-icon>
-        Elimina gioco
-      </ion-button> -->
       <ion-button (click)="print()" class="ion-hide-sm-down">
         <ion-icon slot="start" name="save"></ion-icon>
         Salva modifiche
@@ -39,7 +35,7 @@
       <div class="content">
         <ion-item lines="full">
           <ion-label position="floating" text-wrap>Nome del gioco</ion-label>
-          <ion-input type="text" placeholder="Inserisci un nome" [(ngModel)]="gameName" style="font-size: 28px;">
+          <ion-input type="text" placeholder="Inserisci un nome" [(ngModel)]="game.name" style="font-size: 28px;">
           </ion-input>
         </ion-item>
 
@@ -48,7 +44,7 @@
             Attiva
             <p>Se attivato, il gioco sarà visibile a tutti i giocatori online.</p>
           </ion-label>
-          <ion-toggle slot="end" [(ngModel)]="active"></ion-toggle>
+          <ion-toggle slot="end" [(ngModel)]="game.isActive"></ion-toggle>
         </ion-item>
       </div>
     </div>
@@ -59,7 +55,7 @@
           <h2>Regolamento</h2>
         </div>
         <div>
-          <ion-textarea auto-grow="true" placeholder="Inserisci qui il regolamento" [(ngModel)]="regulation">
+          <ion-textarea auto-grow="true" placeholder="Inserisci qui il regolamento" [(ngModel)]="game.regulation">
           </ion-textarea>
         </div>
       </div>

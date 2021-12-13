@@ -21,12 +21,12 @@
 
   <ion-grid fixed>
     <ion-row>
-      <ion-col size-sm="6" size-md="4" size-lg="2" size="12" *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]"
+      <ion-col size-sm="6" size-md="4" size-lg="2" size="12" *ngFor="let game of list"
         style="min-width: 250px;">
 
         <div class="game">
           <div class="edit-toolbar">
-            <div class="edit-icon" title="Modifica gioco" style="float: right;" (click)="editGame()" tappable>
+            <div class="edit-icon" title="Modifica gioco" style="float: right;" (click)="editGame(game)" tappable>
               <ion-icon name="settings"></ion-icon>
             </div>
           </div>
@@ -37,8 +37,8 @@
 
           <div style="padding:0px 20px; color:var(--ion-color-unicamgrey)">
             <p style="text-align: center; font-family: 'DM Sans', sans-serif; font-weight: bold; margin:0px !important">
-              Memory</p>
-            <p style="text-align: center; font-size: 14px;">Giocatori 2 - 6</p>
+              {{game.name}}</p>
+            <p style="text-align: center; font-size: 14px;">Giocatori {{game.minPlayers}} - {{game.maxPlayers}}</p>
           </div>
 
           <div style="padding: 0px 20px;">

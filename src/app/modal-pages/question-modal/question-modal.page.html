@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar style="text-align: center;">
+    <ion-label>Tempo rimanente: {{timer.timerTime}}</ion-label>
+  </ion-toolbar>
+
+  <app-timer [timer]="timer"></app-timer>
+</ion-header>
+
+<ion-content>
+  <div class="container">
+    <h2>Rispondi correttamente alla seguente domanda</h2>
+
+
+    <div *ngIf="question.videoUrl && question.videoUrl !=''">
+      <p>Visiona il seguente video prima di rispondere</p>
+      <div style="max-width: 600px; margin:auto;">
+        <div class="video-container">
+          <iframe [src]="question.videoUrl | safe" title="video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div *ngIf="question.imgUrl" class="image-container">
+      <img src="{{ question.imgUrl }}">
+    </div> -->
+
+    <div class="answer-container">
+      <p>Seleziona la risposta corretta:</p>
+      <div *ngFor="let answer of shuffledAnswers; let i = index;" class="answer" tappable (click)="selectAnswer(answer)"
+        [class.disabled-answer]="selectedAnswer">
+        <p>{{answer}}</p>
+
+        <!-- <div class="icon">
+          <ion-icon name="checkmark"></ion-icon>
+        </div> -->
+      </div>
+    </div>
+  </div>
+
+
+</ion-content>
