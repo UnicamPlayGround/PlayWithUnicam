@@ -1,8 +1,10 @@
 <ion-split-pane contentId="content">
   <ion-menu contentId="content">
-    <ion-header>
-      <ion-toolbar color="unicamblue">
-        <ion-title>Menu</ion-title>
+    <ion-header class="ion-no-border">
+      <ion-toolbar #toolbar color="unicamblue">
+        <div class="wrapper">
+          <img class="logo-toolbar" src="../../../../assets/logo-small.png" alt="">
+        </div>
       </ion-toolbar>
     </ion-header>
 
@@ -17,12 +19,10 @@
       </div>
 
       <ion-item [routerLink]='' (click)="logout()">
-        <ion-icon name="log-out-outline" slot="start"></ion-icon>Logout
+        <ion-icon name="log-out" slot="start"></ion-icon>Logout
       </ion-item>
     </ion-content>
-
   </ion-menu>
 
   <ion-router-outlet id="content" main></ion-router-outlet>
-
 </ion-split-pane>

@@ -1,0 +1,29 @@
+.container{
+    padding:20px;
+}
+
+.game-header{
+    padding-top: 60px;
+    color:var(--ion-color-unicamgrey);
+    background-color: #fff;
+
+    ion-item{
+        --background:transparent;
+    }
+}
+
+.content{
+    max-width: 900px;
+    margin:auto;
+}
+
+.regulation{
+    padding:15px;
+}
+
+ion-textarea{
+    max-height: 220px;
+    height: 220px;
+    border: 2px solid var(--ion-color-light);
+    border-radius: 5px;
+}

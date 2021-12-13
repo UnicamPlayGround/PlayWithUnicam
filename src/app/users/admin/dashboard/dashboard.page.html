@@ -9,26 +9,49 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content style="--background: #D9DBE1">
+  <ion-toolbar
+    style="--min-height:30px !important; vertical-align: middle; justify-items: center; line-height: 40px; padding:10px;">
+    <ion-label text-wrap>Elenco dei giochi</ion-label>
+    <ion-button slot="end" (click)="addGame()" shape="round" color="unicamblue">
+      Nuovo
+      <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
 
-  <ion-row class="row">
-    <ion-card button="true" class="users-card" routerLink="/admin/users">
-      <ion-label>
-        <h1>
-          <ion-icon name="people-outline"></ion-icon>
-        </h1>
-        <h1>GESTISCI UTENTI</h1>
-      </ion-label>
-    </ion-card>
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col size-sm="6" size-md="4" size-lg="2" size="12" *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]"
+        style="min-width: 250px;">
 
-    <ion-card button="true" class="games-card" routerLink="/admin/games">
-      <ion-label>
-        <h1>
-          <ion-icon name="game-controller-outline"></ion-icon>
-        </h1>
-        <h1>GESTISCI GIOCHI</h1>
-      </ion-label>
-    </ion-card>
-  </ion-row>
+        <div class="game">
+          <div class="edit-toolbar">
+            <div class="edit-icon" title="Modifica gioco" style="float: right;" (click)="editGame()" tappable>
+              <ion-icon name="settings"></ion-icon>
+            </div>
+          </div>
+
+          <div style="font-size: 70px; text-align: center; color:var(--ion-color-unicamgrey);">
+            <ion-icon name="game-controller"></ion-icon>
+          </div>
+
+          <div style="padding:0px 20px; color:var(--ion-color-unicamgrey)">
+            <p style="text-align: center; font-family: 'DM Sans', sans-serif; font-weight: bold; margin:0px !important">
+              Memory</p>
+            <p style="text-align: center; font-size: 14px;">Giocatori 2 - 6</p>
+          </div>
+
+          <div style="padding: 0px 20px;">
+            <ion-button expand="block" fill="outline" color="unicamblue" shape="round">Gioca</ion-button>
+          </div>
+        </div>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- <div>
+
+  </div> -->
 
 </ion-content>

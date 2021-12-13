@@ -12,17 +12,17 @@ export class MenuPage implements OnInit {
   pages = [
     {
       title: 'Dashboard',
-      icon: 'home-outline',
+      icon: 'home',
       url: '/admin/dashboard'
     },
     {
       title: 'Utenti',
-      icon: 'people-outline',
+      icon: 'people',
       url: '/admin/users'
     },
     {
       title: 'Giochi',
-      icon: 'game-controller-outline',
+      icon: 'game-controller',
       url: '/admin/games'
     }
   ]
