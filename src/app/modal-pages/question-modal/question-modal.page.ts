@@ -1,6 +1,6 @@
 import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ModalController } from '@ionic/angular';
+import { ModalController, NavParams } from '@ionic/angular';
 import { Timer } from 'src/app/components/timer/timer';
 import { ToastCreatorService } from 'src/app/services/toast-creator/toast-creator.service';
 import { Question } from './question';
@@ -27,21 +27,27 @@ export class QuestionModalPage implements OnInit {
   correctAnswer: boolean;
   timer: Timer;
 
-  constructor(private modalController: ModalController, private toastCreator: ToastCreatorService) {
-    this.question = new Question(
-      "Che ore sono?",
-      ["11SUPERcalifragilistichespiralidosoSUPERcalifragilistichespiralidoso",
-        "22superCALIFRAGILISTICHEspiralidososuperCALIFRAGILISTICHEspiralidoso",
-        "33supercalifragilisticheSPIRALIDOSOsupercalifragilisticheSPIRALIDOSO"],
-      "https://www.logitech.com/content/dam/logitech/en/products/mice/m171/gallery/m171-gallery-blue-1.png",
-      "https://www.youtube.com/embed/lElXAgd1hGA");
-    this.timer = new Timer(5, () => { this.closeModal() }, true);
+  constructor(
+    private modalController: ModalController,
+    private navParams: NavParams,
+    private toastCreator: ToastCreatorService) {
+    // this.question = new Question(
+    //   "Di che università si parla nel video?",
+    //   [
+    //     "Università di Camerino",
+    //     "Università Politecnica delle Marche",
+    //     "Università di Perugia"
+    //   ],
+    //   "",
+    //   "https://www.youtube.com/embed/lElXAgd1hGA", 10);
+    // this.timer = new Timer(this.question.countdownSeconds, () => { this.closeModal() }, true);
   }
 
   ngOnInit() {
-    console.log(this.question);
+    this.question = this.navParams.get('question');
     this.setAnswers();
     this.shuffleAnswers();
+    this.timer = new Timer(this.question.countdownSeconds, () => { this.closeModal() }, true);
   }
 
   /**
@@ -63,8 +69,6 @@ export class QuestionModalPage implements OnInit {
       this.shuffledAnswers[i] = this.shuffledAnswers[j];
       this.shuffledAnswers[j] = temp;
     }
-    console.log(this.shuffledAnswers);
-
   }
 
   /**
@@ -73,18 +77,22 @@ export class QuestionModalPage implements OnInit {
    */
   closeModal() {
     this.timer.enabled = false;
-    //this.modalController.dismiss(this.rispostaCorretta);
+    this.modalController.dismiss(this.correctAnswer);
   }
 
-  selectAnswer(answer: String) {
+  selectAnswer(answer: String, index: Number) {
+    this.timer.enabled = false;
     this.selectedAnswer = true;
 
     if (answer == this.question.answers[0]) {
       this.correctAnswer = true;
-      this.toastCreator.creaToast("Risposta corretta!", "bottom", 2000);
+      this.toastCreator.creaToast("Risposta corretta!", "top", 2000);
+      document.getElementById("answer" + index).classList.add("correct-answer");
     } else {
       this.correctAnswer = false;
-      this.toastCreator.creaToast("Risposta errata!", "bottom", 2000);
+      this.toastCreator.creaToast("Risposta errata!", "top", 2000);
+      document.getElementById("answer" + index).classList.add("wrong-answer");
     }
   }
+
 }

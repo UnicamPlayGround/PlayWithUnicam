@@ -3,16 +3,17 @@
     <ion-label>Tempo rimanente: {{timer.timerTime}}</ion-label>
   </ion-toolbar>
 
-  <app-timer [timer]="timer"></app-timer>
+  <app-timer [timer]="timer" color="danger" reversed="true"></app-timer>
 </ion-header>
 
 <ion-content>
   <div class="container">
-    <h2>Rispondi correttamente alla seguente domanda</h2>
+    <p style="font-size: 14px; margin-bottom: 0px;">Rispondi correttamente alla seguente domanda</p>
+    <h1>{{question.question}}</h1>
 
 
-    <div *ngIf="question.videoUrl && question.videoUrl !=''">
-      <p>Visiona il seguente video prima di rispondere</p>
+    <div *ngIf="question.videoUrl && question.videoUrl.length > 0" style="margin-top: 30px;">
+      <p style="font-size: 14px;">Visiona il seguente video prima di rispondere</p>
       <div style="max-width: 600px; margin:auto;">
         <div class="video-container">
           <iframe [src]="question.videoUrl | safe" title="video player" frameborder="0"
@@ -22,22 +23,26 @@
       </div>
     </div>
 
-    <!-- <div *ngIf="question.imgUrl" class="image-container">
+    <div *ngIf="question.imgUrl && question.imgUrl.length > 0" class="image-container">
+      <p style="font-size: 14px; text-align: left;">Osserva la seguente immagine prima di rispondere</p>
       <img src="{{ question.imgUrl }}">
-    </div> -->
+    </div>
 
     <div class="answer-container">
-      <p>Seleziona la risposta corretta:</p>
-      <div *ngFor="let answer of shuffledAnswers; let i = index;" class="answer" tappable (click)="selectAnswer(answer)"
-        [class.disabled-answer]="selectedAnswer">
+      <p style="font-size: 20px; font-weight: bold;">Seleziona la risposta corretta</p>
+      <div *ngFor="let answer of shuffledAnswers; let i = index;" id="answer{{i}}" class="answer" tappable
+        (click)="selectAnswer(answer, i)" [class.disabled-answer]="selectedAnswer">
         <p>{{answer}}</p>
-
-        <!-- <div class="icon">
-          <ion-icon name="checkmark"></ion-icon>
-        </div> -->
       </div>
     </div>
   </div>
-
-
 </ion-content>
+
+<ion-footer *ngIf="selectedAnswer">
+  <ion-toolbar color="unicamred">
+    <ion-button fill="clear" expand="block" color="light" (click)="closeModal()">
+      Continua
+      <ion-icon slot="end" name="arrow-forward"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

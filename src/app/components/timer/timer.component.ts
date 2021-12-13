@@ -8,6 +8,8 @@ import { Timer } from './timer';
 })
 export class TimerComponent implements OnInit {
   @Input('timer') timer: Timer;
+  @Input('color') color: String;
+  @Input('reversed') reversed: boolean;
 
   /**
    * Tempo attuale del Timer
@@ -18,7 +20,7 @@ export class TimerComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.startTimer();
+    this.startTimer();    
   }
 
   /**

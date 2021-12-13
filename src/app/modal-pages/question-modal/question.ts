@@ -3,12 +3,14 @@ export class Question {
     answers: String[];
     imgUrl: String;
     videoUrl: String;
+    countdownSeconds: number
 
-    constructor(question: String, answers: String[], imgUrl: String, videoUrl: String) {
+    constructor(question: String, answers: String[], imgUrl: String, videoUrl: String, countdownSeconds: number) {
         this.question = question;
         this.answers = answers;
         this.imgUrl = imgUrl;
         this.videoUrl = videoUrl;
+        this.countdownSeconds = countdownSeconds;
     }
 
     getJSON() {
