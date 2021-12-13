@@ -62,7 +62,7 @@ const routes: Routes = [
   },
   {
     path: 'memory-game',
-    loadChildren: () => import('./mgp_games/memory-game/memory-game.module').then( m => m.MemoryGamePageModule)
+    loadChildren: () => import('./mgp_games/memory-game/gameMultiplayer/memory-game-routing.module').then( m => m.MemoryGamePageRoutingModule)
   },
   {
     path: 'memory',
