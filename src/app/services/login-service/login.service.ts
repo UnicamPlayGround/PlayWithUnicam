@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, tap, switchMap } from 'rxjs/operators';
+import { map, tap, switchMap, filter, take } from 'rxjs/operators';
 import { BehaviorSubject, Observable } from 'rxjs';
 import jwt_decode from 'jwt-decode';
 
@@ -93,17 +93,18 @@ export class LoginService {
   async logout() {
     const tokenValue = (await this.getToken()).value;
     const headers = { 'token': tokenValue };
+    const decodedToken: any = jwt_decode(tokenValue);
 
-    this.http.delete('/logout/ospite', { headers }).subscribe(
-      async (res) => {
-        this.tipologiaAccount.next("");
-        await Storage.remove({ key: TOKEN_KEY });
-      },
-      async (res) => {
-        this.tipologiaAccount.next("");
-        await Storage.remove({ key: TOKEN_KEY });
-        console.log("Logout fallito!");
-      });
+    this.tipologiaAccount.next("");
+    await Storage.remove({ key: TOKEN_KEY });
+
+    if (decodedToken.tipo == 'OSPITE') {
+      this.http.delete('/logout/ospite', { headers }).subscribe(
+        async (res) => { },
+        async (res) => {
+          console.log("Logout fallito!");
+        });
+    }
   }
 
   /**
