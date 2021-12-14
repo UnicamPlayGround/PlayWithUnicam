@@ -67,12 +67,7 @@ const routes: Routes = [
   {
     path: 'memory',
     loadChildren: () => import('./mgp_games/memory-game/components/menu/menu.module').then( m => m.MemoryMenuPageModule)
-  },
-  {
-    path: 'question-modal',
-    loadChildren: () => import('./modal-pages/question-modal/question-modal.module').then( m => m.QuestionModalPageModule)
   }
-
 ];
 
 @NgModule({
