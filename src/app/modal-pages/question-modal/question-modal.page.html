@@ -3,9 +3,7 @@
     <ion-label>Tempo rimanente: {{timer.timerTime}}</ion-label>
   </ion-toolbar>
 
-  <div style="background-color: var(--ion-color-light) !important;">
-    <app-timer [timer]="timer" color="danger" reversed="true"></app-timer>
-  </div>
+  <app-timer [timer]="timer" color="danger" reversed="true"></app-timer>
 </ion-header>
 
 <ion-content>

@@ -57,10 +57,6 @@ const routes: Routes = [
     loadChildren: () => import('./authentication/login-by-link/login-by-link.module').then(m => m.LoginByLinkPageModule)
   },
   {
-    path: 'crosswords/editor',
-    loadChildren: () => import('./mgp_games/crosswords-puzzle/editor/editor.module').then(m => m.EditorPageModule)
-  },
-  {
     path: 'memory-game',
     loadChildren: () => import('./mgp_games/memory-game/components/game-multiplayer/memory-multi.module').then( m => m.MemoryMultiPageModule)
   },
