@@ -34,7 +34,9 @@ export class LobbyGuestPage implements OnInit {
   }
 
   ngOnInit() {
-    this.ping();
+    setTimeout(() => {
+      this.ping();
+    }, 0);
     this.timerPing = this.timerController.getTimer(() => { this.ping() }, 2000);
   }
 

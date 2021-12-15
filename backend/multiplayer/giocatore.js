@@ -75,7 +75,7 @@ exports.creaGiocatore = (username, codiceLobby) => {
             })
             .then(results => {
                 if (controller.controllaRisultatoQuery(results)) {
-                    db.pool.query('INSERT INTO public.giocatori (username, codice_lobby, data_ingresso) VALUES ($1, $2, NOW())',
+                    db.pool.query('INSERT INTO public.giocatori (username, codice_lobby, data_ingresso, ping) VALUES ($1, $2, NOW(), NOW())',
                         [username, codiceLobby], (error, results) => {
                             if (error)
                                 return reject(error);
@@ -83,7 +83,7 @@ exports.creaGiocatore = (username, codiceLobby) => {
                                 return resolve(results);
                         });
                 } else {
-                    db.pool.query('UPDATE public.giocatori SET codice_lobby = $1, data_ingresso = NOW() WHERE username = $2',
+                    db.pool.query('UPDATE public.giocatori SET codice_lobby = $1, data_ingresso = NOW(), ping = NOW() WHERE username = $2',
                         [codiceLobby, username], (error, results) => {
                             if (error)
                                 return reject(error);

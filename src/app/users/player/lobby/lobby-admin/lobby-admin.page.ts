@@ -40,9 +40,11 @@ export class LobbyAdminPage implements OnInit {
   }
 
   ngOnInit() {
-    this.loadInfoLobby();
-    this.loadGiocatori();
-    this.ping();
+    setTimeout(() => {
+      this.loadInfoLobby();
+      this.loadGiocatori();
+      this.ping();
+    }, 0);
 
     this.timerPing = this.timerController.getTimer(() => { this.ping() }, 4000);
   }
