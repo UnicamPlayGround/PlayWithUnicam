@@ -1,7 +1,7 @@
 import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalController, NavParams } from '@ionic/angular';
-import { Timer } from 'src/app/components/timer/timer';
+import { Timer } from 'src/app/components/progress-bar-timer/timer';
 import { ToastCreatorService } from 'src/app/services/toast-creator/toast-creator.service';
 import { Question } from './question';
 
@@ -31,16 +31,6 @@ export class QuestionModalPage implements OnInit {
     private modalController: ModalController,
     private navParams: NavParams,
     private toastCreator: ToastCreatorService) {
-    // this.question = new Question(
-    //   "Di che università si parla nel video?",
-    //   [
-    //     "Università di Camerino",
-    //     "Università Politecnica delle Marche",
-    //     "Università di Perugia"
-    //   ],
-    //   "",
-    //   "https://www.youtube.com/embed/lElXAgd1hGA", 10);
-    // this.timer = new Timer(this.question.countdownSeconds, () => { this.closeModal() }, true);
   }
 
   ngOnInit() {

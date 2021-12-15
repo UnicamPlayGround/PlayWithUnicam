@@ -2,14 +2,14 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Timer } from './timer';
 
 @Component({
-  selector: 'app-timer',
-  templateUrl: './timer.component.html',
-  styleUrls: ['./timer.component.scss'],
+  selector: 'app-progress-bar-timer',
+  templateUrl: './progress-bar-timer.component.html',
+  styleUrls: ['./progress-bar-timer.component.scss'],
 })
-export class TimerComponent implements OnInit {
+export class ProgressBarTimerComponent implements OnInit {
   @Input('timer') timer: Timer;
   @Input('color') color: String;
-  @Input('reversed') reversed: boolean;
+  @Input('reversed') reversed: String;
 
   /**
    * Tempo attuale del Timer
@@ -49,7 +49,6 @@ export class TimerComponent implements OnInit {
       }
 
     }, 1000);
-
   }
 
 }

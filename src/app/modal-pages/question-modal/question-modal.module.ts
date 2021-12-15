@@ -7,15 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { QuestionModalPageRoutingModule } from './question-modal-routing.module';
 
 import { QuestionModalPage, SafePipe } from './question-modal.page';
-import { TimerComponent } from 'src/app/components/timer/timer.component';
+import { SharedComponentsModule } from 'src/app/components/shared-components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    QuestionModalPageRoutingModule
+    QuestionModalPageRoutingModule,
+    SharedComponentsModule
   ],
-  declarations: [QuestionModalPage, SafePipe, TimerComponent]
+  declarations: [QuestionModalPage, SafePipe],
 })
 export class QuestionModalPageModule { }

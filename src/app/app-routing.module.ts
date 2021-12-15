@@ -63,7 +63,12 @@ const routes: Routes = [
   {
     path: 'memory',
     loadChildren: () => import('./mgp_games/memory-game/components/menu/menu.module').then( m => m.MemoryMenuPageModule)
+  },
+  {
+    path: 'editor',
+    loadChildren: () => import('./mgp_games/memory-game/components/memory-game-editor/memory-game-editor.module').then( m => m.MemoryGameEditorPageModule)
   }
+
 ];
 
 @NgModule({

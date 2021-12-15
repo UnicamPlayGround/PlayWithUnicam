@@ -28,4 +28,9 @@ export class DashboardPage implements OnInit {
     this.gameManager.gameEdited = game;
     this.router.navigateByUrl("admin/edit-game");
   }
+
+  addGame(){
+
+  }
+  
 }
