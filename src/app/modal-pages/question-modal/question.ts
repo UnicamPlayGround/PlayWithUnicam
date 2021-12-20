@@ -3,7 +3,7 @@ export class Question {
     answers: String[];
     imgUrl: String;
     videoUrl: String;
-    countdownSeconds: number
+    countdownSeconds: number;
 
     constructor(question: String, answers: String[], imgUrl: String, videoUrl: String, countdownSeconds: number) {
         this.question = question;
