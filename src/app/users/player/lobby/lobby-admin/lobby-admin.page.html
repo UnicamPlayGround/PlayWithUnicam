@@ -141,8 +141,11 @@
               <ion-label>{{ giocatore.username }}</ion-label>
               <p slot="end" *ngIf="giocatore.username == lobby.admin_lobby" class="admin-label">ADMIN</p>
               <ion-icon slot="end" name="diamond-outline" *ngIf="giocatore.username == lobby.admin_lobby"></ion-icon>
-              <ion-icon slot="end" name="trash-outline" tappable (click)="eliminaPartecipante(giocatore.username, i)"
-                *ngIf="giocatore.username != lobby.admin_lobby"></ion-icon>
+              <ion-button (click)="eliminaPartecipante(giocatore.username, i)" clear
+                *ngIf="giocatore.username != lobby.admin_lobby">
+                <ion-icon slot="end" name="trash-outline" tappable>
+                </ion-icon>
+              </ion-button>
             </ion-item>
           </ion-list>
         </ion-card>
@@ -167,9 +170,10 @@
                     style="position:absolute; margin-top: -18px; margin-left: 23px; z-index: 1;">ADMIN</p>
                   <ion-icon size="large" name="diamond-outline" *ngIf="giocatore.username == lobby.admin_lobby">
                   </ion-icon>
-                  <ion-icon size="large" name="trash-outline" tappable
-                    (click)="eliminaPartecipante(giocatore.username, i)"
-                    *ngIf="giocatore.username != lobby.admin_lobby"></ion-icon>
+                  <ion-button (click)="eliminaPartecipante(giocatore.username, i)" clear
+                    *ngIf="giocatore.username != lobby.admin_lobby">
+                    <ion-icon size="large" name="trash-outline" tappable></ion-icon>
+                  </ion-button>
                 </ion-col>
               </ion-slide>
             </ion-slides>
