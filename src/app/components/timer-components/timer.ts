@@ -1,6 +1,9 @@
+import { TimerComponents } from "./timer-components";
+
 export class Timer {
     timerTime: number;
     enabled: boolean = false;
+    timerComponent: TimerComponents;
     cb: Function
 
     constructor(timerTime: number, cb: Function, enabled: boolean) {

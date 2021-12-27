@@ -1,7 +1,7 @@
 import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalController, NavParams } from '@ionic/angular';
-import { Timer } from 'src/app/components/progress-bar-timer/timer';
+import { Timer } from 'src/app/components/timer-components/timer';
 import { ToastCreatorService } from 'src/app/services/toast-creator/toast-creator.service';
 import { Question } from './question';
 
