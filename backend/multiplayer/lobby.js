@@ -38,20 +38,16 @@ function eliminaGiocatore(username) {
     return new Promise((resolve, reject) => {
         partita.getInfoPartita(username)
             .then(info => {
-                if (info) {
-                    if (info.giocatore_corrente) {
-                        if (info.giocatore_corrente == username)
-                            return partita.cambiaGiocatoreCorrente(username)
-                                .then(_ => { return giocatore.eliminaGiocatore(username); })
-                                .then(_ => { return resolve(); })
-                                .catch(error => { return reject(error); })
-                    }
+                if (info && info.giocatore_corrente && info.giocatore_corrente == username) {
+                    return partita.cambiaGiocatoreCorrente(username)
+                        .then(_ => { return giocatore.eliminaGiocatore(username); })
+                        .then(_ => { return resolve(); })
+                        .catch(error => { return reject(error); })
                 } else {
                     giocatore.eliminaGiocatore(username)
                         .then(_ => { return resolve(); })
                         .catch(error => { return reject(error); })
                 }
-
             })
             .catch(error => { return reject(error) })
     });
