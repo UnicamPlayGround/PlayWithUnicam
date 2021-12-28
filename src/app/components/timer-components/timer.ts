@@ -24,13 +24,21 @@ export class Timer {
     /**
      * Callback da chiamare quando il timer termina
      */
-    cb: Function
+    callback: Function
 
-    constructor(timerTime: number, cb: Function, enabled: boolean) {
+    constructor(timerTime: number, enabled: boolean, cb?: Function) {
         this.timerTime = timerTime;
         this.timeLeft = timerTime;
         this.enabled = enabled;
-        this.cb = cb;
+        this.callback = cb;
+    }
+
+    /**
+     * Avvia il timer.
+     */
+    startTimer() {
+        this.enabled = true;
+        this.timerComponent.startTimer();
     }
 
     /**
@@ -39,6 +47,10 @@ export class Timer {
      */
     setTimerComponent(timerComponent: TimerComponents) {
         timerComponent = timerComponent;
+    }
+
+    setCallback(cb) {
+        this.callback = cb;
     }
 
     /**

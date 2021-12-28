@@ -47,7 +47,7 @@ export class ProgressBarTimerComponent implements OnInit, TimerComponents {
         if (this.timer.getTimeLeft() != 0)
           this.changeProgressBar();
         else
-          this.timer.cb();
+          this.timer.callback();
       }
 
     }, 1000);

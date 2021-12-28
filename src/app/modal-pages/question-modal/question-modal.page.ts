@@ -37,7 +37,7 @@ export class QuestionModalPage implements OnInit {
     this.question = this.navParams.get('question');
     this.setAnswers();
     this.shuffleAnswers();
-    this.timer = new Timer(this.question.countdownSeconds, () => { this.closeModal() }, true);
+    this.timer = new Timer(this.question.countdownSeconds, true, () => { this.closeModal() });
   }
 
   /**
