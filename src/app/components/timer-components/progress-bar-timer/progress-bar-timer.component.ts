@@ -21,7 +21,7 @@ export class ProgressBarTimerComponent implements OnInit, TimerComponents {
   constructor() { }
 
   ngOnInit() {
-    this.timer.timerComponent = this;
+    this.timer.setTimerComponent(this);
     this.startTimer();
   }
 
@@ -29,7 +29,7 @@ export class ProgressBarTimerComponent implements OnInit, TimerComponents {
    * Fa partire il timer.
    */
   startTimer() {
-    this.progressBarIncrease = 1 / this.timer.timerTime;
+    this.progressBarIncrease = 1 / this.timer.getTimerTime();
     if (this.timer.enabled) {
       this.changeProgressBar();
     }
@@ -37,14 +37,14 @@ export class ProgressBarTimerComponent implements OnInit, TimerComponents {
 
   private changeProgressBar() {
     setTimeout(() => {
-      this.timer.timerTime--;
+      this.timer.decreaseTimeLeft();
       this.currentTime += this.progressBarIncrease;
       var bar = document.getElementById("progress-bar");
       if (bar)
         bar.setAttribute("value", this.currentTime.toString());
 
       if (this.timer.enabled) {
-        if (this.timer.timerTime != 0)
+        if (this.timer.getTimeLeft() != 0)
           this.changeProgressBar();
         else
           this.timer.cb();
