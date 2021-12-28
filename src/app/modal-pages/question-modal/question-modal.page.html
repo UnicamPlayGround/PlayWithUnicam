@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar style="text-align: center;">
-    <ion-label>Tempo rimanente: {{timer.timerTime}}</ion-label>
+    <ion-label>Tempo rimanente: {{timer.getTimeLeft()}}</ion-label>
   </ion-toolbar>
 
   <app-progress-bar-timer [timer]="timer" color="danger" reversed="true"></app-progress-bar-timer>
