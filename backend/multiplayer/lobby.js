@@ -49,7 +49,14 @@ function eliminaGiocatore(username) {
                         .catch(error => { return reject(error); })
                 }
             })
-            .catch(error => { return reject(error) })
+            .catch(error => {
+                if (error.message == messaggi.MINIMO_GIOCATORI_ERROR) {
+                    giocatore.eliminaGiocatore(username)
+                        .then(_ => { return resolve(); })
+                        .catch(error => { return reject(error); })
+                } else
+                    return reject(error)
+            })
     });
 }
 
