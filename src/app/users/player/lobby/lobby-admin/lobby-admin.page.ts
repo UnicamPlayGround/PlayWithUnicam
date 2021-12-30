@@ -1,5 +1,5 @@
 import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creator.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LoadingController } from '@ionic/angular';
 import { LobbyManagerService } from 'src/app/services/lobby-manager/lobby-manager.service';
@@ -13,7 +13,7 @@ import jwt_decode from 'jwt-decode';
   templateUrl: './lobby-admin.page.html',
   styleUrls: ['./lobby-admin.page.scss'],
 })
-export class LobbyAdminPage implements OnInit {
+export class LobbyAdminPage implements OnInit, OnDestroy {
   lobby = { codice: null, admin_lobby: null, pubblica: false, min_giocatori: 0, max_giocatori: 0, nome: null, link: null, regolamento: null };
   giocatori = [];
   mostraInfoLobby = false;
@@ -33,10 +33,7 @@ export class LobbyAdminPage implements OnInit {
     private loginService: LoginService,
     private router: Router
   ) {
-    window.addEventListener('beforeunload', (event) => {
-      //TODO: vedere per Firefox
-      event.returnValue = '';
-    });
+    window.addEventListener('beforeunload', this.beforeUnloadListener);
   }
 
   ngOnInit() {
@@ -48,6 +45,15 @@ export class LobbyAdminPage implements OnInit {
 
     this.timerPing = this.timerController.getTimer(() => { this.ping() }, 4000);
   }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('beforeunload', this.beforeUnloadListener);
+  }
+
+  beforeUnloadListener = (event) => {
+    event.preventDefault();
+    return event.returnValue = "Sei sicuro di voler uscire dal sito?";
+  };
 
   /**
    * Cambia il valore di 'mostraInfoLobby' che determina l'espansione della relativa card
