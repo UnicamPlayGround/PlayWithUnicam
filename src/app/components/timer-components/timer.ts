@@ -19,7 +19,7 @@ export class Timer {
     /**
      * Componente grafico del timer
      */
-    private timerComponent: TimerComponents;
+    private timerComponent: TimerComponents = null;
 
     /**
      * Callback da chiamare quando il timer termina
@@ -38,7 +38,15 @@ export class Timer {
      */
     startTimer() {
         this.enabled = true;
-        this.timerComponent.startTimer();
+        if (this.timerComponent)
+            this.timerComponent.startTimer();
+    }
+
+    /**
+     * Ferma il timer.
+     */
+    stopTimer() {
+        this.enabled = false;
     }
 
     /**
@@ -47,6 +55,15 @@ export class Timer {
      */
     setTimerComponent(timerComponent: TimerComponents) {
         timerComponent = timerComponent;
+    }
+
+    /**
+     * Imposta il tempo iniziale del timer.
+     * @param timerTime Tempo iniziale del timer
+     */
+    setTimerTime(timerTime: number) {
+        this.timerTime = timerTime;
+        this.timeLeft = timerTime;
     }
 
     setCallback(cb) {
@@ -72,6 +89,29 @@ export class Timer {
      */
     getTimerTime() {
         return this.timerTime;
+    }
+
+    /**
+     * Ritorna il tempo rimanente in formato *"minuti : secondi"*.
+     * @returns una stringa contenente il tempo rimanente del timer
+     */
+    getTimeLeftToPrint() {
+        var toReturn = "";
+        if (this.timeLeft >= 60) {
+            var minutes = Math.floor(this.timeLeft / 60);
+            var seconds = this.timeLeft - (minutes * 60);
+
+            if (seconds < 10)
+                toReturn = minutes + ":0" + seconds;
+            else
+                toReturn = minutes + ":" + seconds;
+
+        } else if (this.timeLeft >= 10)
+            toReturn = "00:" + this.timeLeft;
+        else
+            toReturn = "00:0" + this.timeLeft;
+
+        return toReturn;
     }
 
     /**
