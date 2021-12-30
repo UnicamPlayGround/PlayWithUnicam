@@ -83,11 +83,8 @@ export class GamesPage implements OnInit {
       cssClass: 'fullscreen'
     });
 
-    modal.onDidDismiss().then((data) => {
-      const giocoModificato = data['data'];
-
-      if (giocoModificato)
-        this.loadGames();
+    modal.onDidDismiss().then(() => {
+      this.loadGames();
     });
 
     return await modal.present();

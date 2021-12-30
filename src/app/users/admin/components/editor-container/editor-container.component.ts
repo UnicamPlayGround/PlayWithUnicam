@@ -15,12 +15,6 @@ export class EditorContainerComponent implements OnInit {
    */
   @Input() editorItem: EditorItem;
 
-  /**
-   * Questo EventEmitter consente a questo component di comunicare con il suo parent emettendo
-   * eventi contenenti determinati valori che saranno poi intercettati dal parent.
-   */
-  @Output() updateConfigEvent = new EventEmitter<Object>();
-
   @ViewChild(EditorDirective, { static: true }) editorHost!: EditorDirective;
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver) { }
@@ -31,22 +25,12 @@ export class EditorContainerComponent implements OnInit {
   }
 
   /**
-   * Quando questo component riceve un evento da qualcuno dei suoi child component contenente
-   * un certo valore, emette a sua volta un nuovo evento contenente tale valore, che verrà poi
-   * catturato dal componente parent.
-   */
-  updateConfig(newConfig: Object) {
-    this.updateConfigEvent.emit(newConfig);
-  }
-
-  /**
    * Risolve il component contenuto in "editorItem" e lo istanzia dinamicamente all'interno
    * del template editorHost.
    */
   loadGameEditor() {
     const componentRef = this.loadComponent(this.editorItem.editor);
     componentRef.instance.config = this.editorItem.config;
-    componentRef.instance.updateConfigEvent.subscribe(newConfig => this.updateConfig(newConfig));
   }
 
   /**
