@@ -20,7 +20,6 @@ describe('Giocatore.js', function () {
         promises.push(utente.creaOspite("guest_test"));
         promises.push(utente.creaOspite("guest2-t"));
         promises.push(utente.creaOspite("guest3-t"));
-        // promises.push(utente.creaOspite("guest4-t"));
         promises.push(game.creaGioco("game_test", "NORMALE", 1, 5, "gameTest", false, {}, ""));
         return Promise.all(promises);
     });
@@ -45,7 +44,6 @@ describe('Giocatore.js', function () {
             .then(results => { codiceLobby = results.rows[0].codice; })
             .then(_ => { return lobby.partecipaLobby("guest2-t", codiceLobby); })
             .then(_ => { return lobby.partecipaLobby("guest3-t", codiceLobby); })
-            // .then(_ => { return lobby.partecipaLobby("guest4-t", codiceLobby); })
             .then(_ => { return partita.creaPartita("guest_test"); })
             .then(_ => { return done(); })
             .catch(error => { return done(error); });
@@ -54,9 +52,6 @@ describe('Giocatore.js', function () {
     after(function () {
         return new Promise((resolve, reject) => {
             lobby.abbandonaLobby("guest_test")
-                .then(_ => { return lobby.abbandonaLobby("guest2-t") })
-                .then(_ => { return lobby.abbandonaLobby("guest3-t") })
-                // .then(_ => { return lobby.abbandonaLobby("guest4-t") })
                 .then(_ => { return resolve(); })
                 .catch(error => { return reject(error); });
         })
@@ -68,7 +63,6 @@ describe('Giocatore.js', function () {
         promises.push(utente.eliminaOspite("guest_test"));
         promises.push(utente.eliminaOspite("guest2-t"));
         promises.push(utente.eliminaOspite("guest3-t"));
-        // promises.push(utente.eliminaOspite("guest4-t"));
         return Promise.all(promises);
     });
 
@@ -82,16 +76,14 @@ describe('Giocatore.js', function () {
                 giocatore.creaGiocatore("guest_test", codiceLobby)
                     .then(_ => {
                         db.pool.query('SELECT * FROM public.giocatori WHERE username=$1', ["guest_test"], (error, results) => {
-
                             if (error) throw new Error(error);
 
-                            dataIngresso = results.rows[0].data_ingresso;
                             const expected = {
                                 username: "guest_test",
                                 codice_lobby: codiceLobby,
                                 ruolo: null,
-                                ping: null,
-                                data_ingresso: dataIngresso,
+                                ping: results.rows[0].ping,
+                                data_ingresso: results.rows[0].data_ingresso,
                                 info: null
                             }
                             assert.strictEqual(results.rows.length, 1);
@@ -125,18 +117,15 @@ describe('Giocatore.js', function () {
                 db.pool.query('SELECT ping FROM public.giocatori WHERE username=$1', ["guest_test"], (error, results) => {
                     if (error) return reject(error);
 
-                    ping = results.rows[0];
-                    const expected = { ping: null }
                     assert.strictEqual(results.rows.length, 1);
-                    assert.deepStrictEqual(results.rows[0], expected);
+                    assert.notDeepStrictEqual(null, results.rows[0].ping,);
 
                     giocatore.ping("guest_test")
                         .then(_ => {
-                            assert.notDeepStrictEqual(null, ping)
+                            assert.notDeepStrictEqual(null, results.rows[0].ping)
                             return resolve();
                         })
                         .catch(error => { return reject(error) });
-
                 })
                 //TODO: manca return reject/throw error?????
             })

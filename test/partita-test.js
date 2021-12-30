@@ -63,7 +63,6 @@ describe('Partita.js', function () {
             lobby.abbandonaLobby("guest-t")
                 .then(_ => { return lobby.abbandonaLobby("guest2-t") })
                 .then(_ => { return lobby.abbandonaLobby("guest4-t") })
-                .then(_ => { return lobby.abbandonaLobby("guest5-t") })
                 .then(_ => { return resolve(); })
                 .catch(error => { return reject(error); });
         })

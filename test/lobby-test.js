@@ -45,10 +45,6 @@ describe('Lobby.js', function () {
     });
 
     after(function () {
-        return lobby.abbandonaLobby("guest-t3");
-    });
-
-    after(function () {
         const promises = [];
         promises.push(utente.eliminaOspite("guest-t"));
         promises.push(utente.eliminaOspite("guest-t2"));
@@ -268,7 +264,7 @@ describe('Lobby.js', function () {
                             username: "guest-t",
                             codice_lobby: codiceLobby,
                             ruolo: null,
-                            ping: null,
+                            ping: results.rows[0].ping,
                             data_ingresso: results.rows[0].data_ingresso,
                             info: null
                         }
@@ -278,7 +274,7 @@ describe('Lobby.js', function () {
                             username: "guest-t2",
                             codice_lobby: codiceLobby,
                             ruolo: null,
-                            ping: null,
+                            ping: results.rows[1].ping,
                             data_ingresso: results.rows[1].data_ingresso,
                             info: null
                         }

@@ -1,4 +1,3 @@
-const { rejects } = require('assert');
 var assert = require('assert');
 const controller = require('../backend/controller')
 
