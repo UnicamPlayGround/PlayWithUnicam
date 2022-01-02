@@ -25,7 +25,7 @@ const routes: Routes = [
   {
     path: 'player/dashboard',
     loadChildren: () => import('./users/player/dashboard/dashboard.module').then(m => m.DashboardPageModule),
-    canLoad: [AuthGiocatoriGuard]
+    //canLoad: [AuthGiocatoriGuard]
   },
   {
     path: 'admin',
@@ -58,17 +58,12 @@ const routes: Routes = [
   },
   {
     path: 'memory-game',
-    loadChildren: () => import('./mgp_games/memory-game/components/game-multiplayer/memory-multi.module').then( m => m.MemoryMultiPageModule)
+    loadChildren: () => import('./mgp_games/memory-game/components/game-multiplayer/memory-multi.module').then(m => m.MemoryMultiPageModule)
   },
   {
     path: 'memory',
-    loadChildren: () => import('./mgp_games/memory-game/components/menu/menu.module').then( m => m.MemoryMenuPageModule)
-  },
-  {
-    path: 'editor',
-    loadChildren: () => import('./mgp_games/memory-game/components/memory-game-editor/memory-game-editor.module').then( m => m.MemoryGameEditorPageModule)
+    loadChildren: () => import('./mgp_games/memory-game/components/menu/menu.module').then(m => m.MemoryMenuPageModule)
   }
-
 ];
 
 @NgModule({

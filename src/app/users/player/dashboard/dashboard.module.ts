@@ -10,6 +10,7 @@ import { DashboardPage } from './dashboard.page';
 
 import { IntroLobbyComponentModule } from '../popover/intro-lobby-popover/intro-lobby-popover.module';
 import { UserPopoverComponentModule } from 'src/app/components/user-popover/user-popover.module';
+import { SwiperModule } from 'swiper/angular';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { UserPopoverComponentModule } from 'src/app/components/user-popover/user
     ReactiveFormsModule,
     DashboardPageRoutingModule,
     IntroLobbyComponentModule,
-    UserPopoverComponentModule
+    UserPopoverComponentModule,
+    SwiperModule
   ],
   declarations: [DashboardPage]
 })

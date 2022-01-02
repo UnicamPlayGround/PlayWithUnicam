@@ -97,21 +97,18 @@ export class Timer {
      */
     getTimeLeftToPrint() {
         var toReturn = "";
-        if (this.timeLeft >= 60) {
-            var minutes = Math.floor(this.timeLeft / 60);
-            var seconds = this.timeLeft - (minutes * 60);
+        var minutes = Math.floor(this.timeLeft / 60);
+        var seconds = this.timeLeft - (minutes * 60);
+        var minString: string;
+        var secString: string;
 
-            if (seconds < 10)
-                toReturn = minutes + ":0" + seconds;
-            else
-                toReturn = minutes + ":" + seconds;
+        if (minutes < 10) minString = "0" + minutes;
+        else minString = "" + minutes;
 
-        } else if (this.timeLeft >= 10)
-            toReturn = "00:" + this.timeLeft;
-        else
-            toReturn = "00:0" + this.timeLeft;
+        if (seconds < 10) secString = "0" + seconds;
+        else secString = "" + seconds;
 
-        return toReturn;
+        return minString + ":" + secString;
     }
 
     /**

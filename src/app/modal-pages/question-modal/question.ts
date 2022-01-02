@@ -15,10 +15,11 @@ export class Question {
 
     getJSON() {
         var json: any = {};
-        json.q = this.question;
+        json.question = this.question;
         json.answers = this.answers;
         json.img_url = this.imgUrl;
         json.video_url = this.videoUrl;
+        json.countdown_seconds = this.countdownSeconds;
         return json;
     }
 }

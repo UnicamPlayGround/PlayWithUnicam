@@ -16,116 +16,198 @@ ion-toolbar{
   }
 }
 
-#catalogo-title{
-  // font-family: Century Gothic, Courier New, appearance;
-  font-size:35px;
-  text-align: center;
+.container{
+  max-width: 1200px;
+  margin: auto;
+  padding: 0px 24px;
+}
+
+.section-header{
+  // border: 1px solid purple;
+  margin: 0px 0px 24px;
+}
+
+.section-header h2{
+  font-size:32px;
   padding-top:30px;
   font-family: 'DM Sans', sans-serif;
-  color: var(--ion-color-medium);
+  color: var(--ion-color-unicamgrey);
   font-weight: bold;
 }
 
-.game{
-  border-radius: 25px;
-  box-shadow: 0 8px 16px 0 rgba(78, 78, 78, 0.2), 0 6px 20px 0 rgba(78, 78, 78, 0.2);
-  transition: all 0.3s;
+.section-header p{
+  color:grey;
+  font-size:22px;
+  margin: 5px 0px 0px;
 }
 
-.game:hover {
-  box-shadow: 0 13px 16px 0 rgba(0,0,0,0.24), 0 18px 50px 0 rgba(0,0,0,0.19);
-  transform: translateY(-6px);
-  .overlay2 {
-    opacity: 0.6;
-  }
-  .game-img{
-    opacity: 0.8;
-  }
-  .overlay-text {
-    opacity: 1;
-  }
+swiper{
+  // border: 1px solid green;
+  margin: 10px 0px 24px;
 }
 
-.game-img{
-  transition: 0.5s ease;
-}
-
-.game-header{
-  ion-card-title{
-    font-family: Century Gothic, Courier New, appearance;
-    font-size: 24px;
-    text-align: center;
-    padding: 12px 0px 0px 0px;
-  }
-  ion-card-subtitle{
-    font-family: Malgun Gothic, Courier New, appearance;
-    font-size: 18px;
-    text-align: center;
-    padding-bottom: 10px;
-  }
-}
-
-.overlay-text {
-  transition: 0.5s ease;
-  opacity: 0;
-  color: #fff;
-  font-size: 35px;
-  font-weight: bold;
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  text-align: center;
-}
-
-.game-small{
+.gameItem{
+  border-radius: 35px;
+  max-width: 100%;
   max-height: 250px;
-  border-radius: 25px;
-  box-shadow: 0 8px 16px 0 rgba(78, 78, 78, 0.2), 0 6px 20px 0 rgba(78, 78, 78, 0.2);
-  transition: all 0.3s;
-  --background: var(ion-color-unicamblue);
+  width: 350px;
+  height: 250px;
+  background-image: url("../../../../assets/images/generic-game-400x300.jpg");
 }
 
-.game-header-small{
-  --background:var(--ion-color-unicamblue);
-
-  ion-card-title{
-    font-family: Century Gothic, Courier New, appearance;
-    font-size: 24px;
-    text-align: center;
-    padding: 12px 0px 0px 0px;
-    color: #fff !important;
-  }
-  ion-card-subtitle{
-    color: #fff !important;
-    font-family: Malgun Gothic, Courier New, appearance;
-    font-size: 18px;
-    text-align: center;
-    padding-bottom: 10px;
-  }
+.label{
+  background-color: rgba(185, 7, 43, 0.7);
+  position:absolute;
+  bottom: 0px;
+  height:100px;
+  width: 350px;
+  padding: 0px 24px;
+  border-radius: 0px 0px 35px 35px;
 }
 
-@media only screen and (max-width: 767px){
-  .game{display: none;}
-  #catalogo-title{
-    font-size:20px;
-    padding-top: 0px;
-    padding-bottom: 0px;
-  }
+.label h2{
+  font-family: 'DM Sans', sans-serif;
+  color:var(--ion-color-light);
+  font-weight: bold;
+  margin-bottom: 5px;
 }
 
-@media only screen and (min-width: 768px){
-  .game-small{display: none;}
+.label p{
+  font-family: 'DM Sans', sans-serif;
+  color:var(--ion-color-light);
+  font-weight: bold;
+  margin-top:0px;
 }
 
-@media only screen and (max-width: 540px){
-  .game-header-small{
-    ion-card-title{
-      font-size: 20px;
-    }
-    ion-card-subtitle{
-      font-size: 15px;
-    }
-  }
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// .game{
+//   border-radius: 25px;
+//   box-shadow: 0 8px 16px 0 rgba(78, 78, 78, 0.2), 0 6px 20px 0 rgba(78, 78, 78, 0.2);
+//   transition: all 0.3s;
+// }
+
+// .game:hover {
+//   box-shadow: 0 13px 16px 0 rgba(0,0,0,0.24), 0 18px 50px 0 rgba(0,0,0,0.19);
+//   transform: translateY(-6px);
+//   .overlay2 {
+//     opacity: 0.6;
+//   }
+//   .game-img{
+//     opacity: 0.8;
+//   }
+//   .overlay-text {
+//     opacity: 1;
+//   }
+// }
+
+// .game-img{
+//   transition: 0.5s ease;
+// }
+
+// .game-header{
+//   ion-card-title{
+//     font-family: Century Gothic, Courier New, appearance;
+//     font-size: 24px;
+//     text-align: center;
+//     padding: 12px 0px 0px 0px;
+//   }
+//   ion-card-subtitle{
+//     font-family: Malgun Gothic, Courier New, appearance;
+//     font-size: 18px;
+//     text-align: center;
+//     padding-bottom: 10px;
+//   }
+// }
+
+// .overlay-text {
+//   transition: 0.5s ease;
+//   opacity: 0;
+//   color: #fff;
+//   font-size: 35px;
+//   font-weight: bold;
+//   position: absolute;
+//   top: 40%;
+//   left: 50%;
+//   transform: translate(-50%, -50%);
+//   -ms-transform: translate(-50%, -50%);
+//   text-align: center;
+// }
+
+// .game-small{
+//   max-height: 250px;
+//   border-radius: 25px;
+//   box-shadow: 0 8px 16px 0 rgba(78, 78, 78, 0.2), 0 6px 20px 0 rgba(78, 78, 78, 0.2);
+//   transition: all 0.3s;
+//   --background: var(ion-color-unicamblue);
+// }
+
+// .game-header-small{
+//   --background:var(--ion-color-unicamblue);
+
+//   ion-card-title{
+//     font-family: Century Gothic, Courier New, appearance;
+//     font-size: 24px;
+//     text-align: center;
+//     padding: 12px 0px 0px 0px;
+//     color: #fff !important;
+//   }
+//   ion-card-subtitle{
+//     color: #fff !important;
+//     font-family: Malgun Gothic, Courier New, appearance;
+//     font-size: 18px;
+//     text-align: center;
+//     padding-bottom: 10px;
+//   }
+// }
+
+// @media only screen and (max-width: 767px){
+//   .game{display: none;}
+//   #catalogo-title{
+//     font-size:20px;
+//     padding-top: 0px;
+//     padding-bottom: 0px;
+//   }
+// }
+
+// @media only screen and (min-width: 768px){
+//   .game-small{display: none;}
+// }
+
+// @media only screen and (max-width: 540px){
+//   .game-header-small{
+//     ion-card-title{
+//       font-size: 20px;
+//     }
+//     ion-card-subtitle{
+//       font-size: 15px;
+//     }
+//   }
+// }

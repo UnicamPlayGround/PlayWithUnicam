@@ -6,6 +6,7 @@ import { ErrorManagerService } from 'src/app/services/error-manager/error-manage
 import { LoginService } from 'src/app/services/login-service/login.service';
 import { IntroLobbyPopoverComponent } from '../popover/intro-lobby-popover/intro-lobby-popover.component';
 import jwt_decode from 'jwt-decode';
+import Swiper, { SwiperOptions, Pagination } from 'swiper';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,9 +15,26 @@ import jwt_decode from 'jwt-decode';
 })
 export class DashboardPage implements OnInit {
   games = [];
-  page = 0;
-  maximumPages = 3;
   ospite = false;
+  config: SwiperOptions = {
+    slidesPerView: 1,
+    spaceBetween: 20,
+    pagination: true,
+    // centeredSlides:true,
+    grabCursor:true,
+    breakpoints: {
+      // when window width is >= 480px
+      810: {
+         slidesPerView: 2,
+         spaceBetween: 0
+      },
+      // when window width is >= 640px
+      1180: {
+         slidesPerView: 3,
+         spaceBetween: 40
+      }
+   }
+  }
 
   constructor(
     private popoverController: PopoverController,
@@ -24,10 +42,20 @@ export class DashboardPage implements OnInit {
     private loginService: LoginService,
     private errorManager: ErrorManagerService
   ) {
+    this.getTipoUtente();
     this.loadGames();
+    // this.games = [
+    //   { nome: "Gioco dell'Oca", min_giocatori: 1, max_giocatori: 6 },
+    //   { nome: "Memory Single Version", min_giocatori: 1, max_giocatori: 1 },
+    //   { nome: "Memory MP", min_giocatori: 1, max_giocatori: 20 },
+    //   { nome: "Risiko", min_giocatori: 4, max_giocatori: 8 },
+    //   { nome: "Battaglia navale", min_giocatori: 2, max_giocatori: 2 },
+    //   { nome: "Forza 4", min_giocatori: 2, max_giocatori: 2 }
+    // ];
   }
 
   ngOnInit() {
+    Swiper.use([Pagination]);
   }
 
   /**
@@ -84,11 +112,4 @@ export class DashboardPage implements OnInit {
       });
   }
 
-  //TODO infinite scroll
-  // loadMore(event) {
-  //   this.page++;
-  //   this.loadGames();
-
-  //   if (this.page === this.maximumPages) event.target.disabled = true;
-  // }
 }

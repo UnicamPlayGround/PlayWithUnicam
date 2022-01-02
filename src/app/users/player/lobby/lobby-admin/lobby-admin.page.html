@@ -2,7 +2,7 @@
   <ion-toolbar color="unicamblue">
     <ion-title>Lobby di gioco</ion-title>
 
-    <ion-button slot="end" (click)="abbandonaLobby()" fill="clear" color="light" shape="round" class="ion-hide-md-down">
+    <ion-button slot="end" (click)="abbandonaLobby()" fill="clear" color="light" class="ion-hide-md-down">
       <ion-label>Abbandona lobby</ion-label>
       <ion-icon slot="start" name="exit-outline"></ion-icon>
     </ion-button>
@@ -65,11 +65,11 @@
                 Se attivo, permette a tutti i giocatori online di trovare la lobby e di parteciparvi.
               </p>
               <br>
-              <ion-button color="unicamblue" shape="round" expand="block" (click)="generaLink()">Condividi link
+              <ion-button color="unicamblue" expand="block" (click)="generaLink()">Condividi link
               </ion-button>
               <p *ngIf="impossibileCopiareLink">{{link}}</p>
               <br>
-              <ion-button color="unicamblue" shape="round" (click)="modificaLobby()" expand="block">Salva modifiche
+              <ion-button color="unicamblue" (click)="modificaLobby()" expand="block">Salva modifiche
               </ion-button>
             </ion-card-content>
           </ion-list>
@@ -114,11 +114,11 @@
                 Se attivo, permette a tutti i giocatori online di trovare la lobby e di parteciparvi.
               </p>
               <br>
-              <ion-button color="unicamblue" shape="round" expand="block" (click)="generaLink()">Condividi link
+              <ion-button color="unicamblue" expand="block" (click)="generaLink()">Condividi link
               </ion-button>
               <p *ngIf="impossibileCopiareLink">{{link}}</p>
               <br>
-              <ion-button color="unicamblue" shape="round" (click)="modificaLobby()" expand="block">Salva modifiche
+              <ion-button color="unicamblue" (click)="modificaLobby()" expand="block">Salva modifiche
               </ion-button>
             </ion-card-content>
           </ion-list>
@@ -141,11 +141,11 @@
               <ion-label>{{ giocatore.username }}</ion-label>
               <p slot="end" *ngIf="giocatore.username == lobby.admin_lobby" class="admin-label">ADMIN</p>
               <ion-icon slot="end" name="diamond-outline" *ngIf="giocatore.username == lobby.admin_lobby"></ion-icon>
-              <ion-button (click)="eliminaPartecipante(giocatore.username, i)" clear
+
+              <div tappable (click)="eliminaPartecipante(giocatore.username, i)" title="Elimina partecipante"
                 *ngIf="giocatore.username != lobby.admin_lobby">
-                <ion-icon slot="end" name="trash-outline" tappable>
-                </ion-icon>
-              </ion-button>
+                <ion-icon slot="end" name="trash-outline"></ion-icon>
+              </div>
             </ion-item>
           </ion-list>
         </ion-card>
@@ -170,17 +170,19 @@
                     style="position:absolute; margin-top: -18px; margin-left: 23px; z-index: 1;">ADMIN</p>
                   <ion-icon size="large" name="diamond-outline" *ngIf="giocatore.username == lobby.admin_lobby">
                   </ion-icon>
-                  <ion-button (click)="eliminaPartecipante(giocatore.username, i)" clear
+
+                  <div tappable (click)="eliminaPartecipante(giocatore.username, i)" title="Elimina partecipante"
                     *ngIf="giocatore.username != lobby.admin_lobby">
-                    <ion-icon size="large" name="trash-outline" tappable></ion-icon>
-                  </ion-button>
+                    <ion-icon size="large" name="trash-outline"></ion-icon>
+                  </div>
+
                 </ion-col>
               </ion-slide>
             </ion-slides>
           </ion-list>
         </ion-card>
 
-        <ion-button color="unicamred" expand="block" shape="round" (click)="iniziaPartita()" class="start-button-row">
+        <ion-button color="unicamred" expand="block" (click)="iniziaPartita()" class="start-button-row">
           INIZIA PARTITA!
         </ion-button>
       </ion-col>

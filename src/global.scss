@@ -24,9 +24,11 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+@import "swiper/css/bundle";
 
 ion-button{
     --box-shadow:none;
+    //text-transform: none;
 }
 
 .contact-popover .popover-content{ 
