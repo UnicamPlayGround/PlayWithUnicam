@@ -26,16 +26,41 @@
 @import "~@ionic/angular/css/flex-utils.css";
 @import "swiper/css/bundle";
 
-ion-button{
-    --box-shadow:none;
-    //text-transform: none;
+ion-content{
+    --background:var(--ion-color-light);
 }
 
-.contact-popover .popover-content{ 
-    border-radius:0px!important;
-     padding:0px!important;
-     right: 0px !important;
-     margin-right: 0px !important;
+ion-title{
+    font-family: "Poppins" sans-serif !important;
+    font-weight: bold !important;
+    color:var(--ion-color-unicamblue) !important;
+    font-size: 26px !important;
+}
+
+ion-button{
+    --box-shadow: none;
+    --border-radius: 10px !important;
+    text-transform: none !important;
+    height: 44px !important;
+}
+
+ion-textarea, ion-input{
+    border-radius: 10px !important;
+    margin: 0px;
+    font-size: 14px;
+    color:#000;
+    padding-left: 10px !important;
+}
+
+ion-card{
+    border-radius: 10px !important;
+}
+
+.popover .popover-content{ 
+    border-radius: 20px!important;
+    padding:0px!important;
+    right: 0px !important;
+    margin-right: 0px !important;
 }
 
 .menu-active-item{
@@ -54,6 +79,12 @@ ion-button{
 
 .modal{
     padding: 25px;
+}
+
+ion-modal.create-lobby .modal-wrapper{
+    --width: 430px;
+    --height: 55%;
+    --border-radius: 20px !important;
 }
 
 ion-modal.lobby-pubbliche {
@@ -90,6 +121,15 @@ ion-modal.crea-parola {
 }
 
 /* Mobile/Small Tablet Styles */
+@media only screen and (max-height: 475px){
+    ion-modal.create-lobby .modal-wrapper{
+        --width: 100% !important;
+        --height: 100% !important;
+        --border-radius: 0px !important;
+    }
+}
+
+
 @media only screen and (max-width: 1228px){
     ion-modal.lobby-pubbliche {
         --width: 100%;
@@ -114,6 +154,20 @@ ion-modal.crea-parola {
         --height: 100%;
         --border-radius: 0;
     }
+}
+
+.page-header {
+    --background:var(--ion-color-unicamblue) !important;
+    color:#fff;
+    line-height:80px;
+}
+
+ion-split-pane{
+    --side-max-width: 280px;
+}
+
+ion-icon{
+    pointer-events: none;
 }
 
 .ion-color-unicamblue {
@@ -141,18 +195,4 @@ ion-modal.crea-parola {
     --ion-color-contrast-rgb: var(--ion-color-unicamred-contrast-rgb) !important;
     --ion-color-shade: var(--ion-color-unicamred-shade) !important;
     --ion-color-tint: var(--ion-color-unicamred-tint) !important;
-}
-
-.page-header {
-    --background:var(--ion-color-unicamblue) !important;
-    color:#fff;
-    line-height:80px;
-}
-
-ion-split-pane{
-    --side-max-width: 250px;
-}
-
-ion-icon{
-    pointer-events: none;
 }

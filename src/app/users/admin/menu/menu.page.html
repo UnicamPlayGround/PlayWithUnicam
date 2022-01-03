@@ -1,25 +1,25 @@
 <ion-split-pane contentId="content">
   <ion-menu contentId="content">
     <ion-header class="ion-no-border">
-      <ion-toolbar #toolbar color="unicamblue">
+      <ion-toolbar #toolbar>
         <div class="wrapper">
-          <img class="logo-toolbar" src="../../../../assets/logo-small.png" alt="">
+          <img class="logo-toolbar" src="../../../../assets/logo-small-grey.png" alt="">
         </div>
       </ion-toolbar>
     </ion-header>
 
-    <ion-content>
+    <ion-content color="light">
       <div *ngFor="let p of pages">
         <ion-menu-toggle auto-hide="false" *ngIf="p.url">
-          <ion-item [routerLink]="p.url" routerDirection="root" routerLinkActive="menu-active-item">
-            <ion-icon slot="start" [name]="p.icon"></ion-icon>
+          <ion-item [routerLink]="p.url" routerDirection="root" routerLinkActive="menu-active-item" color="light">
+            <ion-icon slot="start" [name]="p.icon" color="unicamblue"></ion-icon>
             <ion-label>{{ p.title }}</ion-label>
           </ion-item>
         </ion-menu-toggle>
       </div>
 
-      <ion-item [routerLink]='' (click)="logout()">
-        <ion-icon name="log-out" slot="start"></ion-icon>Logout
+      <ion-item [routerLink]='' (click)="logout()" color="light">
+        <ion-icon name="log-out" slot="start" color="unicamblue"></ion-icon>Logout
       </ion-item>
     </ion-content>
   </ion-menu>

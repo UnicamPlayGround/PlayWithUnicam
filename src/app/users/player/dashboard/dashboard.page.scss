@@ -2,18 +2,23 @@
   margin:auto;
   max-width: 1300px;
   overflow:hidden;
+  padding: 0 10px;
 }
 
 ion-toolbar{
-  --background: var(--ion-color-unicamblue);
-  --color: var(--ion-color-light);
-
   #logo-toolbar{
     -webkit-transform:scale(0.9);
     -moz-transform:scale(0.9);
     -ms-transform:scale(0.9);
     transform:scale(0.9);
   }
+}
+
+.wave-header{
+  position:absolute;
+  width: 100%;
+  min-height: 387px;
+  min-width: 1106px;
 }
 
 .container{
@@ -23,7 +28,7 @@ ion-toolbar{
 }
 
 .section-header{
-  // border: 1px solid purple;
+  position: relative;
   margin: 0px 0px 24px;
 }
 
@@ -36,51 +41,163 @@ ion-toolbar{
 }
 
 .section-header p{
-  color:grey;
+  color:var(--ion-color-light);
   font-size:22px;
   margin: 5px 0px 0px;
 }
 
-swiper{
-  // border: 1px solid green;
-  margin: 10px 0px 24px;
+.ioncardgame{
+  border-radius: 30px !important;
+  --background: url(../../../../assets/images/generic-game-400x300.jpg);
+  min-height: 250px;
+  box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+  transition: 0.2s ease-out;
 }
 
-.gameItem{
-  border-radius: 35px;
-  max-width: 100%;
-  max-height: 250px;
-  width: 350px;
-  height: 250px;
-  background-image: url("../../../../assets/images/generic-game-400x300.jpg");
+.ioncardgame img{
+  width: 100%;
+  aspect-ratio: 2/1;
+  transition: transform .2s;
 }
 
-.label{
-  background-color: rgba(185, 7, 43, 0.7);
+.ioncardgame .game-title{
   position:absolute;
-  bottom: 0px;
-  height:100px;
-  width: 350px;
-  padding: 0px 24px;
-  border-radius: 0px 0px 35px 35px;
+  bottom: 5px;
+  padding:30px;
+
+  ion-card-title{
+    text-transform: none !important;
+    font-size: 26px;
+    font-family: "Poppins" sans-serif !important;
+    font-weight: bold !important;
+    color:var(--ion-color-unicamblue) !important;
+  }
 }
 
-.label h2{
-  font-family: 'DM Sans', sans-serif;
-  color:var(--ion-color-light);
-  font-weight: bold;
-  margin-bottom: 5px;
+.ioncardgame:hover{
+    transform: translateY(-6px);
 }
 
-.label p{
-  font-family: 'DM Sans', sans-serif;
-  color:var(--ion-color-light);
-  font-weight: bold;
-  margin-top:0px;
+.white-wave-header{
+  position:absolute;
+  width: 100% !important;
+  bottom: -15px;
+  min-height: 147px;
+  max-height: 168px;
 }
 
+.players-item{
+  max-width: 105px;
+  margin:auto;
+  border-radius: 0px 0px 20px 20px;
+  height: 35px;
+  line-height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  --background: var(--ion-color-unicamred);
 
+  ion-label{
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 12px !important;
+    color:#fff !important;
+  }
 
+  ion-icon{
+    font-size: 18px;
+    margin-right: 10px;
+  }
+}
+
+.buttons-container{
+  text-align: center;
+}
+
+.buttons{
+  display: inline-block;
+}
+
+@media screen and (max-width:1090px) {
+  .game-title{
+    ion-card-title{
+      font-size: 22px !important;
+    }
+  }
+}
+
+@media screen and (max-width:1030px) {
+  .white-wave-header{
+    min-height: 156px;
+  }
+}
+
+@media screen and (max-width:810px) {
+  .white-wave-header{
+    min-height: 147px;
+  }
+  .game-title{
+    ion-card-title{
+      font-size: 24px !important;
+    }
+  }
+}
+
+@media screen and (max-width:710px) {
+  .white-wave-header{
+    min-height: 156px;
+  }
+}
+
+@media screen and (max-width:700px) {
+  .game-title{
+    ion-card-title{
+      font-size: 20px !important;
+    }
+  }
+}
+
+@media screen and (max-width:510px) {
+  .game-title{
+    ion-card-title{
+      font-size: 20px !important;
+    }
+  }
+  .section-header h2{
+    font-size:28px;
+  }
+}
+
+@media screen and (max-width:479px) {
+  .game-title{
+    ion-card-title{
+      font-size: 26px !important;
+    }
+  }
+}
+
+@media screen and (max-width:350px) {
+  .game-title{
+    ion-card-title{
+      font-size: 24px !important;
+    }
+  }
+  .section-header h2{
+    font-size:26px;
+  }
+}
+
+@media screen and (max-width:300px) {
+  .game-title{
+    ion-card-title{
+      font-size: 20px !important;
+    }
+  }
+  .section-header h2{
+    font-size:22px;
+  }
+}
 
 
 

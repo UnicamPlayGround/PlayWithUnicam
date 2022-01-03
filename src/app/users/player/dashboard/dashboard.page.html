@@ -1,12 +1,12 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <div class="wrapper">
-      <img id="logo-toolbar" src="../../../../assets/logo-small.png" alt=""
+      <img id="logo-toolbar" src="../../../../assets/logo-small-grey.png" alt=""
         style="vertical-align:middle; float:left; line-height: 56px">
 
       <ion-buttons style="vertical-align:middle; float:right; line-height: 56px">
         <ion-button (click)="openUserPopover($event)">
-          <ion-icon slot="icon-only" name="person-outline"></ion-icon>
+          <ion-icon slot="icon-only" name="person-outline" color="unicamblue"></ion-icon>
         </ion-button>
       </ion-buttons>
     </div>
@@ -14,6 +14,8 @@
 </ion-header>
 
 <ion-content>
+  <img src="../../../../assets/images/wave-header.png" alt="" class="wave-header">
+
   <div class="container">
     <ion-card class="transparent-card" style="max-width: 500px; margin:auto;" *ngIf="ospite">
       <ion-item>
@@ -25,58 +27,38 @@
     </ion-card>
 
     <div class="section-header">
-      <h2>Catalogo dei giochi</h2>
+      <h2 style="color: #fff;">Catalogo dei giochi</h2>
       <p *ngIf="this.games.length == 0">Non è stato trovato alcun gioco! :(</p>
     </div>
 
-    <!-- <ion-item lines="none" *ngIf="this.games.length == 0">
-      <ion-label style="text-align: center; color:grey">Non è stato trovato alcun gioco! :(</ion-label>
-    </ion-item> -->
-
-    <!-- <ion-grid fixed>
-    <ion-row>
-      <ion-col size-sm="12" size-md="6" size-lg="4" size="12" *ngFor="let game of games">
-
-        <ion-card button="true" class="game" (click)="openIntroLobby(game)">
-          <img class="game-img" src="../../../../assets/images/generic-game-400x300.jpg" />
-          <div class="overlay-text">GIOCA ORA!</div>
-
-          <ion-card-header class="game-header">
-            <ion-card-title> {{game.nome}}</ion-card-title>
-            <ion-card-subtitle>Giocatori {{game.min_giocatori}} - {{game.max_giocatori}}</ion-card-subtitle>
-          </ion-card-header>
-        </ion-card>
-
-
-        <ion-card button="true" class="game-small" (click)="openIntroLobby(game)">
-          <ion-card-header class="game-header-small">
-            <ion-card-title>{{game.nome}}</ion-card-title>
-            <ion-card-subtitle>Giocatori {{game.min_giocatori}} - {{game.max_giocatori}}</ion-card-subtitle>
-          </ion-card-header>
-        </ion-card>
-
-      </ion-col>
-    </ion-row>
-  </ion-grid> -->
-
-    <!-- <ion-row>
-        <div class="gameItem" *ngFor="let game of games">
-          <div class="label">
-            {{game.nome}}
-          </div>
-        </div>
-    </ion-row> -->
-
-    <swiper [config]="config">
+    <swiper [config]="config" #gamesSwiper>
       <ng-template swiperSlide *ngFor="let game of games">
-        <div class="gameItem" tappable (click)="openIntroLobby(game)">
-          <div class="label">
-            <h2>{{game.nome}}</h2>
-            <p>Giocatori {{game.min_giocatori}} - {{game.max_giocatori}}</p>
+        <ion-card class="ioncardgame" (click)="openIntroLobby(game)" tappable button="true">
+          <img src="../../../../assets/images/white_wave_header.png" alt="" class="white-wave-header">
+
+          <ion-item lines="none" class="players-item"
+            title="Da {{game.min_giocatori}} a {{game.max_giocatori}} giocatori">
+            <ion-label>
+              <ion-icon slot="start" name="people"></ion-icon>
+              {{game.min_giocatori}} - {{game.max_giocatori}}
+            </ion-label>
+          </ion-item>
+          <div class="game-title">
+            <ion-card-title>{{game.nome}}</ion-card-title>
           </div>
-        </div>
+        </ion-card>
       </ng-template>
     </swiper>
 
+    <div class="buttons-container" *ngIf="games.length > 0">
+      <div class="buttons">
+        <ion-button (click)="prevSlide()" fill="clear" color="unicamblue">
+          <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+        </ion-button>
+        <ion-button (click)="nextSlide()" fill="clear" color="unicamblue">
+          <ion-icon slot="icon-only" name="arrow-forward"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
   </div>
 </ion-content>

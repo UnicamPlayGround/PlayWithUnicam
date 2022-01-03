@@ -1,19 +1,22 @@
 <ion-header class="ion-no-border">
   <ion-toolbar #toolbar>
     <div class="wrapper">
-      <img class="logo-toolbar" src="../../../assets/logo-small.png" alt="">
+      <img class="logo-toolbar" src="../../../assets/logo-small-grey.png" alt="">
 
-      <ion-buttons style="vertical-align:middle; justify-items: center; float:right; line-height: 56px" class="ion-hide-sm-up">
-        <ion-button routerLink="/login" color="light" shape="round">
-          <ion-icon slot="icon-only" name="log-in-outline" color="light"></ion-icon>
+      <ion-buttons style="vertical-align:middle; justify-items: center; float:right; line-height: 56px;"
+        class="ion-hide-sm-up">
+        <ion-button routerLink="/login" color="light" shape="round" title="Accedi">
+          <ion-icon slot="icon-only" name="log-in-outline" color="unicamblue"></ion-icon>
         </ion-button>
-        <ion-button routerLink="/registration" shape="round">
-          <ion-icon slot="icon-only" name="person-add-outline" color="light"></ion-icon>
+        <ion-button routerLink="/registration" shape="round" title="Registrati">
+          <ion-icon slot="icon-only" name="person-add-outline" color="unicamred"></ion-icon>
         </ion-button>
       </ion-buttons>
-      
-      <ion-buttons style="vertical-align:middle; justify-items: center; float:right; line-height: 48px" class="ion-hide-sm-down">
-        <ion-button routerLink="/login" fill="outline" shape="round" color="light" style="font-size: 12px; width:100px;">
+
+      <ion-buttons style="vertical-align:middle; justify-items: center; float:right; line-height: 48px"
+        class="ion-hide-sm-down">
+        <ion-button routerLink="/login" fill="outline" shape="round" color="unicamblue"
+          style="font-size: 12px; width:100px;">
           Accedi
         </ion-button>
         <ion-button routerLink="/registration" shape="round"
@@ -45,14 +48,14 @@
           <div class="auth-buttons">
             <div id="login-btn">
               <ion-button routerLink="/login" shape="round" fill="outline" expand="full"
-                style="--background: rgba(0, 0, 0, 0.4); --color: var(--ion-color-light); --border-color: var(--ion-color-light); height:48px">
+                style="--background: rgba(0, 0, 0, 0.4); --color: var(--ion-color-light); --border-color: var(--ion-color-light); height:52px !important;">
                 Accedi
               </ion-button>
             </div>
 
             <div id="signin-btn">
               <ion-button routerLink="/registration" shape="round" expand="full"
-                style="--background: var(--ion-color-unicamred); --color: var(--ion-color-light); height:48px">
+                style="--background: var(--ion-color-unicamred); --color: var(--ion-color-light); height:52px !important;">
                 Registrati
               </ion-button>
             </div>
@@ -65,7 +68,7 @@
           </div>
 
           <form (ngSubmit)="guestLogin()" [formGroup]="credentials" style="margin-top: 10px;">
-            <ion-item lines="none" style="border-radius: 30px;">
+            <ion-item lines="none" style="border-radius: 10px;">
               <ion-input type="nickname" name="username" formControlName="username" placeholder="Scegli un nickname"
                 required text-wrap>
               </ion-input>
@@ -107,7 +110,7 @@
 
     <img src="../../../assets/images/lobby.jpg" alt="" class="home-img">
   </div>
-  
+
   <app-cookie-alert></app-cookie-alert>
   <app-home-footer></app-home-footer>
 </ion-content>

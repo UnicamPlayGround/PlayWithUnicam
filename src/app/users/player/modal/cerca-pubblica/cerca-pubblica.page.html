@@ -6,50 +6,53 @@
 
     <ion-button slot="end" (click)="loadLobby()" expand="block" fill="clear" color="unicamblue" shape="round">
       <ion-label class="ion-hide-md-down">Aggiorna</ion-label>
-      <ion-icon slot="end" name="refresh-outline"></ion-icon>
+      <ion-icon slot="start" name="refresh-outline"></ion-icon>
     </ion-button>
   </ion-toolbar>
 
   <div class="modal">
-    <ion-title id="lista-title">Lista delle lobby attive</ion-title>
-
-    <div class="table; ion-hide-xl-down">
-      <ion-row class="header-row" color="unicamblue">
-        <ion-col size="3">GIOCO</ion-col>
-        <ion-col size="2">ADMIN</ion-col>
-        <ion-col size="2">Data creazione</ion-col>
-        <ion-col size="2">PARTECIPANTI</ion-col>
-        <ion-col size="3"></ion-col>
-      </ion-row>
-
-      <ion-row *ngFor="let lobby of lobbiesDaVisualizzare;" class="data-row">
-        <ion-col size="3">
-          <ion-label>
-            <strong>{{lobby.nome}}</strong>
-            <p>Giocatori: {{lobby.min_giocatori}} - {{lobby.max_giocatori}}</p>
-          </ion-label>
-        </ion-col>
-
-        <ion-col size="2">{{lobby.admin_lobby}}</ion-col>
-
-        <ion-col size="2">{{lobby.data_creazione}}</ion-col>
-
-        <ion-col size="2">{{lobby.partecipanti}} / {{lobby.max_giocatori}}</ion-col>
-
-        <ion-col size="3">
-          <ion-button (click)="partecipa(lobby)" color="unicamred" expand="block">
-            <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
-            Partecipa
-          </ion-button>
-        </ion-col>
-      </ion-row>
+    <div class="title">
+      <h2>Lista delle lobby attive</h2>
     </div>
 
-    <ion-item *ngIf="lobbies.length == 0">
-      <ion-label id="no-lobby-message" text-wrap>Non è stata trovata alcuna lobby attiva!</ion-label>
-    </ion-item>
+    <div class="no-lobby-text" *ngIf="lobbies.length == 0">
+      <p>Non è stata trovata alcuna lobby attiva! :(</p>
+    </div>
 
-    <div class="ion-hide-xl-up">
+    <ion-card class="ion-hide-md-down" *ngIf="lobbies.length > 0">
+      <ion-card-content>
+        <ion-row class="header-row">
+          <ion-col size="3">Gioco</ion-col>
+          <ion-col size="2">Admin</ion-col>
+          <ion-col size="3">Data creazione</ion-col>
+          <ion-col size="2">Partecipanti</ion-col>
+          <ion-col size="2"></ion-col>
+        </ion-row>
+
+        <ion-row *ngFor="let lobby of lobbiesDaVisualizzare;" class="data-row">
+          <ion-col size="3">
+            <ion-label>
+              <strong>{{lobby.nome}}</strong>
+              <p>Giocatori: {{lobby.min_giocatori}} - {{lobby.max_giocatori}}</p>
+            </ion-label>
+          </ion-col>
+
+          <ion-col size="2">{{lobby.admin_lobby}}</ion-col>
+
+          <ion-col size="3">{{lobby.data_creazione}}</ion-col>
+
+          <ion-col size="2">{{lobby.partecipanti}} / {{lobby.max_giocatori}}</ion-col>
+
+          <ion-col size="2">
+            <ion-button (click)="partecipa(lobby)" color="unicamred" expand="block">
+              Partecipa
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="ion-hide-md-up">
       <ion-card *ngFor="let lobby of lobbiesDaVisualizzare;" class="lobby-card">
 
         <ion-card-header>

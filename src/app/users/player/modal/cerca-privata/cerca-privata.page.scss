@@ -1,15 +1,22 @@
+ion-content{
+    --background:#fff;
+}
+
 ion-input{
-    --background: rgb(197, 219, 248);
+    border: 2px solid var(--ion-color-light);
     border-radius: 20px;
     text-align: center;
     font-size: 25px;
 }
 
-.header{
-    align-items: center;
-}
-
-.title{
+ion-card-subtitle{
     text-align: center;
-    font-weight: bold;
+}
+ion-card-title{
+    font-size: 25px;
+    text-align: center;
+    text-transform: none !important;
+    font-family: "Poppins" sans-serif !important;
+    font-weight: bold !important;
+    color:var(--ion-color-unicamblue) !important;
 }

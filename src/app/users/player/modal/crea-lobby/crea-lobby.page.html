@@ -1,5 +1,4 @@
 <ion-content [fullscreen]="true">
-
   <ion-toolbar>
     <ion-button fill="clear" color="unicamblue" slot="start" (click)="closeModal()">
       <ion-icon slot="icon-only" name="close-outline"></ion-icon>
@@ -7,10 +6,9 @@
   </ion-toolbar>
 
   <ion-list lines="full" class="modal" style="padding-top: 0px;">
-
     <ion-card-header>
-      <ion-card-subtitle style="text-align: center;">Stai creando una lobby per</ion-card-subtitle>
-      <ion-card-title style="font-size: 25px; font-weight:bold; text-align: center;">{{giocoSelezionato.nome}}
+      <ion-card-subtitle>Stai creando una lobby per</ion-card-subtitle>
+      <ion-card-title>{{giocoSelezionato.nome}}
       </ion-card-title>
     </ion-card-header>
 
@@ -36,7 +34,7 @@
         Visibilità pubblica
         <p>Se attivo, permette a tutti i giocatori online di trovare la lobby e di parteciparvi.</p>
       </ion-label>
-      <ion-toggle slot="end" [(ngModel)]="tipo"></ion-toggle>
+      <ion-toggle slot="end" [(ngModel)]="tipo" color="unicamblue"></ion-toggle>
     </ion-item>
 
     <br>

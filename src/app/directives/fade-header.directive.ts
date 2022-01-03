@@ -22,7 +22,7 @@ export class FadeHeaderDirective implements OnInit {
     const hexDist = scrollTop.toString(16).substring(0, 2);
 
     this.domctrl.write(() => {
-      this.toolbar.style.setProperty('--background', `#1d3c62${hexDist}`);
+      this.toolbar.style.setProperty('--background', `#ffffff${hexDist}`);
 
       if (scrollTop > 100)
         this.toolbar.classList.add('toolbar-show-buttons');

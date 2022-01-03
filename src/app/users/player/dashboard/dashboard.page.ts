@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { AfterContentChecked, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { UserPopoverComponent } from 'src/app/components/user-popover/user-popover.component';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
@@ -7,34 +7,46 @@ import { LoginService } from 'src/app/services/login-service/login.service';
 import { IntroLobbyPopoverComponent } from '../popover/intro-lobby-popover/intro-lobby-popover.component';
 import jwt_decode from 'jwt-decode';
 import Swiper, { SwiperOptions, Pagination } from 'swiper';
+import { SwiperComponent } from 'swiper/angular';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
+  // encapsulation: ViewEncapsulation.None
 })
-export class DashboardPage implements OnInit {
+export class DashboardPage implements OnInit, AfterContentChecked {
   games = [];
   ospite = false;
   config: SwiperOptions = {
     slidesPerView: 1,
     spaceBetween: 20,
     pagination: true,
-    // centeredSlides:true,
-    grabCursor:true,
+    grabCursor: true,
     breakpoints: {
       // when window width is >= 480px
-      810: {
-         slidesPerView: 2,
-         spaceBetween: 0
+      480: {
+        slidesPerView: 2,
+        spaceBetween: 0
       },
-      // when window width is >= 640px
+      // when window width is >= 810px
+      810: {
+        slidesPerView: 3,
+        spaceBetween: 0
+      },
+      // when window width is >= 1180px
       1180: {
-         slidesPerView: 3,
-         spaceBetween: 40
+        slidesPerView: 3,
+        spaceBetween: 40
       }
-   }
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
   }
+
+  @ViewChild('gamesSwiper') gamesSwiper: SwiperComponent;
 
   constructor(
     private popoverController: PopoverController,
@@ -46,7 +58,7 @@ export class DashboardPage implements OnInit {
     this.loadGames();
     // this.games = [
     //   { nome: "Gioco dell'Oca", min_giocatori: 1, max_giocatori: 6 },
-    //   { nome: "Memory Single Version", min_giocatori: 1, max_giocatori: 1 },
+    //   { nome: "Gioco dell'oca blockchain", min_giocatori: 1, max_giocatori: 100 },
     //   { nome: "Memory MP", min_giocatori: 1, max_giocatori: 20 },
     //   { nome: "Risiko", min_giocatori: 4, max_giocatori: 8 },
     //   { nome: "Battaglia navale", min_giocatori: 2, max_giocatori: 2 },
@@ -54,8 +66,21 @@ export class DashboardPage implements OnInit {
     // ];
   }
 
+  ngAfterContentChecked() {
+    if (this.gamesSwiper)
+      this.gamesSwiper.updateSwiper({});
+  }
+
   ngOnInit() {
     Swiper.use([Pagination]);
+  }
+
+  prevSlide() {
+    this.gamesSwiper.swiperRef.slidePrev(500);
+  }
+
+  nextSlide() {
+    this.gamesSwiper.swiperRef.slideNext(500);
   }
 
   /**
@@ -74,7 +99,7 @@ export class DashboardPage implements OnInit {
     const popover = await this.popoverController.create({
       component: UserPopoverComponent,
       event,
-      cssClass: 'contact-popover'
+      cssClass: 'popover'
     });
     return await popover.present();
   }
@@ -92,6 +117,7 @@ export class DashboardPage implements OnInit {
       componentProps: {
         giocoSelezionato: giocoSelezionato
       },
+      cssClass: 'popover'
     });
     return await popover.present();
   }

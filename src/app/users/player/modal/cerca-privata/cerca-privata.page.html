@@ -5,16 +5,17 @@
     </ion-button>
   </ion-toolbar>
 
-  <ion-list lines="none" class="modal">
+  <ion-list lines="none" class="modal" style="padding-top: 0px;">
     <form (ngSubmit)="partecipa()" [formGroup]="codiceForm">
 
-      <h2 class="title">Codice lobby</h2>
+      <ion-card-header>
+        <ion-card-subtitle>Inserisci il</ion-card-subtitle>
+        <ion-card-title>codice della lobby</ion-card-title>
+      </ion-card-header>
 
-      <ion-item>
-        <ion-input type="number" inputmode="numeric" formControlName="codice" required
-          placeholder="Inserisci il codice">
-        </ion-input>
-      </ion-item>
+      <ion-input type="tel" inputmode="numeric" formControlName="codice" maxlength="6" required
+        placeholder="- - - - - -">
+      </ion-input>
 
       <br><br>
 
