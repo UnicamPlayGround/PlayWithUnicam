@@ -25,7 +25,7 @@ export class QuestionModalPage implements OnInit {
   shuffledAnswers: String[] = [];
   selectedAnswer = false;
   correctAnswer: boolean;
-  timer: Timer;
+  timer: Timer = new Timer(30, false, () => { this.closeModal(); });
 
   constructor(
     private modalController: ModalController,
@@ -37,7 +37,8 @@ export class QuestionModalPage implements OnInit {
     this.question = this.navParams.get('question');
     this.setAnswers();
     this.shuffleAnswers();
-    this.timer = new Timer(this.question.countdownSeconds, true, () => { this.closeModal() });
+    this.timer.setTimerTime(this.question.countdownSeconds);
+    this.timer.startTimer();
   }
 
   /**
