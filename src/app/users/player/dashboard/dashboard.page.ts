@@ -18,8 +18,7 @@ Swiper.use([Pagination, Navigation]);
 })
 export class DashboardPage implements OnInit, AfterContentChecked {
   games = [];
-  ospite = false;
-
+  tipoUtente: string;
   breakpoints = {
     420: { slidesPerView: 1.5, spaceBetween: 20 },
     550: { slidesPerView: 2.2, spaceBetween: 20 },
@@ -35,16 +34,12 @@ export class DashboardPage implements OnInit, AfterContentChecked {
     private loginService: LoginService,
     private errorManager: ErrorManagerService
   ) {
-    this.getTipoUtente();
-    this.loadGames();
-    // this.games = [
-    //   { nome: "Gioco dell'Oca", min_giocatori: 1, max_giocatori: 6 },
-    //   { nome: "Gioco dell'oca blockchain", min_giocatori: 1, max_giocatori: 100 },
-    //   { nome: "Memory MP", min_giocatori: 1, max_giocatori: 20 },
-    //   { nome: "Risiko", min_giocatori: 4, max_giocatori: 8 },
-    //   { nome: "Battaglia navale", min_giocatori: 2, max_giocatori: 2 },
-    //   { nome: "Forza 4", min_giocatori: 2, max_giocatori: 2 }
-    // ];
+    this.loginService.getUserType().then(
+      tipoUtente => {
+        if (tipoUtente)
+          if (tipoUtente == "ADMIN") this.tipoUtente = tipoUtente;
+      }
+    ).then(_ => { this.loadGames(); });
   }
 
   ngAfterContentChecked() {
@@ -53,18 +48,6 @@ export class DashboardPage implements OnInit, AfterContentChecked {
   }
 
   ngOnInit() { }
-
-  /**
-   * Imposta la variabile *"ospite"* a true se il tipo del JWT dell'Account è uguale a "OSPITE",
-   * false se è uguale a "GIOCATORE".
-   */
-  async getTipoUtente() {
-    const token = (await this.loginService.getToken()).value;
-    const decodedToken: any = jwt_decode(token);
-    if (decodedToken.tipo === 'OSPITE') this.ospite = true;
-    else if (decodedToken.tipo === 'GIOCATORE') this.ospite = false;
-    // console.log(this.ospite);
-  }
 
   async openUserPopover(event) {
     const popover = await this.popoverController.create({
@@ -90,6 +73,17 @@ export class DashboardPage implements OnInit, AfterContentChecked {
       },
       cssClass: 'popover'
     });
+
+    popover.onDidDismiss().then((data) => {
+      const modified = data['data'];
+
+      if (modified) {
+        this.loadGames();
+        console.log("Modified, games reloaded.");
+
+      }
+    });
+
     return await popover.present();
   }
 
@@ -100,9 +94,13 @@ export class DashboardPage implements OnInit, AfterContentChecked {
     const tokenValue = (await this.loginService.getToken()).value;
     const headers = { 'token': tokenValue };
 
-    this.http.get('/games', { headers }).subscribe(
+    var url: string;
+    if (this.tipoUtente == "ADMIN") url = '/games/admin';
+    else url = '/games';
+
+    this.http.get(url, { headers }).subscribe(
       async (res) => {
-        this.games = this.games.concat(res['results']);
+        this.games = res['results'];
       },
       async (res) => {
         this.errorManager.stampaErrore(res, 'Impossibile caricare i giochi!');

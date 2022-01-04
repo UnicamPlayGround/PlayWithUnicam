@@ -3,6 +3,8 @@ import { ModalController, PopoverController } from '@ionic/angular';
 import { CercaPrivataPage } from '../../modal/cerca-privata/cerca-privata.page';
 import { CreaLobbyPage } from '../../modal/crea-lobby/crea-lobby.page';
 import { CercaPubblicaPage } from '../../modal/cerca-pubblica/cerca-pubblica.page';
+import { LoginService } from 'src/app/services/login-service/login.service';
+import { EditGamePage } from 'src/app/users/admin/modal-pages/edit-game/edit-game.page';
 
 @Component({
   selector: 'app-intro-lobby-popover',
@@ -11,15 +13,24 @@ import { CercaPubblicaPage } from '../../modal/cerca-pubblica/cerca-pubblica.pag
 })
 export class IntroLobbyPopoverComponent implements OnInit {
   @Input() giocoSelezionato;
+  tipoUtente: string;
 
   constructor(
     private popoverController: PopoverController,
+    private loginService: LoginService,
     private modalController: ModalController
-  ) { }
+  ) {
+    this.loginService.getUserType().then(
+      tipoUtente => {
+        if (tipoUtente)
+          this.tipoUtente = tipoUtente;
+      }
+    );
+  }
 
   ngOnInit() { }
 
-  close() {
+  closePopover() {
     this.popoverController.dismiss();
   }
 
@@ -34,7 +45,7 @@ export class IntroLobbyPopoverComponent implements OnInit {
       },
       cssClass: 'create-lobby'
     });
-    this.close();
+    this.closePopover();
     return await modal.present();
   }
 
@@ -46,7 +57,7 @@ export class IntroLobbyPopoverComponent implements OnInit {
       component: CercaPrivataPage,
       cssClass: 'create-lobby'
     });
-    this.close();
+    this.closePopover();
     return await modal.present();
   }
 
@@ -58,7 +69,32 @@ export class IntroLobbyPopoverComponent implements OnInit {
       component: CercaPubblicaPage,
       cssClass: 'lobby-pubbliche'
     });
-    this.close();
+    this.closePopover();
+    return await modal.present();
+  }
+
+  /**
+ * Apre una pagina modale per editare il gioco selezionato dall'utente.
+ * @param game Il gioco che si vuole modificare.
+ * @returns La modal per l'editing.
+ */
+  async editGame() {
+    const modal = await this.modalController.create({
+      component: EditGamePage,
+      componentProps: {
+        game: this.giocoSelezionato
+      },
+      cssClass: 'fullscreen'
+    });
+
+    modal.onDidDismiss().then((data) => {
+      const modified = data['data'];
+
+      if (modified) {
+        this.popoverController.dismiss(true);
+      } else this.closePopover();
+    });
+
     return await modal.present();
   }
 }

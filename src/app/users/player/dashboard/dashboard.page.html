@@ -1,5 +1,5 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar>
+  <ion-toolbar *ngIf="tipoUtente != 'ADMIN'">
     <div class="wrapper">
       <img id="logo-toolbar" src="../../../../assets/logo-small-grey.png" alt=""
         style="vertical-align:middle; float:left; line-height: 56px">
@@ -11,13 +11,21 @@
       </ion-buttons>
     </div>
   </ion-toolbar>
+
+  <ion-toolbar *ngIf="tipoUtente == 'ADMIN'">
+    <ion-buttons slot="start">
+      <ion-menu-button color="unicamblue"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Giochi</ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <img src="../../../../assets/images/wave-header.png" alt="" class="wave-header">
 
   <div class="container">
-    <ion-card class="transparent-card" style="max-width: 500px; margin:auto; margin-top: 10px;" *ngIf="ospite">
+    <ion-card class="transparent-card" style="max-width: 500px; margin:auto; margin-top: 10px;"
+      *ngIf="tipoUtente == 'OSPITE'">
       <ion-item>
         <h4 style="font-size: 14px; color: #949494;">Ricorda che gli utenti non registrati vengono eliminati ogni 24
           ore.

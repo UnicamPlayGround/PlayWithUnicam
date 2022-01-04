@@ -7,12 +7,22 @@ import { LoginService } from '../login-service/login.service';
   providedIn: 'root'
 })
 export class ErrorManagerService {
+  dashboardRedirectPath: string;
 
   constructor(
     private alertCreator: AlertCreatorService,
     private router: Router,
     private loginService: LoginService
-  ) { }
+  ) {
+    this.loginService.getUserType().then(
+      tipoUtente => {
+        if (tipoUtente) {
+          if (tipoUtente == 'ADMIN') this.dashboardRedirectPath = '/admin/dashboard';
+          else this.dashboardRedirectPath = '/player/dashboard';
+        }
+      }
+    );
+  }
 
   /**
    * Mostra a video un alert contenente un errore generato a seguito del
@@ -39,7 +49,7 @@ export class ErrorManagerService {
       return false;
     } else if (res.error == 'Errore: devi partecipare ad una lobby!') {
       this.stampa('Sei stato espulso', "L'admin ti ha rimosso dalla lobby.");
-      this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
+      this.router.navigateByUrl(this.dashboardRedirectPath, { replaceUrl: true });
       return false;
     } else return true;
   }

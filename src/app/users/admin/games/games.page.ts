@@ -13,7 +13,7 @@ import { EditGamePage } from '../modal-pages/edit-game/edit-game.page';
   styleUrls: ['./games.page.scss'],
 })
 export class GamesPage implements OnInit {
-  segment: string = "lista";
+  // segment: string = "lista";
   games = [];
   data: FormGroup;
   attivo = true;
@@ -29,7 +29,7 @@ export class GamesPage implements OnInit {
     private fb: FormBuilder,
     private alertCreator: AlertCreatorService
   ) {
-    this.loadGames();
+    // this.loadGames();
   }
 
   ngOnInit() {
@@ -42,9 +42,9 @@ export class GamesPage implements OnInit {
     });
   }
 
-  segmentChanged(ev: any) {
-    this.segment = ev.detail.value;
-  }
+  // segmentChanged(ev: any) {
+  //   this.segment = ev.detail.value;
+  // }
 
   /**
    * Pulisce il form di creazione gioco quando l'utente cambia segment nella pagina.
@@ -53,42 +53,43 @@ export class GamesPage implements OnInit {
     this.data.reset();
   }
 
-  /**
-   * Effettua la chiamata REST per ottenere la lista dei giochi della piattaforma.
-   */
-  async loadGames() {
-    const tokenValue = (await this.loginService.getToken()).value;
-    const headers = { 'token': tokenValue };
+  // /**
+  //  * Effettua la chiamata REST per ottenere la lista dei giochi della piattaforma.
+  //  */
+  // async loadGames() {
+  //   const tokenValue = (await this.loginService.getToken()).value;
+  //   const headers = { 'token': tokenValue };
 
-    this.http.get('/games/admin', { headers }).subscribe(
-      async (res) => {
-        this.games = res['results'];
-      },
-      async (res) => {
-        this.errorManager.stampaErrore(res, 'Impossibile caricare i giochi!');
-      });
-  }
+  //   this.http.get('/games/admin', { headers }).subscribe(
+  //     async (res) => {
+  //       this.games = res['results'];
+  //       console.log(res['results']);
+  //     },
+  //     async (res) => {
+  //       this.errorManager.stampaErrore(res, 'Impossibile caricare i giochi!');
+  //     });
+  // }
 
-  /**
-   * Apre una pagina modale per editare il gioco selezionato dall'utente.
-   * @param game Il gioco che si vuole modificare.
-   * @returns La modal per l'editing.
-   */
-  async editGame(game) {
-    const modal = await this.modalController.create({
-      component: EditGamePage,
-      componentProps: {
-        game: game
-      },
-      cssClass: 'fullscreen'
-    });
+  // /**
+  //  * Apre una pagina modale per editare il gioco selezionato dall'utente.
+  //  * @param game Il gioco che si vuole modificare.
+  //  * @returns La modal per l'editing.
+  //  */
+  // async editGame(game) {
+  //   const modal = await this.modalController.create({
+  //     component: EditGamePage,
+  //     componentProps: {
+  //       game: game
+  //     },
+  //     cssClass: 'fullscreen'
+  //   });
 
-    modal.onDidDismiss().then(() => {
-      this.loadGames();
-    });
+  //   modal.onDidDismiss().then(() => {
+  //     this.loadGames();
+  //   });
 
-    return await modal.present();
-  }
+  //   return await modal.present();
+  // }
 
   /**
    * Dopo aver controllato i campi effettua la chiamata REST per creare il nuovo
@@ -114,8 +115,8 @@ export class GamesPage implements OnInit {
         async (res) => {
           this.data.reset();
           this.alertCreator.createInfoAlert('Gioco creato', 'Il gioco è stato creato con successo.');
-          this.loadGames();
-          this.segment = "lista";
+          // this.loadGames();
+          // this.segment = "lista";
           await loading.dismiss();
         },
         async (res) => {

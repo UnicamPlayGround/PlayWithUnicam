@@ -42,6 +42,18 @@ export class LoginService {
   }
 
   /**
+   * Ritorna la tipologia dell'account indicata nel JSON Web Token.
+   * @returns il JWT
+   */
+  async getUserType() {
+    const token = (await this.getToken()).value;
+    if (token) {
+      const decodedToken: any = jwt_decode(token);
+      return decodedToken.tipo;
+    }
+  }
+
+  /**
    * Effettua l'operazione di Login dell'Utente.
    * @param credenziali *(username, password)* dell'Utente
    * @returns 1 se il tipo del JWT in ritorno è *"GIOCATORE"*, 2 se è *"ADMIN"*, 0 altimenti

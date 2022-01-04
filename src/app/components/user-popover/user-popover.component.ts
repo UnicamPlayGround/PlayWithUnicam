@@ -19,22 +19,15 @@ export class UserPopoverComponent implements OnInit {
     private loginService: LoginService,
     private alertCreator: AlertCreatorService
   ) {
-    this.getTipoUtente()
+    this.loginService.getUserType().then(
+      tipoUtente => {
+        if (tipoUtente)
+          this.ospite = (tipoUtente == 'OSPITE');
+      }
+    );
   }
 
   ngOnInit() { }
-
-  /**
-   * Controlla il tipo dell'utente.
-   * Se l'utente autenticato è un ospite, la variabile "ospite" viene settata a true,
-   * altrimenti viene settata a false.
-   */
-  async getTipoUtente() {
-    const token = (await this.loginService.getToken()).value;
-    const decodedToken: any = jwt_decode(token);
-    if (decodedToken.tipo === 'OSPITE') this.ospite = true;
-    else if (decodedToken.tipo === 'GIOCATORE') this.ospite = false;
-  }
 
   /**
    * Chiude il popover e inoltra alla pagina "account" per modificare i dati del profilo

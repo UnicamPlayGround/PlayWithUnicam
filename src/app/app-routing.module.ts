@@ -49,7 +49,7 @@ const routes: Routes = [
   },
   {
     path: 'goose-game',
-    loadChildren: () => import('./mgp_games/goose-game/goose-game.module').then(m => m.GooseGamePageModule),
+    loadChildren: () => import('./PlayWithUnicam-Games/goose-game/goose-game.module').then(m => m.GooseGamePageModule),
     canLoad: [AuthGiocatoriGuard]
   },
   {
@@ -58,12 +58,12 @@ const routes: Routes = [
   },
   {
     path: 'memory-game',
-    loadChildren: () => import('./mgp_games/memory-game/components/game-multiplayer/memory-multi.module').then(m => m.MemoryMultiPageModule),
+    loadChildren: () => import('./PlayWithUnicam-Games/memory-game/components/game-multiplayer/memory-multi.module').then(m => m.MemoryMultiPageModule),
     canLoad: [AuthGiocatoriGuard]
   },
   {
     path: 'memory',
-    loadChildren: () => import('./mgp_games/memory-game/components/menu/menu.module').then(m => m.MemoryMenuPageModule),
+    loadChildren: () => import('./PlayWithUnicam-Games/memory-game/components/menu/menu.module').then(m => m.MemoryMenuPageModule),
     canLoad: [AuthGiocatoriGuard]
   }
 ];

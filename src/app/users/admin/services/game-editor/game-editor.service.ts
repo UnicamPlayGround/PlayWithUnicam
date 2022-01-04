@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { GooseGameEditorComponent } from 'src/app/mgp_games/goose-game/components/goose-game-editor/goose-game-editor.component';
-import { MemoryGameEditorPage } from 'src/app/mgp_games/memory-game/components/memory-game-editor/memory-game-editor.page';
+import { GooseGameEditorComponent } from 'src/app/PlayWithUnicam-Games/goose-game/components/goose-game-editor/goose-game-editor.component';
+import { MemoryGameEditorPage } from 'src/app/PlayWithUnicam-Games/memory-game/components/memory-game-editor/memory-game-editor.page';
 import { EditorItem } from '../../components/editor-container/editor-item';
 
 @Injectable()
@@ -17,6 +17,8 @@ export class GameEditorService {
       case "goose-game":
         return new EditorItem(GooseGameEditorComponent, config);
       case "memory-game":
+        return new EditorItem(MemoryGameEditorPage, config);
+      case "memory":
         return new EditorItem(MemoryGameEditorPage, config);
       default:
         return null;

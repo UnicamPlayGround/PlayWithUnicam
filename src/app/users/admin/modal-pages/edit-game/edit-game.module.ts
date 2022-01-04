@@ -8,7 +8,7 @@ import { EditorContainerComponent } from '../../components/editor-container/edit
 import { EditorDirective } from '../../components/editor-container/editor.directive';
 import { GameEditorService } from '../../services/game-editor/game-editor.service';
 import { NoEditorWarningComponent } from '../../components/no-editor-warning/no-editor-warning.component';
-import { GamesComponentsModule } from 'src/app/mgp_games/games-components.module';
+import { GamesComponentsModule } from 'src/app/PlayWithUnicam-Games/games-components.module';
 
 @NgModule({
   imports: [

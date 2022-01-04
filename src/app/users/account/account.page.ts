@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./account.page.scss'],
 })
 export class AccountPage implements OnInit {
+  tipoUtente: string;
   dati: FormGroup;
   passwords: FormGroup;
   user = { 'username': null, 'nome': null, 'cognome': null, 'password': null, 'salt': null, 'tipo': null };
@@ -25,9 +26,15 @@ export class AccountPage implements OnInit {
     private http: HttpClient,
     private fb: FormBuilder,
     private alertCreator: AlertCreatorService,
+    private loginService: LoginService,
     private router: Router
   ) {
-    this.getDatiProfilo();
+    this.loginService.getUserType().then(
+      tipoUtente => {
+        if (tipoUtente)
+          if (tipoUtente == "ADMIN") this.tipoUtente = tipoUtente;
+      }
+    ).then(_ => { this.getDatiProfilo(); });
   }
 
   ngOnInit() {
@@ -144,7 +151,7 @@ export class AccountPage implements OnInit {
     if (this.passwords.value.newPassword == this.passwords.value.passwordConfirmed) {
       this.http.put('/modifica/password', toSend).subscribe(
         async (res) => {
-          const text = 'La password del tuo account è stata aggiornata';
+          this.passwords.reset();
           await loading.dismiss();
           this.alertCreator.createInfoAlert("Password aggiornata", "La password è stata aggiornata");
         },

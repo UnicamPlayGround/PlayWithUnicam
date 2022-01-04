@@ -18,6 +18,7 @@ export class LobbyGuestPage implements OnInit, OnDestroy {
   private timerPing;
   mostraInfoLobby = false;
   mostraInfoGioco = false;
+  redirectPath: string;
 
   constructor(
     private errorManager: ErrorManagerService,
@@ -28,6 +29,15 @@ export class LobbyGuestPage implements OnInit, OnDestroy {
     private router: Router
   ) {
     window.addEventListener('beforeunload', this.beforeUnloadListener);
+
+    this.loginService.getUserType().then(
+      tipoUtente => {
+        if (tipoUtente) {
+          if (tipoUtente == 'ADMIN') this.redirectPath = '/admin/dashboard';
+          else this.redirectPath = '/player/dashboard';
+        }
+      }
+    );
   }
 
   ngOnInit() {
@@ -79,7 +89,7 @@ export class LobbyGuestPage implements OnInit, OnDestroy {
       },
       async (res) => {
         this.timerController.stopTimers(this.timerPing);
-        this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
+        this.router.navigateByUrl(this.redirectPath, { replaceUrl: true });
         this.errorManager.stampaErrore(res, 'Impossibile caricare la lobby!');
       });
   }
@@ -94,7 +104,7 @@ export class LobbyGuestPage implements OnInit, OnDestroy {
       },
       async (res) => {
         this.timerController.stopTimers(this.timerPing);
-        this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
+        this.router.navigateByUrl(this.redirectPath, { replaceUrl: true });
         this.errorManager.stampaErrore(res, 'Impossibile caricare la lobby!');
       });
   }
@@ -115,7 +125,7 @@ export class LobbyGuestPage implements OnInit, OnDestroy {
       },
       async (res) => {
         this.timerController.stopTimers(this.timerPing);
-        this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
+        this.router.navigateByUrl(this.redirectPath, { replaceUrl: true });
         this.errorManager.stampaErrore(res, 'Impossibile caricare la lobby!');
       });
   }
@@ -129,7 +139,7 @@ export class LobbyGuestPage implements OnInit, OnDestroy {
         this.timerController.stopTimers(this.timerPing);
         (await this.lobbyManager.abbandonaLobby()).subscribe(
           async (res) => {
-            this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
+            this.router.navigateByUrl(this.redirectPath, { replaceUrl: true });
           },
           async (res) => {
             this.timerPing = this.timerController.getTimer(() => { this.ping() }, 4000);
@@ -152,7 +162,7 @@ export class LobbyGuestPage implements OnInit, OnDestroy {
       },
       async (res) => {
         this.timerController.stopTimers(this.timerPing);
-        this.router.navigateByUrl('/player/dashboard', { replaceUrl: true });
+        this.router.navigateByUrl(this.redirectPath, { replaceUrl: true });
         this.errorManager.stampaErrore(res, 'Ping fallito');
       }
     );

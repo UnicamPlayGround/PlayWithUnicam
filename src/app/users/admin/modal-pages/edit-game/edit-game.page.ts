@@ -36,7 +36,9 @@ export class EditGamePage implements OnInit {
 
   ngOnInit() {
     this.game = this.navParams.get('game');
-    this.editorItem = this.gameEditorService.getProperEditor(this.game.config);
+
+    if (this.game.config)
+      this.editorItem = this.gameEditorService.getProperEditor(this.game.config);
 
     this.data = this.fb.group({
       nome: [this.game.nome],
@@ -47,7 +49,8 @@ export class EditGamePage implements OnInit {
       attivo: [this.game.attivo]
     });
 
-    this.regolamento = this.game.regolamento;
+    if (this.game.regolamento)
+      this.regolamento = this.game.regolamento;
   }
 
   updateConfig(newConfig: Object) {

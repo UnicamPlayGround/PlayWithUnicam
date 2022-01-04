@@ -14,5 +14,10 @@
       <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
       Partecipa a una lobby privata
     </ion-item>
+
+    <ion-item button="true" lines="full" (click)="editGame()" *ngIf="tipoUtente == 'ADMIN'">
+      <ion-icon name="settings-outline" slot="start"></ion-icon>
+      Modifica gioco
+    </ion-item>
   </ion-list>
 </ion-content>

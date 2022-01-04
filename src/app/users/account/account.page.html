@@ -1,21 +1,31 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar color="unicamblue">
+  <ion-toolbar *ngIf="tipoUtente != 'ADMIN'">
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button color="unicamblue"></ion-back-button>
     </ion-buttons>
     <div class="wrapper">
-      <img class="logo-toolbar" src="../../../assets/logo-small.png" alt="">
+      <img id="logo-toolbar" src="../../../assets/logo-small-grey.png" alt=""
+        style="vertical-align:middle; float:left; line-height: 56px">
     </div>
+  </ion-toolbar>
+
+  <ion-toolbar *ngIf="tipoUtente == 'ADMIN'">
+    <ion-buttons slot="start">
+      <ion-menu-button color="unicamblue"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Profilo</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <div class="container">
-    <ion-card-header style="text-align: center; padding-top: 30px;">
-      <ion-icon name="person-circle" style="font-size: 80px; color: var(--ion-color-unicamblue);"></ion-icon>
-      <p class="subtitle">Profilo di</p>
-      <h2 class="title">{{user.username}}</h2>
-    </ion-card-header>
+    <ion-item lines="none" color="transparent">
+      <ion-icon name="person-circle" style="font-size: 90px; color: var(--ion-color-unicamblue);"></ion-icon>
+      <ion-label style="padding-left: 20px;">
+        <p class="subtitle">Profilo di</p>
+        <ion-title style="padding: 0px !important;">{{user.username}}</ion-title>
+      </ion-label>
+    </ion-item>
   </div>
 
 
@@ -49,7 +59,7 @@
             </div>
           </div>
 
-          <ion-button class="login-button" type="submit" color="unicamgrey" expand="block">SALVA MODIFICHE</ion-button>
+          <ion-button class="login-button" type="submit" color="unicamblue" expand="block">Salva modifiche</ion-button>
         </ion-card-content>
       </form>
     </div>
@@ -83,11 +93,9 @@
             </div>
           </div>
 
-          <ion-button class="login-button" type="submit" color="unicamred" expand="block">CAMBIA PASSWORD</ion-button>
+          <ion-button class="login-button" type="submit" color="unicamred" expand="block">Cambia password</ion-button>
         </ion-card-content>
       </form>
     </div>
   </div>
-
-
 </ion-content>
