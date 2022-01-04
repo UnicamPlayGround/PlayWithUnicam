@@ -5,7 +5,7 @@
         style="vertical-align:middle; float:left; line-height: 56px">
 
       <ion-buttons style="vertical-align:middle; float:right; line-height: 56px">
-        <ion-button (click)="openUserPopover($event)">
+        <ion-button (click)="openUserPopover($event)" title="Profilo / Logout">
           <ion-icon slot="icon-only" name="person-outline" color="unicamblue"></ion-icon>
         </ion-button>
       </ion-buttons>
@@ -17,7 +17,7 @@
   <img src="../../../../assets/images/wave-header.png" alt="" class="wave-header">
 
   <div class="container">
-    <ion-card class="transparent-card" style="max-width: 500px; margin:auto;" *ngIf="ospite">
+    <ion-card class="transparent-card" style="max-width: 500px; margin:auto; margin-top: 10px;" *ngIf="ospite">
       <ion-item>
         <h4 style="font-size: 14px; color: #949494;">Ricorda che gli utenti non registrati vengono eliminati ogni 24
           ore.
@@ -31,34 +31,26 @@
       <p *ngIf="this.games.length == 0">Non è stato trovato alcun gioco! :(</p>
     </div>
 
-    <swiper [config]="config" #gamesSwiper>
-      <ng-template swiperSlide *ngFor="let game of games">
-        <ion-card class="ioncardgame" (click)="openIntroLobby(game)" tappable button="true">
-          <img src="../../../../assets/images/white_wave_header.png" alt="" class="white-wave-header">
+    <swiper [slidesPerView]="1.2" [spaceBetween]="20" [navigation]="true" [breakpoints]="breakpoints">
+      <ng-container *ngFor="let game of games">
+        <ng-template swiperSlide>
+          <ion-card class="ioncardgame" (click)="openIntroLobby(game)" tappable button="true">
+            <img src="../../../../assets/images/white_wave_header.png" alt="" class="white-wave-header">
 
-          <ion-item lines="none" class="players-item"
-            title="Da {{game.min_giocatori}} a {{game.max_giocatori}} giocatori">
-            <ion-label>
-              <ion-icon slot="start" name="people"></ion-icon>
-              {{game.min_giocatori}} - {{game.max_giocatori}}
-            </ion-label>
-          </ion-item>
-          <div class="game-title">
-            <ion-card-title>{{game.nome}}</ion-card-title>
-          </div>
-        </ion-card>
-      </ng-template>
+            <ion-item lines="none" class="players-item"
+              title="Da {{game.min_giocatori}} a {{game.max_giocatori}} giocatori">
+              <ion-label>
+                <ion-icon slot="start" name="people"></ion-icon>
+                {{game.min_giocatori}} - {{game.max_giocatori}}
+              </ion-label>
+            </ion-item>
+            <div class="game-title">
+              <ion-card-title>{{game.nome}}</ion-card-title>
+            </div>
+          </ion-card>
+        </ng-template>
+      </ng-container>
     </swiper>
 
-    <div class="buttons-container" *ngIf="games.length > 0">
-      <div class="buttons">
-        <ion-button (click)="prevSlide()" fill="clear" color="unicamblue">
-          <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
-        </ion-button>
-        <ion-button (click)="nextSlide()" fill="clear" color="unicamblue">
-          <ion-icon slot="icon-only" name="arrow-forward"></ion-icon>
-        </ion-button>
-      </div>
-    </div>
   </div>
 </ion-content>

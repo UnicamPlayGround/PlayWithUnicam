@@ -25,12 +25,12 @@ const routes: Routes = [
   {
     path: 'player/dashboard',
     loadChildren: () => import('./users/player/dashboard/dashboard.module').then(m => m.DashboardPageModule),
-    //canLoad: [AuthGiocatoriGuard]
+    canLoad: [AuthGiocatoriGuard]
   },
   {
     path: 'admin',
     loadChildren: () => import('./users/admin/menu/menu.module').then(m => m.MenuPageModule),
-    //canLoad: [AuthAdminGuard]
+    canLoad: [AuthAdminGuard]
   },
   {
     path: 'lobby-admin',

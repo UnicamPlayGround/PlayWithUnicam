@@ -24,6 +24,11 @@ export class MenuPage implements OnInit {
       title: 'Giochi',
       icon: 'game-controller',
       url: '/admin/games'
+    },
+    {
+      title: 'Account',
+      icon: 'person',
+      url: '/admin/account'
     }
   ]
 

@@ -6,44 +6,25 @@ import { ErrorManagerService } from 'src/app/services/error-manager/error-manage
 import { LoginService } from 'src/app/services/login-service/login.service';
 import { IntroLobbyPopoverComponent } from '../popover/intro-lobby-popover/intro-lobby-popover.component';
 import jwt_decode from 'jwt-decode';
-import Swiper, { SwiperOptions, Pagination } from 'swiper';
+import Swiper, { SwiperOptions, Pagination, Navigation } from 'swiper';
 import { SwiperComponent } from 'swiper/angular';
+
+Swiper.use([Pagination, Navigation]);
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
-  // encapsulation: ViewEncapsulation.None
 })
 export class DashboardPage implements OnInit, AfterContentChecked {
   games = [];
   ospite = false;
-  config: SwiperOptions = {
-    slidesPerView: 1,
-    spaceBetween: 20,
-    pagination: true,
-    grabCursor: true,
-    breakpoints: {
-      // when window width is >= 480px
-      480: {
-        slidesPerView: 2,
-        spaceBetween: 0
-      },
-      // when window width is >= 810px
-      810: {
-        slidesPerView: 3,
-        spaceBetween: 0
-      },
-      // when window width is >= 1180px
-      1180: {
-        slidesPerView: 3,
-        spaceBetween: 40
-      }
-    },
-    navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev',
-    },
+
+  breakpoints = {
+    420: { slidesPerView: 1.5, spaceBetween: 20 },
+    550: { slidesPerView: 2.2, spaceBetween: 20 },
+    768: { slidesPerView: 2.6, spaceBetween: 40 },
+    1024: { slidesPerView: 3.6, spaceBetween: 40 }
   }
 
   @ViewChild('gamesSwiper') gamesSwiper: SwiperComponent;
@@ -71,17 +52,7 @@ export class DashboardPage implements OnInit, AfterContentChecked {
       this.gamesSwiper.updateSwiper({});
   }
 
-  ngOnInit() {
-    Swiper.use([Pagination]);
-  }
-
-  prevSlide() {
-    this.gamesSwiper.swiperRef.slidePrev(500);
-  }
-
-  nextSlide() {
-    this.gamesSwiper.swiperRef.slideNext(500);
-  }
+  ngOnInit() { }
 
   /**
    * Imposta la variabile *"ospite"* a true se il tipo del JWT dell'Account è uguale a "OSPITE",

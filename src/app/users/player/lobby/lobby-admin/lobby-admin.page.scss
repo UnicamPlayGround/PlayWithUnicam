@@ -1,71 +1,58 @@
-p{
-    color:rgb(16, 64, 85);
+ion-toolbar{
+    color:#fff;
+    --padding-end: 5px;
 }
 
-.info-card{
-    background: #96c6da;
-    border-radius: 20px;
-
-    ion-list{
-        background: rgba(0, 0, 0, 0);
-
-        ion-title{
-            color: #fff;
-            font-size: 18px;
-        }
-        ion-item{
-            color: #fff;
-            --background: rgba(0, 0, 0, 0);
-        }
-    }
+.wave-header{
+    position:absolute;
+    width: 100%;
+    min-height: 387px;
+    min-width: 1106px;
 }
 
-.players-card{
-    background: #44a2b9;
-    color: #fff;
-    border-radius: 20px;
-
-    ion-list{
-        background: rgba(0, 0, 0, 0);
-
-        ion-title{
-            color: #fff;
-            font-size: 18px;
-        }
-        ion-item{
-            color: #fff;
-            --background: rgba(0, 0, 0, 0);
-        }
-    }
+.start-button{
+    margin: 0 10px;
 }
 
-.admin{
-    background: rgb(109, 194, 206) !important;
+ion-card{
+    background: #fff !important;
+}
+
+ion-card-title{
+    font-size: 20px;
+    font-weight:bold;
+    text-align: center;
+    color:var(--ion-color-unicamblue);
+}
+
+h2{
+    color:var(--ion-color-unicamblue);
+}
+
+.card-title{
+    text-align: left !important;
+    padding:0px !important;
+    font-size: 18px;
+}
+
+ion-list{
+    background: transparent;
+}
+
+ion-item{
+    --background: transparent;
+    color:#737373;
+}
+
+.admin-item{
+    background: rgb(106, 174, 214) !important;
+    color: #fff !important;
 }
 
 .admin-label{
     color:#fff !important;
     font-size: 13px;
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-}
-
-.game-card{
-    background: #4fc5c5;
-    color: #fff;
-    border-radius: 20px;
-
-    ion-list{
-        background: rgba(0, 0, 0, 0);
-
-        ion-title{
-            color: #fff;
-            font-size: 18px;
-        }
-        ion-item{
-            color: #fff;
-            --background: rgba(0, 0, 0, 0);
-        }
-    }
 }
 
 .start-button-footer{
@@ -97,7 +84,7 @@ p{
     #normal-game-card{
         display: none;
     }
-    .start-button-row{
+    .start-button{
         display: none;
     }
 }

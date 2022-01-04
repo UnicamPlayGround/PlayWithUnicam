@@ -13,10 +13,10 @@ const routes: Routes = [
     path: '',
     component: MenuPage,
     children: [
-      { path: 'dashboard', loadChildren: () => import('../dashboard/dashboard.module').then(m => m.DashboardPageModule) },
+      { path: 'dashboard', loadChildren: () => import('../../player/dashboard/dashboard.module').then(m => m.DashboardPageModule) },
       { path: 'users', loadChildren: () => import('../users/users.module').then(m => m.UsersPageModule) },
       { path: 'games', loadChildren: () => import('../games/games.module').then(m => m.GamesPageModule) },
-      { path: 'edit-game', loadChildren: () => import('../edit-game/edit-game.module').then(m => m.EditGamePageModule) }
+      { path: 'account', loadChildren: () => import('../../account/account.module').then(m => m.AccountPageModule) },
     ]
   }
 ];
