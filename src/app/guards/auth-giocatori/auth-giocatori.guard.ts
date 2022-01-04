@@ -15,7 +15,7 @@ export class AuthGiocatoriGuard implements CanLoad {
       filter(val => val !== null),
       take(1),
       map(tipologiaToken => {
-        if (tipologiaToken == 'OSPITE' || tipologiaToken == 'GIOCATORE')
+        if (tipologiaToken == 'OSPITE' || tipologiaToken == 'GIOCATORE' || tipologiaToken == 'ADMIN')
           return true;
         else {
           this.router.navigateByUrl('/home');

@@ -58,11 +58,13 @@ const routes: Routes = [
   },
   {
     path: 'memory-game',
-    loadChildren: () => import('./mgp_games/memory-game/components/game-multiplayer/memory-multi.module').then(m => m.MemoryMultiPageModule)
+    loadChildren: () => import('./mgp_games/memory-game/components/game-multiplayer/memory-multi.module').then(m => m.MemoryMultiPageModule),
+    canLoad: [AuthGiocatoriGuard]
   },
   {
     path: 'memory',
-    loadChildren: () => import('./mgp_games/memory-game/components/menu/menu.module').then(m => m.MemoryMenuPageModule)
+    loadChildren: () => import('./mgp_games/memory-game/components/menu/menu.module').then(m => m.MemoryMenuPageModule),
+    canLoad: [AuthGiocatoriGuard]
   }
 ];
 
