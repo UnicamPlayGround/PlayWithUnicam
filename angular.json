@@ -32,12 +32,12 @@
               },
               {
                 "glob": "**/*.png",
-                "input": "src/app/mgp_games",
+                "input": "src/app/PlayWithUnicam-Games",
                 "output": "game-assets"
               },
               {
                 "glob": "**/*.jpg",
-                "input": "src/app/mgp_games",
+                "input": "src/app/PlayWithUnicam-Games",
                 "output": "game-assets"
               }
             ],
