@@ -13,12 +13,12 @@ import { LoginService } from 'src/app/services/login-service/login.service';
 })
 export class EditUserPage implements OnInit {
   data: FormGroup;
-  passwordForm: FormGroup;
+  // passwordForm: FormGroup;
 
   @Input() username: any;
   @Input() nome: any;
   @Input() cognome: any;
-  @Input() tipo: any;
+  // @Input() tipo: any;
 
   constructor(
     private fb: FormBuilder,
@@ -35,18 +35,18 @@ export class EditUserPage implements OnInit {
     this.username = this.navParams.get('username');
     this.nome = this.navParams.get('nome');
     this.cognome = this.navParams.get('cognome');
-    this.tipo = this.navParams.get('tipo');
+    // this.tipo = this.navParams.get('tipo');
 
     this.data = this.fb.group({
       username: [this.username],
       nome: [this.nome],
       cognome: [this.cognome],
-      tipo: [this.tipo]
+      // tipo: [this.tipo]
     });
 
-    this.passwordForm = this.fb.group({
-      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16)]]
-    });
+    // this.passwordForm = this.fb.group({
+    //   password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16)]]
+    // });
   }
 
   /**
@@ -70,7 +70,7 @@ export class EditUserPage implements OnInit {
       'new_username': this.data.value.username,
       'new_nome': this.data.value.nome,
       'new_cognome': this.data.value.cognome,
-      'new_tipo': this.data.value.tipo
+      // 'new_tipo': this.data.value.tipo
     }
 
     this.http.put('/admin/utenti/' + this.username, toSend).subscribe(
