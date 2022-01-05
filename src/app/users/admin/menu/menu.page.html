@@ -8,17 +8,17 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content color="light">
+    <ion-content>
       <div *ngFor="let p of pages">
         <ion-menu-toggle auto-hide="false" *ngIf="p.url">
-          <ion-item [routerLink]="p.url" routerDirection="root" routerLinkActive="menu-active-item" color="light">
+          <ion-item [routerLink]="p.url" routerDirection="root" routerLinkActive="menu-active-item">
             <ion-icon slot="start" [name]="p.icon" color="unicamblue"></ion-icon>
             <ion-label>{{ p.title }}</ion-label>
           </ion-item>
         </ion-menu-toggle>
       </div>
 
-      <ion-item [routerLink]='' (click)="logout()" color="light">
+      <ion-item [routerLink]='' (click)="logout()">
         <ion-icon name="log-out" slot="start" color="unicamblue"></ion-icon>Logout
       </ion-item>
     </ion-content>

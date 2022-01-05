@@ -1,3 +1,7 @@
+ion-content{
+  --background: #fff !important;
+}
+
 .wrapper{
     margin:auto;
     max-width: 1300px;
@@ -15,5 +19,9 @@
 
 ion-toolbar{
   color:#fff;
+}
+
+ion-item{
+  --background: transparent !important;
 }
   
