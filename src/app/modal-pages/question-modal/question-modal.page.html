@@ -13,7 +13,6 @@
 
 
     <div *ngIf="question.videoUrl && question.videoUrl.length > 0" style="margin-top: 30px;">
-      <p style="font-size: 14px;">Visiona il seguente video prima di rispondere</p>
       <div style="max-width: 600px; margin:auto;">
         <div class="video-container">
           <iframe [src]="question.videoUrl | safe" title="video player" frameborder="0"
@@ -24,7 +23,6 @@
     </div>
 
     <div *ngIf="question.imgUrl && question.imgUrl.length > 0" class="image-container">
-      <p style="font-size: 14px; text-align: left;">Osserva la seguente immagine prima di rispondere</p>
       <img src="{{ question.imgUrl }}">
     </div>
 
