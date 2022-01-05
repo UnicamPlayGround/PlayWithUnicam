@@ -11,21 +11,33 @@ export class Game {
     private minPlayers: number;
     private maxPlayers: number;
     private url: string;
-    private config;
+    private config: any = {};
 
     /**
      * Editor del gioco utilizzato da: {@link GameEditorService}
      */
     private editor: Type<any>;
 
-    constructor(name: string, type: GameType, minPlayers: number, maxPlayers: number, url: string, editor: Type<any>) {
+    /**
+     * Costruttore del gioco.
+     * @param name Nome univoco del gioco
+     * @param type Tipologia del gioco 
+     * @param minPlayers Numero minimo di giocatori supportati
+     * @param maxPlayers Numero massimo di giocatori supportati
+     * @param url Url del gioco
+     * @param editor Editor del gioco
+     * @param configParams parametri opzionali da aggiungere al JSON di configurazione 
+     */
+    constructor(name: string, type: GameType, minPlayers: number, maxPlayers: number, url: string, editor: Type<any>, configParams?: any) {
         this.name = name;
         this.type = type;
         this.minPlayers = minPlayers;
         this.maxPlayers = maxPlayers;
         this.url = url
         this.editor = editor;
-        this.config = { game_name: name };
+        if (configParams)
+            this.config = configParams;
+        this.config.game_name = name;
     }
 
     public getName(): string {

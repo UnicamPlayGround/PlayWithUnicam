@@ -10,8 +10,8 @@ export class GameEditorService {
 
   private games: Game[] = [
     new Game("Gioco dell'Oca", GameType.TURNI, 1, 6, "/goose-game", GooseGameEditorComponent),
-    new Game("Memory MULTI", GameType.NORMALE, 1, 10, "/memory-game", MemoryGameEditorPage),
-    new Game("Memory SINGLE", GameType.NORMALE, 1, 1, "/memory", MemoryGameEditorPage)
+    new Game("Memory MULTI", GameType.NORMALE, 1, 10, "/memory-game", MemoryGameEditorPage, { version: "multi" }),
+    new Game("Memory SINGLE", GameType.NORMALE, 1, 1, "/memory", MemoryGameEditorPage, { version: "single" })
   ];
 
   /**
