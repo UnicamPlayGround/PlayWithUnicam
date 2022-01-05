@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { LoadingController, ModalController } from '@ionic/angular';
+import { LoadingController } from '@ionic/angular';
+import { Game } from 'src/app/components/game';
 import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creator.service';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LoginService } from 'src/app/services/login-service/login.service';
-import { EditGamePage } from '../modal-pages/edit-game/edit-game.page';
+import { GameEditorService } from '../services/game-editor/game-editor.service';
 
 @Component({
   selector: 'app-games',
@@ -13,8 +14,7 @@ import { EditGamePage } from '../modal-pages/edit-game/edit-game.page';
   styleUrls: ['./games.page.scss'],
 })
 export class GamesPage implements OnInit {
-  // segment: string = "lista";
-  games = [];
+  games: Game[] = [];
   data: FormGroup;
   attivo = true;
   mostraRegolamento = false;
@@ -24,87 +24,41 @@ export class GamesPage implements OnInit {
     private http: HttpClient,
     private loginService: LoginService,
     private errorManager: ErrorManagerService,
-    private modalController: ModalController,
     private loadingController: LoadingController,
     private fb: FormBuilder,
-    private alertCreator: AlertCreatorService
+    private alertCreator: AlertCreatorService,
+    private gameEditorService: GameEditorService
   ) {
-    // this.loadGames();
+    this.games = this.gameEditorService.getGames();
   }
 
   ngOnInit() {
     this.data = this.fb.group({
-      nome: ['', Validators.required],
-      tipo: ['', Validators.required],
-      link: ['', Validators.required],
-      minGiocatori: ['', Validators.required],
-      maxGiocatori: ['', Validators.required]
+      name: ['', Validators.required],
+      game: ['', Validators.required]
     });
   }
-
-  // segmentChanged(ev: any) {
-  //   this.segment = ev.detail.value;
-  // }
-
-  /**
-   * Pulisce il form di creazione gioco quando l'utente cambia segment nella pagina.
-   */
-  clearForm() {
-    this.data.reset();
-  }
-
-  // /**
-  //  * Effettua la chiamata REST per ottenere la lista dei giochi della piattaforma.
-  //  */
-  // async loadGames() {
-  //   const tokenValue = (await this.loginService.getToken()).value;
-  //   const headers = { 'token': tokenValue };
-
-  //   this.http.get('/games/admin', { headers }).subscribe(
-  //     async (res) => {
-  //       this.games = res['results'];
-  //       console.log(res['results']);
-  //     },
-  //     async (res) => {
-  //       this.errorManager.stampaErrore(res, 'Impossibile caricare i giochi!');
-  //     });
-  // }
-
-  // /**
-  //  * Apre una pagina modale per editare il gioco selezionato dall'utente.
-  //  * @param game Il gioco che si vuole modificare.
-  //  * @returns La modal per l'editing.
-  //  */
-  // async editGame(game) {
-  //   const modal = await this.modalController.create({
-  //     component: EditGamePage,
-  //     componentProps: {
-  //       game: game
-  //     },
-  //     cssClass: 'fullscreen'
-  //   });
-
-  //   modal.onDidDismiss().then(() => {
-  //     this.loadGames();
-  //   });
-
-  //   return await modal.present();
-  // }
 
   /**
    * Dopo aver controllato i campi effettua la chiamata REST per creare il nuovo
    * gioco secondo i dati inseriti dall'utente.
    */
   async creaGioco() {
-    if (this.controllaCampi()) {
+    var game = this.games.find(game => game.getName() == this.data.value.game);
+    if (game && this.data.value.name) {
       const loading = await this.loadingController.create();
       await loading.present();
 
       const tokenValue = (await this.loginService.getToken()).value;
-      var toSend = this.data.value;
-      toSend.config = { game: toSend.link };
-      toSend.link = "/" + toSend.link;
-      toSend.attivo = this.attivo;
+
+      var toSend: any = {};
+      toSend.nome = this.data.value.name;
+      toSend.tipo = game.getType();
+      toSend.minGiocatori = game.getMinPlayers();
+      toSend.maxGiocatori = game.getMaxPlayers();
+      toSend.link = game.getUrl();
+      toSend.attivo = false;
+      toSend.config = game.getConfig();
 
       if (this.mostraRegolamento) toSend.regolamento = this.regolamento;
       else toSend.regolamento = null;
@@ -115,8 +69,6 @@ export class GamesPage implements OnInit {
         async (res) => {
           this.data.reset();
           this.alertCreator.createInfoAlert('Gioco creato', 'Il gioco è stato creato con successo.');
-          // this.loadGames();
-          // this.segment = "lista";
           await loading.dismiss();
         },
         async (res) => {
@@ -124,22 +76,8 @@ export class GamesPage implements OnInit {
           await loading.dismiss();
           this.errorManager.stampaErrore(res, 'Creazione gioco fallita');
         });
-    }
+    } else
+      this.alertCreator.createInfoAlert('Errore!', 'Compila tutti i campi!');
   }
 
-  /**
-   * Controlla che i valori inseriti dall'utente negli input siano corretti.
-   * @returns true se i dati passati non contengono errori, false altrimenti.
-   */
-  controllaCampi() {
-    if (this.data.value.minGiocatori < 1 || this.data.value.maxGiocatori < 1) {
-      this.alertCreator.createInfoAlert('Errore nei dati', 'Il numero dei giocatori non può essere negativo!');
-      return false;
-    }
-    if (this.data.value.minGiocatori > this.data.value.maxGiocatori) {
-      this.alertCreator.createInfoAlert('Errore nei dati', 'Il numero minimo dei giocatori non può essere maggiore del numero massimo!');
-      return false;
-    }
-    return true;
-  }
 }

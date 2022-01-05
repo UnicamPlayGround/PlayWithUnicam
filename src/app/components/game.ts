@@ -1,68 +1,59 @@
-export class Game {
-    /**
-     * L'id del gioco.
-     */
-    id: Number;
-    /**
-     * Il nome del gioco.
-     */
-    name: String;
-    /**
-     * Il regolamento del gioco.
-     */
-    regulation: String;
-    /**
-     * La modalità di gioco: può essere a turni o normale (non a turni).
-     */
-    type: String;
-    /**
-     * Minimo numero dei giocatori richiesti.
-     */
-    minPlayers: Number;
-    /**
-     * Massimo numero di giocatori ammessi.
-     */
-    maxPlayers: Number;
-    /**
-     * Stato del gioco: se attivo è visibile a tutti i giocatori, altrimenti è nascosto.
-     */
-    isActive: boolean;
-    /**
-     * L'URL al quale si viene reindirizzati quando si gioca.
-     */
-    url: String;
-    /**
-     * JSON di configurazione del funzionamento del gioco.
-     */
-    config: any;
+import { Type } from "@angular/core";
+import { GameType } from "./game-type";
+import { GameEditorService } from "../users/admin/services/game-editor/game-editor.service";
 
-    constructor(id: Number, name: String, type: String, minPlayers: Number, maxPlayers: Number, url: String) {
-        this.id = id;
+/**
+ * Classe che rappresenta i giochi attualmente implementati dalla piattaforma.
+ */
+export class Game {
+    private name: string;
+    private type: GameType;
+    private minPlayers: number;
+    private maxPlayers: number;
+    private url: string;
+    private config;
+
+    /**
+     * Editor del gioco utilizzato da: {@link GameEditorService}
+     */
+    private editor: Type<any>;
+
+    constructor(name: string, type: GameType, minPlayers: number, maxPlayers: number, url: string, editor: Type<any>) {
         this.name = name;
-        this.regulation = "";
         this.type = type;
         this.minPlayers = minPlayers;
         this.maxPlayers = maxPlayers;
-        this.isActive = true;
-        this.url = url;
-        this.config = { name: this.name };
+        this.url = url
+        this.editor = editor;
+        this.config = { game_name: name };
     }
 
-    setRegulation(regulation: String) {
-        this.regulation = regulation;
+    public getName(): string {
+        return this.name;
     }
 
-    getJSON() {
-        var json: any = {};
-        json.id = this.id;
-        json.name = this.name;
-        json.regulation = this.regulation;
-        json.type = this.type;
-        json.minPlayers = this.minPlayers;
-        json.maxPlayers = this.maxPlayers;
-        json.isActive = this.isActive;
-        json.url = this.url;
-        json.config = this.config;
-        return json;
+    public getType(): string {
+        return this.type.valueOf();
     }
+
+    public getMinPlayers(): number {
+        return this.minPlayers;
+    }
+
+    public getMaxPlayers(): number {
+        return this.maxPlayers;
+    }
+
+    public getUrl(): string {
+        return this.url;
+    }
+
+    public getConfig() {
+        return this.config;
+    }
+
+    public getEditor(): Type<any> {
+        return this.editor;
+    }
+
 }
