@@ -22,7 +22,7 @@ export class AlertCreatorService {
       { text: 'ANNULLA', role: 'cancel' },
       { text: 'OK', handler: () => { cb(); } }
     ]
-    this.createAlert("Conferma", messaggio, buttons);
+    this.createAlert("Conferma", messaggio, buttons, true);
   }
 
   /**
@@ -30,12 +30,14 @@ export class AlertCreatorService {
    * @param header header dell'alert da mostrare.
    * @param messaggio messaggio dell'alert
    * @param buttons bottoni dell'alert
+   * @param backdropDismiss Se true, l'alert potrà essere chiuso anche cliccando al di fuori di esso
    */
-  async createAlert(header, messaggio, buttons) {
+  async createAlert(header, messaggio, buttons, backdropDismiss: boolean) {
     const alert = await this.alertController.create({
       header: header,
       message: messaggio,
-      buttons: buttons
+      buttons: buttons,
+      backdropDismiss: backdropDismiss
     });
     await alert.present();
   }
@@ -47,6 +49,6 @@ export class AlertCreatorService {
    * @param messaggio messaggio dell'alert
    */
   async createInfoAlert(header, messaggio) {
-    this.createAlert(header, messaggio, ['OK']);
+    this.createAlert(header, messaggio, ['OK'], true);
   }
 }
