@@ -62,7 +62,7 @@ export class CercaPubblicaPage implements OnInit {
       this.http.get('/lobby/giocatori/' + lobby.codice, { headers }).subscribe(
         async (res) => {
           var tmp = await res['results'];
-          lobby['partecipanti'] = tmp[0].count;
+          lobby['partecipanti'] = Number.parseInt(tmp[0].count);
           if (lobby.partecipanti < lobby.max_giocatori) this.lobbiesDaVisualizzare.push(lobby);
         },
         async (res) => {

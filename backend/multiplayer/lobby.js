@@ -393,7 +393,7 @@ exports.partecipaLobby = (username, codiceLobby) => {
             .then(results => {
                 const count = results.rows[0].count;
 
-                if (count < lobby.max_giocatori) {
+                if (Number.parseInt(count) < Number.parseInt(lobby.max_giocatori)) {
                     this.cercaLobbyByAdmin(username)
                         .then(results => { return controllaLobbyAdmin(results); })
                         .then(_ => { return giocatore.creaGiocatore(username, codiceLobby); })
