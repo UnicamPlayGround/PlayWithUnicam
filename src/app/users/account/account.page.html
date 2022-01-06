@@ -1,19 +1,21 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar *ngIf="tipoUtente != 'ADMIN'">
-    <ion-buttons slot="start">
-      <ion-back-button color="unicamblue"></ion-back-button>
-    </ion-buttons>
-    <div class="wrapper">
-      <img id="logo-toolbar" src="../../../assets/logo-small-grey.png" alt=""
-        style="vertical-align:middle; float:left; line-height: 56px">
+  <ion-toolbar>
+    <div *ngIf="tipoUtente != 'ADMIN'">
+      <ion-buttons slot="start">
+        <ion-back-button color="unicamblue"></ion-back-button>
+      </ion-buttons>
+      <div class="wrapper">
+        <img id="logo-toolbar" src="../../../assets/logo-small-grey.png" alt=""
+          style="vertical-align:middle; float:left; line-height: 56px">
+      </div>
     </div>
-  </ion-toolbar>
 
-  <ion-toolbar *ngIf="tipoUtente == 'ADMIN'">
-    <ion-buttons slot="start">
-      <ion-menu-button color="unicamblue"></ion-menu-button>
-    </ion-buttons>
-    <ion-title>Profilo</ion-title>
+    <div *ngIf="tipoUtente == 'ADMIN'">
+      <ion-buttons slot="start">
+        <ion-menu-button color="unicamblue"></ion-menu-button>
+      </ion-buttons>
+      <ion-title>Profilo</ion-title>
+    </div>
   </ion-toolbar>
 </ion-header>
 

@@ -94,6 +94,8 @@
 
 .segment-div {
   padding: 25px;
+  max-width: 900px;
+  margin: auto;
 }
 
 .preview {
@@ -108,4 +110,14 @@
 
 .preview:hover .overlay {
   opacity: 0.7;
+}
+
+ion-item{
+  --background:transparent;
+}
+
+.title{
+  font-weight: bold;
+  font-size: 24px;
+  color: var(--ion-color-unicamblue);
 }

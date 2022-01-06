@@ -5,53 +5,9 @@
     </ion-buttons>
     <ion-title>Giochi</ion-title>
   </ion-toolbar>
-
-  <!-- <ion-toolbar color="light">
-    <ion-segment (ionChange)="clearForm()" [(ngModel)]="segment" value="lista">
-      <ion-segment-button value="lista">
-        <ion-label>Lista</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="crea">
-        <ion-label>Crea</ion-label>
-      </ion-segment-button>
-    </ion-segment>
-  </ion-toolbar> -->
 </ion-header>
 
 <ion-content>
-
-  <!-- <div *ngIf="segment === 'lista'">
-
-    <ion-item>
-      <ion-label>Elenco dei giochi aggiunti:</ion-label>
-    </ion-item>
-
-    <ion-item lines="full" *ngIf="this.games.length == 0">
-      <ion-label style="text-align: center; color:grey">Non è stato trovato alcun gioco!</ion-label>
-    </ion-item>
-
-    <div class="row">
-      <a *ngFor="let game of games" class="column" tappable (click)="editGame(game)">
-        <div class="container">
-          <img src="../../../../assets/images/generic-game.jpg" class="image" />
-          <div class="overlay">
-            <div class="text">MODIFICA</div>
-          </div>
-          <div class="info">
-            <ion-label>
-              <h1><strong>{{game.nome}}</strong></h1>
-              <h2>
-                <ion-icon name="people-outline"></ion-icon>
-                Giocatori {{game.min_giocatori}} - {{game.max_giocatori}}
-              </h2>
-            </ion-label>
-          </div>
-        </div>
-      </a>
-    </div>
-  </div> -->
-
-  <!-- <div *ngIf="segment === 'crea'" class="segment-div"> -->
   <div class="segment-div">
 
     <form (ngSubmit)="creaGioco()" [formGroup]="data">
@@ -112,12 +68,10 @@
         </ion-row>
 
         <ion-row>
-          <ion-col size-lg="4" size-md="4" size-sm="0" size="12"></ion-col>
-          <ion-col size-lg="4" size-md="4" size-sm="12" size="12">
-            <ion-button type="submit" fill="clear" color="unicamred" expand="block" shape="round">Crea gioco
+          <ion-col size="12" style="text-align: right;">
+            <ion-button type="submit" color="unicamred" shape="round" style="float: right;">Crea gioco
             </ion-button>
           </ion-col>
-          <ion-col size-lg="4" size-md="4" size-sm="0" size="12"></ion-col>
         </ion-row>
       </ion-grid>
     </form>
