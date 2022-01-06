@@ -200,7 +200,7 @@ exports.getLobbyPubbliche = (username) => {
     return new Promise((resolve, reject) => {
         db.pool.query('SELECT codice, admin_lobby, data_creazione, id_gioco, nome, max_giocatori, min_giocatori FROM public.lobby' +
             ' INNER JOIN public.giochi ON public.lobby.id_gioco = public.giochi.id WHERE pubblica=$1 AND admin_lobby <> $2' +
-            ' AND public.lobby.partita_iniziata = $3', [true, username, false], (error, results) => {
+            ' AND public.lobby.partita_iniziata = $3 AND public.giochi.attivo = $4', [true, username, false, true], (error, results) => {
                 if (error)
                     return reject(error);
                 else
