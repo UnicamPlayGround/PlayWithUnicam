@@ -53,7 +53,7 @@ function controllaNumeroGiocatori(adminLobby) {
             .then(results => {
                 const numeroGiocatori = results.rows[0];
 
-                if (lobbyInfo.min_giocatori > numeroGiocatori.count)
+                if (Number.parseInt(lobbyInfo.min_giocatori) > Number.parseInt(numeroGiocatori.count))
                     throw new Error("Non ci sono abbastanza giocatori per iniziare!");
 
                 return resolve(lobbyInfo);
@@ -100,7 +100,7 @@ function controllaMinimoGiocatori(username) {
             .then(results => {
                 const numeroGiocatori = results.rows[0];
 
-                if (lobbyInfo.min_giocatori > numeroGiocatori.count)
+                if (Number.parseInt(lobbyInfo.min_giocatori) > Number.parseInt(numeroGiocatori.count))
                     throw new Error(messaggi.MINIMO_GIOCATORI_ERROR);
                 else
                     return resolve();
