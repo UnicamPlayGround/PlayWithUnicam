@@ -9,9 +9,9 @@ import { EditorItem } from '../../components/editor-container/editor-item';
 export class GameEditorService {
 
   private games: Game[] = [
-    new Game("Gioco dell'Oca", GameType.TURNI, 1, 6, "/goose-game", GooseGameEditorComponent),
-    new Game("Memory MULTI", GameType.NORMALE, 1, 10, "/memory-game", MemoryGameEditorPage, { version: "multi" }),
-    new Game("Memory SINGLE", GameType.NORMALE, 1, 1, "/memory", MemoryGameEditorPage, { version: "single" })
+    new Game("Gioco dell'oca", GameType.TURNI, 1, 6, "/goose-game", GooseGameEditorComponent),
+    new Game("Memory multiplayer", GameType.NORMALE, 1, 10, "/memory-game", MemoryGameEditorPage, { version: "multi" }),
+    new Game("Memory multiplayer a schermo condiviso", GameType.NORMALE, 1, 1, "/memory", MemoryGameEditorPage, { version: "single" })
   ];
 
   /**
