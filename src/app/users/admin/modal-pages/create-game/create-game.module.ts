@@ -4,10 +4,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { GamesPageRoutingModule } from './games-routing.module';
+import { CreateGamePageRoutingModule } from './create-game-routing.module';
 
-import { GamesPage } from './games.page';
-import { EditGamePageModule } from '../modal-pages/edit-game/edit-game.module';
+import { CreateGamePage } from './create-game.page';
+import { EditGamePageModule } from '../edit-game/edit-game.module';
 
 @NgModule({
   imports: [
@@ -15,9 +15,9 @@ import { EditGamePageModule } from '../modal-pages/edit-game/edit-game.module';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    GamesPageRoutingModule,
+    CreateGamePageRoutingModule,
     EditGamePageModule
   ],
-  declarations: [GamesPage]
+  declarations: [CreateGamePage]
 })
-export class GamesPageModule { }
+export class CreateGamePageModule { }

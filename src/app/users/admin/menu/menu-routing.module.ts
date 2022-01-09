@@ -15,7 +15,6 @@ const routes: Routes = [
     children: [
       { path: 'dashboard', loadChildren: () => import('../../player/dashboard/dashboard.module').then(m => m.DashboardPageModule) },
       { path: 'users', loadChildren: () => import('../users/users.module').then(m => m.UsersPageModule) },
-      { path: 'games', loadChildren: () => import('../games/games.module').then(m => m.GamesPageModule) },
       { path: 'account', loadChildren: () => import('../../account/account.module').then(m => m.AccountPageModule) },
     ]
   }

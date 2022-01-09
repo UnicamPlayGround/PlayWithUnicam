@@ -1,0 +1,57 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="closeModal()" color="unicamblue">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Crea nuovo gioco</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container">
+    <p class="info">
+      Scegli un nome e seleziona il gioco di cui vuoi creare una nuova istanza.
+      Potrai modificare in seguito tutte le altre opzioni, come il regolamento o
+      i contenuti del gioco.
+    </p>
+
+    <form (ngSubmit)="creaGioco()" [formGroup]="data">
+      <ion-grid>
+        <div style="margin-bottom: 10px;">
+          <ion-item>
+            <ion-input type="text" style="font-size: 20px;" placeholder="Inserisci il nome del gioco" name="game"
+              formControlName="name" required></ion-input>
+          </ion-item>
+        </div>
+
+        <ion-list class="gameList">
+          <ion-list-header>
+            <ion-label text-wrap>Seleziona un gioco tra quelli attualmente supportati:</ion-label>
+          </ion-list-header>
+
+          <div class="listContent">
+            <ion-item lines="full" *ngFor="let game of games;" button="true" (click)="selectGame(game)"
+              [class.selectedItem]="selectedGame == game" name="game">
+              <ion-icon slot="start" name="game-controller"></ion-icon>
+              <ion-label text-wrap>
+                {{game.getName()}}
+                <p>Giocatori: da {{game.getMinPlayers()}} a {{game.getMaxPlayers()}}</p>
+              </ion-label>
+            </ion-item>
+          </div>
+        </ion-list>
+
+        <ion-row>
+          <ion-col size="12" style="text-align: right;">
+            <ion-button type="submit" color="unicamred" shape="round" style="float: right;"
+              [class.button-disabled]="!selectedGame || !data.value.name">Crea gioco
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+  </div>
+
+</ion-content>

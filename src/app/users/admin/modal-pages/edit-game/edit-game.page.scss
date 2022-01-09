@@ -1,0 +1,51 @@
+.info-div{
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+}
+
+ion-item{
+    --background:transparent;
+    padding: 0px;
+}
+
+
+ion-input{
+    font-size: 28px;
+    font-weight: bold;
+}
+
+ion-textarea{
+    height: 200px;
+    border: 1px solid #cecece;
+    padding: 5px 15px;
+}
+
+.label{
+    font-size: 22px;
+    font-weight: bold;
+    color: var(--ion-color-unicamblue);
+}
+
+.delete-button{
+    margin-top: 10px;
+    text-align: right;
+}
+
+@media screen and(max-height:640px) {
+    ion-textarea{
+        height: 150px;
+    }
+}
+
+@media screen and(max-height:579px) {
+    ion-textarea{
+        height: 100px;
+    }
+}
+
+@media screen and(max-height:530px) {
+    ion-textarea{
+        height: 60px;
+    }
+}

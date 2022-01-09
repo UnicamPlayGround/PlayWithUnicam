@@ -1,25 +1,30 @@
 <ion-header>
-  <ion-toolbar color="unicamblue">
+  <ion-toolbar style="padding: 0 5px;">
+    <ion-buttons slot="start">
+      <ion-button slot="start" (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close-outline" color="unicamblue"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
     <ion-title>Modifica gioco</ion-title>
 
-    <ion-button fill="clear" slot="start" (click)="closeModal()">
-      <ion-icon slot="icon-only" name="close-outline" color="light"></ion-icon>
-    </ion-button>
-
-    <ion-button type="submit" fill="clear" color="light" slot="end" (click)="salvaModifiche()">
-      <ion-icon slot="icon-only" name="save" class="ion-hide-md-up" title="Salva modifiche"></ion-icon>
-      <ion-icon slot="start" name="save" class="ion-hide-md-down"></ion-icon>
+    <ion-button type="submit" color="unicamblue" slot="end" (click)="salvaModifiche()" class="ion-hide-md-down"
+      title="Salva modifiche">
+      <ion-icon slot="start" name="save"></ion-icon>
       <ion-label class="ion-hide-md-down">Salva modifiche</ion-label>
     </ion-button>
+
+    <ion-buttons slot="end" class="ion-hide-md-up" title="Salva modifiche">
+      <ion-button type="submit" color="unicamblue" slot="end" (click)="salvaModifiche()">
+        <ion-icon slot="icon-only" name="save"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 
   <ion-toolbar>
     <ion-segment [(ngModel)]="segment" value="info">
       <ion-segment-button value="info">
         <ion-label>Info</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="regolamento">
-        <ion-label>Regolamento</ion-label>
       </ion-segment-button>
       <ion-segment-button value="editor">
         <ion-label>Editor</ion-label>
@@ -29,112 +34,38 @@
 </ion-header>
 
 <ion-content>
-  <div *ngIf="segment === 'info'" class="modal">
-    <ion-toolbar>
-      <ion-button slot="end" (click)="deleteGame()" color="unicamred" shape="round">
-        <ion-icon slot="icon-only" name="trash-outline" class="ion-hide-md-up"></ion-icon>
-        <ion-icon slot="start" name="trash-outline" class="ion-hide-md-down"></ion-icon>
-        <ion-label class="ion-hide-md-down">Elimina gioco</ion-label>
-      </ion-button>
-    </ion-toolbar>
+  <div *ngIf="segment === 'info'">
+    <div class="info-div">
+      <h2 class="label">Nome</h2>
 
-    <form (ngSubmit)="salvaModifiche()" [formGroup]="data">
-      <ion-grid>
-        <ion-row>
-          <ion-col size="12">
-            <h2><strong>Info</strong></h2>
-          </ion-col>
-        </ion-row>
+      <form (ngSubmit)="salvaModifiche()" [formGroup]="data">
+        <ion-item lines="full" title="Nome del gioco">
+          <ion-input type="text" placeholder="Inserisci il nome del gioco" name="nome" formControlName="nome" required>
+          </ion-input>
+        </ion-item>
 
-        <ion-row>
-          <ion-col size="12">
-            <ion-item>
-              <ion-label position="floating">Nome</ion-label>
-              <ion-input type="text" style="font-size: 20px;" placeholder="Inserisci il nome del gioco" name="nome"
-                formControlName="nome" required></ion-input>
-            </ion-item>
-          </ion-col>
-        </ion-row>
+        <ion-item lines="full" title="Attiva il gioco">
+          <ion-label text-wrap>
+            <b style="color:var(--ion-color-unicamblue);">Attiva</b>
+            <p>Se attivato, il gioco sarà visibile a tutti i giocatori online.</p>
+          </ion-label>
+          <ion-toggle slot="end" color="unicamblue" name="attivo" formControlName="attivo" required>
+          </ion-toggle>
+        </ion-item>
+      </form>
 
-        <ion-row>
-          <ion-col size-lg="4" size-md="4" size-sm="6" size="12">
-            <ion-item>
-              <ion-label position="floating">Tipologia</ion-label>
-              <ion-select value="NORMALE" okText="Ok" cancelText="Annulla" formControlName="tipo" required>
-                <ion-select-option value="NORMALE">Normale</ion-select-option>
-                <ion-select-option value="TURNI">Turni</ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-col>
+      <h2 class="label">Regolamento</h2>
 
-          <ion-col size-lg="8" size-md="8" size-sm="8" size="12">
-            <ion-item>
-              <ion-label position="floating">Link</ion-label>
-              <ion-input type="text" placeholder="Inserisci il link del gioco" name="link" formControlName="link"
-                required></ion-input>
-            </ion-item>
-          </ion-col>
-        </ion-row>
+      <ion-textarea name="regolamento" title="Regolamento del gioco" placeholder="Scrivi qui il regolamento del gioco"
+        [(ngModel)]="regolamento" [ngModelOptions]="{standalone: true}"></ion-textarea>
 
-        <ion-row>
-          <ion-col size-lg="4" size-md="4" size-sm="4" size="12">
-            <ion-item lines="none">
-              <ion-label>Giocatori:</ion-label>
-            </ion-item>
-          </ion-col>
-
-          <ion-col size-lg="4" size-md="4" size-sm="4" size="12">
-            <ion-item>
-              <ion-item lines="none">
-                <ion-label position="floating">Min</ion-label>
-                <ion-input type="number" min="1" name="minGiocatori" formControlName="minGiocatori" required>
-                </ion-input>
-              </ion-item>
-              <ion-item lines="none">
-                <ion-label position="floating">Max</ion-label>
-                <ion-input type="number" min="1" name="maxGiocatori" formControlName="maxGiocatori" required>
-                </ion-input>
-              </ion-item>
-            </ion-item>
-          </ion-col>
-        </ion-row>
-
-        <ion-row>
-          <ion-col size="12">
-            <h2><strong>Impostazioni</strong></h2>
-          </ion-col>
-        </ion-row>
-
-        <ion-row>
-          <ion-col size="12">
-            <ion-item>
-              <ion-label text-wrap>
-                Attiva
-                <p>Se attivato, il gioco sarà visibile a tutti i giocatori online.</p>
-              </ion-label>
-              <ion-toggle slot="end" name="attivo" formControlName="attivo" required></ion-toggle>
-            </ion-item>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </form>
-  </div>
-
-  <div *ngIf="segment === 'regolamento'" class="modal">
-    <ion-grid>
-      <ion-row>
-        <ion-col size="12">
-          <h2><strong>Regolamento</strong></h2>
-        </ion-col>
-      </ion-row>
-
-      <ion-row>
-        <ion-col size="12">
-          <ion-textarea style="height: 100%; border: 1px solid var(--ion-color-primary); padding:15px;" auto-grow="true"
-            name="regolamento" [(ngModel)]="regolamento" [ngModelOptions]="{standalone: true}"></ion-textarea>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+      <div class="delete-button">
+        <ion-button slot="end" (click)="deleteGame()" color="unicamred" shape="round" title="Elimina questo gioco">
+          <ion-icon slot="start" name="trash-outline"></ion-icon>
+          <ion-label>Elimina gioco</ion-label>
+        </ion-button>
+      </div>
+    </div>
   </div>
 
   <app-editor-container *ngIf="segment === 'editor'" class="modal" [editorItem]="editorItem"

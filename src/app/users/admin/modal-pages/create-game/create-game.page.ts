@@ -1,24 +1,22 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, ModalController } from '@ionic/angular';
 import { Game } from 'src/app/components/game';
 import { AlertCreatorService } from 'src/app/services/alert-creator/alert-creator.service';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LoginService } from 'src/app/services/login-service/login.service';
-import { GameEditorService } from '../services/game-editor/game-editor.service';
+import { GameEditorService } from '../../services/game-editor/game-editor.service';
 
 @Component({
-  selector: 'app-games',
-  templateUrl: './games.page.html',
-  styleUrls: ['./games.page.scss'],
+  selector: 'app-create-game',
+  templateUrl: './create-game.page.html',
+  styleUrls: ['./create-game.page.scss'],
 })
-export class GamesPage implements OnInit {
+export class CreateGamePage implements OnInit {
   games: Game[] = [];
   data: FormGroup;
-  attivo = true;
-  mostraRegolamento = false;
-  regolamento: string = "";
+  selectedGame: Game;
 
   constructor(
     private http: HttpClient,
@@ -27,6 +25,7 @@ export class GamesPage implements OnInit {
     private loadingController: LoadingController,
     private fb: FormBuilder,
     private alertCreator: AlertCreatorService,
+    private modalCtrl: ModalController,
     private gameEditorService: GameEditorService
   ) {
     this.games = this.gameEditorService.getGames();
@@ -35,8 +34,15 @@ export class GamesPage implements OnInit {
   ngOnInit() {
     this.data = this.fb.group({
       name: ['', Validators.required],
-      game: ['', Validators.required]
     });
+  }
+
+  closeModal() {
+    this.modalCtrl.dismiss();
+  }
+
+  selectGame(game: Game) {
+    this.selectedGame = game;
   }
 
   /**
@@ -44,8 +50,7 @@ export class GamesPage implements OnInit {
    * gioco secondo i dati inseriti dall'utente.
    */
   async creaGioco() {
-    var game = this.games.find(game => game.getName() == this.data.value.game);
-    if (game && this.data.value.name) {
+    if (this.selectedGame && this.data.value.name) {
       const loading = await this.loadingController.create();
       await loading.present();
 
@@ -53,15 +58,13 @@ export class GamesPage implements OnInit {
 
       var toSend: any = {};
       toSend.nome = this.data.value.name;
-      toSend.tipo = game.getType();
-      toSend.minGiocatori = game.getMinPlayers();
-      toSend.maxGiocatori = game.getMaxPlayers();
-      toSend.link = game.getUrl();
+      toSend.tipo = this.selectedGame.getType();
+      toSend.minGiocatori = this.selectedGame.getMinPlayers();
+      toSend.maxGiocatori = this.selectedGame.getMaxPlayers();
+      toSend.link = this.selectedGame.getUrl();
       toSend.attivo = false;
-      toSend.config = game.getConfig();
-
-      if (this.mostraRegolamento) toSend.regolamento = this.regolamento;
-      else toSend.regolamento = null;
+      toSend.config = this.selectedGame.getConfig();
+      toSend.regolamento = null;
 
       toSend.token = tokenValue;
 
@@ -70,14 +73,14 @@ export class GamesPage implements OnInit {
           this.data.reset();
           this.alertCreator.createInfoAlert('Gioco creato', 'Il gioco è stato creato con successo.');
           await loading.dismiss();
+          this.modalCtrl.dismiss(true);
         },
         async (res) => {
           this.data.reset();
           await loading.dismiss();
           this.errorManager.stampaErrore(res, 'Creazione gioco fallita');
         });
-    } else
-      this.alertCreator.createInfoAlert('Errore!', 'Compila tutti i campi!');
+    } else this.alertCreator.createInfoAlert('Errore!', 'Compila tutti i campi!');
   }
 
 }

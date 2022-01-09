@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { AfterContentChecked, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { PopoverController } from '@ionic/angular';
+import { ModalController, PopoverController } from '@ionic/angular';
 import { UserPopoverComponent } from 'src/app/components/user-popover/user-popover.component';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LoginService } from 'src/app/services/login-service/login.service';
@@ -8,6 +8,7 @@ import { IntroLobbyPopoverComponent } from '../popover/intro-lobby-popover/intro
 import jwt_decode from 'jwt-decode';
 import Swiper, { SwiperOptions, Pagination, Navigation } from 'swiper';
 import { SwiperComponent } from 'swiper/angular';
+import { CreateGamePage } from '../../admin/modal-pages/create-game/create-game.page';
 
 Swiper.use([Pagination, Navigation]);
 
@@ -30,6 +31,7 @@ export class DashboardPage implements OnInit, AfterContentChecked {
 
   constructor(
     private popoverController: PopoverController,
+    private modalCtrl: ModalController,
     private http: HttpClient,
     private loginService: LoginService,
     private errorManager: ErrorManagerService
@@ -48,6 +50,22 @@ export class DashboardPage implements OnInit, AfterContentChecked {
   }
 
   ngOnInit() { }
+
+  async createGame() {
+    const modal = await this.modalCtrl.create({
+      component: CreateGamePage,
+      cssClass: 'fullscreen'
+    });
+
+    modal.onDidDismiss().then((data) => {
+      const newGameCreated = data['data'];
+
+      if (newGameCreated)
+        this.loadGames()
+    });
+
+    return await modal.present();
+  }
 
   async openUserPopover(event) {
     const popover = await this.popoverController.create({

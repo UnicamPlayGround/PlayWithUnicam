@@ -35,17 +35,13 @@ export class EditGamePage implements OnInit {
   }
 
   ngOnInit() {
-    this.game = this.navParams.get('game');
+    this.game = this.navParams.get('game');   
 
     if (this.game.config)
       this.editorItem = this.gameEditorService.getProperEditor(this.game.config);
 
     this.data = this.fb.group({
       nome: [this.game.nome],
-      tipo: [this.game.tipo],
-      minGiocatori: [parseInt(this.game.min_giocatori)],
-      maxGiocatori: [parseInt(this.game.max_giocatori)],
-      link: [this.game.link],
       attivo: [this.game.attivo]
     });
 
@@ -100,9 +96,13 @@ export class EditGamePage implements OnInit {
       const tokenValue = (await this.loginService.getToken()).value;
       var toSend = this.data.value;
       toSend.id = this.game.id;
-
       toSend.regolamento = this.regolamento;
       toSend.config = this.game.config;
+
+      toSend.minGiocatori = this.game.min_giocatori;
+      toSend.maxGiocatori = this.game.max_giocatori;
+      toSend.tipo = this.game.tipo;
+      toSend.link = this.game.link;
       toSend.token = tokenValue;
 
       this.http.put('/game/modifica', toSend).subscribe(

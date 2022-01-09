@@ -60,7 +60,7 @@ exports.controllaDatiGioco = function (nome, tipo, minGiocatori, maxGiocatori, l
             if (exports.controllaString(regolamento))
                 throw new Error("Il regolamento del gioco non è valido");
 
-        if (Number.isInteger(minGiocatori) && Number.isInteger(maxGiocatori)) {
+        if (Number.isInteger(Number.parseInt(minGiocatori)) && Number.isInteger(Number.parseInt(maxGiocatori))) {
             if (minGiocatori < 1 || maxGiocatori < 1)
                 throw new Error("Il numero minimo o massimo dei giocatori non può essere minore di uno!");
             else if (minGiocatori > maxGiocatori)

@@ -25,7 +25,7 @@
 </ion-header>
 
 <ion-content>
-  <div class="table; ion-hide-lg-down">
+  <ion-grid fixed class="ion-hide-lg-down">
 
     <ion-row class="header-row">
       <ion-col size="0.5" *ngIf="bulkEdit" class="checkbox-column"></ion-col>
@@ -77,12 +77,12 @@
       </ion-col>
 
       <ion-col size="0.5" class="checkbox-column">
-        <ion-button fill="clear" (click)="editUser(user, i)">
+        <ion-button fill="clear" color="unicamblue" (click)="editUser(user, i)" title="Modifica utente">
           <ion-icon slot="icon-only" name="create-outline"></ion-icon>
         </ion-button>
       </ion-col>
     </ion-row>
-  </div>
+  </ion-grid>
 
   <ion-list class="ion-hide-lg-up">
 
