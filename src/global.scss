@@ -78,8 +78,8 @@ ion-card{
 }
 
 .toast{
-    --background:rgb(34, 64, 95) !important;
-    color:#fff !important;
+    --background: var(--ion-color-light) !important;
+    color:var(--ion-color-unicamblue) !important;
 }
 
 .modal{
