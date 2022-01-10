@@ -96,7 +96,6 @@ export class Timer {
      * @returns una stringa contenente il tempo rimanente del timer
      */
     getTimeLeftToPrint() {
-        var toReturn = "";
         var minutes = Math.floor(this.timeLeft / 60);
         var seconds = this.timeLeft - (minutes * 60);
         var minString: string;
