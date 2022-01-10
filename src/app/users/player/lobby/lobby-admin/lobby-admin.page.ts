@@ -3,9 +3,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ErrorManagerService } from 'src/app/services/error-manager/error-manager.service';
 import { LoadingController } from '@ionic/angular';
 import { LobbyManagerService } from 'src/app/services/lobby-manager/lobby-manager.service';
-import { TimerController } from 'src/app/services/timer-controller/timer-controller.service';
-import { Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login-service/login.service';
+import { Router } from '@angular/router';
+import { TimerController } from 'src/app/services/timer-controller/timer-controller.service';
 import jwt_decode from 'jwt-decode';
 
 @Component({
@@ -23,6 +23,14 @@ export class LobbyAdminPage implements OnInit, OnDestroy {
   redirectPath: string;
 
   private timerPing;
+  private workerPing = new Worker(new URL('src/app/workers/timer-worker.worker', import.meta.url));
+
+  /**
+   * Variabile booleana per indicare se l'utente sta uscendo dalla pagina o no:
+   * * **true** se l'utente sta uscendo dalla pagina
+   * * **false** altrimenti
+   */
+  isLeavingPage: boolean;
 
   constructor(
     private alertCreator: AlertCreatorService,
@@ -46,16 +54,19 @@ export class LobbyAdminPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.isLeavingPage = false;
+    this.initializeTimers();
+
     setTimeout(() => {
       this.loadInfoLobby();
       this.loadGiocatori();
       this.ping();
     }, 0);
-
-    this.timerPing = this.timerController.getTimer(() => { this.ping() }, 4000);
   }
 
   ngOnDestroy(): void {
+    this.isLeavingPage = true;
+    this.stopTimers();
     window.removeEventListener('beforeunload', this.beforeUnloadListener);
   }
 
@@ -63,6 +74,42 @@ export class LobbyAdminPage implements OnInit, OnDestroy {
     event.preventDefault();
     return event.returnValue = "Sei sicuro di voler uscire dal sito?";
   };
+
+  /**
+   * Inizializza i timer della pagina.
+   */
+  private initializeTimers() {
+    if (typeof Worker !== 'undefined') {
+      this.workerPing.onmessage = () => { this.ping(); };
+      this.workerPing.postMessage(4000);
+    } else {
+      // Gli Web Worker non sono supportati.
+      this.timerPing = this.timerController.getTimer(() => { this.ping() }, 4000);
+    }
+  }
+
+  /**
+   * Ferma i timer della pagina
+   */
+  private stopTimers() {
+    this.workerPing.terminate();
+    this.timerController.stopTimers(this.timerPing);
+  }
+
+  /**
+   * Gestisce un errore causato da una chiamata REST e crea un alert 
+   * solo se l'utente non sta abbandonando la pagina. 
+   * @param res Response della chiamata REST
+   * @param errorText Header dell'alert
+   */
+  private handleError(res, errorText: string) {
+    if (!this.isLeavingPage) {
+      this.stopTimers();
+      this.router.navigateByUrl(this.redirectPath, { replaceUrl: true });
+      this.errorManager.stampaErrore(res, errorText);
+      this.isLeavingPage = true;
+    }
+  }
 
   /**
    * Cambia il valore di 'mostraInfoLobby' che determina l'espansione della relativa card
@@ -91,15 +138,11 @@ export class LobbyAdminPage implements OnInit, OnDestroy {
         this.lobby = res['results'][0];
 
         if (this.lobby.admin_lobby != decodedToken.username) {
-          this.timerController.stopTimers(this.timerPing);
+          this.stopTimers();
           this.router.navigateByUrl('/lobby-guest', { replaceUrl: true });
         }
       },
-      async (res) => {
-        this.timerController.stopTimers(this.timerPing);
-        this.router.navigateByUrl(this.redirectPath, { replaceUrl: true });
-        this.errorManager.stampaErrore(res, 'Impossibile caricare la lobby!');
-      });
+      async (res) => { this.handleError(res, 'Impossibile caricare la lobby!'); });
   }
 
   /**
@@ -110,11 +153,7 @@ export class LobbyAdminPage implements OnInit, OnDestroy {
       async (res) => {
         this.giocatori = res['results'];
       },
-      async (res) => {
-        this.timerController.stopTimers(this.timerPing);
-        this.router.navigateByUrl(this.redirectPath, { replaceUrl: true });
-        this.errorManager.stampaErrore(res, 'Impossibile caricare la lobby!');
-      });
+      async (res) => { this.handleError(res, 'Impossibile caricare la lobby!'); });
   }
 
   /**
@@ -163,13 +202,11 @@ export class LobbyAdminPage implements OnInit, OnDestroy {
   async abbandonaLobby() {
     this.alertCreator.createConfirmationAlert('Sei sicuro di voler abbandonare la lobby?',
       async () => {
-        this.timerController.stopTimers(this.timerPing);
+        this.stopTimers();
         (await this.lobbyManager.abbandonaLobby()).subscribe(
+          async (res) => { this.router.navigateByUrl(this.redirectPath, { replaceUrl: true }); },
           async (res) => {
-            this.router.navigateByUrl(this.redirectPath, { replaceUrl: true });
-          },
-          async (res) => {
-            this.timerPing = this.timerController.getTimer(() => { this.ping() }, 4000);
+            this.initializeTimers();
             this.errorManager.stampaErrore(res, 'Abbandono fallito');
           }
         );
@@ -182,14 +219,8 @@ export class LobbyAdminPage implements OnInit, OnDestroy {
    */
   private async ping() {
     (await this.lobbyManager.ping()).subscribe(
-      async (res) => {
-        this.loadGiocatori();
-      },
-      async (res) => {
-        this.timerController.stopTimers(this.timerPing);
-        this.router.navigateByUrl(this.redirectPath, { replaceUrl: true });
-        this.errorManager.stampaErrore(res, 'Ping fallito');
-      }
+      async (res) => { this.loadGiocatori(); },
+      async (res) => { this.handleError(res, 'Ping fallito'); }
     );
   }
 
@@ -199,7 +230,7 @@ export class LobbyAdminPage implements OnInit, OnDestroy {
   async iniziaPartita() {
     (await this.lobbyManager.iniziaPartita()).subscribe(
       async (res) => {
-        this.timerController.stopTimers(this.timerPing);
+        this.stopTimers();
         this.router.navigateByUrl(this.lobby.link, { replaceUrl: true });
       },
       async (res) => {
