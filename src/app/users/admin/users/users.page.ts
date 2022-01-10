@@ -50,14 +50,6 @@ export class UsersPage implements OnInit {
       });
   }
 
-  loadMore(event) {
-    //TODO:
-    // this.page++;
-    // this.loadUsers(event);
-
-    // if (this.page === this.maximumPages) event.target.disabled = true;
-  }
-
   /**
    * Ordina l'Array degli Utenti attraverso una key.
    * @param key Attributo degli Utenti su cui effettuare l'Ordinamento
