@@ -3,6 +3,7 @@ import { Game } from 'src/app/components/game';
 import { GameType } from 'src/app/components/game-type';
 import { GooseGameEditorComponent } from 'src/app/PlayWithUnicam-Games/goose-game/components/goose-game-editor/goose-game-editor.component';
 import { MemoryGameEditorPage } from 'src/app/PlayWithUnicam-Games/memory-game/components/memory-game-editor/memory-game-editor.page';
+import { QuizEditorPage } from 'src/app/PlayWithUnicam-Games/quiz/quiz-editor/quiz-editor.page';
 import { EditorItem } from '../../components/editor-container/editor-item';
 
 @Injectable()
@@ -11,7 +12,8 @@ export class GameEditorService {
   private games: Game[] = [
     new Game("Gioco dell'oca", GameType.TURNI, 1, 6, "/goose-game", GooseGameEditorComponent),
     new Game("Memory multiplayer", GameType.NORMALE, 1, 10, "/memory-game", MemoryGameEditorPage, { version: "multi" }),
-    new Game("Memory multiplayer a schermo condiviso", GameType.NORMALE, 1, 1, "/memory", MemoryGameEditorPage, { version: "single" })
+    new Game("Memory multiplayer a schermo condiviso", GameType.NORMALE, 1, 1, "/memory", MemoryGameEditorPage, { version: "single" }),
+    new Game("Quiz", GameType.NORMALE, 1, 10, "/quiz", QuizEditorPage)
   ];
 
   /**

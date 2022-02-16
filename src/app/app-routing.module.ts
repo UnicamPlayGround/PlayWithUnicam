@@ -65,7 +65,16 @@ const routes: Routes = [
     path: 'memory',
     loadChildren: () => import('./PlayWithUnicam-Games/memory-game/components/menu/menu.module').then(m => m.MemoryMenuPageModule),
     canLoad: [AuthGiocatoriGuard]
+  },
+  {
+    path: 'quiz',
+    loadChildren: () => import('./PlayWithUnicam-Games/quiz/quiz.module').then( m => m.QuizPageModule)
+  },
+  {
+    path: 'editor',
+    loadChildren: () => import('./PlayWithUnicam-Games/quiz/quiz-editor/quiz-editor.module').then( m => m.QuizEditorPageModule)
   }
+
 ];
 
 @NgModule({
