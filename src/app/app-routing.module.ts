@@ -68,13 +68,9 @@ const routes: Routes = [
   },
   {
     path: 'quiz',
-    loadChildren: () => import('./PlayWithUnicam-Games/quiz/quiz.module').then( m => m.QuizPageModule)
-  },
-  {
-    path: 'editor',
-    loadChildren: () => import('./PlayWithUnicam-Games/quiz/quiz-editor/quiz-editor.module').then( m => m.QuizEditorPageModule)
+    loadChildren: () => import('./PlayWithUnicam-Games/quiz/quiz.module').then( m => m.QuizPageModule),
+    canLoad: [AuthGiocatoriGuard]
   }
-
 ];
 
 @NgModule({

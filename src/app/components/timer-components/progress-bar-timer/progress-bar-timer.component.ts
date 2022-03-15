@@ -21,8 +21,10 @@ export class ProgressBarTimerComponent implements OnInit, TimerComponents {
   constructor() { }
 
   ngOnInit() {
-    this.timer.setTimerComponent(this);
-    this.startTimer();
+    if (this.timer) {
+      this.timer.setTimerComponent(this);
+      this.startTimer();
+    }
   }
 
   /**
