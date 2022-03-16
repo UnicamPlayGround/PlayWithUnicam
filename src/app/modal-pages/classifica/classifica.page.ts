@@ -16,6 +16,7 @@ export class ClassificaPage implements OnInit {
 
   ngOnInit() {
     this.classifica = this.navParams.get('classifica');
+    console.log('classificaPage', this.classifica);
   }
 
   /**
