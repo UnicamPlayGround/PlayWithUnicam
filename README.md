@@ -1,56 +1,66 @@
-<p width="100%">
+<!-- <p width="100%">
     <img src="src/assets/images/unicam.png" style="width:30%; float:left">
-    <!-- <p style="width:30%; float: right; text-align:right;">a.y. 2020/2021
-    </p> -->
 </p>
 
 <p style="float: left; text-align:left; width:100%; margin-top:30px;">
     <img src="src/assets/logo_grey.png" style="width:65%; float:left">
-</p>
+</p> -->
 
-<p style="float: left; text-align:left; width:100%; margin-top:30px; margin-bottom:0px;">
-    Authors:
-</p>
-<h3 style="float: left; text-align:left; width:100%; margin-top:0px;">
-    Catervi Tommaso, Cipolletta Leonardo, Rondini Matteo
-</h3>
+# PlayWithUnicam
 
-<p style="float: left; text-align:left; width:100%; margin-top:30px;">
-    Questo progetto è stato realizzato come elaborato finale per il conseguimento della laurea triennale in Informatica (L-31) presso l<a href="https://www.unicam.it/"><b>'Università di Camerino</b></a>.
-</p>
+## Introduction
+The idea behind the project is to create an teaching tool that offers the possibility of enhancing learning through video games, based on the use of so-called serious games, i.e. games that do not have entertainment as their main purpose, but are designed primarily for educational purposes.
 
-<h1 style="font-weight:bold; float: left; text-align:left; width:100%; margin-top:30px;">Introduzione</h1>
-<p style="float: left; text-align:left; width:100%;">
-    L'idea alla base del progetto è quella di creare uno strumento didattico alternativo capace di coniugare l'aspetto videoludico e l'apprendimento, basandosi sull'utilizzo dei cosiddetti <i>serious game</i>, ovvero giochi che non hanno come scopo principale l'intrattenimento, ma che sono progettati soprattutto a fini educativi.
-</p>
+PlayWithUnicam is a web application that aims to provide a portal for the collection of video games in the above-mentioned category, offering the possibility of creating game rooms (lobbies) that allow users to connect with each other to play a particular game together. The focus is on creating an effective, enjoyable and entertaining learning experience.
 
-<p style="float: left; text-align:left; width:100%;">
-    <b>PlayWithUnicam</b> è un applicativo web che vuole offrire un portale di raccolta di videogiochi della suddetta categoria, dove è possibile creare stanze di gioco (<i>lobby</i>) che consentono agli utenti di connettersi tra loro per giocare assieme ad un determinato gioco.
-    Al centro dell'attenzione sta la volontà di creare un'esperienza formativa efficace, piacevole e divertente.
-</p>
+## Games
+The aim is to enrich the platform with educational games, each equipped with a special editor that allows you to modify its behaviour, structure and content, thus making it freely customisable and tailoring the learning experience to the topics you want.
 
-<h1 style="font-weight:bold; float: left; text-align:left; width:100%; margin-top:30px;">Giochi</h1>
-<p style="float: left; text-align:left; width:100%;">
-    L'obiettivo è quello di arricchire la piattaforma con giochi di stampo educativo, ciascuno provvisto di un apposito editor che consenta di modificarne il comportamento, la struttura ed i contenuti, rendendolo dunque liberamente personalizzabile e declinando l'esperienza formativa sugli argomenti che si desiderano.
-</p>
-<p style="float: left; text-align:left; width:100%;">
-    Attualmente, il catalogo dei giochi è provvisto dei seguenti giochi:
-</p>
-<p style="float: left; text-align:left; width:100%; margin-left:30px;">
-    <a href="https://it.wikipedia.org/wiki/Gioco_dell%27oca"><b>Gioco dell'oca:</b></a> una versione multiplayer personalizzata del più classico dei giochi da tavolo con tabellone.
-</p>
-<p style="float: left; text-align:left; width:100%; margin-left:30px;">
-    <a href="https://it.wikipedia.org/wiki/Memoria_(gioco)"><b>Memory multiplayer:</b></a> una versione multiplayer del popolare gioco di carte per bambini che richiede concentrazione e memoria, in cui i giocatori devono accoppiare le carte.
-</p>
-<p style="float: left; text-align:left; width:100%; margin-left:30px;">
-    <a href="https://it.wikipedia.org/wiki/Memoria_(gioco)"><b>Memory a schermo condiviso:</b></a> una versione a schermo condiviso del gioco precedentemente menzionato, pensata per scenari didattici in cui si dispone di un unico dispositivo, che consente di creare più giocatori controllabili da un singolo utente.
-</p>
+Currently, the games catalogue features the following games:
+- **Goose Game:** a customised multiplayer version of the most classic board game.
+- **Memory:** a revamped version of the popular children's card game that requires concentration and memory, in which players must match cards.
+- **Shared-screen Memory:** a shared-screen version of the previously mentioned game, designed for educational scenarios where only one device is available, allowing multiple players to be controlled by a single user.
 
-<h1 style="font-weight:bold; float: left; text-align:left; width:100%; margin-top:30px;">Architettura della piattaforma</h1>
-<p style="float: left; text-align:left; width:100%; margin-bottom:200px !important;">
-    Le componenti principali dell'app sono sostanzialmente: 
-        * Un front-end sviluppato tramite framework <a href="https://angular.io/"><b>Angular</b></a> e <a href="https://ionicframework.com/"><b>Ionic</b></a>.
-        * Un back-end realizzato in	Javascript tramite il framework <a href="https://nodejs.org/it/"><b>Node.js</b></a>.
-        * Una <a href="https://it.wikipedia.org/wiki/Representational_state_transfer"><b>API RESTful</b></a> per far dialogare le due parti.
-        * Un database relazionale realizzato tramite <a href="https://www.postgresql.org/"><b>PostgreSQL</b></a>.
-</p>
+## Architecture
+PlayWithUnicam has been developed using [Ionic](https://ionicframework.com/) and [Angular](https://angular.io/) frameworks for the front-end while [Node.js](https://nodejs.org/it/) framework was adopted for the back-end along with a [PostgreSQL](https://www.postgresql.org/) relational database.
+A [RESTful api]("https://it.wikipedia.org/wiki/Representational_state_transfer") was then set up to allow dialogue between the two parts.
+
+## App usage
+#### Initial requirements:
+- Install [Node.js](https://nodejs.org/it/download/) and the npm package manager (included with the Node.js installer).
+- Install the [PostgreSQL](https://www.postgresql.org/download/) database management system.
+- Install the database management tool [PgAdmin](https://www.pgadmin.org/download/).
+- Using the latter, create a new database and, to create all the necessary tables, execute the query contained in the file located at the following location:
+  - ```./PlayWithUnicam/database/script.sql```
+
+#### Installation:
+- Using a terminal window, navigate to the location where you want to clone the app repository by running the following command:
+  - ```cd "desired-path"```
+- Clone the main repository via the command:
+  - ```git clone https://github.com/catervpillar/PlayWithUnicam```
+- Navigate to the path ```./PlayWithUnicam/src/app``` via the command:
+  -  ```cd /PlayWithUnicam/src/app```
+- Clone the games repository via the command:
+  -  ```git clone https://github.com/catervpillar/PlayWithUnicam-Games```
+- Go back to the path ```/PlayWithUnicam/``` and create a file named ```.env```
+- Write the following environment variables into the previously created file:
+  - ```SECRET_PWD = **********```
+  - ```SECRET_KEY_JWT = **********```
+  - ```DB_HOST = **********```
+  - ```DB_PORT = **********```
+  - ```DB_USER = **********```
+  - ```DB_PASSWORD = **********```
+  - ```DB_NAME = **********```
+
+  Choosing strings of your choice ```SECRET_PWD``` and ```SECRET_KEY_JWT``` and making sure to put in the entry ```DB_HOST``` the host on which the database is active, in the entry ```DB_PORT``` the port on which it is listening, under ```DB_USER``` the user that owns the database, under ```DB_PASSWORD``` the password of the database and finally under ```DB_NAME``` the name of the database.
+- Execute the following command to install all project dependencies:
+  -  ```npm install```
+- **Optional:** open in write mode the file ```server.js```, located inside the main folder, and in the last line change the port on which the server will listen once started (default: 8081).
+- **Only in Unix environment:** make the file ```server.js``` (located in the root directory) executable using the following command:
+  -  ```sudo chmod 755 server.js```
+- **Only in Unix environment:** if system administrator permissions are needed, prefix the keyword ```sudo``` in each of the above commands.
+
+#### Execution
+- Within the root directory, execute the following command to start the server:
+  - ```npm start```
+- Open your browser and navigate to the address ```http://localhost:portnumber```, replacing ```port-number``` with the port on which the server is running (default: 8081).
