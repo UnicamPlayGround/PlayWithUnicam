@@ -13,7 +13,9 @@ export class GameEditorService {
     new Game("Gioco dell'oca", GameType.TURNI, 1, 6, "/goose-game", GooseGameEditorComponent),
     new Game("Memory multiplayer", GameType.NORMALE, 1, 10, "/memory-game", MemoryGameEditorPage, { version: "multi" }),
     new Game("Memory multiplayer a schermo condiviso", GameType.NORMALE, 1, 1, "/memory", MemoryGameEditorPage, { version: "single" }),
-    new Game("Quiz", GameType.NORMALE, 1, 10, "/quiz", QuizEditorPage)
+    new Game("Quiz", GameType.NORMALE, 1, 10, "/quiz", QuizEditorPage),
+    new Game("Pixel-Art", GameType.NORMALE, 1, 1, "/pixelart", null),
+    new Game("Percorsi", GameType.NORMALE, 1, 1, "/percorsi", null)
   ];
 
   /**

@@ -70,6 +70,16 @@ const routes: Routes = [
     path: 'quiz',
     loadChildren: () => import('./PlayWithUnicam-Games/quiz/quiz.module').then( m => m.QuizPageModule),
     canLoad: [AuthGiocatoriGuard]
+  },
+  {
+    path: 'pixelart',
+    loadChildren: () => import('./PlayWithUnicam-Games/pixelart/pixelart.module').then( m => m.PixelartPageModule),
+    canLoad: [AuthGiocatoriGuard]
+  },
+  {
+    path: 'percorsi',
+    loadChildren: () => import('./PlayWithUnicam-Games/percorsi/home.module').then( m => m.HomePageModule),
+    canLoad: [AuthGiocatoriGuard]
   }
 ];
 
